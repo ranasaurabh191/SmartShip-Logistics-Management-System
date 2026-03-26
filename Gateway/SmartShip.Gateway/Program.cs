@@ -35,8 +35,7 @@ var app = builder.Build();
 app.UseCors("AllowAll");
 app.UseAuthentication();
 
-// ✅ Branch: non-gateway requests go to health endpoints
-// gateway requests go to Ocelot
+
 app.UseWhen(
     ctx => ctx.Request.Path.StartsWithSegments("/gateway"),
     ocelotBranch =>
@@ -45,7 +44,6 @@ app.UseWhen(
     }
 );
 
-// ✅ These work for all non-/gateway/* requests
 app.MapGet("/", () => "SmartShip Gateway v1.0 Running");
 app.MapGet("/health", () => Results.Json(new
 {

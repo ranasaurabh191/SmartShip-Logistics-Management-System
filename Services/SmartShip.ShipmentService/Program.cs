@@ -26,7 +26,7 @@ builder.Services.AddControllers()
             return new BadRequestObjectResult(new
             {
                 message = "Validation failed.",
-                errors = errors
+                errors
             });
         };
     });
