@@ -14,7 +14,7 @@ public class UsersController : ControllerBase
     public UsersController(IUserService userService) => _userService = userService;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll() => Ok(await _userService.GetAllUsersAsync());
+    public async Task<IActionResult> GetAll([FromQuery] UserPagedRequest request) =>  Ok(await _userService.GetAllUsersPagedAsync(request));
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)

@@ -41,8 +41,6 @@ public class AdminService : IAdminService
         return new DashboardMetrics(total, active, deliveredToday, exceptions, customers);
     }
 
-    public async Task<IEnumerable<HubDto>> GetHubsAsync() =>
-        await _context.Hubs.Select(h => new HubDto(h.Id, h.Name, h.City, h.State, h.Country, h.ContactPhone, h.IsActive)).ToListAsync();
 
     public async Task<HubDto?> GetHubByIdAsync(int id)
     {
@@ -110,7 +108,84 @@ public class AdminService : IAdminService
         return new ReportDto(report.Id, report.Title, report.ReportType.ToString(),
             report.FromDate, report.ToDate, report.GeneratedAt, data);
     }
+    public async Task<PagedResponse<HubDto>> GetHubsPagedAsync(HubPagedRequest req)
+    {
+        var query = _context.Hubs.AsQueryable();
 
-    public async Task<IEnumerable<ReportDto>> GetReportsAsync() =>
-        await _context.Reports.Select(r => new ReportDto(r.Id, r.Title, r.ReportType.ToString(), r.FromDate, r.ToDate, r.GeneratedAt, r.DataJson)).ToListAsync();
+        // Filters
+        if (req.IsActive.HasValue)
+            query = query.Where(h => h.IsActive == req.IsActive.Value);
+
+        if (!string.IsNullOrEmpty(req.City))
+            query = query.Where(h => h.City.Contains(req.City));
+
+        if (!string.IsNullOrEmpty(req.State))
+            query = query.Where(h => h.State.Contains(req.State));
+
+        if (!string.IsNullOrEmpty(req.Search))
+            query = query.Where(h => h.Name.Contains(req.Search)
+                                  || h.City.Contains(req.Search)
+                                  || h.State.Contains(req.Search));
+
+        // Sorting
+        query = req.SortBy?.ToLower() switch
+        {
+            "name" => req.SortOrder == "asc" ? query.OrderBy(h => h.Name) : query.OrderByDescending(h => h.Name),
+            "city" => req.SortOrder == "asc" ? query.OrderBy(h => h.City) : query.OrderByDescending(h => h.City),
+            _ => req.SortOrder == "asc" ? query.OrderBy(h => h.CreatedAt) : query.OrderByDescending(h => h.CreatedAt)
+        };
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((req.Page - 1) * req.PageSize)
+            .Take(req.PageSize)
+            .Select(h => new HubDto(h.Id, h.Name, h.City, h.State, h.Country, h.ContactPhone, h.IsActive))
+            .ToListAsync();
+
+        return new PagedResponse<HubDto>
+        {
+            Data = items,
+            TotalCount = totalCount,
+            Page = req.Page,
+            PageSize = req.PageSize
+        };
+    }
+
+    public async Task<PagedResponse<ReportDto>> GetReportsPagedAsync(ReportPagedRequest req)
+    {
+        var query = _context.Reports.AsQueryable();
+
+        if (!string.IsNullOrEmpty(req.ReportType) && Enum.TryParse<ReportType>(req.ReportType, true, out var rt))
+            query = query.Where(r => r.ReportType == rt);
+
+        if (req.FromDate.HasValue)
+            query = query.Where(r => r.GeneratedAt >= req.FromDate.Value);
+
+        if (req.ToDate.HasValue)
+            query = query.Where(r => r.GeneratedAt <= req.ToDate.Value);
+
+        if (!string.IsNullOrEmpty(req.Search))
+            query = query.Where(r => r.Title.Contains(req.Search));
+
+        query = req.SortOrder == "asc"
+            ? query.OrderBy(r => r.GeneratedAt)
+            : query.OrderByDescending(r => r.GeneratedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((req.Page - 1) * req.PageSize)
+            .Take(req.PageSize)
+            .Select(r => new ReportDto(r.Id, r.Title, r.ReportType.ToString(), r.FromDate, r.ToDate, r.GeneratedAt, r.DataJson))
+            .ToListAsync();
+
+        return new PagedResponse<ReportDto>
+        {
+            Data = items,
+            TotalCount = totalCount,
+            Page = req.Page,
+            PageSize = req.PageSize
+        };
+    }
 }

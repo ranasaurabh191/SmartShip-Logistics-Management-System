@@ -21,5 +21,13 @@ public record ShipmentResponse(
     AddressDto SenderAddress, AddressDto ReceiverAddress, PackageDto Package, string? Notes
 );
 
+public class ShipmentPagedRequest : PagedRequest
+{
+    public string? Status { get; set; }
+    public string? ShipmentType { get; set; }
+    public DateTime? FromDate { get; set; }
+    public DateTime? ToDate { get; set; }
+}
+
 public record UpdateStatusRequest(string Status);
 public record SchedulePickupRequest(DateTime PickupScheduledAt);

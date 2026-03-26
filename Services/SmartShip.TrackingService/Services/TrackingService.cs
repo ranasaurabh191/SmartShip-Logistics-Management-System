@@ -29,14 +29,7 @@ public class TrackingService : ITrackingService
         return new TrackingEventDto(ev.Id, ev.TrackingNumber, ev.Status, ev.Location, ev.Description, ev.EventTime, ev.UpdatedBy);
     }
 
-    public async Task<IEnumerable<TrackingEventDto>> GetByTrackingNumberAsync(string trackingNumber)
-    {
-        return await _context.TrackingEvents
-            .Where(t => t.TrackingNumber == trackingNumber)
-            .OrderByDescending(t => t.EventTime)
-            .Select(t => new TrackingEventDto(t.Id, t.TrackingNumber, t.Status, t.Location, t.Description, t.EventTime, t.UpdatedBy))
-            .ToListAsync();
-    }
+    
 
     public async Task<DeliveryProofDto?> GetDeliveryProofAsync(int shipmentId)
     {
@@ -87,8 +80,77 @@ public class TrackingService : ITrackingService
         return new DocumentDto(doc.Id, doc.FileName, doc.DocumentType.ToString(), doc.FileSizeBytes, doc.UploadedAt);
     }
 
-    public async Task<IEnumerable<DocumentDto>> GetDocumentsAsync(int shipmentId) =>
-        await _context.Documents.Where(d => d.ShipmentId == shipmentId)
+    public async Task<PagedResponse<TrackingEventDto>> GetByTrackingNumberPagedAsync(
+    string trackingNumber, TrackingEventPagedRequest req)
+    {
+        var query = _context.TrackingEvents
+            .Where(t => t.TrackingNumber == trackingNumber)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(req.Status))
+            query = query.Where(t => t.Status.Contains(req.Status));
+
+        if (req.FromDate.HasValue)
+            query = query.Where(t => t.EventTime >= req.FromDate.Value);
+
+        if (req.ToDate.HasValue)
+            query = query.Where(t => t.EventTime <= req.ToDate.Value);
+
+        if (!string.IsNullOrEmpty(req.Search))
+            query = query.Where(t => t.Location.Contains(req.Search)
+                                  || t.Description.Contains(req.Search));
+
+        query = req.SortOrder == "asc"
+            ? query.OrderBy(t => t.EventTime)
+            : query.OrderByDescending(t => t.EventTime);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((req.Page - 1) * req.PageSize)
+            .Take(req.PageSize)
+            .Select(t => new TrackingEventDto(t.Id, t.TrackingNumber, t.Status, t.Location, t.Description, t.EventTime, t.UpdatedBy))
+            .ToListAsync();
+
+        return new PagedResponse<TrackingEventDto>
+        {
+            Data = items,
+            TotalCount = totalCount,
+            Page = req.Page,
+            PageSize = req.PageSize
+        };
+    }
+
+    public async Task<PagedResponse<DocumentDto>> GetDocumentsPagedAsync(int shipmentId, DocumentPagedRequest req)
+    {
+        var query = _context.Documents
+            .Where(d => d.ShipmentId == shipmentId)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(req.DocumentType) && Enum.TryParse<DocumentType>(req.DocumentType, true, out var dt))
+            query = query.Where(d => d.DocumentType == dt);
+
+        if (!string.IsNullOrEmpty(req.Search))
+            query = query.Where(d => d.FileName.Contains(req.Search));
+
+        query = req.SortOrder == "asc"
+            ? query.OrderBy(d => d.UploadedAt)
+            : query.OrderByDescending(d => d.UploadedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((req.Page - 1) * req.PageSize)
+            .Take(req.PageSize)
             .Select(d => new DocumentDto(d.Id, d.FileName, d.DocumentType.ToString(), d.FileSizeBytes, d.UploadedAt))
             .ToListAsync();
+
+        return new PagedResponse<DocumentDto>
+        {
+            Data = items,
+            TotalCount = totalCount,
+            Page = req.Page,
+            PageSize = req.PageSize
+        };
+    }
 }

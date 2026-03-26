@@ -18,7 +18,7 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> Dashboard() => Ok(await _service.GetDashboardAsync());
 
     [HttpGet("hubs")]
-    public async Task<IActionResult> GetHubs() => Ok(await _service.GetHubsAsync());
+    public async Task<IActionResult> GetHubs([FromQuery] HubPagedRequest request) => Ok(await _service.GetHubsPagedAsync(request));
 
     [HttpGet("hubs/{id}")]
     public async Task<IActionResult> GetHub(int id)
@@ -46,7 +46,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpGet("reports")]
-    public async Task<IActionResult> GetReports() => Ok(await _service.GetReportsAsync());
+    public async Task<IActionResult> GetReports([FromQuery] ReportPagedRequest request) => Ok(await _service.GetReportsPagedAsync(request));
 
     [HttpPost("reports")]
     public async Task<IActionResult> GenerateReport([FromBody] ReportRequest req)

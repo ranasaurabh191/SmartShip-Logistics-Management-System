@@ -10,6 +10,82 @@ public class ShipmentService : IShipmentService
     private readonly ShipmentDbContext _context;
     public ShipmentService(ShipmentDbContext context) => _context = context;
 
+    public async Task<PagedResponse<ShipmentResponse>> GetAllPagedAsync(ShipmentPagedRequest req)
+    {
+        var query = _context.Shipments
+            .Include(s => s.SenderAddress)
+            .Include(s => s.ReceiverAddress)
+            .Include(s => s.Package)
+            .AsQueryable();
+
+        // Filters
+        if (!string.IsNullOrEmpty(req.Status) && Enum.TryParse<ShipmentStatus>(req.Status, true, out var st))
+            query = query.Where(s => s.Status == st);
+
+        if (!string.IsNullOrEmpty(req.ShipmentType) && Enum.TryParse<ShipmentType>(req.ShipmentType, true, out var tp))
+            query = query.Where(s => s.ShipmentType == tp);
+
+        if (req.FromDate.HasValue)
+            query = query.Where(s => s.CreatedAt >= req.FromDate.Value);
+
+        if (req.ToDate.HasValue)
+            query = query.Where(s => s.CreatedAt <= req.ToDate.Value);
+
+        if (!string.IsNullOrEmpty(req.Search))
+            query = query.Where(s => s.TrackingNumber.Contains(req.Search));
+
+        // Sorting
+        query = req.SortBy?.ToLower() switch
+        {
+            "status" => req.SortOrder == "asc" ? query.OrderBy(s => s.Status) : query.OrderByDescending(s => s.Status),
+            "rate" => req.SortOrder == "asc" ? query.OrderBy(s => s.ShippingRate) : query.OrderByDescending(s => s.ShippingRate),
+            _ => req.SortOrder == "asc" ? query.OrderBy(s => s.CreatedAt) : query.OrderByDescending(s => s.CreatedAt)
+        };
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .Skip((req.Page - 1) * req.PageSize)
+            .Take(req.PageSize)
+            .ToListAsync();
+
+        return new PagedResponse<ShipmentResponse>
+        {
+            Data = items.Select(s => MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package)),
+            TotalCount = totalCount,
+            Page = req.Page,
+            PageSize = req.PageSize
+        };
+    }
+
+    public async Task<PagedResponse<ShipmentResponse>> GetMyShipmentsPagedAsync(int customerId, PagedRequest req)
+    {
+        var query = _context.Shipments
+            .Include(s => s.SenderAddress)
+            .Include(s => s.ReceiverAddress)
+            .Include(s => s.Package)
+            .Where(s => s.CustomerId == customerId)
+            .AsQueryable();
+
+        if (!string.IsNullOrEmpty(req.Search))
+            query = query.Where(s => s.TrackingNumber.Contains(req.Search));
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderByDescending(s => s.CreatedAt)
+            .Skip((req.Page - 1) * req.PageSize)
+            .Take(req.PageSize)
+            .ToListAsync();
+
+        return new PagedResponse<ShipmentResponse>
+        {
+            Data = items.Select(s => MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package)),
+            TotalCount = totalCount,
+            Page = req.Page,
+            PageSize = req.PageSize
+        };
+    }
     public async Task<ShipmentResponse> CreateAsync(CreateShipmentRequest req, int customerId)
     {
         var rate = await CalculateRateAsync(req.Package.WeightKg, req.ShipmentType);
@@ -41,15 +117,7 @@ public class ShipmentService : IShipmentService
         return MapToResponse(shipment, sender, receiver, package);
     }
 
-    public async Task<IEnumerable<ShipmentResponse>> GetMyShipmentsAsync(int customerId)
-    {
-        var shipments = await _context.Shipments
-            .Include(s => s.SenderAddress).Include(s => s.ReceiverAddress).Include(s => s.Package)
-            .Where(s => s.CustomerId == customerId)
-            .OrderByDescending(s => s.CreatedAt)
-            .ToListAsync();
-        return shipments.Select(s => MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package));
-    }
+   
 
     public async Task<ShipmentResponse?> GetByIdAsync(int id)
     {
@@ -57,14 +125,7 @@ public class ShipmentService : IShipmentService
         return s == null ? null : MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package);
     }
 
-    public async Task<IEnumerable<ShipmentResponse>> GetAllAsync(string? status, string? type)
-    {
-        var query = _context.Shipments.Include(s => s.SenderAddress).Include(s => s.ReceiverAddress).Include(s => s.Package).AsQueryable();
-        if (!string.IsNullOrEmpty(status) && Enum.TryParse<ShipmentStatus>(status, true, out var st)) query = query.Where(s => s.Status == st);
-        if (!string.IsNullOrEmpty(type) && Enum.TryParse<ShipmentType>(type, true, out var tp)) query = query.Where(s => s.ShipmentType == tp);
-        var list = await query.OrderByDescending(s => s.CreatedAt).ToListAsync();
-        return list.Select(s => MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package));
-    }
+    
 
     public async Task<bool> UpdateStatusAsync(int id, string status)
     {

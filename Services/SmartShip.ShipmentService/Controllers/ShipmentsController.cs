@@ -27,7 +27,8 @@ public class ShipmentsController : ControllerBase
 
     [HttpGet("my")]
     [Authorize(Roles = "CUSTOMER")]
-    public async Task<IActionResult> GetMine() => Ok(await _service.GetMyShipmentsAsync(GetUserId()));
+    public async Task<IActionResult> GetMine([FromQuery] PagedRequest request) =>
+    Ok(await _service.GetMyShipmentsPagedAsync(GetUserId(), request));
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)

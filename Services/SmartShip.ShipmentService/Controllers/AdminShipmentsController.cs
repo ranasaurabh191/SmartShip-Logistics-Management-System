@@ -14,8 +14,7 @@ public class AdminShipmentsController : ControllerBase
     public AdminShipmentsController(IShipmentService service) => _service = service;
 
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] string? status, [FromQuery] string? type) =>
-        Ok(await _service.GetAllAsync(status, type));
+    public async Task<IActionResult> GetAll([FromQuery] ShipmentPagedRequest request) =>  Ok(await _service.GetAllPagedAsync(request));
 
     [HttpPut("{id}/status")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest req)
