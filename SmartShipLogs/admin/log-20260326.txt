@@ -1,0 +1,39 @@
+2026-03-26 14:57:52 [INF] [AdminService] Generating Operational report | From: "2026-01-01T00:00:00.0000000Z" | To: "2026-12-31T23:59:59.0000000Z" | By: Administrator
+2026-03-26 14:57:53 [INF] [AdminService] Report data: 6 shipments found in range
+2026-03-26 14:57:53 [INF] [AdminService] Report generated: ID 2 | Operational Report (01-01-2026 - 31-12-2026) | Total: 6 | Delivered: 2
+2026-03-26 14:57:53 [INF] [AdminService] HTTP POST /api/admin/reports → 200 in 1091.8823ms
+2026-03-26 14:58:15 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-26 14:58:15 [INF] [AdminService] Dashboard metrics → Total: 6 | Active: 4 | DeliveredToday: 0 | Exceptions: 1 | Customers: 3
+2026-03-26 14:58:15 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 180.5256ms
+2026-03-26 14:58:27 [INF] [AdminService] Fetching hubs | Page: 1 | PageSize: 10 | City: All | State: All | IsActive: All
+2026-03-26 14:58:27 [INF] [AdminService] Fetched 5 of 5 hubs
+2026-03-26 14:58:27 [INF] [AdminService] HTTP GET /api/admin/hubs → 200 in 70.7468ms
+2026-03-26 15:01:04 [INF] [AdminService] Fetching hub by ID: 1
+2026-03-26 15:01:04 [INF] [AdminService] Hub found: Delhi Central Hub | City: New Delhi
+2026-03-26 15:01:04 [INF] [AdminService] HTTP GET /api/admin/hubs/1 → 200 in 118.1197ms
+2026-03-26 15:01:08 [INF] [AdminService] Fetching hub by ID: 12
+2026-03-26 15:01:08 [WRN] [AdminService] Hub not found: ID 12
+2026-03-26 15:01:08 [INF] [AdminService] HTTP GET /api/admin/hubs/12 → 404 in 49.0264ms
+2026-03-26 15:01:22 [INF] [AdminService] Fetching hubs | Page: 1 | PageSize: 10 | City: All | State: All | IsActive: All
+2026-03-26 15:01:22 [INF] [AdminService] Fetched 5 of 5 hubs
+2026-03-26 15:01:22 [INF] [AdminService] HTTP GET /api/admin/hubs/ → 200 in 14.0850ms
+2026-03-26 15:01:34 [INF] [AdminService] Fetching hub by ID: 4
+2026-03-26 15:01:34 [INF] [AdminService] Hub found: Amritsar North Hub | City: Amritsar
+2026-03-26 15:01:34 [INF] [AdminService] HTTP GET /api/admin/hubs/4 → 200 in 6.7574ms
+2026-03-26 15:10:25 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-26 15:10:25 [INF] [AdminService] Dashboard metrics → Total: 6 | Active: 4 | DeliveredToday: 0 | Exceptions: 1 | Customers: 3
+2026-03-26 15:10:25 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 97.4151ms
+2026-03-26 15:25:32 [INF] [AdminService] HTTP DELETE /api/admin/hubs/4 → 403 in 3.2641ms
+2026-03-26 15:26:28 [INF] [AdminService] Deleting hub ID: 4
+2026-03-26 15:26:28 [INF] [AdminService] Hub deleted: ID 4 | Amritsar North Hub
+2026-03-26 15:26:28 [INF] [AdminService] HTTP DELETE /api/admin/hubs/4 → 200 in 118.2788ms
+2026-03-26 15:26:33 [INF] [AdminService] Deleting hub ID: 5
+2026-03-26 15:26:33 [INF] [AdminService] Hub deleted: ID 5 | Chennai South Hub
+2026-03-26 15:26:33 [INF] [AdminService] HTTP DELETE /api/admin/hubs/5 → 200 in 10.7595ms
+2026-03-26 15:28:06 [INF] [AdminService] Fetching hubs | Page: 1 | PageSize: 10 | City: All | State: All | IsActive: All
+2026-03-26 15:28:06 [INF] [AdminService] Fetched 3 of 3 hubs
+2026-03-26 15:28:06 [INF] [AdminService] HTTP GET /api/admin/hubs/ → 200 in 48.7824ms
+2026-03-26 15:28:34 [INF] [AdminService] Fetching hubs | Page: 1 | PageSize: 10 | City: All | State: All | IsActive: All
+2026-03-26 15:28:34 [INF] [AdminService] Fetched 5 of 5 hubs
+2026-03-26 15:28:34 [INF] [AdminService] HTTP GET /api/admin/hubs/ → 200 in 16.8389ms
+2026-03-26 15:31:21 [INF] [AdminService] HTTP GET /api/admin/user/ → 404 in 0.7122ms

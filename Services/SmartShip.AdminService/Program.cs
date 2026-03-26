@@ -7,95 +7,109 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
 using SmartShip.AdminService.Data;
+using SmartShip.AdminService.Middleware;
 using SmartShip.AdminService.Services;
 using SmartShip.AdminService.Validators;
 using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers()
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
-        {
-            var errors = context.ModelState
-                .Where(e => e.Value?.Errors.Count > 0)
-                .ToDictionary(
-                    kvp => kvp.Key,
-                    kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
-                );
-
-            return new BadRequestObjectResult(new
-            {
-                message = "Validation failed.",
-                errors
-            });
-        };
-    });
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddValidatorsFromAssemblyContaining<CreateHubRequestValidator>();
-
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin Service", Version = "v1" });
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme { Name = "Authorization", Type = SecuritySchemeType.Http, Scheme = "Bearer", BearerFormat = "JWT", In = ParameterLocation.Header });
-    c.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecuritySchemeReference("Bearer"),
-            new List<string>()
-        }
-    });
-});
 Log.Logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
-builder.Host.UseSerilog();
+    .WriteTo.Console()
+    .CreateBootstrapLogger();
 
-builder.Services.AddDbContext<AdminDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+try
+{
+    Log.Information("🚀 Starting AdminService...");
 
-builder.Services.AddDbContext<ShipmentReadDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("ShipmentDB")));
+    var builder = WebApplication.CreateBuilder(args);
 
-var jwt = builder.Configuration.GetSection("JwtSettings");
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters
+    builder.Host.UseSerilog((ctx, lc) => lc
+        .ReadFrom.Configuration(ctx.Configuration)
+        .Enrich.FromLogContext()
+        .Enrich.WithProperty("Application", "AdminService")
+        .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
+
+    builder.Services.AddControllers()
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.InvalidModelStateResponseFactory = context =>
+            {
+                var errors = context.ModelState
+                    .Where(e => e.Value?.Errors.Count > 0)
+                    .ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray());
+                return new BadRequestObjectResult(new { message = "Validation failed.", errors });
+            };
+        });
+
+    builder.Services.AddFluentValidationAutoValidation();
+    builder.Services.AddFluentValidationClientsideAdapters();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddValidatorsFromAssemblyContaining<CreateHubRequestValidator>();
+
+    builder.Services.AddSwaggerGen(c =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwt["Issuer"],
-        ValidAudience = jwt["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin Service", Version = "v1" });
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header
+        });
+        c.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+        {
+            { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() }
+        });
     });
 
-builder.Services.AddAuthorization();
-builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+    builder.Services.AddDbContext<AdminDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-var app = builder.Build();
+    builder.Services.AddDbContext<ShipmentReadDbContext>(opt =>
+        opt.UseSqlServer(builder.Configuration.GetConnectionString("ShipmentDB")));
 
-app.UseSerilogRequestLogging(options =>
-{
-    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms";
-});
+    var jwt = builder.Configuration.GetSection("JwtSettings");
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwt["Issuer"],
+            ValidAudience = jwt["Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
+        });
 
-using (var scope = app.Services.CreateScope())
-{
-    var adminDb = scope.ServiceProvider.GetRequiredService<AdminDbContext>();
-    adminDb.Database.Migrate();  // Only migrate Admin DB
+    builder.Services.AddAuthorization();
+    builder.Services.AddScoped<IAdminService, AdminService>();
+    builder.Services.AddCors(opt =>
+        opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
-    var shipmentDb = scope.ServiceProvider.GetRequiredService<ShipmentReadDbContext>();
-    shipmentDb.Database.EnsureCreated();  // Creates if missing
+    var app = builder.Build();
+    app.UseMiddleware<ExceptionMiddleware>();
+    app.UseSerilogRequestLogging(opt =>
+        opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
+
+    using (var scope = app.Services.CreateScope())
+    {
+        scope.ServiceProvider.GetRequiredService<AdminDbContext>().Database.Migrate();
+        scope.ServiceProvider.GetRequiredService<ShipmentReadDbContext>().Database.EnsureCreated();
+    }
+
+    app.UseSwagger(); app.UseSwaggerUI();
+    app.UseCors("AllowAll");
+    app.UseAuthentication(); app.UseAuthorization();
+    app.MapControllers();
+    app.Run();
 }
-
-app.UseSwagger(); app.UseSwaggerUI();
-app.UseCors("AllowAll");
-app.UseAuthentication(); app.UseAuthorization();
-app.MapControllers();
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "❌ AdminService crashed on startup.");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

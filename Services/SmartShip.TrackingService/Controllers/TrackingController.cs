@@ -15,11 +15,9 @@ public class TrackingController : ControllerBase
     public TrackingController(ITrackingService service) => _service = service;
 
     [HttpGet("{trackingNumber}")]
-    public async Task<IActionResult> GetTimeline(string trackingNumber)
-    {
-        var events = await _service.GetByTrackingNumberAsync(trackingNumber);
-        return Ok(events);
-    }
+    public async Task<IActionResult> GetTimeline(
+        string trackingNumber, [FromQuery] TrackingEventPagedRequest request) =>
+        Ok(await _service.GetByTrackingNumberPagedAsync(trackingNumber, request));
 
     [HttpPost("events")]
     [Authorize(Roles = "ADMIN")]
@@ -30,11 +28,11 @@ public class TrackingController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{shipmentId}/delivery-proof")]
+    [HttpGet("delivery/{shipmentId}")]
     public async Task<IActionResult> GetDeliveryProof(int shipmentId)
     {
-        var proof = await _service.GetDeliveryProofAsync(shipmentId);
-        return proof == null ? NotFound() : Ok(proof);
+        var result = await _service.GetDeliveryProofAsync(shipmentId);
+        return result == null ? NotFound(new { message = "Delivery proof not found." }) : Ok(result);
     }
 
     [HttpPost("delivery-proof")]
@@ -79,6 +77,7 @@ public class TrackingController : ControllerBase
     }
 
     [HttpGet("documents/{shipmentId}")]
-    public async Task<IActionResult> GetDocuments(int shipmentId) =>
-        Ok(await _service.GetDocumentsAsync(shipmentId));
+    public async Task<IActionResult> GetDocuments(
+        int shipmentId, [FromQuery] DocumentPagedRequest request) =>
+        Ok(await _service.GetDocumentsPagedAsync(shipmentId, request));
 }

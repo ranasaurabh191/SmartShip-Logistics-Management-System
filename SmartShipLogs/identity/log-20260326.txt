@@ -1,0 +1,85 @@
+2026-03-26 14:56:47 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-26 14:56:48 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-26 14:56:48 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-26 14:56:48 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 60 minutes
+2026-03-26 14:56:48 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1240.1186ms
+2026-03-26 14:57:13 [INF] [IdentityService] HTTP GET /api/admin/users → 200 in 323.2205ms
+2026-03-26 15:03:04 [WRN] [IdentityService] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-03-26 15:03:04 [WRN] [IdentityService] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-03-26 15:03:04 [INF] [IdentityService] HTTP GET /api/admin/users → 200 in 123.0338ms
+2026-03-26 15:05:57 [INF] [IdentityService] HTTP GET /api/admin/users → 200 in 28.1595ms
+2026-03-26 15:11:44 [INF] [IdentityService] HTTP PUT /api/admin/users/1 → 400 in 34.8506ms
+2026-03-26 15:11:57 [INF] [IdentityService] HTTP PUT /api/admin/users/1 → 400 in 2.0570ms
+2026-03-26 15:12:02 [INF] [IdentityService] HTTP PUT /api/admin/users/1 → 400 in 2.5967ms
+2026-03-26 15:12:06 [INF] [IdentityService] Updating user with ID: 1
+2026-03-26 15:12:06 [INF] [IdentityService] User updated successfully: 1
+2026-03-26 15:12:06 [INF] [IdentityService] HTTP PUT /api/admin/users/1 → 200 in 240.4148ms
+2026-03-26 15:12:15 [INF] [IdentityService] HTTP GET /api/admin/users → 200 in 6.0460ms
+2026-03-26 15:13:23 [INF] [IdentityService] HTTP GET /api/admin/users → 200 in 30.4570ms
+2026-03-26 15:13:32 [INF] [IdentityService] HTTP GET /api/admin/users → 200 in 4.0893ms
+2026-03-26 15:18:25 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:18:25 [WRN] [IdentityService] Login failed for: saurabh@smartship.com
+2026-03-26 15:18:25 [INF] [IdentityService] HTTP POST /api/auth/login → 401 in 303.6638ms
+2026-03-26 15:18:33 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:18:33 [WRN] [IdentityService] Login failed for: saurabh@smartship.com
+2026-03-26 15:18:33 [INF] [IdentityService] HTTP POST /api/auth/login → 401 in 145.1372ms
+2026-03-26 15:18:47 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:18:47 [WRN] [IdentityService] Login failed for: saurabh@smartship.com
+2026-03-26 15:18:47 [INF] [IdentityService] HTTP POST /api/auth/login → 401 in 137.5402ms
+2026-03-26 15:21:43 [INF] [IdentityService] HTTP GET /swagger/index.html → 304 in 68.6751ms
+2026-03-26 15:21:43 [INF] [IdentityService] HTTP GET /swagger/index.js → 304 in 30.8626ms
+2026-03-26 15:21:43 [INF] [IdentityService] HTTP GET /swagger/swagger-ui.css → 304 in 58.5120ms
+2026-03-26 15:21:43 [INF] [IdentityService] HTTP GET /swagger/swagger-ui-standalone-preset.js → 304 in 45.4379ms
+2026-03-26 15:21:43 [INF] [IdentityService] HTTP GET /swagger/index.css → 304 in 56.4349ms
+2026-03-26 15:21:43 [INF] [IdentityService] HTTP GET /swagger/swagger-ui-bundle.js → 304 in 56.3585ms
+2026-03-26 15:21:44 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 17.3597ms
+2026-03-26 15:22:41 [INF] [IdentityService] HTTP POST /api/auth/login → 400 in 13.8689ms
+2026-03-26 15:22:57 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:22:57 [WRN] [IdentityService] Login failed for: saurabh@smartship.com
+2026-03-26 15:22:57 [INF] [IdentityService] HTTP POST /api/auth/login → 401 in 150.1522ms
+2026-03-26 15:23:37 [INF] [IdentityService] Signup attempt for email: sonia@gmail.com
+2026-03-26 15:23:37 [INF] [IdentityService] User created successfully: sonia@gmail.com | Role: CUSTOMER
+2026-03-26 15:23:37 [INF] [IdentityService] Generating JWT token for user: sonia@gmail.com, Role: CUSTOMER
+2026-03-26 15:23:37 [INF] [IdentityService] Token generated successfully for user: sonia@gmail.com, expires in 60 minutes
+2026-03-26 15:23:37 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 248.8507ms
+2026-03-26 15:24:01 [INF] [IdentityService] HTTP POST /api/auth/login → 400 in 1.0460ms
+2026-03-26 15:24:09 [INF] [IdentityService] Login attempt: sonia@gmail.com
+2026-03-26 15:24:09 [INF] [IdentityService] Login successful: sonia@gmail.com | Role: CUSTOMER
+2026-03-26 15:24:09 [INF] [IdentityService] Generating JWT token for user: sonia@gmail.com, Role: CUSTOMER
+2026-03-26 15:24:09 [INF] [IdentityService] Token generated successfully for user: sonia@gmail.com, expires in 60 minutes
+2026-03-26 15:24:09 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 155.0353ms
+2026-03-26 15:24:51 [INF] [IdentityService] HTTP GET /api/admin/users → 200 in 41.4886ms
+2026-03-26 15:25:00 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 9.9441ms
+2026-03-26 15:25:44 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 4.0801ms
+2026-03-26 15:25:55 [INF] [IdentityService] HTTP POST /gateway/auth/login → 404 in 2.8801ms
+2026-03-26 15:26:15 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-26 15:26:15 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-26 15:26:15 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-26 15:26:15 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 60 minutes
+2026-03-26 15:26:15 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 155.9714ms
+2026-03-26 15:26:42 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 5.6930ms
+2026-03-26 15:26:50 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 3.9602ms
+2026-03-26 15:31:31 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 75.2373ms
+2026-03-26 15:34:30 [INF] [IdentityService] Deleting user with ID: 3
+2026-03-26 15:34:30 [INF] [IdentityService] User deleted successfully: 3
+2026-03-26 15:34:30 [INF] [IdentityService] HTTP DELETE /api/admin/users/3 → 200 in 52.9295ms
+2026-03-26 15:34:34 [INF] [IdentityService] Deleting user with ID: 4
+2026-03-26 15:34:34 [INF] [IdentityService] User deleted successfully: 4
+2026-03-26 15:34:34 [INF] [IdentityService] HTTP DELETE /api/admin/users/4 → 200 in 10.6119ms
+2026-03-26 15:34:37 [INF] [IdentityService] Deleting user with ID: 5
+2026-03-26 15:34:37 [INF] [IdentityService] User deleted successfully: 5
+2026-03-26 15:34:37 [INF] [IdentityService] HTTP DELETE /api/admin/users/5 → 200 in 9.9681ms
+2026-03-26 15:34:40 [INF] [IdentityService] Deleting user with ID: 5
+2026-03-26 15:34:40 [WRN] [IdentityService] Delete failed - user not found: 5
+2026-03-26 15:34:40 [INF] [IdentityService] HTTP DELETE /api/admin/users/5 → 404 in 29.9394ms
+2026-03-26 15:35:00 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 7.0238ms
+2026-03-26 15:35:26 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:35:26 [WRN] [IdentityService] Login failed for: saurabh@smartship.com
+2026-03-26 15:35:26 [INF] [IdentityService] HTTP POST /api/auth/login → 401 in 10.2516ms
+2026-03-26 15:35:50 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 3.3905ms
+2026-03-26 15:37:01 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:37:01 [WRN] [IdentityService] Login failed for: saurabh@smartship.com
+2026-03-26 15:37:01 [INF] [IdentityService] HTTP POST /api/auth/login → 401 in 9.5044ms
+2026-03-26 15:47:00 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:47:00 [WRN] [IdentityService] Login failed - user not found: saurabh@smartship.com
+2026-03-26 15:47:00 [INF] [IdentityService] HTTP POST /api/auth/login → 400 in 604.8851ms

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartShip.IdentityService.DTOs;
 using SmartShip.IdentityService.Services;
-
+using SmartShip.IdentityService.Models;
 namespace SmartShip.IdentityService.Controllers;
 
 [ApiController]
@@ -23,8 +23,11 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await _authService.LoginAsync(request);
-        if (result == null) return Unauthorized(new { message = "Invalid credentials." });
-        return Ok(result);
+
+        if (!result.IsSuccess)
+            return BadRequest(new { message = result.Message });
+
+        return Ok(result.Data);
     }
 
     // ✅ Temp debug - DELETE after fixing

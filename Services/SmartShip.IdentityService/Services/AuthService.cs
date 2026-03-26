@@ -47,19 +47,58 @@ public class AuthService : IAuthService
         return new AuthResponse(GenerateToken(user), user.Role, user.Name, user.Id);
     }
 
-    public async Task<AuthResponse?> LoginAsync(LoginRequest request)
+    public async Task<LoginResult> LoginAsync(LoginRequest request)
     {
         _logger.LogInformation("Login attempt: {Email}", request.Email);
 
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email && u.IsActive);
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.Email == request.Email);
+
+        // ❌ User not found
+        if (user == null)
         {
-            _logger.LogWarning("Login failed for: {Email}", request.Email);
-            return null;
+            _logger.LogWarning("Login failed - user not found: {Email}", request.Email);
+
+            return new LoginResult
+            {
+                IsSuccess = false,
+                Message = "User not found with this email. Please signup."
+            };
         }
 
+        // ❌ User inactive
+        if (!user.IsActive)
+        {
+            _logger.LogWarning("Login failed - inactive user: {Email}", request.Email);
+
+            return new LoginResult
+            {
+                IsSuccess = false,
+                Message = "User account is inactive."
+            };
+        }
+
+        // ❌ Wrong password
+        if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        {
+            _logger.LogWarning("Login failed - wrong password: {Email}", request.Email);
+
+            return new LoginResult
+            {
+                IsSuccess = false,
+                Message = "Incorrect password."
+            };
+        }
+
+        // ✅ Success
         _logger.LogInformation("Login successful: {Email} | Role: {Role}", user.Email, user.Role);
-        return new AuthResponse(GenerateToken(user), user.Role, user.Name, user.Id);
+
+        return new LoginResult
+        {
+            IsSuccess = true,
+            Message = "Login successful",
+            Data = new AuthResponse(GenerateToken(user), user.Role, user.Name, user.Id)
+        };
     }
 
     private string GenerateToken(User user)
