@@ -1,0 +1,84 @@
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SmartShip.TrackingService.DTOs;
+using SmartShip.TrackingService.Services;
+using System.Security.Claims;
+
+namespace SmartShip.TrackingService.Controllers;
+
+[ApiController]
+[Route("api/tracking")]
+[Authorize]
+public class TrackingController : ControllerBase
+{
+    private readonly ITrackingService _service;
+    public TrackingController(ITrackingService service) => _service = service;
+
+    [HttpGet("{trackingNumber}")]
+    public async Task<IActionResult> GetTimeline(string trackingNumber)
+    {
+        var events = await _service.GetByTrackingNumberAsync(trackingNumber);
+        return Ok(events);
+    }
+
+    [HttpPost("events")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> AddEvent([FromBody] AddTrackingEventRequest req)
+    {
+        var updatedBy = User.FindFirstValue(ClaimTypes.Name) ?? "System";
+        var result = await _service.AddEventAsync(req, updatedBy);
+        return Ok(result);
+    }
+
+    [HttpGet("{shipmentId}/delivery-proof")]
+    public async Task<IActionResult> GetDeliveryProof(int shipmentId)
+    {
+        var proof = await _service.GetDeliveryProofAsync(shipmentId);
+        return proof == null ? NotFound() : Ok(proof);
+    }
+
+    [HttpPost("delivery-proof")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> AddDeliveryProof([FromForm] AddDeliveryProofRequest req,
+        IFormFile? signature, IFormFile? photo)
+    {
+        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+        Directory.CreateDirectory(uploadPath);
+        string? sigPath = null, photoPath = null;
+
+        if (signature != null)
+        {
+            sigPath = Path.Combine(uploadPath, $"sig_{Guid.NewGuid()}_{signature.FileName}");
+            using var s = new FileStream(sigPath, FileMode.Create);
+            await signature.CopyToAsync(s);
+        }
+        if (photo != null)
+        {
+            photoPath = Path.Combine(uploadPath, $"photo_{Guid.NewGuid()}_{photo.FileName}");
+            using var s = new FileStream(photoPath, FileMode.Create);
+            await photo.CopyToAsync(s);
+        }
+
+        var result = await _service.AddDeliveryProofAsync(req, sigPath, photoPath);
+        return Ok(result);
+    }
+
+    [HttpPost("documents/upload")]
+    public async Task<IActionResult> UploadDocument(
+        [FromForm] int shipmentId, [FromForm] string trackingNumber,
+        [FromForm] string documentType, IFormFile file)
+    {
+        if (file.Length > 10 * 1024 * 1024) return BadRequest("File must be under 10MB");
+        var allowed = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+        var ext = Path.GetExtension(file.FileName).ToLower();
+        if (!allowed.Contains(ext)) return BadRequest("Only PDF, JPG, PNG allowed");
+
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var result = await _service.UploadDocumentAsync(shipmentId, trackingNumber, file, documentType, userId);
+        return Ok(result);
+    }
+
+    [HttpGet("documents/{shipmentId}")]
+    public async Task<IActionResult> GetDocuments(int shipmentId) =>
+        Ok(await _service.GetDocumentsAsync(shipmentId));
+}

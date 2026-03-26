@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Gateway/">
+    <Project Path="Gateway/SmartShip.Gateway/SmartShip.Gateway.csproj" />
+  </Folder>
+  <Folder Name="/Services/">
+    <Project Path="Services/SmartShip.AdminService/SmartShip.AdminService.csproj" />
+    <Project Path="Services/SmartShip.IdentityService/SmartShip.IdentityService.csproj" />
+    <Project Path="Services/SmartShip.ShipmentService/SmartShip.ShipmentService.csproj" />
+    <Project Path="Services/SmartShip.TrackingService/SmartShip.TrackingService.csproj" />
+  </Folder>
+</Solution>
