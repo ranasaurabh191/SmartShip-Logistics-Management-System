@@ -8,4 +8,7 @@
     <Project Path="Services/SmartShip.ShipmentService/SmartShip.ShipmentService.csproj" />
     <Project Path="Services/SmartShip.TrackingService/SmartShip.TrackingService.csproj" />
   </Folder>
+  <Folder Name="/Shared/">
+    <Project Path="Smartship.Shared/Smartship.Shared.csproj" Id="2f96e047-883d-4b8e-8306-ad6c56a1eb05" />
+  </Folder>
 </Solution>

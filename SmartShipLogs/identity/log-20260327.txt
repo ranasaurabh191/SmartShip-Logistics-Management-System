@@ -1,0 +1,16 @@
+2026-03-27 09:48:05 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-27 09:48:06 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-27 09:48:06 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-27 09:48:06 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 60 minutes
+2026-03-27 09:48:06 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1114.1217ms
+2026-03-27 10:23:04 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-27 10:23:04 [INF] [IdentityService] Total users after filtering: 2
+2026-03-27 10:23:04 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-27 10:23:04 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 705.7194ms
+2026-03-27 10:24:06 [INF] [IdentityService] Login attempt: sonia@gmail.com
+2026-03-27 10:24:07 [INF] [IdentityService] Login successful: sonia@gmail.com | Role: CUSTOMER
+2026-03-27 10:24:07 [INF] [IdentityService] Generating JWT token for user: sonia@gmail.com, Role: CUSTOMER
+2026-03-27 10:24:07 [INF] [IdentityService] Token generated successfully for user: sonia@gmail.com, expires in 60 minutes
+2026-03-27 10:24:07 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 562.6745ms
+2026-03-27 12:23:35 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-27 12:38:03 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"

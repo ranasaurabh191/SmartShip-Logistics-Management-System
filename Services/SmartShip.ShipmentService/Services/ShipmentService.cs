@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+using SmartShip.Shared.Events;
+using MassTransit;
 using SmartShip.ShipmentService.Data;
 using SmartShip.ShipmentService.DTOs;
 using SmartShip.ShipmentService.Models;
@@ -10,11 +11,13 @@ public class ShipmentService : IShipmentService
 {
     private readonly ShipmentDbContext _context;
     private readonly ILogger<ShipmentService> _logger;
+    private readonly IPublishEndpoint _publisher;
 
-    public ShipmentService(ShipmentDbContext context, ILogger<ShipmentService> logger)
+    public ShipmentService(ShipmentDbContext context, ILogger<ShipmentService> logger, IPublishEndpoint publisher)
     {
         _context = context;
         _logger = logger;
+        _publisher = publisher;
     }
 
     public async Task<PagedResponse<ShipmentResponse>> GetAllPagedAsync(ShipmentPagedRequest req)
@@ -155,6 +158,15 @@ public class ShipmentService : IShipmentService
             _logger.LogInformation("Shipment created: {TrackingNumber} | Rate: ₹{Rate} | Customer: {CustomerId}",
                 shipment.TrackingNumber, rate, customerId);
 
+            await _publisher.Publish(new ShipmentCreatedEvent
+            {
+                ShipmentId = shipment.Id,
+                TrackingNumber = shipment.TrackingNumber,
+                CustomerId = shipment.CustomerId,
+                SenderCity = sender.City,
+                CreatedAt = shipment.CreatedAt
+            });
+
             return MapToResponse(shipment, sender, receiver, package);
         }
         catch (Exception ex)
@@ -210,6 +222,28 @@ public class ShipmentService : IShipmentService
 
             _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}",
                 s.TrackingNumber, oldStatus, st);
+
+            await _publisher.Publish(new ShipmentStatusUpdatedEvent
+            {
+                ShipmentId = s.Id,
+                TrackingNumber = s.TrackingNumber,
+                OldStatus = oldStatus.ToString(),
+                NewStatus = s.Status.ToString(),
+                Location = string.Empty,
+                UpdatedBy = string.Empty,
+                UpdatedAt = DateTime.UtcNow
+            });
+
+            if (s.Status == ShipmentStatus.Delivered)
+            {
+                await _publisher.Publish(new ShipmentDeliveredEvent
+                {
+                    ShipmentId = s.Id,
+                    TrackingNumber = s.TrackingNumber,
+                    CustomerId = s.CustomerId,
+                    DeliveredAt = DateTime.UtcNow
+                });
+            }
             return true;
         }
         catch (Exception ex)
@@ -285,15 +319,12 @@ public class ShipmentService : IShipmentService
             _ => (decimal)(weightKg * 80)
         };
         var finalRate = Math.Max(rate, 99);
-        _logger.LogInformation("Rate calculated: ₹{Rate} | Type: {Type} | Weight: {Weight}kg",
-            finalRate, type, weightKg);
+        _logger.LogInformation("Rate calculated: ₹{Rate} | Type: {Type} | Weight: {Weight}kg", finalRate, type, weightKg);
         return Task.FromResult(finalRate);
     }
 
-    // ── Private helpers ──────────────────────────────────────────────────────
 
-    private static string GenerateTrackingNumber() =>
-        "SS" + DateTime.UtcNow.ToString("yyyyMMdd") + Random.Shared.Next(10000, 99999);
+    private static string GenerateTrackingNumber() => "SS" + DateTime.UtcNow.ToString("yyyyMMdd") + Random.Shared.Next(10000, 99999);
 
     private static Address MapAddress(AddressDto d) => new()
     {

@@ -10,46 +10,35 @@ namespace SmartShip.AdminService.Services;
 public class AdminService : IAdminService
 {
     private readonly AdminDbContext _context;
-    private readonly ShipmentReadDbContext _shipmentContext;
     private readonly ILogger<AdminService> _logger;
 
-    public AdminService(AdminDbContext context, ShipmentReadDbContext shipmentContext, ILogger<AdminService> logger)
+    public AdminService(AdminDbContext context, ILogger<AdminService> logger)
     {
         _context = context;
-        _shipmentContext = shipmentContext;
         _logger = logger;
     }
 
-    public async Task<DashboardMetrics> GetDashboardAsync()
+    public async Task<DashboardMetricsDto> GetDashboardAsync()
     {
         _logger.LogInformation("Fetching dashboard metrics...");
 
-        try
+        var metrics = await _context.DashboardMetrics.FirstOrDefaultAsync()
+            ?? throw new Exception("Metrics not initialized.");
+
+        _logger.LogInformation(
+            "Dashboard metrics → Total: {Total} | Active: {Active} | DeliveredToday: {DeliveredToday} | Exceptions: {Exceptions} | Customers: {Customers}",
+            metrics.TotalShipments, metrics.ActiveShipments,
+            metrics.DeliveredToday, metrics.Exceptions, metrics.TotalCustomers);
+
+        return new DashboardMetricsDto
         {
-            var today = DateTime.UtcNow.Date;
-
-            var total = await _shipmentContext.Shipments.CountAsync();
-            var active = await _shipmentContext.Shipments
-                .CountAsync(s => s.Status != 5 && s.Status != 7 && s.Status != 8);
-            var deliveredToday = await _shipmentContext.Shipments
-                .CountAsync(s => s.Status == 5 && s.DeliveredAt.HasValue
-                              && s.DeliveredAt.Value.Date == today);
-            var exceptions = await _shipmentContext.Shipments
-                .CountAsync(s => s.Status == 6 || s.Status == 7 || s.Status == 8);
-            var customers = await _shipmentContext.Shipments
-                .Select(s => s.CustomerId).Distinct().CountAsync();
-
-            _logger.LogInformation(
-                "Dashboard metrics → Total: {Total} | Active: {Active} | DeliveredToday: {DeliveredToday} | Exceptions: {Exceptions} | Customers: {Customers}",
-                total, active, deliveredToday, exceptions, customers);
-
-            return new DashboardMetrics(total, active, deliveredToday, exceptions, customers);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to fetch dashboard metrics");
-            throw;
-        }
+            TotalShipments = metrics.TotalShipments,
+            ActiveShipments = metrics.ActiveShipments,
+            DeliveredToday = metrics.DeliveredToday,
+            Exceptions = metrics.Exceptions,
+            TotalCustomers = metrics.TotalCustomers,
+            LastUpdatedAt = metrics.LastUpdatedAt
+        };
     }
 
     public async Task<PagedResponse<HubDto>> GetHubsPagedAsync(HubPagedRequest req)
@@ -214,19 +203,16 @@ public class AdminService : IAdminService
         {
             Enum.TryParse<ReportType>(req.ReportType, true, out var rt);
 
-            var shipments = await _shipmentContext.Shipments
-                .Where(s => s.CreatedAt >= req.FromDate && s.CreatedAt <= req.ToDate)
-                .ToListAsync();
-
-            _logger.LogInformation("Report data: {Total} shipments found in range", shipments.Count);
+            var metrics = await _context.DashboardMetrics.FirstOrDefaultAsync();
 
             var data = new
             {
-                TotalShipments = shipments.Count,
-                Delivered = shipments.Count(s => s.Status == 5),
-                Exceptions = shipments.Count(s => s.Status == 6 || s.Status == 7),
-                ByStatus = shipments.GroupBy(s => s.Status)
-                                    .Select(g => new { Status = g.Key, Count = g.Count() })
+                TotalShipments = metrics?.TotalShipments ?? 0,
+                Delivered = metrics?.TotalShipments - metrics?.ActiveShipments ?? 0,
+                Exceptions = metrics?.Exceptions ?? 0,
+                ActiveShipments = metrics?.ActiveShipments ?? 0,
+                GeneratedFrom = req.FromDate,
+                GeneratedTo = req.ToDate
             };
 
             var report = new Report
@@ -242,8 +228,8 @@ public class AdminService : IAdminService
             _context.Reports.Add(report);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Report generated: ID {ReportId} | {Title} | Total: {Total} | Delivered: {Delivered}",
-                report.Id, report.Title, data.TotalShipments, data.Delivered);
+            _logger.LogInformation("Report generated: ID {ReportId} | {Title}",
+                report.Id, report.Title);
 
             return new ReportDto(report.Id, report.Title, report.ReportType.ToString(),
                 report.FromDate, report.ToDate, report.GeneratedAt, data);
@@ -254,6 +240,7 @@ public class AdminService : IAdminService
             throw;
         }
     }
+
 
     public async Task<PagedResponse<ReportDto>> GetReportsPagedAsync(ReportPagedRequest req)
     {

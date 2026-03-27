@@ -1,0 +1,9 @@
+2026-03-27 09:50:05 [INF] [TrackingService] Fetching tracking timeline for SS202601001  | Page: 1 | PageSize: 10
+2026-03-27 09:50:06 [INF] [TrackingService] Fetched 4 of 4 events for SS202601001 
+2026-03-27 09:50:06 [INF] [TrackingService] HTTP GET /api/tracking/SS202601001  → 200 in 716.7207ms
+2026-03-27 12:23:34 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-27 12:23:34 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-27 12:23:35 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-27 12:38:03 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-27 12:38:03 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-27 12:38:03 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"

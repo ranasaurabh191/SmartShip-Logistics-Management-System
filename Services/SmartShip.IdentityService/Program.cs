@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("🚀 Starting IdentityService...");
+    Log.Information(" --> Starting IdentityService...");
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,18 @@ try
 
     builder.Services.AddDbContext<IdentityDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    builder.Services.AddMassTransit(x =>
+    {
+        x.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host("localhost", "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+        });
+    });
 
     var jwt = builder.Configuration.GetSection("JwtSettings");
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

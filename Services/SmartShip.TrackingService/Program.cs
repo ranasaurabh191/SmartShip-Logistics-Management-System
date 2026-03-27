@@ -1,3 +1,4 @@
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +16,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("🚀 Starting TrackingService...");
+    Log.Information(" --> Starting TrackingService...");
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -59,6 +60,27 @@ try
 
     builder.Services.AddDbContext<TrackingDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddConsumer<ShipmentCreatedConsumer>();
+        x.AddConsumer<ShipmentStatusUpdatedConsumer>();
+
+        x.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host("localhost", "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+
+            cfg.ReceiveEndpoint("tracking-shipment-created", e =>
+                e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
+
+            cfg.ReceiveEndpoint("tracking-status-updated", e =>
+                e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
+        });
+    });
 
     var jwt = builder.Configuration.GetSection("JwtSettings");
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

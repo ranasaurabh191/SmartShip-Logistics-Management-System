@@ -8,3 +8,7 @@
 2026-03-26 15:36:51 [INF] [ShipmentService] Fetched 0 of 0 shipments for Customer 8
 2026-03-26 15:36:51 [INF] [ShipmentService] HTTP GET /api/shipments/my → 200 in 198.7771ms
 2026-03-26 15:46:46 [WRN] [ShipmentService] No store type was specified for the decimal property 'DeclaredValue' on entity type 'Package'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-03-26 15:50:35 [WRN] [ShipmentService] No store type was specified for the decimal property 'DeclaredValue' on entity type 'Package'. This will cause values to be silently truncated if they do not fit in the default precision and scale. Explicitly specify the SQL server column type that can accommodate all the values in 'OnModelCreating' using 'HasColumnType', specify precision and scale using 'HasPrecision', or configure a value converter using 'HasConversion'.
+2026-03-26 15:59:43 [INF] [ShipmentService] Fetching shipments for Customer 8 | Page: 1 | PageSize: 10
+2026-03-26 15:59:44 [INF] [ShipmentService] Fetched 0 of 0 shipments for Customer 8
+2026-03-26 15:59:44 [INF] [ShipmentService] HTTP GET /api/shipments/my → 200 in 853.0227ms

@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,10 +8,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
 using SmartShip.ShipmentService.Data;
+using SmartShip.ShipmentService.Messaging.Consumers;
 using SmartShip.ShipmentService.Middleware;
 using SmartShip.ShipmentService.Services;
 using SmartShip.ShipmentService.Validators;
 using System.Text;
+using System.Text.Json.Serialization;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -18,7 +21,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("🚀 Starting ShipmentService...");
+    Log.Information(" --> Starting ShipmentService...");
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +32,11 @@ try
         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
     builder.Services.AddControllers()
+        .AddJsonOptions(opts =>
+        {
+            opts.JsonSerializerOptions.Converters
+                .Add(new JsonStringEnumConverter());
+        })
         .ConfigureApiBehaviorOptions(options =>
         {
             options.InvalidModelStateResponseFactory = context =>
@@ -66,6 +74,25 @@ try
 
     builder.Services.AddDbContext<ShipmentDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddConsumer<UserDeletedConsumer>();
+
+        x.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host("localhost", "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+
+            cfg.ReceiveEndpoint("shipment-user-deleted", e =>
+            {
+                e.ConfigureConsumer<UserDeletedConsumer>(ctx);
+            });
+        });
+    });
 
     var jwt = builder.Configuration.GetSection("JwtSettings");
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

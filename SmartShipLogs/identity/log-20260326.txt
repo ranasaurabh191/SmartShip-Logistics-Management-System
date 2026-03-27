@@ -83,3 +83,15 @@
 2026-03-26 15:47:00 [INF] [IdentityService] Login attempt: saurabh@smartship.com
 2026-03-26 15:47:00 [WRN] [IdentityService] Login failed - user not found: saurabh@smartship.com
 2026-03-26 15:47:00 [INF] [IdentityService] HTTP POST /api/auth/login → 400 in 604.8851ms
+2026-03-26 15:53:10 [INF] [IdentityService] Login attempt: saurabh@smartship.com
+2026-03-26 15:53:10 [WRN] [IdentityService] Login failed - user not found: saurabh@smartship.com
+2026-03-26 15:53:10 [INF] [IdentityService] HTTP POST /api/auth/login → 400 in 615.2040ms
+2026-03-26 15:54:11 [INF] [IdentityService] Login attempt: sonia@gmail.com
+2026-03-26 15:54:11 [WRN] [IdentityService] Login failed - wrong password: sonia@gmail.com
+2026-03-26 15:54:11 [INF] [IdentityService] HTTP POST /api/auth/login → 400 in 394.7278ms
+2026-03-26 15:54:34 [INF] [IdentityService] Login attempt: sonia@gmail.com
+2026-03-26 15:54:35 [INF] [IdentityService] Login successful: sonia@gmail.com | Role: CUSTOMER
+2026-03-26 15:54:35 [INF] [IdentityService] Generating JWT token for user: sonia@gmail.com, Role: CUSTOMER
+2026-03-26 15:54:35 [INF] [IdentityService] Token generated successfully for user: sonia@gmail.com, expires in 60 minutes
+2026-03-26 15:54:35 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 350.0778ms
+2026-03-26 15:59:36 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 167.4813ms

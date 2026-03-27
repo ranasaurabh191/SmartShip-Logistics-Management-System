@@ -54,7 +54,6 @@ public class AuthService : IAuthService
         var user = await _context.Users
             .FirstOrDefaultAsync(u => u.Email == request.Email);
 
-        // ❌ User not found
         if (user == null)
         {
             _logger.LogWarning("Login failed - user not found: {Email}", request.Email);
@@ -66,7 +65,6 @@ public class AuthService : IAuthService
             };
         }
 
-        // ❌ User inactive
         if (!user.IsActive)
         {
             _logger.LogWarning("Login failed - inactive user: {Email}", request.Email);
@@ -78,7 +76,6 @@ public class AuthService : IAuthService
             };
         }
 
-        // ❌ Wrong password
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {
             _logger.LogWarning("Login failed - wrong password: {Email}", request.Email);
@@ -90,7 +87,6 @@ public class AuthService : IAuthService
             };
         }
 
-        // ✅ Success
         _logger.LogInformation("Login successful: {Email} | Role: {Role}", user.Email, user.Role);
 
         return new LoginResult

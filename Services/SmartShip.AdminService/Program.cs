@@ -18,7 +18,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information("🚀 Starting AdminService...");
+    Log.Information(" --> Starting AdminService...");
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -67,9 +67,6 @@ try
     builder.Services.AddDbContext<AdminDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-    builder.Services.AddDbContext<ShipmentReadDbContext>(opt =>
-        opt.UseSqlServer(builder.Configuration.GetConnectionString("ShipmentDB")));
-
     var jwt = builder.Configuration.GetSection("JwtSettings");
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters
@@ -96,7 +93,6 @@ try
     using (var scope = app.Services.CreateScope())
     {
         scope.ServiceProvider.GetRequiredService<AdminDbContext>().Database.Migrate();
-        scope.ServiceProvider.GetRequiredService<ShipmentReadDbContext>().Database.EnsureCreated();
     }
 
     app.UseSwagger(); app.UseSwaggerUI();

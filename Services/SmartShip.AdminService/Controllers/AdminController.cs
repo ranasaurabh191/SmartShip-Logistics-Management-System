@@ -28,8 +28,7 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost("hubs")]
-    public async Task<IActionResult> CreateHub([FromBody] CreateHubRequest req) =>
-        Ok(await _service.CreateHubAsync(req));
+    public async Task<IActionResult> CreateHub([FromBody] CreateHubRequest req) =>  Ok(await _service.CreateHubAsync(req));
 
     [HttpPut("hubs/{id}")]
     public async Task<IActionResult> UpdateHub(int id, [FromBody] UpdateHubRequest req)

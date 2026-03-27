@@ -2,7 +2,7 @@
 
 public interface IAdminService
 {
-    Task<DashboardMetrics> GetDashboardAsync();
+    Task<DashboardMetricsDto> GetDashboardAsync();
     Task<PagedResponse<HubDto>> GetHubsPagedAsync(HubPagedRequest request);
     Task<HubDto?> GetHubByIdAsync(int id);
     Task<HubDto> CreateHubAsync(CreateHubRequest req);
