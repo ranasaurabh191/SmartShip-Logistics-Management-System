@@ -128,7 +128,7 @@ public class ShipmentService : IShipmentService
         try
         {
             var rate = await CalculateRateAsync(req.Package.WeightKg, req.ShipmentType);
-            _logger.LogInformation("Calculated shipping rate: ₹{Rate} for Type: {Type}", rate, req.ShipmentType);
+            _logger.LogInformation("Calculated shipping rate: {Rate} for Type: {Type}", rate, req.ShipmentType);
 
             var sender = MapAddress(req.SenderAddress);
             var receiver = MapAddress(req.ReceiverAddress);
@@ -155,7 +155,7 @@ public class ShipmentService : IShipmentService
             _context.Shipments.Add(shipment);
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Shipment created: {TrackingNumber} | Rate: ₹{Rate} | Customer: {CustomerId}",
+            _logger.LogInformation("Shipment created: {TrackingNumber} | Rate: {Rate} | Customer: {CustomerId}",
                 shipment.TrackingNumber, rate, customerId);
 
             await _publisher.Publish(new ShipmentCreatedEvent
@@ -196,22 +196,18 @@ public class ShipmentService : IShipmentService
         return MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package);
     }
 
-    public async Task<bool> UpdateStatusAsync(int id, string status)
+    public async Task<bool> UpdateStatusAsync(int id, UpdateStatusRequest request)  
     {
-        _logger.LogInformation("Updating status for Shipment {ShipmentId} → {Status}", id, status);
+        _logger.LogInformation("Updating status for Shipment {ShipmentId} → {Status}", id, request.Status);
 
         try
         {
             var s = await _context.Shipments.FindAsync(id);
-            if (s == null)
-            {
-                _logger.LogWarning("Shipment not found for status update: ID {ShipmentId}", id);
-                return false;
-            }
+            if (s == null) return false;
 
-            if (!Enum.TryParse<ShipmentStatus>(status, true, out var st))
+            if (!Enum.TryParse<ShipmentStatus>(request.Status, true, out var st))
             {
-                _logger.LogWarning("Invalid status value: {Status} for Shipment {ShipmentId}", status, id);
+                _logger.LogWarning("Invalid status value: {Status}", request.Status);
                 return false;
             }
 
@@ -229,10 +225,11 @@ public class ShipmentService : IShipmentService
                 TrackingNumber = s.TrackingNumber,
                 OldStatus = oldStatus.ToString(),
                 NewStatus = s.Status.ToString(),
-                Location = string.Empty,
-                UpdatedBy = string.Empty,
+                Location = request.Location ?? "Unknown Hub",     
+                UpdatedBy = "Agent-" + DateTime.UtcNow.ToString("hhmm"),
                 UpdatedAt = DateTime.UtcNow
             });
+
 
             if (s.Status == ShipmentStatus.Delivered)
             {
@@ -316,6 +313,7 @@ public class ShipmentService : IShipmentService
             ShipmentType.Express => (decimal)(weightKg * 150),
             ShipmentType.International => (decimal)(weightKg * 300),
             ShipmentType.Freight => (decimal)(weightKg * 50),
+            ShipmentType.Domestic => (decimal)(weightKg * 80),
             _ => (decimal)(weightKg * 80)
         };
         var finalRate = Math.Max(rate, 99);

@@ -19,8 +19,8 @@ public class AdminShipmentsController : ControllerBase
     [HttpPut("{id}/status")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest req)
     {
-        var result = await _service.UpdateStatusAsync(id, req.Status);
-        return result ? NoContent() : BadRequest("Invalid status or shipment not found");
+        var result = await _service.UpdateStatusAsync(id, req);
+        return result ? Ok("Updated Sucessfully") : BadRequest("Invalid status or shipment not found");
     }
 
     [HttpPut("{id}/resolve")]

@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
 using SmartShip.AdminService.Data;
+using SmartShip.AdminService.Messaging.Consumers;
 using SmartShip.AdminService.Middleware;
 using SmartShip.AdminService.Services;
 using SmartShip.AdminService.Validators;
@@ -46,7 +48,24 @@ try
     builder.Services.AddFluentValidationClientsideAdapters();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddValidatorsFromAssemblyContaining<CreateHubRequestValidator>();
+    builder.Services.AddMassTransit(x =>
+    {
+        x.AddConsumer<ShipmentDeliveredConsumer>();  
 
+        x.UsingRabbitMq((ctx, cfg) =>
+        {
+            cfg.Host("localhost", "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+
+            cfg.ReceiveEndpoint("admin-shipment-delivered", e =>
+            {
+                e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx);
+            });
+        });
+    });
     builder.Services.AddSwaggerGen(c =>
     {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin Service", Version = "v1" });

@@ -6,11 +6,17 @@ using SmartShip.TrackingService.Data;
 public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
 {
     private readonly TrackingDbContext _db;
-    public ShipmentCreatedConsumer(TrackingDbContext db) => _db = db;
+    private readonly ILogger<ShipmentCreatedConsumer> _logger;
 
+    public ShipmentCreatedConsumer(TrackingDbContext db, ILogger<ShipmentCreatedConsumer> logger)
+    {
+        _db = db;
+        _logger = logger;
+    }
     public async Task Consume(ConsumeContext<ShipmentCreatedEvent> context)
     {
         var msg = context.Message;
+        _logger.LogInformation("Processing ShipmentCreated: {TrackingNumber} (ID: {Id})", msg.TrackingNumber, msg.ShipmentId);
 
         _db.TrackingEvents.Add(new TrackingEvent
         {
@@ -24,6 +30,6 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
         });
 
         await _db.SaveChangesAsync();
-        Console.WriteLine($"[TrackingService] Auto-created Booked event for {msg.TrackingNumber}");
+        _logger.LogInformation("Created Booked event for {TrackingNumber}", msg.TrackingNumber);
     }
 }

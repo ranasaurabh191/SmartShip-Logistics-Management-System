@@ -109,6 +109,7 @@ try
 
     builder.Services.AddAuthorization();
     builder.Services.AddScoped<IShipmentService, ShipmentService>();
+    builder.Services.AddScoped<UserDeletedConsumer>();
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 

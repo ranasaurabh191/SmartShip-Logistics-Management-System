@@ -94,3 +94,524 @@ Client has been authenticated for path '/gateway/shipments' by 'AuthenticationTy
 2026-03-27 12:16:36 [INF] [Gateway] GATEWAY GET / → 200 in 161.8300ms
 2026-03-27 12:19:17 [INF] [Gateway] GATEWAY GET / → 200 in 119.9176ms
 2026-03-27 12:23:33 [INF] [Gateway] GATEWAY GET / → 200 in 116.5212ms
+2026-03-27 12:46:56 [INF] [Gateway] GATEWAY GET / → 200 in 133.2210ms
+2026-03-27 12:51:50 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 12:51:50 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000001, PreviousRequestId: -
+The path '/gateway/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 12:51:50 [WRN] [Gateway] RequestId: 0HNKBQ3A39RLG:00000001, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/shipments' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/shipments' was unauthenticated!;
+2026-03-27 12:51:50 [WRN] [Gateway] RequestId: 0HNKBQ3A39RLG:00000001, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/shipments' was unauthenticated!
+Setting error response for request: GET /gateway/shipments
+2026-03-27 12:51:50 [INF] [Gateway] GATEWAY GET /gateway/shipments → 401 in 191.6988ms
+2026-03-27 12:52:00 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 12:52:00 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000002, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/login' in the route /gateway/auth/{everything}.
+2026-03-27 12:52:01 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/login
+2026-03-27 12:52:01 [INF] [Gateway] GATEWAY POST /gateway/auth/login → 200 in 1422.4450ms
+2026-03-27 12:52:15 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 12:52:15 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000003, PreviousRequestId: -
+The path '/gateway/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 12:52:15 [INF] [Gateway] RequestId: 0HNKBQ3A39RLG:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 12:52:15 [WRN] [Gateway] RequestId: 0HNKBQ3A39RLG:00000003, PreviousRequestId: -
+405 Method Not Allowed status code of request URI: http://localhost:5002/api/shipments
+2026-03-27 12:52:15 [INF] [Gateway] GATEWAY GET /gateway/shipments → 405 in 358.7171ms
+2026-03-27 12:54:11 [INF] [Gateway] GATEWAY GET /swagger/index.html → 404 in 0.1172ms
+2026-03-27 12:55:54 [INF] [Gateway] RequestId: 0HNKBQ3A39RLJ:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 12:55:54 [INF] [Gateway] RequestId: 0HNKBQ3A39RLJ:00000001, PreviousRequestId: -
+The path '/gateway/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 12:55:54 [INF] [Gateway] RequestId: 0HNKBQ3A39RLJ:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 12:55:54 [WRN] [Gateway] RequestId: 0HNKBQ3A39RLJ:00000001, PreviousRequestId: -
+405 Method Not Allowed status code of request URI: http://localhost:5002/api/shipments
+2026-03-27 12:55:54 [INF] [Gateway] GATEWAY GET /gateway/shipments → 405 in 52.7326ms
+2026-03-27 12:56:16 [INF] [Gateway] RequestId: 0HNKBQ3A39RLJ:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 12:56:16 [INF] [Gateway] RequestId: 0HNKBQ3A39RLJ:00000002, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 12:56:16 [INF] [Gateway] RequestId: 0HNKBQ3A39RLJ:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 13:00:32 [INF] [Gateway] GATEWAY GET / → 200 in 174.3170ms
+2026-03-27 13:00:48 [INF] [Gateway] RequestId: 0HNKBQASV1586:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 13:00:48 [INF] [Gateway] RequestId: 0HNKBQASV1586:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 13:00:48 [INF] [Gateway] RequestId: 0HNKBQASV1586:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 13:00:49 [INF] [Gateway] RequestId: 0HNKBQASV1586:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments
+2026-03-27 13:00:49 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 200 in 1472.5887ms
+2026-03-27 14:06:30 [INF] [Gateway] GATEWAY GET / → 200 in 205.4701ms
+2026-03-27 14:06:45 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:06:45 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:06:45 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOP:00000001, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/shipments' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/shipments' was unauthenticated!;
+2026-03-27 14:06:45 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOP:00000001, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/shipments' was unauthenticated!
+Setting error response for request: GET /gateway/admin/shipments
+2026-03-27 14:06:45 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 401 in 158.5496ms
+2026-03-27 14:06:53 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:06:53 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000002, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/login' in the route /gateway/auth/{everything}.
+2026-03-27 14:06:54 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/login
+2026-03-27 14:06:54 [INF] [Gateway] GATEWAY POST /gateway/auth/login → 200 in 1238.4271ms
+2026-03-27 14:07:25 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:07:25 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000003, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:07:25 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:07:26 [INF] [Gateway] RequestId: 0HNKBRFOQLTOP:00000003, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments
+2026-03-27 14:07:26 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 200 in 1002.4038ms
+2026-03-27 14:14:23 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:14:23 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000001, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:14:23 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:14:24 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOR:00000001, PreviousRequestId: -
+404 Not Found status code of request URI: http://localhost:5004/api/admin/users/
+2026-03-27 14:14:24 [INF] [Gateway] GATEWAY POST /gateway/admin/users/ → 404 in 348.9107ms
+2026-03-27 14:14:44 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:14:44 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000002, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:14:44 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:14:44 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/
+2026-03-27 14:14:44 [INF] [Gateway] GATEWAY GET /gateway/admin/users/ → 200 in 347.9628ms
+2026-03-27 14:14:52 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:14:52 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000003, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:14:52 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:14:52 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOR:00000003, PreviousRequestId: -
+405 Method Not Allowed status code of request URI: http://localhost:5001/api/admin/users/
+2026-03-27 14:14:52 [INF] [Gateway] GATEWAY DELETE /gateway/admin/users/ → 405 in 20.0053ms
+2026-03-27 14:14:58 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:14:58 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000004, PreviousRequestId: -
+The path '/gateway/admin/users/5' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:14:58 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000004, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/5' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:14:58 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOR:00000004, PreviousRequestId: -
+404 Not Found status code of request URI: http://localhost:5001/api/admin/users/5
+2026-03-27 14:14:58 [INF] [Gateway] GATEWAY DELETE /gateway/admin/users/5 → 404 in 86.9942ms
+2026-03-27 14:15:20 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000005, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:15:20 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000005, PreviousRequestId: -
+The path '/gateway/admin/users/8' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:15:20 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000005, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/8' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:16:50 [INF] [Gateway] RequestId: 0HNKBRFOQLTOR:00000005, PreviousRequestId: -
+102 unknown status code of request URI: 
+2026-03-27 14:16:50 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOR:00000005, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+RequestTimedOutError: Timeout making http request, exception: System.TimeoutException: The operation has timed out.
+   at Ocelot.Requester.TimeoutDelegatingHandler.SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+   at System.Net.Http.HttpMessageInvoker.<SendAsync>g__SendAsyncWithTelemetry|6_0(HttpMessageHandler handler, HttpRequestMessage request, CancellationToken cancellationToken)
+   at Ocelot.Requester.MessageInvokerHttpRequester.GetResponse(HttpContext httpContext)
+Setting error response for request: DELETE /gateway/admin/users/8
+2026-03-27 14:16:50 [ERR] [Gateway] GATEWAY DELETE /gateway/admin/users/8 → 503 in 90045.3577ms
+2026-03-27 14:17:23 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:17:23 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000001, PreviousRequestId: -
+The path '/gateway/admin/users/8' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:17:23 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/8' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:17:23 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOT:00000001, PreviousRequestId: -
+404 Not Found status code of request URI: http://localhost:5001/api/admin/users/8
+2026-03-27 14:17:23 [INF] [Gateway] GATEWAY DELETE /gateway/admin/users/8 → 404 in 26.5493ms
+2026-03-27 14:17:29 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:17:29 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000002, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:17:29 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOT:00000002, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users/' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users/' was unauthenticated!;
+2026-03-27 14:17:29 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOT:00000002, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users/' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users/
+2026-03-27 14:17:29 [INF] [Gateway] GATEWAY GET /gateway/admin/users/ → 401 in 7.5185ms
+2026-03-27 14:17:56 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:17:56 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000003, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:17:56 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:17:56 [INF] [Gateway] RequestId: 0HNKBRFOQLTOT:00000003, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/
+2026-03-27 14:17:56 [INF] [Gateway] GATEWAY GET /gateway/admin/users/ → 200 in 26.6552ms
+2026-03-27 14:19:00 [INF] [Gateway] RequestId: 0HNKBRFOQLTOV:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:19:00 [INF] [Gateway] RequestId: 0HNKBRFOQLTOV:00000001, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/signup' in the route /gateway/auth/{everything}.
+2026-03-27 14:19:00 [WRN] [Gateway] RequestId: 0HNKBRFOQLTOV:00000001, PreviousRequestId: -
+415 Unsupported Media Type status code of request URI: http://localhost:5001/api/auth/signup
+2026-03-27 14:19:00 [INF] [Gateway] GATEWAY POST /gateway/auth/signup → 415 in 55.4990ms
+2026-03-27 14:20:53 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:20:53 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000001, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:20:53 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:20:53 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/
+2026-03-27 14:20:53 [INF] [Gateway] GATEWAY GET /gateway/admin/users/ → 200 in 24.4249ms
+2026-03-27 14:21:18 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:21:18 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000002, PreviousRequestId: -
+The path '/gateway/admin/users/9' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:21:18 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/9' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:21:18 [INF] [Gateway] RequestId: 0HNKBRFOQLTP1:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/9
+2026-03-27 14:21:18 [INF] [Gateway] GATEWAY DELETE /gateway/admin/users/9 → 200 in 33.4455ms
+2026-03-27 14:29:54 [INF] [Gateway] GATEWAY GET / → 200 in 166.3741ms
+2026-03-27 14:30:46 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:30:46 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000001, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/signup' in the route /gateway/auth/{everything}.
+2026-03-27 14:30:47 [WRN] [Gateway] RequestId: 0HNKBRSR24UQI:00000001, PreviousRequestId: -
+400 Bad Request status code of request URI: http://localhost:5001/api/auth/signup
+2026-03-27 14:30:47 [INF] [Gateway] GATEWAY POST /gateway/auth/signup → 400 in 397.2937ms
+2026-03-27 14:31:01 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:31:01 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000002, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/signup' in the route /gateway/auth/{everything}.
+2026-03-27 14:31:01 [WRN] [Gateway] RequestId: 0HNKBRSR24UQI:00000002, PreviousRequestId: -
+400 Bad Request status code of request URI: http://localhost:5001/api/auth/signup
+2026-03-27 14:31:01 [INF] [Gateway] GATEWAY POST /gateway/auth/signup → 400 in 29.5643ms
+2026-03-27 14:31:11 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:31:11 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000003, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/signup' in the route /gateway/auth/{everything}.
+2026-03-27 14:31:11 [WRN] [Gateway] RequestId: 0HNKBRSR24UQI:00000003, PreviousRequestId: -
+400 Bad Request status code of request URI: http://localhost:5001/api/auth/signup
+2026-03-27 14:31:11 [INF] [Gateway] GATEWAY POST /gateway/auth/signup → 400 in 30.4598ms
+2026-03-27 14:31:15 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:31:15 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000004, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/signup' in the route /gateway/auth/{everything}.
+2026-03-27 14:31:16 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000004, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/signup
+2026-03-27 14:31:16 [INF] [Gateway] GATEWAY POST /gateway/auth/signup → 200 in 915.3618ms
+2026-03-27 14:31:50 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000005, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:31:50 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000005, PreviousRequestId: -
+The path '/gateway/admin/users/9' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:31:50 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000005, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/9' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:31:50 [WRN] [Gateway] RequestId: 0HNKBRSR24UQI:00000005, PreviousRequestId: -
+404 Not Found status code of request URI: http://localhost:5001/api/admin/users/9
+2026-03-27 14:31:50 [INF] [Gateway] GATEWAY DELETE /gateway/admin/users/9 → 404 in 349.3216ms
+2026-03-27 14:31:54 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000006, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:31:54 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000006, PreviousRequestId: -
+The path '/gateway/admin/users/10' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:31:54 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000006, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/10' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:31:54 [INF] [Gateway] RequestId: 0HNKBRSR24UQI:00000006, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/10
+2026-03-27 14:31:54 [INF] [Gateway] GATEWAY DELETE /gateway/admin/users/10 → 200 in 289.6559ms
+2026-03-27 14:39:44 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:39:44 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000001, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:39:44 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:39:44 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/
+2026-03-27 14:39:44 [INF] [Gateway] GATEWAY GET /gateway/admin/users/ → 200 in 180.6268ms
+2026-03-27 14:39:53 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:39:53 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000002, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/signup' in the route /gateway/auth/{everything}.
+2026-03-27 14:39:53 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/signup
+2026-03-27 14:39:53 [INF] [Gateway] GATEWAY POST /gateway/auth/signup → 200 in 287.9533ms
+2026-03-27 14:40:32 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:40:32 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000003, PreviousRequestId: -
+The path '/gateway/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:40:32 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:40:33 [INF] [Gateway] RequestId: 0HNKBRSR24UQK:00000003, PreviousRequestId: -
+201 Created status code of request URI: http://localhost:5002/api/shipments
+2026-03-27 14:40:33 [INF] [Gateway] GATEWAY POST /gateway/shipments → 201 in 1234.0396ms
+2026-03-27 14:45:20 [INF] [Gateway] RequestId: 0HNKBRSR24UQM:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:45:20 [INF] [Gateway] RequestId: 0HNKBRSR24UQM:00000001, PreviousRequestId: -
+The path '/gateway/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:45:20 [INF] [Gateway] RequestId: 0HNKBRSR24UQM:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:45:20 [WRN] [Gateway] RequestId: 0HNKBRSR24UQM:00000001, PreviousRequestId: -
+405 Method Not Allowed status code of request URI: http://localhost:5002/api/shipments
+2026-03-27 14:45:20 [INF] [Gateway] GATEWAY GET /gateway/shipments → 405 in 24.1389ms
+2026-03-27 14:45:29 [INF] [Gateway] RequestId: 0HNKBRSR24UQM:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:45:29 [INF] [Gateway] RequestId: 0HNKBRSR24UQM:00000002, PreviousRequestId: -
+The path '/gateway/shipments/11' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:45:29 [INF] [Gateway] RequestId: 0HNKBRSR24UQM:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments/11' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:45:29 [WRN] [Gateway] RequestId: 0HNKBRSR24UQM:00000002, PreviousRequestId: -
+404 Not Found status code of request URI: http://localhost:5002/api/shipments/11
+2026-03-27 14:45:29 [INF] [Gateway] GATEWAY GET /gateway/shipments/11 → 404 in 151.1281ms
+2026-03-27 14:51:28 [INF] [Gateway] RequestId: 0HNKBRSR24UQO:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:51:28 [INF] [Gateway] RequestId: 0HNKBRSR24UQO:00000001, PreviousRequestId: -
+The path '/gateway/shipments/4' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:51:28 [INF] [Gateway] RequestId: 0HNKBRSR24UQO:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments/4' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:51:28 [INF] [Gateway] RequestId: 0HNKBRSR24UQO:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/shipments/4
+2026-03-27 14:51:28 [INF] [Gateway] GATEWAY GET /gateway/shipments/4 → 200 in 64.8323ms
+2026-03-27 14:53:28 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:53:28 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000001, PreviousRequestId: -
+The path '/gateway/shipments/rate' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:53:28 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments/rate' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:53:28 [WRN] [Gateway] RequestId: 0HNKBRSR24UQQ:00000001, PreviousRequestId: -
+400 Bad Request status code of request URI: http://localhost:5002/api/shipments/rate
+2026-03-27 14:53:28 [INF] [Gateway] GATEWAY GET /gateway/shipments/rate → 400 in 40.3262ms
+2026-03-27 14:54:04 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:54:04 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000002, PreviousRequestId: -
+The path '/gateway/shipments/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:54:04 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:54:04 [WRN] [Gateway] RequestId: 0HNKBRSR24UQQ:00000002, PreviousRequestId: -
+405 Method Not Allowed status code of request URI: http://localhost:5002/api/shipments/
+2026-03-27 14:54:04 [INF] [Gateway] GATEWAY GET /gateway/shipments/ → 405 in 12.8594ms
+2026-03-27 14:54:08 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:54:08 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000003, PreviousRequestId: -
+The path '/gateway/shipments/2' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:54:08 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments/2' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:54:08 [WRN] [Gateway] RequestId: 0HNKBRSR24UQQ:00000003, PreviousRequestId: -
+404 Not Found status code of request URI: http://localhost:5002/api/shipments/2
+2026-03-27 14:54:08 [INF] [Gateway] GATEWAY GET /gateway/shipments/2 → 404 in 23.4723ms
+2026-03-27 14:54:12 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 14:54:12 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000004, PreviousRequestId: -
+The path '/gateway/shipments/4' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 14:54:12 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000004, PreviousRequestId: -
+Client has been authenticated for path '/gateway/shipments/4' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 14:54:12 [INF] [Gateway] RequestId: 0HNKBRSR24UQQ:00000004, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/shipments/4
+2026-03-27 14:54:12 [INF] [Gateway] GATEWAY GET /gateway/shipments/4 → 200 in 16.3018ms
+2026-03-27 18:55:22 [INF] [Gateway] GATEWAY GET / → 200 in 181.4125ms
+2026-03-27 18:55:36 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-27 18:55:36 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000001, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/login' in the route /gateway/auth/{everything}.
+2026-03-27 18:55:38 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/login
+2026-03-27 18:55:38 [INF] [Gateway] GATEWAY POST /gateway/auth/login → 200 in 1318.2546ms
+2026-03-27 18:55:54 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 18:55:54 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000002, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 18:55:54 [WRN] [Gateway] RequestId: 0HNKC0H5V1HU4:00000002, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/shipments' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/shipments' was unauthenticated!;
+2026-03-27 18:55:54 [WRN] [Gateway] RequestId: 0HNKC0H5V1HU4:00000002, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/shipments' was unauthenticated!
+Setting error response for request: GET /gateway/admin/shipments
+2026-03-27 18:55:54 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 401 in 105.0612ms
+2026-03-27 18:56:04 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 18:56:04 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000003, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 18:56:04 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 18:56:06 [INF] [Gateway] RequestId: 0HNKC0H5V1HU4:00000003, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments
+2026-03-27 18:56:06 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 200 in 1177.9611ms
+2026-03-27 18:58:21 [INF] [Gateway] RequestId: 0HNKC0H5V1HU6:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-27 18:58:21 [INF] [Gateway] RequestId: 0HNKC0H5V1HU6:00000001, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 18:58:21 [INF] [Gateway] RequestId: 0HNKC0H5V1HU6:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 18:58:22 [INF] [Gateway] RequestId: 0HNKC0H5V1HU6:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/
+2026-03-27 18:58:22 [INF] [Gateway] GATEWAY GET /gateway/admin/users/ → 200 in 280.2961ms
+2026-03-27 19:01:06 [INF] [Gateway] RequestId: 0HNKC0H5V1HU8:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:01:06 [INF] [Gateway] RequestId: 0HNKC0H5V1HU8:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:01:06 [INF] [Gateway] RequestId: 0HNKC0H5V1HU8:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:01:06 [INF] [Gateway] RequestId: 0HNKC0H5V1HU8:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments
+2026-03-27 19:01:06 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 200 in 112.4488ms
+2026-03-27 19:01:19 [WRN] [Gateway] RequestId: 0HNKC0H5V1HU8:00000002, PreviousRequestId: -
+DownstreamRouteFinderMiddleware setting pipeline errors because DownstreamRouteFinder returned the following ->
+UnableToFindDownstreamRouteError: Failed to match route configuration for upstream: PATCH /gateway/admin/4/shipments
+2026-03-27 19:01:19 [WRN] [Gateway] RequestId: 0HNKC0H5V1HU8:00000002, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnableToFindDownstreamRouteError: Failed to match route configuration for upstream: PATCH /gateway/admin/4/shipments
+Setting error response for request: PATCH /gateway/admin/4/shipments
+2026-03-27 19:01:19 [INF] [Gateway] GATEWAY PATCH /gateway/admin/4/shipments → 404 in 5.1357ms
+2026-03-27 19:02:35 [WRN] [Gateway] RequestId: 0HNKC0H5V1HUA:00000001, PreviousRequestId: -
+DownstreamRouteFinderMiddleware setting pipeline errors because DownstreamRouteFinder returned the following ->
+UnableToFindDownstreamRouteError: Failed to match route configuration for upstream: PATCH /gateway/admin/shipments/4
+2026-03-27 19:02:35 [WRN] [Gateway] RequestId: 0HNKC0H5V1HUA:00000001, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnableToFindDownstreamRouteError: Failed to match route configuration for upstream: PATCH /gateway/admin/shipments/4
+Setting error response for request: PATCH /gateway/admin/shipments/4
+2026-03-27 19:02:35 [INF] [Gateway] GATEWAY PATCH /gateway/admin/shipments/4 → 404 in 7.3805ms
+2026-03-27 19:02:43 [WRN] [Gateway] RequestId: 0HNKC0H5V1HUA:00000002, PreviousRequestId: -
+DownstreamRouteFinderMiddleware setting pipeline errors because DownstreamRouteFinder returned the following ->
+UnableToFindDownstreamRouteError: Failed to match route configuration for upstream: PATCH /gateway/admin/shipments/4/status
+2026-03-27 19:02:43 [WRN] [Gateway] RequestId: 0HNKC0H5V1HUA:00000002, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnableToFindDownstreamRouteError: Failed to match route configuration for upstream: PATCH /gateway/admin/shipments/4/status
+Setting error response for request: PATCH /gateway/admin/shipments/4/status
+2026-03-27 19:02:43 [INF] [Gateway] GATEWAY PATCH /gateway/admin/shipments/4/status → 404 in 3.3561ms
+2026-03-27 19:03:26 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:03:26 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000003, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:03:26 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:03:26 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000003, PreviousRequestId: -
+204 No Content status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:03:26 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 204 in 398.7544ms
+2026-03-27 19:03:34 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:03:34 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000004, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:03:34 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000004, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:03:34 [INF] [Gateway] RequestId: 0HNKC0H5V1HUA:00000004, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments
+2026-03-27 19:03:34 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 200 in 30.7885ms
+2026-03-27 19:05:41 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:05:41 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:05:41 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:05:41 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:05:41 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 49.4929ms
+2026-03-27 19:06:17 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:06:17 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000002, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:06:17 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:06:17 [WRN] [Gateway] RequestId: 0HNKC0H5V1HUC:00000002, PreviousRequestId: -
+400 Bad Request status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:06:17 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 400 in 21.6208ms
+2026-03-27 19:06:57 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:06:57 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000003, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:06:57 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:06:57 [INF] [Gateway] RequestId: 0HNKC0H5V1HUC:00000003, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:06:57 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 29.1584ms
+2026-03-27 19:14:38 [INF] [Gateway] RequestId: 0HNKC0H5V1HUE:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:14:38 [INF] [Gateway] RequestId: 0HNKC0H5V1HUE:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:14:38 [INF] [Gateway] RequestId: 0HNKC0H5V1HUE:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:14:38 [INF] [Gateway] RequestId: 0HNKC0H5V1HUE:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:14:38 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 76.1394ms
+2026-03-27 19:16:10 [INF] [Gateway] GATEWAY GET / → 200 in 163.5480ms
+2026-03-27 19:16:45 [INF] [Gateway] RequestId: 0HNKC0SPPMOGC:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:16:45 [INF] [Gateway] RequestId: 0HNKC0SPPMOGC:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:16:45 [INF] [Gateway] RequestId: 0HNKC0SPPMOGC:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:16:46 [INF] [Gateway] RequestId: 0HNKC0SPPMOGC:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:16:46 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 1397.2949ms
+2026-03-27 19:32:09 [INF] [Gateway] GATEWAY GET / → 200 in 118.6275ms
+2026-03-27 19:32:39 [INF] [Gateway] RequestId: 0HNKC15NOKLNR:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:32:39 [INF] [Gateway] RequestId: 0HNKC15NOKLNR:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:32:39 [INF] [Gateway] RequestId: 0HNKC15NOKLNR:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:32:41 [INF] [Gateway] RequestId: 0HNKC15NOKLNR:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:32:41 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 1328.2568ms
+2026-03-27 19:37:31 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:37:31 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:37:31 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:37:32 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments
+2026-03-27 19:37:32 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 200 in 327.1187ms
+2026-03-27 19:37:37 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:37:37 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000002, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:37:37 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:37:37 [INF] [Gateway] RequestId: 0HNKC15NOKLNT:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:37:37 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 44.1051ms
+2026-03-27 19:38:47 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:38:47 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:38:47 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:38:47 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:38:47 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 139.7873ms
+2026-03-27 19:38:52 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:38:52 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000002, PreviousRequestId: -
+The path '/gateway/admin/shipments' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:38:52 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:38:52 [INF] [Gateway] RequestId: 0HNKC15NOKLNV:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments
+2026-03-27 19:38:52 [INF] [Gateway] GATEWAY GET /gateway/admin/shipments → 200 in 28.4784ms
+2026-03-27 19:45:10 [INF] [Gateway] RequestId: 0HNKC15NOKLO1:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:45:10 [INF] [Gateway] RequestId: 0HNKC15NOKLO1:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:45:10 [INF] [Gateway] RequestId: 0HNKC15NOKLO1:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:45:10 [INF] [Gateway] RequestId: 0HNKC15NOKLO1:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:45:10 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 62.5822ms
+2026-03-27 19:49:15 [INF] [Gateway] RequestId: 0HNKC15NOKLO3:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/shipments/{everything}' via the EnableRateLimiting option.
+2026-03-27 19:49:15 [INF] [Gateway] RequestId: 0HNKC15NOKLO3:00000001, PreviousRequestId: -
+The path '/gateway/admin/shipments/4/status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-27 19:49:15 [INF] [Gateway] RequestId: 0HNKC15NOKLO3:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/shipments/4/status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-27 19:49:15 [INF] [Gateway] RequestId: 0HNKC15NOKLO3:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5002/api/admin/shipments/4/status
+2026-03-27 19:49:15 [INF] [Gateway] GATEWAY PUT /gateway/admin/shipments/4/status → 200 in 47.5066ms

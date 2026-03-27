@@ -29,5 +29,5 @@ public class ShipmentPagedRequest : PagedRequest
     public DateTime? ToDate { get; set; }
 }
 
-public record UpdateStatusRequest(string Status);
+//public record UpdateStatusRequest(string Status);
 public record SchedulePickupRequest(DateTime PickupScheduledAt);

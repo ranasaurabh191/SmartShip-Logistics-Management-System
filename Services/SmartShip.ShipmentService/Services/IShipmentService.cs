@@ -7,7 +7,7 @@ namespace SmartShip.ShipmentService.Services
     {
         Task<ShipmentResponse> CreateAsync(CreateShipmentRequest req, int customerId);
         Task<ShipmentResponse?> GetByIdAsync(int id);
-        Task<bool> UpdateStatusAsync(int id, string status);
+        Task<bool> UpdateStatusAsync(int id, UpdateStatusRequest request);
         Task<bool> SchedulePickupAsync(int id, DateTime pickupTime);
         Task<bool> ResolveExceptionAsync(int id, string resolution);
         Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type);
