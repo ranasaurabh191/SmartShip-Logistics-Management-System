@@ -1,0 +1,19 @@
+2026-03-28 10:09:54 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 10:09:54 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 10:09:55 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:20:13 [INF] [TrackingService] Processing ShipmentCreated: SS2026032868126 (ID: 1)
+2026-03-28 10:20:13 [INF] [TrackingService] Created Booked event for SS2026032868126
+2026-03-28 10:36:20 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 10:36:20 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 10:36:21 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:42:44 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 10:42:44 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 10:42:45 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 11:29:42 [INF] [TrackingService] Processing ShipmentCreated: SS2026032817685 (ID: 2)
+2026-03-28 11:29:43 [INF] [TrackingService] Created Booked event for SS2026032817685
+2026-03-28 11:32:01 [INF] [TrackingService] Processing StatusUpdate for Tracking Number: SS2026032817685 Booked -> Delivered
+2026-03-28 11:32:01 [INF] [TrackingService] Changes Saved, Added status event for Tracking Number: SS2026032817685
+2026-03-28 11:49:06 [INF] [TrackingService] Processing ShipmentCreated: SS2026032855949 (ID: 1)
+2026-03-28 11:49:06 [INF] [TrackingService] Created Booked event for SS2026032855949
+2026-03-28 11:53:19 [INF] [TrackingService] Processing ShipmentCreated: SS2026032869630 (ID: 2)
+2026-03-28 11:53:19 [INF] [TrackingService] Created Booked event for SS2026032869630

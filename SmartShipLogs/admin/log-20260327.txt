@@ -40,3 +40,90 @@ Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
 2026-03-27 14:19:29 [INF] [AdminService] HTTP GET /swagger/swagger-ui-standalone-preset.js → 304 in 10.8559ms
 2026-03-27 14:19:29 [INF] [AdminService] HTTP GET /swagger/swagger-ui-bundle.js → 304 in 18.8175ms
 2026-03-27 14:19:29 [INF] [AdminService] HTTP GET /swagger/v1/swagger.json → 200 in 9.6258ms
+2026-03-27 20:35:48 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-27 20:35:49 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-27 20:36:35 [INF] [AdminService] Processing ShipmentDelivered: SS2026032725369
+2026-03-27 20:36:35 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-27 20:36:36 [INF] [AdminService] Updated metrics: Total=1, Active=-1, DeliveredToday=1
+2026-03-27 20:39:52 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 20:39:52 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 0
+2026-03-27 20:39:52 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 301.7325ms
+2026-03-27 20:58:48 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: UserCreatedConsumer
+2026-03-27 20:58:48 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-27 20:58:49 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-27 20:59:05 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 20:59:05 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-27 20:59:05 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 0
+2026-03-27 20:59:05 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 695.2606ms
+2026-03-27 21:00:28 [INF] [AdminService] Processing UserCreated: sahil@gmail.com (CUSTOMER)
+2026-03-27 21:00:28 [INF] [AdminService] ✅ TotalCustomers now: 1
+2026-03-27 21:00:40 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:00:40 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 1
+2026-03-27 21:00:40 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 13.7560ms
+2026-03-27 21:02:35 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:02:35 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:02:35 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 20.1672ms
+2026-03-27 21:03:27 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:03:27 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:03:27 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 8.5731ms
+2026-03-27 21:05:31 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:05:31 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:05:31 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 10.0490ms
+2026-03-27 21:35:14 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:35:14 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 1
+2026-03-27 21:35:14 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 25.9931ms
+2026-03-27 21:35:21 [INF] [AdminService] Processing UserCreated: sahil@gmail.com (CUSTOMER)
+2026-03-27 21:35:21 [INF] [AdminService] ✅ TotalCustomers now: 2
+2026-03-27 21:35:27 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:35:27 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:35:27 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 12.5605ms
+2026-03-27 21:35:50 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:35:50 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:35:50 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 10.8454ms
+2026-03-27 21:36:08 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:36:08 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:36:08 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 7.9991ms
+2026-03-27 21:40:51 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-27 21:40:51 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-27 21:40:51 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-27 21:40:52 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-27 21:41:00 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:41:01 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-27 21:41:01 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:41:01 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 781.9083ms
+2026-03-27 21:41:38 [INF] [AdminService] Processing UserCreated: sahil@gmail.com (CUSTOMER)
+2026-03-27 21:41:38 [INF] [AdminService] TotalCustomers incremented to 2
+2026-03-27 21:42:28 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:42:28 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 2
+2026-03-27 21:42:28 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 13.0843ms
+2026-03-27 21:42:49 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 21:42:49 [INF] [AdminService] Dashboard metrics → Total: 1 | Active: -1 | DeliveredToday: 1 | Exceptions: 0 | Customers: 1
+2026-03-27 21:42:49 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 13.2029ms
+2026-03-27 22:00:44 [INF] [AdminService] Processing ShipmentDelivered: SS2026032725369
+2026-03-27 22:00:44 [INF] [AdminService] Updated metrics: Total=2, Active=-2, DeliveredToday=2
+2026-03-27 22:06:00 [INF] [AdminService] Processing ShipmentDelivered: SS2026032755561
+2026-03-27 22:06:00 [INF] [AdminService] Updated metrics: Total=3, Active=-3, DeliveredToday=3
+2026-03-27 22:26:50 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-27 22:26:51 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-27 22:26:51 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-27 22:26:51 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-27 22:48:33 [INF] [AdminService] Fetching reports | Page: 1 | PageSize: 10 | Type: All
+2026-03-27 22:48:34 [INF] [AdminService] Fetched 2 of 2 reports
+2026-03-27 22:48:34 [INF] [AdminService] HTTP GET /api/admin/reports → 200 in 830.1034ms
+2026-03-27 22:50:14 [INF] [AdminService] HTTP POST /api/admin/reports → 400 in 117.4838ms
+2026-03-27 22:50:27 [INF] [AdminService] Generating Operational report | From: "2026-01-01T00:00:00.0000000Z" | To: "2026-12-31T23:59:59.0000000Z" | By: Administrator
+2026-03-27 22:50:27 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-27 22:50:27 [INF] [AdminService] Report generated: ID 3 | Operational Report (01-01-2026 - 31-12-2026)
+2026-03-27 22:50:27 [INF] [AdminService] HTTP POST /api/admin/reports → 200 in 375.2498ms
+2026-03-27 22:50:47 [INF] [AdminService] Generating Performance report | From: "2026-01-01T00:00:00.0000000Z" | To: "2026-12-31T23:59:59.0000000Z" | By: Administrator
+2026-03-27 22:50:47 [INF] [AdminService] Report generated: ID 4 | Performance Report (01-01-2026 - 31-12-2026)
+2026-03-27 22:50:47 [INF] [AdminService] HTTP POST /api/admin/reports → 200 in 17.3875ms
+2026-03-27 22:50:55 [INF] [AdminService] Generating SLA report | From: "2026-01-01T00:00:00.0000000Z" | To: "2026-12-31T23:59:59.0000000Z" | By: Administrator
+2026-03-27 22:50:55 [INF] [AdminService] Report generated: ID 5 | SLA Report (01-01-2026 - 31-12-2026)
+2026-03-27 22:50:55 [INF] [AdminService] HTTP POST /api/admin/reports → 200 in 11.6160ms
+2026-03-27 22:51:06 [INF] [AdminService] Fetching reports | Page: 1 | PageSize: 10 | Type: All
+2026-03-27 22:51:06 [INF] [AdminService] Fetched 5 of 5 reports
+2026-03-27 22:51:06 [INF] [AdminService] HTTP GET /api/admin/reports → 200 in 14.5720ms
+2026-03-27 22:57:10 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-27 22:57:10 [INF] [AdminService] Dashboard metrics → Total: 3 | Active: -3 | DeliveredToday: 3 | Exceptions: 0 | Customers: 1
+2026-03-27 22:57:10 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 61.7386ms

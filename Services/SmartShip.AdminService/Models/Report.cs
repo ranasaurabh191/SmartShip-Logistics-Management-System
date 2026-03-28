@@ -11,6 +11,6 @@ public class Report
     public string GeneratedBy { get; set; } = string.Empty;
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
-    public DateTime GeneratedAt { get; set; } = DateTime.UtcNow;
+    public DateTime GeneratedAt { get; set; } = DateTime.Now;
     public string DataJson { get; set; } = string.Empty; // Serialized report data
 }

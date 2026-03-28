@@ -19,7 +19,7 @@ public class User
     public string PasswordHash { get; set; } = string.Empty;
 
     [Required]
-    public string Role { get; set; } = "CUSTOMER"; // CUSTOMER | ADMIN
+    public string Role { get; set; } = "CUSTOMER"; 
     public bool IsActive { get; set; } = true;
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 }

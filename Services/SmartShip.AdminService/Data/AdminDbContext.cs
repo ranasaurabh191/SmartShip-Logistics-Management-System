@@ -9,7 +9,7 @@ public class AdminDbContext : DbContext
 
     public DbSet<Hub> Hubs => Set<Hub>();
     public DbSet<Report> Reports => Set<Report>();
-    public DbSet<DashboardMetrics> DashboardMetrics => Set<DashboardMetrics>(); // ✅ Added
+    public DbSet<DashboardMetrics> DashboardMetrics => Set<DashboardMetrics>(); 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -18,7 +18,6 @@ public class AdminDbContext : DbContext
             new Hub { Id = 2, Name = "Mumbai Hub", City = "Mumbai", State = "Maharashtra", Country = "India", ContactPhone = "9800000002", IsActive = true, CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc) }
         );
 
-        // ✅ Seed initial metrics row
         modelBuilder.Entity<DashboardMetrics>().HasData(
             new DashboardMetrics
             {

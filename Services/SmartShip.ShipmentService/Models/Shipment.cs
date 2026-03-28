@@ -3,7 +3,7 @@
 public enum ShipmentStatus
 {
     Draft, Booked, PickedUp, InTransit, OutForDelivery, Delivered,
-    Delayed, Failed, Returned
+    Delayed, Failed, Returned, Cancelled
 }
 
 public enum ShipmentType { Domestic, International, Express, Freight }
@@ -16,7 +16,7 @@ public class Shipment
     public ShipmentType ShipmentType { get; set; }
     public ShipmentStatus Status { get; set; } = ShipmentStatus.Draft;
     public decimal ShippingRate { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? PickupScheduledAt { get; set; }
     public DateTime? DeliveredAt { get; set; }
     public string? Notes { get; set; }

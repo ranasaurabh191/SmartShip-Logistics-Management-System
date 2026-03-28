@@ -22,11 +22,27 @@ public class AdminService : IAdminService
     {
         _logger.LogInformation("Fetching dashboard metrics...");
 
-        var metrics = await _context.DashboardMetrics.FirstOrDefaultAsync()
-            ?? throw new Exception("Metrics not initialized.");
+        var metrics = await _context.DashboardMetrics.FirstOrDefaultAsync();
+
+        if (metrics == null)
+        {
+            _logger.LogWarning("No metrics row found, creating default...");
+            metrics = new DashboardMetrics
+            {
+                TotalShipments = 0,
+                ActiveShipments = 0,
+                DeliveredToday = 0,
+                Exceptions = 0,
+                TotalCustomers = 0,
+                LastUpdatedAt = DateTime.Now
+            };
+            _context.DashboardMetrics.Add(metrics);
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("Default metrics row created.");
+        }
 
         _logger.LogInformation(
-            "Dashboard metrics → Total: {Total} | Active: {Active} | DeliveredToday: {DeliveredToday} | Exceptions: {Exceptions} | Customers: {Customers}",
+            "Dashboard metrics → Total:{Total} Active:{Active} DeliveredToday:{DeliveredToday} Exceptions:{Exceptions} Customers:{Customers}",
             metrics.TotalShipments, metrics.ActiveShipments,
             metrics.DeliveredToday, metrics.Exceptions, metrics.TotalCustomers);
 

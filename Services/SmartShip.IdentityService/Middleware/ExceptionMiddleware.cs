@@ -40,7 +40,7 @@
                     ArgumentException => ex.Message,
                     _ => "An unexpected error occurred."
                 },
-                timestamp = DateTime.UtcNow
+                timestamp = DateTime.Now
             });
         }
     }

@@ -46,7 +46,7 @@ try
     var app = builder.Build();
 
     app.UseSerilogRequestLogging(opt =>
-        opt.MessageTemplate = "GATEWAY {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
+        opt.MessageTemplate = "GATEWAY {RequestMethod} {RequestPath} -> {StatusCode} in {Elapsed:0.0000}ms");
 
     app.UseCors("AllowAll");
     app.UseAuthentication();
@@ -55,7 +55,7 @@ try
     app.MapGet("/health", () => Results.Json(new
     {
         status = "healthy",
-        timestamp = DateTime.UtcNow,
+        timestamp = DateTime.Now,
         services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004" }
     }));
 

@@ -5,21 +5,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SmartShip.AdminService.Messaging.Consumers;
 
-public class ShipmentDeliveredConsumer : IConsumer<ShipmentDeliveredEvent>
+public class ShipmentCancelledConsumer : IConsumer<ShipmentCancelledEvent>
 {
     private readonly AdminDbContext _db;
-    private readonly ILogger<ShipmentDeliveredConsumer> _logger;
+    private readonly ILogger<ShipmentCancelledConsumer> _logger;
 
-    public ShipmentDeliveredConsumer(AdminDbContext db, ILogger<ShipmentDeliveredConsumer> logger)
+    public ShipmentCancelledConsumer(AdminDbContext db, ILogger<ShipmentCancelledConsumer> logger)
     {
         _db = db;
         _logger = logger;
     }
 
-    public async Task Consume(ConsumeContext<ShipmentDeliveredEvent> context)
+    public async Task Consume(ConsumeContext<ShipmentCancelledEvent> context)
     {
         var msg = context.Message;
-        _logger.LogInformation("Admin: ShipmentDelivered received -> {TrackingNumber}", msg.TrackingNumber);
+        _logger.LogInformation("Admin: ShipmentCancelled received -> {TrackingNumber}", msg.TrackingNumber);
 
         var metrics = await _db.DashboardMetrics.FirstOrDefaultAsync();
         if (metrics == null)
@@ -31,11 +31,9 @@ public class ShipmentDeliveredConsumer : IConsumer<ShipmentDeliveredEvent>
         if (metrics.ActiveShipments > 0)
             metrics.ActiveShipments--;
 
-        metrics.DeliveredToday++;
         metrics.LastUpdatedAt = DateTime.Now;
 
         await _db.SaveChangesAsync();
-        _logger.LogInformation("Metrics -> Active:{Active} DeliveredToday:{DeliveredToday}",
-            metrics.ActiveShipments, metrics.DeliveredToday);
+        _logger.LogInformation("Metrics -> Active:{Active}", metrics.ActiveShipments);
     }
 }

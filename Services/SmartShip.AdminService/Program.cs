@@ -50,9 +50,14 @@ try
     builder.Services.AddValidatorsFromAssemblyContaining<CreateHubRequestValidator>();
     builder.Services.AddMassTransit(x =>
     {
-        x.AddConsumer<ShipmentDeliveredConsumer>();  
+        x.AddConsumer<ShipmentDeliveredConsumer>();
+        x.AddConsumer<UserCreatedConsumer>();
+        x.AddConsumer<UserDeletedConsumer>();
+        x.AddConsumer<ShipmentCreatedMetricsConsumer>();
+        x.AddConsumer<ShipmentDeliveredConsumer>();
+        x.AddConsumer<ShipmentCancelledConsumer>();
 
-        x.UsingRabbitMq((ctx, cfg) =>
+        x.UsingRabbitMq((context, cfg) =>
         {
             cfg.Host("localhost", "/", h =>
             {
@@ -62,7 +67,27 @@ try
 
             cfg.ReceiveEndpoint("admin-shipment-delivered", e =>
             {
-                e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx);
+                e.ConfigureConsumer<ShipmentDeliveredConsumer>(context);
+            });
+
+            cfg.ReceiveEndpoint("admin-user-created", e =>
+            {
+                e.ConfigureConsumer<UserCreatedConsumer>(context);
+            });
+
+            cfg.ReceiveEndpoint("admin-user-deleted", e =>
+            {
+                e.ConfigureConsumer<UserDeletedConsumer>(context);
+            });
+
+            cfg.ReceiveEndpoint("admin-shipment-created", e =>
+            {
+                e.ConfigureConsumer<ShipmentCreatedMetricsConsumer>(context);
+            });
+
+            cfg.ReceiveEndpoint("admin-shipment-cancelled", e =>
+            {
+                e.ConfigureConsumer<ShipmentCancelledConsumer>(context);
             });
         });
     });
@@ -122,7 +147,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "❌ AdminService crashed on startup.");
+    Log.Fatal(ex, "AdminService crashed on startup.");
 }
 finally
 {

@@ -1,0 +1,60 @@
+2026-03-28 10:09:55 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:10:16 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-28 10:10:17 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-28 10:10:17 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-28 10:10:17 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 60 minutes
+2026-03-28 10:10:17 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1127.8230ms
+2026-03-28 10:11:11 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 10:11:11 [INF] [IdentityService] Total users after filtering: 2
+2026-03-28 10:11:11 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-28 10:11:11 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 298.5212ms
+2026-03-28 10:12:57 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 10:12:57 [INF] [IdentityService] Total users after filtering: 2
+2026-03-28 10:12:57 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-28 10:12:57 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 37.4785ms
+2026-03-28 10:13:08 [INF] [IdentityService] Deleting user with ID: 11
+2026-03-28 10:13:08 [INF] [IdentityService] User deleted successfully: 11
+2026-03-28 10:13:08 [INF] [IdentityService] Delete Event published successfully: 11
+2026-03-28 10:13:08 [INF] [IdentityService] HTTP DELETE /api/admin/users/11 → 200 in 415.1177ms
+2026-03-28 10:18:51 [INF] [IdentityService] Signup attempt for email: sahil@gmail.com
+2026-03-28 10:18:52 [INF] [IdentityService] User created successfully: sahil@gmail.com | Role: CUSTOMER
+2026-03-28 10:18:52 [INF] [IdentityService] User creation event published.
+2026-03-28 10:18:52 [INF] [IdentityService] Generating JWT token for user: sahil@gmail.com, Role: CUSTOMER
+2026-03-28 10:18:52 [INF] [IdentityService] Token generated successfully for user: sahil@gmail.com, expires in 60 minutes
+2026-03-28 10:18:52 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 533.3557ms
+2026-03-28 10:36:21 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:42:44 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 11:23:10 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-28 11:23:11 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-28 11:23:11 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-28 11:23:11 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 60 minutes
+2026-03-28 11:23:11 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1075.8060ms
+2026-03-28 11:23:24 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 11:23:25 [INF] [IdentityService] Total users after filtering: 2
+2026-03-28 11:23:25 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-28 11:23:25 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 245.6296ms
+2026-03-28 11:28:25 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 11:28:25 [INF] [IdentityService] Total users after filtering: 2
+2026-03-28 11:28:25 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-28 11:28:25 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 35.1945ms
+2026-03-28 11:28:38 [INF] [IdentityService] Deleting user with ID: 15
+2026-03-28 11:28:38 [INF] [IdentityService] User deleted successfully: 15
+2026-03-28 11:28:38 [INF] [IdentityService] Delete Event published successfully: 15
+2026-03-28 11:28:38 [INF] [IdentityService] HTTP DELETE /api/admin/users/15 → 200 in 393.0429ms
+2026-03-28 11:29:13 [INF] [IdentityService] Signup attempt for email: sahil@gmail.com
+2026-03-28 11:29:13 [INF] [IdentityService] User created successfully: sahil@gmail.com | Role: CUSTOMER
+2026-03-28 11:29:13 [INF] [IdentityService] User creation event published.
+2026-03-28 11:29:13 [INF] [IdentityService] Generating JWT token for user: sahil@gmail.com, Role: CUSTOMER
+2026-03-28 11:29:13 [INF] [IdentityService] Token generated successfully for user: sahil@gmail.com, expires in 60 minutes
+2026-03-28 11:29:13 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 470.1711ms
+2026-03-28 12:06:22 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 12:06:22 [INF] [IdentityService] Total users after filtering: 2
+2026-03-28 12:06:22 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-28 12:06:22 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 49.1901ms
+2026-03-28 12:06:40 [INF] [IdentityService] Deleting user with ID: 15
+2026-03-28 12:06:40 [WRN] [IdentityService] Delete failed - user not found: 15
+2026-03-28 12:06:40 [INF] [IdentityService] HTTP DELETE /api/admin/users/15 → 404 in 46.9443ms
+2026-03-28 12:06:45 [INF] [IdentityService] Deleting user with ID: 16
+2026-03-28 12:06:45 [INF] [IdentityService] User deleted successfully: 16
+2026-03-28 12:06:45 [INF] [IdentityService] Delete Event published successfully: 16
+2026-03-28 12:06:45 [INF] [IdentityService] HTTP DELETE /api/admin/users/16 → 200 in 27.8241ms

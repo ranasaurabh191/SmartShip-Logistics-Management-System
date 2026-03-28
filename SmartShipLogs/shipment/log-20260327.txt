@@ -2825,3 +2825,92 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-27 19:49:15 [INF] [ShipmentService] Updating status for Shipment 4 → Delivered
 2026-03-27 19:49:15 [INF] [ShipmentService] Shipment SS2026032725369 status: "Delivered" → "Delivered"
 2026-03-27 19:49:15 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/4/status → 200 in 33.0317ms
+2026-03-27 20:35:48 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-27 20:35:49 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-27 20:36:34 [INF] [ShipmentService] Updating status for Shipment 4 → Delivered
+2026-03-27 20:36:35 [INF] [ShipmentService] Shipment SS2026032725369 status: "Delivered" → "Delivered"
+2026-03-27 20:36:35 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/4/status → 200 in 1163.0928ms
+2026-03-27 20:58:48 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-27 20:58:49 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-27 21:03:01 [INF] [ShipmentService] Processing UserDeleted event for UserId: 12
+2026-03-27 21:03:01 [INF] [ShipmentService] Found 0 shipments for deleted user 12
+2026-03-27 21:03:01 [INF] [ShipmentService] No shipments found for deleted user 12
+2026-03-27 21:35:42 [INF] [ShipmentService] Processing UserDeleted event for UserId: 13
+2026-03-27 21:35:42 [INF] [ShipmentService] Found 0 shipments for deleted user 13
+2026-03-27 21:35:42 [INF] [ShipmentService] No shipments found for deleted user 13
+2026-03-27 21:40:51 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-27 21:40:52 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-27 21:42:44 [INF] [ShipmentService] Processing UserDeleted event for UserId: 14
+2026-03-27 21:42:45 [INF] [ShipmentService] Found 0 shipments for deleted user 14
+2026-03-27 21:42:45 [INF] [ShipmentService] No shipments found for deleted user 14
+2026-03-27 21:46:15 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 21:46:15 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-27 21:46:15 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 759.9176ms
+2026-03-27 21:48:02 [INF] [ShipmentService] HTTP GET /swagger/index.html → 304 in 60.2996ms
+2026-03-27 21:48:02 [INF] [ShipmentService] HTTP GET /swagger/index.js → 304 in 35.2414ms
+2026-03-27 21:48:02 [INF] [ShipmentService] HTTP GET /swagger/swagger-ui.css → 304 in 56.8155ms
+2026-03-27 21:48:02 [INF] [ShipmentService] HTTP GET /swagger/swagger-ui-standalone-preset.js → 304 in 42.8769ms
+2026-03-27 21:48:02 [INF] [ShipmentService] HTTP GET /swagger/index.css → 304 in 50.0682ms
+2026-03-27 21:48:02 [INF] [ShipmentService] HTTP GET /swagger/swagger-ui-bundle.js → 304 in 83.8030ms
+2026-03-27 21:48:02 [INF] [ShipmentService] HTTP GET /swagger/v1/swagger.json → 200 in 17.9561ms
+2026-03-27 21:48:20 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 401 in 8.1987ms
+2026-03-27 21:49:29 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 21:49:29 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-27 21:49:29 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 62.5077ms
+2026-03-27 21:53:53 [INF] [ShipmentService] HTTP POST /api/shipments/ → 400 in 159.6801ms
+2026-03-27 21:54:17 [INF] [ShipmentService] Creating shipment for Customer 11 | Type: "Domestic" | Weight: 1.5kg
+2026-03-27 21:54:17 [INF] [ShipmentService] Rate calculated: ₹120 | Type: "Domestic" | Weight: 1.5kg
+2026-03-27 21:54:17 [INF] [ShipmentService] Calculated shipping rate: 120 for Type: "Domestic"
+2026-03-27 21:54:18 [INF] [ShipmentService] Shipment created: SS2026032755561 | Rate: 120 | Customer: 11
+2026-03-27 21:54:18 [INF] [ShipmentService] HTTP POST /api/shipments/ → 201 in 564.2815ms
+2026-03-27 21:57:36 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/4/status → 403 in 4.5977ms
+2026-03-27 21:57:56 [INF] [ShipmentService] Updating status for Shipment 4 → Intransit
+2026-03-27 21:57:56 [INF] [ShipmentService] Shipment SS2026032725369 status: "Delivered" → "InTransit"
+2026-03-27 21:57:56 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/4/status → 200 in 113.7145ms
+2026-03-27 21:58:19 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 21:58:19 [INF] [ShipmentService] Fetched 2 of 2 shipments
+2026-03-27 21:58:19 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 15.2602ms
+2026-03-27 22:00:44 [INF] [ShipmentService] Updating status for Shipment 4 → Delivered
+2026-03-27 22:00:44 [INF] [ShipmentService] Shipment SS2026032725369 status: "InTransit" → "Delivered"
+2026-03-27 22:00:44 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/4/status → 200 in 44.2082ms
+2026-03-27 22:01:11 [INF] [ShipmentService] Updating status for Shipment 5 → Intransit
+2026-03-27 22:01:11 [INF] [ShipmentService] Shipment SS2026032755561 status: "Draft" → "InTransit"
+2026-03-27 22:01:11 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/5/status → 200 in 21.9450ms
+2026-03-27 22:01:16 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 22:01:16 [INF] [ShipmentService] Fetched 2 of 2 shipments
+2026-03-27 22:01:16 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 17.1530ms
+2026-03-27 22:06:00 [INF] [ShipmentService] Updating status for Shipment 5 → Delivered
+2026-03-27 22:06:00 [INF] [ShipmentService] Shipment SS2026032755561 status: "InTransit" → "Delivered"
+2026-03-27 22:06:00 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/5/status → 200 in 37.3542ms
+2026-03-27 22:06:09 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 22:06:09 [INF] [ShipmentService] Fetched 2 of 2 shipments
+2026-03-27 22:06:09 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 14.5150ms
+2026-03-27 22:11:57 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 22:11:57 [INF] [ShipmentService] Fetched 2 of 2 shipments
+2026-03-27 22:11:57 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 31.3693ms
+2026-03-27 22:13:31 [INF] [ShipmentService] HTTP POST /api/shipments/5/pickup → 405 in 38.2352ms
+2026-03-27 22:13:39 [INF] [ShipmentService] HTTP POST /api/shipments/5/pickup → 405 in 0.4018ms
+2026-03-27 22:14:35 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 400 in 23.9963ms
+2026-03-27 22:17:07 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 400 in 12.0668ms
+2026-03-27 22:26:51 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-27 22:26:52 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-27 22:27:01 [INF] [ShipmentService] Scheduling pickup for Shipment 5 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:27:02 [INF] [ShipmentService] Pickup scheduled for SS2026032755561 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:27:02 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 204 in 1126.8446ms
+2026-03-27 22:27:34 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 22:27:34 [INF] [ShipmentService] Fetched 2 of 2 shipments
+2026-03-27 22:27:34 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 340.7091ms
+2026-03-27 22:30:53 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 400 in 30.3592ms
+2026-03-27 22:31:51 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 415 in 25.2208ms
+2026-03-27 22:31:56 [INF] [ShipmentService] Scheduling pickup for Shipment 5 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:31:56 [INF] [ShipmentService] Pickup scheduled for SS2026032755561 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:31:56 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 204 in 19.8085ms
+2026-03-27 22:32:01 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-27 22:32:01 [INF] [ShipmentService] Fetched 2 of 2 shipments
+2026-03-27 22:32:01 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 15.7168ms
+2026-03-27 22:32:50 [INF] [ShipmentService] Scheduling pickup for Shipment 5 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:32:50 [INF] [ShipmentService] Pickup scheduled for SS2026032755561 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:32:50 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 200 in 20.2917ms
+2026-03-27 22:33:05 [INF] [ShipmentService] Scheduling pickup for Shipment 5 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:33:05 [INF] [ShipmentService] Pickup scheduled for SS2026032755561 at "2026-03-28T10:00:00.0000000Z"
+2026-03-27 22:33:05 [INF] [ShipmentService] HTTP PATCH /api/shipments/5/pickup → 200 in 17.8541ms

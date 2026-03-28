@@ -1,0 +1,99 @@
+2026-03-28 10:05:13 [FTL] [ShipmentService] ❌ ShipmentService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.ShipmentService\Program.cs:line 116
+2026-03-28 10:05:20 [FTL] [ShipmentService] ❌ ShipmentService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.ShipmentService\Program.cs:line 116
+2026-03-28 10:09:55 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 10:09:55 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:11:35 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 10:11:36 [INF] [ShipmentService] Fetched 0 of 0 shipments
+2026-03-28 10:11:36 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 882.4972ms
+2026-03-28 10:13:08 [INF] [ShipmentService] Processing UserDeleted event for UserId: 11
+2026-03-28 10:13:08 [INF] [ShipmentService] Found 0 shipments for deleted user 11
+2026-03-28 10:13:08 [INF] [ShipmentService] No shipments found for deleted user 11
+2026-03-28 10:14:21 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 10:14:21 [INF] [ShipmentService] Fetched 0 of 0 shipments
+2026-03-28 10:14:21 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 42.5830ms
+2026-03-28 10:20:12 [INF] [ShipmentService] Creating shipment for Customer 15 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 10:20:12 [INF] [ShipmentService] Rate calculated: 120 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 10:20:12 [INF] [ShipmentService] Calculated shipping rate: 120 for Type: "Domestic"
+2026-03-28 10:20:12 [INF] [ShipmentService] Shipment created: SS2026032868126 | Rate: 120 | Customer: 15
+2026-03-28 10:20:13 [INF] [ShipmentService] HTTP POST /api/shipments/ → 201 in 747.7406ms
+2026-03-28 10:36:21 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 10:36:22 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:42:44 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 10:42:45 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 11:23:35 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:23:36 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 11:23:36 [INF] [ShipmentService] HTTP GET /api/admin/shipments → 200 in 958.0630ms
+2026-03-28 11:26:51 [INF] [ShipmentService] HTTP GET /api/admin/shipments/1/status → 405 in 5.4680ms
+2026-03-28 11:27:47 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:27:47 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 11:27:47 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 123.7889ms
+2026-03-28 11:28:38 [INF] [ShipmentService] Processing UserDeleted event for UserId: 15
+2026-03-28 11:28:38 [INF] [ShipmentService] Found 1 shipments for deleted user 15
+2026-03-28 11:28:39 [INF] [ShipmentService] Cleaned up 1 shipments for deleted user 15
+2026-03-28 11:29:02 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:29:02 [INF] [ShipmentService] Fetched 0 of 0 shipments
+2026-03-28 11:29:02 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 33.1397ms
+2026-03-28 11:29:42 [INF] [ShipmentService] Creating shipment for Customer 16 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 11:29:42 [INF] [ShipmentService] Rate calculated: 120 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 11:29:42 [INF] [ShipmentService] Calculated shipping rate: 120 for Type: "Domestic"
+2026-03-28 11:29:42 [INF] [ShipmentService] Shipment created: SS2026032817685 | Rate: 120 | Customer: 16
+2026-03-28 11:29:42 [INF] [ShipmentService] HTTP POST /api/shipments/ → 201 in 406.8100ms
+2026-03-28 11:30:08 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:30:08 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 11:30:08 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 23.2984ms
+2026-03-28 11:31:05 [INF] [ShipmentService] HTTP PATCH /api/shipments/2/pickup → 400 in 31.0477ms
+2026-03-28 11:31:16 [INF] [ShipmentService] Scheduling pickup for Shipment 2 at "2026-03-29T10:00:00.0000000Z"
+2026-03-28 11:31:16 [INF] [ShipmentService] Pickup scheduled for SS2026032817685 at "2026-03-29T10:00:00.0000000Z"
+2026-03-28 11:31:16 [INF] [ShipmentService] HTTP PATCH /api/shipments/2/pickup → 200 in 53.0142ms
+2026-03-28 11:31:23 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:31:23 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 11:31:23 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 19.9621ms
+2026-03-28 11:31:46 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/2/status → 403 in 3.6636ms
+2026-03-28 11:32:01 [INF] [ShipmentService] Updating status for Shipment 2 → Delivered
+2026-03-28 11:32:01 [INF] [ShipmentService] Shipment SS2026032817685 status: "Booked" → "Delivered"
+2026-03-28 11:32:01 [INF] [ShipmentService] Publishing ShipmentDeliveredEvent for SS2026032817685
+2026-03-28 11:32:01 [INF] [ShipmentService] HTTP PUT /api/admin/shipments/2/status → 200 in 99.3140ms
+2026-03-28 11:32:06 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:32:06 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 11:32:06 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 18.0543ms
+2026-03-28 11:37:11 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:37:11 [INF] [ShipmentService] Fetched 0 of 0 shipments
+2026-03-28 11:37:11 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 19.2770ms
+2026-03-28 11:49:06 [INF] [ShipmentService] Creating shipment for Customer 16 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 11:49:06 [INF] [ShipmentService] Rate calculated: 120 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 11:49:06 [INF] [ShipmentService] Calculated shipping rate: 120 for Type: "Domestic"
+2026-03-28 11:49:06 [INF] [ShipmentService] Shipment created: SS2026032855949 | Rate: 120 | Customer: 16
+2026-03-28 11:49:06 [INF] [ShipmentService] HTTP POST /api/shipments/ → 201 in 65.0438ms
+2026-03-28 11:53:19 [INF] [ShipmentService] Creating shipment for Customer 16 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 11:53:19 [INF] [ShipmentService] Rate calculated: 120 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 11:53:19 [INF] [ShipmentService] Calculated shipping rate: 120 for Type: "Domestic"
+2026-03-28 11:53:19 [INF] [ShipmentService] Shipment created: SS2026032869630 | Rate: 120 | Customer: 16
+2026-03-28 11:53:19 [INF] [ShipmentService] HTTP POST /api/shipments/ → 201 in 51.2272ms
+2026-03-28 11:54:36 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 11:54:36 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 11:54:36 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 17.6154ms
+2026-03-28 12:06:17 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 12:06:17 [INF] [ShipmentService] Fetched 0 of 0 shipments
+2026-03-28 12:06:17 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 32.6460ms
+2026-03-28 12:06:45 [INF] [ShipmentService] Processing UserDeleted event for UserId: 16
+2026-03-28 12:06:45 [INF] [ShipmentService] Found 0 shipments for deleted user 16
+2026-03-28 12:06:45 [INF] [ShipmentService] No shipments found for deleted user 16
+2026-03-28 12:06:53 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 12:06:53 [INF] [ShipmentService] Fetched 0 of 0 shipments
+2026-03-28 12:06:53 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 19.5244ms

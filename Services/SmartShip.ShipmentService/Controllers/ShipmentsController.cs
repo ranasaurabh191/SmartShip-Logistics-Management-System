@@ -41,8 +41,8 @@ public class ShipmentsController : ControllerBase
     [Authorize(Roles = "CUSTOMER")]
     public async Task<IActionResult> SchedulePickup(int id, [FromBody] SchedulePickupRequest req)
     {
-        var result = await _service.SchedulePickupAsync(id, req.PickupScheduledAt);
-        return result ? NoContent() : NotFound();
+        var result = await _service.SchedulePickupAsync(id, req);
+        return result ? Ok("Pickup Scheduled Successfully") : NotFound();
     }
 
     [HttpGet("rate")]

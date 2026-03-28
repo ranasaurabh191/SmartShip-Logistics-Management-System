@@ -4974,3 +4974,27 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-27 19:45:10 [INF] [TrackingService] Changes Saved, Added status event for SS2026032725369
 2026-03-27 19:49:15 [INF] [TrackingService] Processing StatusUpdate for Tracking Number: SS2026032725369 Delivered -> Delivered
 2026-03-27 19:49:15 [INF] [TrackingService] Changes Saved, Added status event for Tracking Number: SS2026032725369
+2026-03-27 20:35:48 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-27 20:35:48 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-27 20:35:49 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-27 20:36:35 [INF] [TrackingService] Processing StatusUpdate for Tracking Number: SS2026032725369 Delivered -> Delivered
+2026-03-27 20:36:35 [INF] [TrackingService] Changes Saved, Added status event for Tracking Number: SS2026032725369
+2026-03-27 20:58:48 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-27 20:58:48 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-27 20:58:48 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-27 21:40:51 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-27 21:40:51 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-27 21:40:52 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-27 21:54:18 [INF] [TrackingService] Processing ShipmentCreated: SS2026032755561 (ID: 5)
+2026-03-27 21:54:18 [INF] [TrackingService] Created Booked event for SS2026032755561
+2026-03-27 21:57:56 [INF] [TrackingService] Processing StatusUpdate for Tracking Number: SS2026032725369 Delivered -> InTransit
+2026-03-27 21:57:56 [INF] [TrackingService] Changes Saved, Added status event for Tracking Number: SS2026032725369
+2026-03-27 22:00:44 [INF] [TrackingService] Processing StatusUpdate for Tracking Number: SS2026032725369 InTransit -> Delivered
+2026-03-27 22:00:44 [INF] [TrackingService] Changes Saved, Added status event for Tracking Number: SS2026032725369
+2026-03-27 22:01:11 [INF] [TrackingService] Processing StatusUpdate for Tracking Number: SS2026032755561 Draft -> InTransit
+2026-03-27 22:01:11 [INF] [TrackingService] Changes Saved, Added status event for Tracking Number: SS2026032755561
+2026-03-27 22:06:00 [INF] [TrackingService] Processing StatusUpdate for Tracking Number: SS2026032755561 InTransit -> Delivered
+2026-03-27 22:06:00 [INF] [TrackingService] Changes Saved, Added status event for Tracking Number: SS2026032755561
+2026-03-27 22:26:50 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-27 22:26:50 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-27 22:26:51 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"

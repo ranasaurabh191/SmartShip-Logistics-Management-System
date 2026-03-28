@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog.Core;
 using SmartShip.IdentityService.Data;
 using SmartShip.IdentityService.DTOs;
 using SmartShip.IdentityService.Models;
+using SmartShip.Shared.Events;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -15,12 +17,14 @@ public class AuthService : IAuthService
     private readonly IdentityDbContext _context;
     private readonly IConfiguration _config;
     private readonly ILogger<AuthService> _logger;
+    private readonly IPublishEndpoint _publisher;
 
-    public AuthService(IdentityDbContext context, IConfiguration config, ILogger<AuthService> logger)
+    public AuthService(IdentityDbContext context, IConfiguration config, ILogger<AuthService> logger, IPublishEndpoint publisher)
     {
         _context = context;
         _config = config;
         _logger = logger;
+        _publisher = publisher;
     }
     public async Task<AuthResponse?> SignupAsync(SignupRequest request)
     {
@@ -44,6 +48,18 @@ public class AuthService : IAuthService
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
         _logger.LogInformation("User created successfully: {Email} | Role: {Role}", user.Email, user.Role);
+
+        await _publisher.Publish(new UserCreatedEvent
+        {
+            UserId = user.Id,
+            Email = user.Email,
+            Name = user.Name,
+            Role = user.Role,
+            CreatedAt = user.CreatedAt
+        });
+
+        _logger.LogInformation("User creation event published.");
+
         return new AuthResponse(GenerateToken(user), user.Role, user.Name, user.Id);
     }
 
@@ -120,7 +136,7 @@ public class AuthService : IAuthService
             issuer: jwt["Issuer"],
             audience: jwt["Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
+            expires: DateTime.Now.AddMinutes(expiryMinutes),
             signingCredentials: creds
         );
 
@@ -176,7 +192,7 @@ public class AuthService : IAuthService
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                 Role = "ADMIN",
                 IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now
             });
 
             _logger.LogInformation("New admin user created.");

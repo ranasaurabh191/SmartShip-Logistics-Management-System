@@ -1,0 +1,171 @@
+2026-03-28 10:09:55 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-28 10:09:55 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-28 10:09:55 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 10:09:55 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-28 10:09:55 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-28 10:09:56 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:10:33 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 10:10:33 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-28 10:10:33 [INF] [AdminService] Dashboard metrics → Total: 3 | Active: 0 | DeliveredToday: 3 | Exceptions: 0 | Customers: 1
+2026-03-28 10:10:33 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 644.8755ms
+2026-03-28 10:13:58 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 10:13:58 [INF] [AdminService] Dashboard metrics → Total: 3 | Active: 0 | DeliveredToday: 3 | Exceptions: 0 | Customers: 0
+2026-03-28 10:13:58 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 15.8539ms
+2026-03-28 10:17:55 [INF] [AdminService] Fetching reports | Page: 1 | PageSize: 10 | Type: All
+2026-03-28 10:17:56 [INF] [AdminService] Fetched 5 of 5 reports
+2026-03-28 10:17:56 [INF] [AdminService] HTTP GET /api/admin/reports → 200 in 291.6832ms
+2026-03-28 10:18:10 [INF] [AdminService] Generating SLA report | From: "2026-01-01T00:00:00.0000000Z" | To: "2026-12-31T23:59:59.0000000Z" | By: Administrator
+2026-03-28 10:18:10 [INF] [AdminService] Report generated: ID 6 | SLA Report (01-01-2026 - 31-12-2026)
+2026-03-28 10:18:10 [INF] [AdminService] HTTP POST /api/admin/reports → 200 in 187.6823ms
+2026-03-28 10:18:52 [INF] [AdminService] Processing UserCreated: sahil@gmail.com (CUSTOMER)
+2026-03-28 10:20:13 [INF] [AdminService] Admin: ShipmentCreated received → SS2026032868126
+2026-03-28 10:20:13 [WRN] [AdminService] No DashboardMetrics row found
+2026-03-28 10:21:04 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 10:28:55 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:29:17 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:29:25 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:30:36 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:30:59 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:31:10 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:31:56 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:32:10 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:32:19 [FTL] [AdminService] AdminService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.AdminService\Program.cs:line 132
+2026-03-28 10:36:21 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-28 10:36:21 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-28 10:36:21 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 10:36:21 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-28 10:36:21 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-28 10:36:21 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:38:19 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 10:38:20 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-28 10:38:20 [WRN] [AdminService] No metrics row found, creating default...
+2026-03-28 10:38:20 [INF] [AdminService] Default metrics row created.
+2026-03-28 10:38:20 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 10:38:20 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 874.1514ms
+2026-03-28 10:42:44 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-28 10:42:44 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-28 10:42:44 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 10:42:44 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-28 10:42:44 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-28 10:42:45 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-28 10:42:55 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 10:42:55 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
+2026-03-28 10:42:55 [WRN] [AdminService] No metrics row found, creating default...
+2026-03-28 10:42:56 [INF] [AdminService] Default metrics row created.
+2026-03-28 10:42:56 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 10:42:56 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 759.3056ms
+2026-03-28 11:12:17 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:12:17 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 11:12:17 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 106.9617ms
+2026-03-28 11:25:03 [INF] [AdminService] HTTP DELETE /api/admin/shipments → 404 in 4.1208ms
+2026-03-28 11:28:13 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:28:13 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 11:28:13 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 54.4389ms
+2026-03-28 11:29:13 [INF] [AdminService] Processing UserCreated: sahil@gmail.com (CUSTOMER)
+2026-03-28 11:29:13 [INF] [AdminService] TotalCustomers incremented to 1
+2026-03-28 11:29:30 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:29:30 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:1
+2026-03-28 11:29:30 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 9.3629ms
+2026-03-28 11:29:42 [INF] [AdminService] Admin: ShipmentCreated received -> SS2026032817685
+2026-03-28 11:29:42 [INF] [AdminService] Metrics -> Total:1 Active:1
+2026-03-28 11:29:47 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:29:47 [INF] [AdminService] Dashboard metrics → Total:1 Active:1 DeliveredToday:0 Exceptions:0 Customers:1
+2026-03-28 11:29:47 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 7.1829ms
+2026-03-28 11:32:01 [INF] [AdminService] Admin: ShipmentDelivered received -> SS2026032817685
+2026-03-28 11:32:01 [INF] [AdminService] Metrics -> Active:0 DeliveredToday:1
+2026-03-28 11:32:14 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:32:14 [INF] [AdminService] Dashboard metrics → Total:1 Active:0 DeliveredToday:1 Exceptions:0 Customers:1
+2026-03-28 11:32:14 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 6.9314ms
+2026-03-28 11:49:06 [INF] [AdminService] Admin: ShipmentCreated received -> SS2026032855949
+2026-03-28 11:49:06 [WRN] [AdminService] No DashboardMetrics row found
+2026-03-28 11:51:10 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:51:10 [WRN] [AdminService] No metrics row found, creating default...
+2026-03-28 11:51:10 [INF] [AdminService] Default metrics row created.
+2026-03-28 11:51:10 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 11:51:10 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 20.0209ms
+2026-03-28 11:51:14 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:51:14 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 11:51:14 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 7.3451ms
+2026-03-28 11:53:13 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:53:13 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 11:53:13 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 13.8716ms
+2026-03-28 11:53:19 [INF] [AdminService] Admin: ShipmentCreated received -> SS2026032869630
+2026-03-28 11:53:19 [INF] [AdminService] Metrics -> Total:1 Active:1
+2026-03-28 11:53:24 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:53:24 [INF] [AdminService] Dashboard metrics → Total:1 Active:1 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 11:53:24 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 8.4007ms
+2026-03-28 11:54:30 [INF] [AdminService] Fetching dashboard metrics...
+2026-03-28 11:54:30 [INF] [AdminService] Dashboard metrics → Total:1 Active:1 DeliveredToday:0 Exceptions:0 Customers:0
+2026-03-28 11:54:30 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 13.2860ms

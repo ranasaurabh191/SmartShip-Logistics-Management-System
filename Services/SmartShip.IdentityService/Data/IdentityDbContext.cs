@@ -18,7 +18,6 @@ public class IdentityDbContext : DbContext
             e.Property(u => u.Role).HasDefaultValue("CUSTOMER");
         });
 
-        // Seed admin user
         modelBuilder.Entity<User>().HasData(new User
         {
             Id = 1,

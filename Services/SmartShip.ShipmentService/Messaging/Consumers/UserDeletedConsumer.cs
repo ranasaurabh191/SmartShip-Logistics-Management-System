@@ -1,8 +1,7 @@
 ﻿using MassTransit;
 using SmartShip.Shared.Events;
 using SmartShip.ShipmentService.Data;
-using Microsoft.EntityFrameworkCore;  // ✅ Add this line
-using Microsoft.Extensions.Logging;   // ✅ For ILogger
+using Microsoft.EntityFrameworkCore; 
 
 namespace SmartShip.ShipmentService.Messaging.Consumers;
 

@@ -30,12 +30,10 @@ public class AuthController : ControllerBase
         return Ok(result.Data);
     }
 
-    // ✅ Temp debug - DELETE after fixing
     [HttpPost("debug-login")]
     public async Task<IActionResult> DebugLogin([FromBody] LoginRequest request) =>
         Ok(await _authService.DebugLoginAsync(request));
 
-    // ✅ Temp fix - DELETE after fixing
     [HttpGet("fix-admin")]
     public async Task<IActionResult> FixAdmin() =>
         Ok(await _authService.FixAdminAsync());

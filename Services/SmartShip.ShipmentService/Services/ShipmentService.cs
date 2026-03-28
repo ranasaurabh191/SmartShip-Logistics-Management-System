@@ -213,7 +213,7 @@ public class ShipmentService : IShipmentService
 
             var oldStatus = s.Status;
             s.Status = st;
-            if (st == ShipmentStatus.Delivered) s.DeliveredAt = DateTime.UtcNow;
+            if (st == ShipmentStatus.Delivered) s.DeliveredAt = DateTime.Now;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}",
@@ -226,19 +226,31 @@ public class ShipmentService : IShipmentService
                 OldStatus = oldStatus.ToString(),
                 NewStatus = s.Status.ToString(),
                 Location = request.Location ?? "Unknown Hub",     
-                UpdatedBy = "Agent-" + DateTime.UtcNow.ToString("hhmm"),
-                UpdatedAt = DateTime.UtcNow
+                UpdatedBy = "Agent-" + DateTime.Now.ToString("hhmm"),
+                UpdatedAt = DateTime.Now
             });
 
 
             if (s.Status == ShipmentStatus.Delivered)
             {
+                _logger.LogInformation("Publishing ShipmentDeliveredEvent for {TrackingNumber}", s.TrackingNumber);
                 await _publisher.Publish(new ShipmentDeliveredEvent
                 {
                     ShipmentId = s.Id,
                     TrackingNumber = s.TrackingNumber,
                     CustomerId = s.CustomerId,
-                    DeliveredAt = DateTime.UtcNow
+                    DeliveredAt = DateTime.Now
+                });
+            }
+
+            if (s.Status == ShipmentStatus.Cancelled)
+            {
+                _logger.LogInformation("Publishing ShipmentCancelledEvent for {TrackingNumber}", s.TrackingNumber);
+                await _publisher.Publish(new ShipmentCancelledEvent
+                {
+                    ShipmentId = s.Id,
+                    TrackingNumber = s.TrackingNumber,
+                    CancelledAt = DateTime.Now
                 });
             }
             return true;
@@ -250,9 +262,9 @@ public class ShipmentService : IShipmentService
         }
     }
 
-    public async Task<bool> SchedulePickupAsync(int id, DateTime pickupTime)
+    public async Task<bool> SchedulePickupAsync(int id, SchedulePickupRequest request)
     {
-        _logger.LogInformation("Scheduling pickup for Shipment {ShipmentId} at {PickupTime}", id, pickupTime);
+        _logger.LogInformation("Scheduling pickup for Shipment {ShipmentId} at {PickupTime}", id, request.PickupTime);
 
         try
         {
@@ -263,12 +275,12 @@ public class ShipmentService : IShipmentService
                 return false;
             }
 
-            s.PickupScheduledAt = pickupTime;
+            s.PickupScheduledAt = request.PickupTime;  
             s.Status = ShipmentStatus.Booked;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime}",
-                s.TrackingNumber, pickupTime);
+                s.TrackingNumber, request.PickupTime);
             return true;
         }
         catch (Exception ex)
@@ -317,12 +329,12 @@ public class ShipmentService : IShipmentService
             _ => (decimal)(weightKg * 80)
         };
         var finalRate = Math.Max(rate, 99);
-        _logger.LogInformation("Rate calculated: ₹{Rate} | Type: {Type} | Weight: {Weight}kg", finalRate, type, weightKg);
+        _logger.LogInformation("Rate calculated: {Rate} | Type: {Type} | Weight: {Weight}kg", finalRate, type, weightKg);
         return Task.FromResult(finalRate);
     }
 
 
-    private static string GenerateTrackingNumber() => "SS" + DateTime.UtcNow.ToString("yyyyMMdd") + Random.Shared.Next(10000, 99999);
+    private static string GenerateTrackingNumber() => "SS" + DateTime.Now.ToString("yyyyMMdd") + Random.Shared.Next(10000, 99999);
 
     private static Address MapAddress(AddressDto d) => new()
     {

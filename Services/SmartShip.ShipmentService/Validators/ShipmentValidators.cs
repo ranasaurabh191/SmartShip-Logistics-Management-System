@@ -86,7 +86,7 @@ public class CreateShipmentRequestValidator : AbstractValidator<CreateShipmentRe
             .IsInEnum().WithMessage("Invalid shipment type.");
 
         RuleFor(x => x.PickupScheduledAt)
-            .GreaterThan(DateTime.UtcNow).WithMessage("Pickup time must be in the future.")
+            .GreaterThan(DateTime.Now).WithMessage("Pickup time must be in the future.")
             .When(x => x.PickupScheduledAt.HasValue);
     }
 }
@@ -95,8 +95,9 @@ public class SchedulePickupRequestValidator : AbstractValidator<SchedulePickupRe
 {
     public SchedulePickupRequestValidator()
     {
-        RuleFor(x => x.PickupScheduledAt)
-            .NotEmpty().WithMessage("Pickup time is required.")
-            .GreaterThan(DateTime.UtcNow).WithMessage("Pickup time must be in the future.");
+        RuleFor(x => x.PickupTime)  
+            .GreaterThan(DateTime.Now)
+            .WithMessage("Pickup time must be in the future.");
+
     }
 }
