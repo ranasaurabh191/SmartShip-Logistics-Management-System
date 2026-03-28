@@ -5,10 +5,11 @@
   <Folder Name="/Services/">
     <Project Path="Services/SmartShip.AdminService/SmartShip.AdminService.csproj" />
     <Project Path="Services/SmartShip.IdentityService/SmartShip.IdentityService.csproj" />
+    <Project Path="Services/SmartShip.PaymentService/SmartShip.PaymentService.csproj" />
     <Project Path="Services/SmartShip.ShipmentService/SmartShip.ShipmentService.csproj" />
     <Project Path="Services/SmartShip.TrackingService/SmartShip.TrackingService.csproj" />
   </Folder>
   <Folder Name="/Shared/">
-    <Project Path="Smartship.Shared/Smartship.Shared.csproj" Id="2f96e047-883d-4b8e-8306-ad6c56a1eb05" />
+    <Project Path="Shared/Smartship.Shared/Smartship.Shared.csproj" DisplayName="SmartShip.Shared" />
   </Folder>
 </Solution>

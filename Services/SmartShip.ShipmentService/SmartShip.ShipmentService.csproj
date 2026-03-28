@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Smartship.Shared\Smartship.Shared.csproj" />
+    <ProjectReference Include="..\..\Shared\Smartship.Shared\SmartShip.Shared.csproj" />
   </ItemGroup>
 
 </Project>

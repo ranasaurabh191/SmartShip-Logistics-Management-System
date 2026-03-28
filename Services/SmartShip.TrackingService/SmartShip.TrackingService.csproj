@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Smartship.Shared\Smartship.Shared.csproj" />
+    <ProjectReference Include="..\..\Shared\Smartship.Shared\SmartShip.Shared.csproj" />
   </ItemGroup>
 
 </Project>

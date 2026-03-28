@@ -147,7 +147,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "AdminService crashed on startup.");
+    Log.Fatal(ex, " !! AdminService crashed on startup.");
 }
 finally
 {

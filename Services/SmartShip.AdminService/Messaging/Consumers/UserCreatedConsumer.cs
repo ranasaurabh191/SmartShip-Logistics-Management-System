@@ -2,7 +2,6 @@
 using SmartShip.Shared.Events;
 using SmartShip.AdminService.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace SmartShip.AdminService.Messaging.Consumers;
 

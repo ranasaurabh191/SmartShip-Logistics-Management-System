@@ -17,3 +17,53 @@
 2026-03-28 11:49:06 [INF] [TrackingService] Created Booked event for SS2026032855949
 2026-03-28 11:53:19 [INF] [TrackingService] Processing ShipmentCreated: SS2026032869630 (ID: 2)
 2026-03-28 11:53:19 [INF] [TrackingService] Created Booked event for SS2026032869630
+2026-03-28 15:48:44 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 15:48:44 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 15:48:45 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 16:02:33 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 16:02:33 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 16:02:34 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 16:05:59 [INF] [TrackingService] Processing ShipmentCreated: SS2026032836897 (ID: 3)
+2026-03-28 16:05:59 [INF] [TrackingService] Created Booked event for SS2026032836897
+2026-03-28 20:17:04 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 20:17:04 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 20:17:04 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:32:19 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 20:32:19 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 20:32:20 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:48:25 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 20:48:25 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 20:48:26 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:48:42 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 20:48:42 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 20:48:43 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:57:50 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 20:57:50 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 20:57:51 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:07:12 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 21:07:12 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 21:07:12 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:14:24 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 21:14:24 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 21:14:25 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:54:45 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 21:54:45 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 21:54:46 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:22:25 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 22:22:25 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 22:22:26 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:26:16 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 22:26:16 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 22:26:17 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:56:57 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 22:56:58 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 22:56:58 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:22:47 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 23:22:47 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 23:22:48 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:35:33 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 23:35:33 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 23:35:34 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:40:28 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-28 23:40:28 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-28 23:40:29 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"

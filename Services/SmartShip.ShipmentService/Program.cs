@@ -78,6 +78,7 @@ try
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<UserDeletedConsumer>();
+        x.AddConsumer<PaymentCompletedConsumer>();
 
         x.UsingRabbitMq((ctx, cfg) =>
         {
@@ -90,6 +91,10 @@ try
             cfg.ReceiveEndpoint("shipment-user-deleted", e =>
             {
                 e.ConfigureConsumer<UserDeletedConsumer>(ctx);
+            });
+            cfg.ReceiveEndpoint("shipment-payment-completed", e =>
+            {
+                e.ConfigureConsumer<PaymentCompletedConsumer>(ctx);
             });
         });
     });
@@ -129,7 +134,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "❌ ShipmentService crashed on startup.");
+    Log.Fatal(ex, " !! ShipmentService crashed on startup.");
 }
 finally
 {

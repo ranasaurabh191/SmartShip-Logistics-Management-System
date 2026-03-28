@@ -1,4 +1,4 @@
-
+use SmartShip_TrackingDB;
 --DELETE FROM DeliveryProofs;
 --DELETE FROM TrackingEvents;
 --DBCC CHECKIDENT ('TrackingEvents', RESEED, 0);

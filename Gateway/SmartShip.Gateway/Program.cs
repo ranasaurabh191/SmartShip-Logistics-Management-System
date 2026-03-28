@@ -51,12 +51,12 @@ try
     app.UseCors("AllowAll");
     app.UseAuthentication();
 
-    app.MapGet("/", () => "SmartShip Gateway v1.0 Running");
+    app.MapGet("/", () => "SmartShip Gateway Running");
     app.MapGet("/health", () => Results.Json(new
     {
         status = "healthy",
         timestamp = DateTime.Now,
-        services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004" }
+        services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004", "payment:5005" }
     }));
 
     app.UseWhen(
@@ -68,7 +68,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "❌ Gateway crashed on startup.");
+    Log.Fatal(ex, " !! Gateway crashed on startup.");
 }
 finally
 {

@@ -115,7 +115,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, "❌ IdentityService crashed on startup.");
+    Log.Fatal(ex, " !! IdentityService crashed on startup.");
 }
 finally
 {

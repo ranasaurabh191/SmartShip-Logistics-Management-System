@@ -58,3 +58,86 @@
 2026-03-28 12:06:45 [INF] [IdentityService] User deleted successfully: 16
 2026-03-28 12:06:45 [INF] [IdentityService] Delete Event published successfully: 16
 2026-03-28 12:06:45 [INF] [IdentityService] HTTP DELETE /api/admin/users/16 → 200 in 27.8241ms
+2026-03-28 15:48:44 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 16:02:34 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 16:02:44 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-28 16:02:45 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-28 16:02:45 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-28 16:02:45 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 60 minutes
+2026-03-28 16:02:45 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1144.3763ms
+2026-03-28 16:03:08 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 16:03:09 [INF] [IdentityService] Total users after filtering: 1
+2026-03-28 16:03:09 [INF] [IdentityService] Returning 1 users for Page 1
+2026-03-28 16:03:09 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 252.6201ms
+2026-03-28 16:03:18 [INF] [IdentityService] Signup attempt for email: sahil@gmail.com
+2026-03-28 16:03:18 [INF] [IdentityService] User created successfully: sahil@gmail.com | Role: CUSTOMER
+2026-03-28 16:03:19 [INF] [IdentityService] User creation event published.
+2026-03-28 16:03:19 [INF] [IdentityService] Generating JWT token for user: sahil@gmail.com, Role: CUSTOMER
+2026-03-28 16:03:19 [INF] [IdentityService] Token generated successfully for user: sahil@gmail.com, expires in 60 minutes
+2026-03-28 16:03:19 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 704.0826ms
+2026-03-28 16:03:50 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 16:03:50 [INF] [IdentityService] Total users after filtering: 2
+2026-03-28 16:03:50 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-28 16:03:50 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 18.1144ms
+2026-03-28 16:04:35 [INF] [IdentityService] Signup attempt for email: rahul@gmail.com
+2026-03-28 16:04:35 [INF] [IdentityService] User created successfully: rahul@gmail.com | Role: CUSTOMER
+2026-03-28 16:04:35 [INF] [IdentityService] User creation event published.
+2026-03-28 16:04:35 [INF] [IdentityService] Generating JWT token for user: rahul@gmail.com, Role: CUSTOMER
+2026-03-28 16:04:35 [INF] [IdentityService] Token generated successfully for user: rahul@gmail.com, expires in 60 minutes
+2026-03-28 16:04:35 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 161.0551ms
+2026-03-28 16:04:48 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 16:04:48 [INF] [IdentityService] Total users after filtering: 3
+2026-03-28 16:04:48 [INF] [IdentityService] Returning 3 users for Page 1
+2026-03-28 16:04:48 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 14.4623ms
+2026-03-28 16:04:59 [INF] [IdentityService] Deleting user with ID: 17
+2026-03-28 16:04:59 [INF] [IdentityService] User deleted successfully: 17
+2026-03-28 16:04:59 [INF] [IdentityService] Delete Event published successfully: 17
+2026-03-28 16:04:59 [INF] [IdentityService] HTTP DELETE /api/admin/users/17 → 200 in 109.3035ms
+2026-03-28 16:05:12 [INF] [IdentityService] Deleting user with ID: 18
+2026-03-28 16:05:12 [INF] [IdentityService] User deleted successfully: 18
+2026-03-28 16:05:12 [INF] [IdentityService] Delete Event published successfully: 18
+2026-03-28 16:05:12 [INF] [IdentityService] HTTP DELETE /api/admin/users/18 → 200 in 23.6286ms
+2026-03-28 16:05:21 [INF] [IdentityService] Signup attempt for email: rahul@gmail.com
+2026-03-28 16:05:21 [INF] [IdentityService] User created successfully: rahul@gmail.com | Role: CUSTOMER
+2026-03-28 16:05:21 [INF] [IdentityService] User creation event published.
+2026-03-28 16:05:21 [INF] [IdentityService] Generating JWT token for user: rahul@gmail.com, Role: CUSTOMER
+2026-03-28 16:05:21 [INF] [IdentityService] Token generated successfully for user: rahul@gmail.com, expires in 60 minutes
+2026-03-28 16:05:21 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 153.7674ms
+2026-03-28 20:17:04 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:23:59 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-28 20:24:00 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-28 20:24:00 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-28 20:24:00 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 60 minutes
+2026-03-28 20:24:00 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1248.7304ms
+2026-03-28 20:32:20 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:48:26 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:48:43 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:54:10 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-28 20:54:11 [INF] [IdentityService] Total users after filtering: 2
+2026-03-28 20:54:11 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-28 20:54:11 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 715.8324ms
+2026-03-28 20:54:19 [INF] [IdentityService] Login attempt: rahul@gmail.com
+2026-03-28 20:54:20 [INF] [IdentityService] Login successful: rahul@gmail.com | Role: CUSTOMER
+2026-03-28 20:54:20 [INF] [IdentityService] Generating JWT token for user: rahul@gmail.com, Role: CUSTOMER
+2026-03-28 20:54:20 [INF] [IdentityService] Token generated successfully for user: rahul@gmail.com, expires in 60 minutes
+2026-03-28 20:54:20 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 516.6706ms
+2026-03-28 20:57:51 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:07:12 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:14:24 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:54:46 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:07:11 [INF] [IdentityService] Login attempt: rahul@gmail.com
+2026-03-28 22:07:12 [INF] [IdentityService] Login successful: rahul@gmail.com | Role: CUSTOMER
+2026-03-28 22:07:12 [INF] [IdentityService] Generating JWT token for user: rahul@gmail.com, Role: CUSTOMER
+2026-03-28 22:07:12 [INF] [IdentityService] Token generated successfully for user: rahul@gmail.com, expires in 60 minutes
+2026-03-28 22:07:12 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1104.4755ms
+2026-03-28 22:22:25 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:26:16 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:56:58 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:22:48 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:23:29 [INF] [IdentityService] Login attempt: rahul@gmail.com
+2026-03-28 23:23:30 [INF] [IdentityService] Login successful: rahul@gmail.com | Role: CUSTOMER
+2026-03-28 23:23:30 [INF] [IdentityService] Generating JWT token for user: rahul@gmail.com, Role: CUSTOMER
+2026-03-28 23:23:30 [INF] [IdentityService] Token generated successfully for user: rahul@gmail.com, expires in 60 minutes
+2026-03-28 23:23:30 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1028.2352ms
+2026-03-28 23:35:33 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:40:28 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"

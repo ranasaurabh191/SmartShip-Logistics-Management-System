@@ -97,3 +97,92 @@ Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
 2026-03-28 12:06:53 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
 2026-03-28 12:06:53 [INF] [ShipmentService] Fetched 0 of 0 shipments
 2026-03-28 12:06:53 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 19.5244ms
+2026-03-28 15:48:44 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 15:48:45 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 16:02:34 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 16:02:35 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 16:03:00 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 16:03:00 [INF] [ShipmentService] Fetched 0 of 0 shipments
+2026-03-28 16:03:00 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 835.9804ms
+2026-03-28 16:04:59 [INF] [ShipmentService] Processing UserDeleted event for UserId: 17
+2026-03-28 16:04:59 [INF] [ShipmentService] Found 0 shipments for deleted user 17
+2026-03-28 16:04:59 [INF] [ShipmentService] No shipments found for deleted user 17
+2026-03-28 16:05:12 [INF] [ShipmentService] Processing UserDeleted event for UserId: 18
+2026-03-28 16:05:12 [INF] [ShipmentService] Found 0 shipments for deleted user 18
+2026-03-28 16:05:12 [INF] [ShipmentService] No shipments found for deleted user 18
+2026-03-28 16:05:58 [INF] [ShipmentService] Creating shipment for Customer 19 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 16:05:58 [INF] [ShipmentService] Rate calculated: 120 | Type: "Domestic" | Weight: 1.5kg
+2026-03-28 16:05:58 [INF] [ShipmentService] Calculated shipping rate: 120 for Type: "Domestic"
+2026-03-28 16:05:58 [INF] [ShipmentService] Shipment created: SS2026032836897 | Rate: 120 | Customer: 19
+2026-03-28 16:05:59 [INF] [ShipmentService] HTTP POST /api/shipments/ → 201 in 596.3034ms
+2026-03-28 16:06:09 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 16:06:09 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 16:06:09 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 59.8787ms
+2026-03-28 20:17:04 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 20:17:05 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:24:10 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 20:24:11 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 20:24:11 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 1066.1996ms
+2026-03-28 20:32:20 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 20:32:21 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:48:26 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 20:48:26 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:48:43 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 20:48:44 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:57:50 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 20:57:51 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 20:59:59 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 21:00:00 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 21:00:00 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 1124.1775ms
+2026-03-28 21:01:59 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 21:01:59 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 21:01:59 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 97.5466ms
+2026-03-28 21:07:12 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 21:07:12 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 21:07:13 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:14:24 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 21:14:24 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 21:14:25 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 21:14:38 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 21:14:38 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 21:14:38 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 1057.2342ms
+2026-03-28 21:14:46 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: COD
+2026-03-28 21:14:46 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
+2026-03-28 21:14:50 [INF] [ShipmentService] Fetching all shipments | Page: 1 | PageSize: 10 | Status: All | Type: All
+2026-03-28 21:14:50 [INF] [ShipmentService] Fetched 1 of 1 shipments
+2026-03-28 21:14:50 [INF] [ShipmentService] HTTP GET /api/admin/shipments/ → 200 in 28.9398ms
+2026-03-28 21:54:45 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 21:54:46 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 21:54:46 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:07:26 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: Online
+2026-03-28 22:07:26 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
+2026-03-28 22:22:25 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 22:22:25 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 22:22:26 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:26:16 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 22:26:16 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 22:26:17 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 22:56:58 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 22:56:58 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 22:56:59 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:22:48 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 23:22:48 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 23:22:49 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:35:33 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 23:35:33 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 23:35:34 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:35:34 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: Online
+2026-03-28 23:35:35 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
+2026-03-28 23:35:35 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: Online
+2026-03-28 23:35:35 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
+2026-03-28 23:35:50 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: Online
+2026-03-28 23:35:50 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
+2026-03-28 23:40:28 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-28 23:40:28 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-28 23:40:29 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-28 23:40:31 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: Online
+2026-03-28 23:40:32 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
+2026-03-28 23:48:00 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: Online
+2026-03-28 23:48:00 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
+2026-03-28 23:50:50 [INF] [ShipmentService] PaymentCompleted received for SS2026032836897 | Method: Online
+2026-03-28 23:50:50 [INF] [ShipmentService] Shipment SS2026032836897 -> Status updated to Booked after payment
