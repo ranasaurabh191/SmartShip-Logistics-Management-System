@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.TrackingService.DTOs;
-using SmartShip.TrackingService.Services;
 using System.Security.Claims;
 
 namespace SmartShip.TrackingService.Controllers;
@@ -15,8 +14,7 @@ public class TrackingController : ControllerBase
     public TrackingController(ITrackingService service) => _service = service;
 
     [HttpGet("{trackingNumber}")]
-    public async Task<IActionResult> GetTimeline(
-        string trackingNumber, [FromQuery] TrackingEventPagedRequest request) =>
+    public async Task<IActionResult> GetTimeline( string trackingNumber, [FromQuery] TrackingEventPagedRequest request) =>
         Ok(await _service.GetByTrackingNumberPagedAsync(trackingNumber, request));
 
     [HttpPost("events")]
@@ -24,7 +22,8 @@ public class TrackingController : ControllerBase
     public async Task<IActionResult> AddEvent([FromBody] AddTrackingEventRequest req)
     {
         var updatedBy = User.FindFirstValue(ClaimTypes.Name) ?? "System";
-        var result = await _service.AddEventAsync(req, updatedBy);
+        var (result, error) = await _service.AddEventAsync(req, updatedBy);
+        if (error != null) return Conflict(new { message = error });
         return Ok(result);
     }
 
@@ -57,7 +56,8 @@ public class TrackingController : ControllerBase
             await photo.CopyToAsync(s);
         }
 
-        var result = await _service.AddDeliveryProofAsync(req, sigPath, photoPath);
+        var (result, error) = await _service.AddDeliveryProofAsync(req, sigPath, photoPath);
+        if (error != null) return Conflict(new { message = error });
         return Ok(result);
     }
 
@@ -72,7 +72,8 @@ public class TrackingController : ControllerBase
         if (!allowed.Contains(ext)) return BadRequest("Only PDF, JPG, PNG allowed");
 
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var result = await _service.UploadDocumentAsync(shipmentId, trackingNumber, file, documentType, userId);
+        var (result, error) = await _service.UploadDocumentAsync(shipmentId, trackingNumber, file, documentType, userId);
+        if (error != null) return Conflict(new { message = error });
         return Ok(result);
     }
 

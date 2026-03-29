@@ -34,7 +34,7 @@ public class AdminService : IAdminService
                 DeliveredToday = 0,
                 Exceptions = 0,
                 TotalCustomers = 0,
-                LastUpdatedAt = DateTime.Now
+                LastUpdatedAt = DateTime.UtcNow
             };
             _context.DashboardMetrics.Add(metrics);
             await _context.SaveChangesAsync();
@@ -46,6 +46,8 @@ public class AdminService : IAdminService
             metrics.TotalShipments, metrics.ActiveShipments,
             metrics.DeliveredToday, metrics.Exceptions, metrics.TotalCustomers);
 
+        metrics.LastUpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
         return new DashboardMetricsDto
         {
             TotalShipments = metrics.TotalShipments,
@@ -53,7 +55,9 @@ public class AdminService : IAdminService
             DeliveredToday = metrics.DeliveredToday,
             Exceptions = metrics.Exceptions,
             TotalCustomers = metrics.TotalCustomers,
-            LastUpdatedAt = metrics.LastUpdatedAt
+            LastUpdatedAt = metrics.LastUpdatedAt.HasValue
+            ? DateTime.SpecifyKind(metrics.LastUpdatedAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
+            : null,
         };
     }
 

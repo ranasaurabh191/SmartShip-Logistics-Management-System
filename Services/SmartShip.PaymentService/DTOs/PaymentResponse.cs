@@ -1,4 +1,6 @@
-﻿namespace SmartShip.PaymentService.DTOs;
+﻿using System.Text.Json.Serialization;
+
+namespace SmartShip.PaymentService.DTOs;
 
 public class PaymentResponse
 {
@@ -9,8 +11,12 @@ public class PaymentResponse
     public string PaymentMethod { get; set; } = "";
     public string PaymentStatus { get; set; } = "";
     public string? RazorpayOrderId { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? RazorpayPaymentId { get; set; }
     public string CreatedAt { get; set; } = "";
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? PaidAt { get; set; }
     public string? Message { get; set; }
 }

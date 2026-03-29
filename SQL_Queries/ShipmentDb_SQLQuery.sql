@@ -1,6 +1,5 @@
 USE SmartShip_ShipmentDB;
 
----DELETE FROM Shipments;
 --DELETE FROM Packages;
 --DELETE FROM Addresses;
 

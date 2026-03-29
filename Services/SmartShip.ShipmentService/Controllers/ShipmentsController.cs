@@ -37,12 +37,13 @@ public class ShipmentsController : ControllerBase
         return s == null ? NotFound() : Ok(s);
     }
 
-    [HttpPatch("{id}/pickup")]
+    [HttpPatch("pickup/{id}")]
     [Authorize(Roles = "CUSTOMER")]
-    public async Task<IActionResult> SchedulePickup(int id, [FromBody] SchedulePickupRequest req)
+    public async Task<IActionResult> SchedulePickup(int id, [FromBody] SchedulePickupRequest request)
     {
-        var result = await _service.SchedulePickupAsync(id, req);
-        return result ? Ok("Pickup Scheduled Successfully") : NotFound();
+        var (success, error) = await _service.SchedulePickupAsync(id, request);
+        if (!success) return BadRequest(new { message = error });
+        return Ok(new { message = "Pickup scheduled successfully." });
     }
 
     [HttpGet("rate")]

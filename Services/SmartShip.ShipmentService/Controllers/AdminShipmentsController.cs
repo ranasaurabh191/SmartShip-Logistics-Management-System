@@ -16,17 +16,18 @@ public class AdminShipmentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] ShipmentPagedRequest request) =>  Ok(await _service.GetAllPagedAsync(request));
 
-    [HttpPut("{id}/status")]
-    public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest req)
+    [HttpPut("status/{id}")]
+    public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
     {
-        var result = await _service.UpdateStatusAsync(id, req);
-        return result ? Ok("Updated Sucessfully") : BadRequest("Invalid status or shipment not found");
+        var (success, error) = await _service.UpdateStatusAsync(id, request);
+        if (!success) return BadRequest(new { message = error });
+        return Ok(new { message = "Status updated successfully." });
     }
 
-    [HttpPut("{id}/resolve")]
+    [HttpPut("resolve/{id}")]
     public async Task<IActionResult> Resolve(int id, [FromBody] UpdateStatusRequest req)
     {
         var result = await _service.ResolveExceptionAsync(id, req.Status);
-        return result ? NoContent() : NotFound();
+        return result ? Ok(result) : NotFound(new { message = "Shipment record not found" });
     }
 }

@@ -19,13 +19,24 @@ public class TrackingService : ITrackingService
         _logger = logger;
     }
 
-    public async Task<TrackingEventDto> AddEventAsync(AddTrackingEventRequest req, string updatedBy)
+    public async Task<(TrackingEventDto? Data, string? Error)> AddEventAsync(AddTrackingEventRequest req, string updatedBy)
     {
         _logger.LogInformation("Adding tracking event for {TrackingNumber} | Status: {Status} | Location: {Location} | By: {UpdatedBy}",
             req.TrackingNumber, req.Status, req.Location, updatedBy);
 
         try
         {
+            var recentDuplicate = await _context.TrackingEvents.FirstOrDefaultAsync(t =>
+            t.TrackingNumber == req.TrackingNumber &&
+            t.Status == req.Status &&
+            t.Location == req.Location &&
+            t.EventTime >= DateTime.UtcNow.AddMinutes(-1));
+
+            if (recentDuplicate != null)
+            {
+                _logger.LogWarning("Duplicate event for {TrackingNumber}", req.TrackingNumber);
+                return (null, "Duplicate tracking event submitted recently.");
+            }
             var ev = new TrackingEvent
             {
                 ShipmentId = req.ShipmentId,
@@ -42,7 +53,7 @@ public class TrackingService : ITrackingService
             _logger.LogInformation("Tracking event added: ID {EventId} for {TrackingNumber} | Status: {Status}",
                 ev.Id, ev.TrackingNumber, ev.Status);
 
-            return new TrackingEventDto(ev.Id, ev.TrackingNumber, ev.Status, ev.Location, ev.Description, ev.EventTime, ev.UpdatedBy);
+            return (new TrackingEventDto(ev.Id, ev.TrackingNumber, ev.Status, ev.Location, ev.Description, ev.EventTime, ev.UpdatedBy),null);
         }
         catch (Exception ex)
         {
@@ -124,13 +135,21 @@ public class TrackingService : ITrackingService
             p.SignatureImagePath, p.PhotoPath, p.Notes, p.DeliveredAt, p.DeliveredBy);
     }
 
-    public async Task<DeliveryProofDto> AddDeliveryProofAsync(AddDeliveryProofRequest req, string? signaturePath, string? photoPath)
+    public async Task<(DeliveryProofDto? Data, string? Error)> AddDeliveryProofAsync(AddDeliveryProofRequest req, string? signaturePath, string? photoPath)
     {
         _logger.LogInformation("Adding delivery proof for {TrackingNumber} | Receiver: {ReceiverName} | By: {DeliveredBy}",
             req.TrackingNumber, req.ReceiverName, req.DeliveredBy);
 
         try
         {
+            var existing = await _context.DeliveryProofs
+            .FirstOrDefaultAsync(d => d.TrackingNumber == req.TrackingNumber);
+
+            if (existing != null)
+            {
+                _logger.LogWarning("Delivery proof already exists for {TrackingNumber}", req.TrackingNumber);
+                return (null, "Delivery proof already exists for this shipment.");
+            }
             var proof = new DeliveryProof
             {
                 ShipmentId = req.ShipmentId,
@@ -150,8 +169,8 @@ public class TrackingService : ITrackingService
                 signaturePath != null ? "Yes" : "No",
                 photoPath != null ? "Yes" : "No");
 
-            return new DeliveryProofDto(proof.ShipmentId, proof.TrackingNumber, proof.ReceiverName,
-                proof.SignatureImagePath, proof.PhotoPath, proof.Notes, proof.DeliveredAt, proof.DeliveredBy);
+            return (new DeliveryProofDto(proof.ShipmentId, proof.TrackingNumber, proof.ReceiverName,
+                proof.SignatureImagePath, proof.PhotoPath, proof.Notes, proof.DeliveredAt, proof.DeliveredBy),null);
         }
         catch (Exception ex)
         {
@@ -160,13 +179,21 @@ public class TrackingService : ITrackingService
         }
     }
 
-    public async Task<DocumentDto> UploadDocumentAsync(int shipmentId, string trackingNumber, IFormFile file, string docType, int userId)
+    public async Task<(DocumentDto? Data, string? Error)> UploadDocumentAsync(int shipmentId, string trackingNumber, IFormFile file, string docType, int userId)
     {
         _logger.LogInformation("Uploading document for Shipment {ShipmentId} | File: {FileName} | Type: {DocType} | User: {UserId}",
             shipmentId, file.FileName, docType, userId);
 
         try
         {
+            var existingDoc = await _context.Documents.FirstOrDefaultAsync(d => d.ShipmentId == shipmentId && d.FileName == file.FileName);
+
+            if (existingDoc != null)
+            {
+                _logger.LogWarning("Document {FileName} already uploaded for Shipment {ShipmentId}", file.FileName, shipmentId);
+                return (null, $"Document '{file.FileName}' already uploaded for this shipment.");
+            }
+
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), _config["FileStorage:UploadPath"] ?? "Uploads");
             Directory.CreateDirectory(uploadPath);
 
@@ -197,7 +224,7 @@ public class TrackingService : ITrackingService
             _logger.LogInformation("Document uploaded: ID {DocId} | {FileName} | Type: {DocType} | Shipment: {ShipmentId}",
                 doc.Id, doc.FileName, doc.DocumentType, shipmentId);
 
-            return new DocumentDto(doc.Id, doc.FileName, doc.DocumentType.ToString(), doc.FileSizeBytes, doc.UploadedAt);
+            return (new DocumentDto(doc.Id, doc.FileName, doc.DocumentType.ToString(), doc.FileSizeBytes, doc.UploadedAt),null);
         }
         catch (Exception ex)
         {

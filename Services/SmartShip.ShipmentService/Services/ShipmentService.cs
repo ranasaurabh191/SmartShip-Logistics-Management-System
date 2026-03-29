@@ -12,12 +12,17 @@ public class ShipmentService : IShipmentService
     private readonly ShipmentDbContext _context;
     private readonly ILogger<ShipmentService> _logger;
     private readonly IPublishEndpoint _publisher;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public ShipmentService(ShipmentDbContext context, ILogger<ShipmentService> logger, IPublishEndpoint publisher)
+    public ShipmentService(ShipmentDbContext context, ILogger<ShipmentService> logger,
+        IPublishEndpoint publisher, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _logger = logger;
         _publisher = publisher;
+        _httpClientFactory = httpClientFactory;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<PagedResponse<ShipmentResponse>> GetAllPagedAsync(ShipmentPagedRequest req)
@@ -196,24 +201,39 @@ public class ShipmentService : IShipmentService
         return MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package);
     }
 
-    public async Task<bool> UpdateStatusAsync(int id, UpdateStatusRequest request)  
+    public async Task<(bool Success, string? Error)> UpdateStatusAsync(int id, UpdateStatusRequest request)
     {
-        _logger.LogInformation("Updating status for Shipment {ShipmentId} → {Status}", id, request.Status);
+        _logger.LogInformation("Updating status for Shipment {ShipmentId} -> {Status}", id, request.Status);
 
         try
         {
             var s = await _context.Shipments.FindAsync(id);
-            if (s == null) return false;
+            if (s == null) return (false, "Shipment record not found.");
 
             if (!Enum.TryParse<ShipmentStatus>(request.Status, true, out var st))
             {
                 _logger.LogWarning("Invalid status value: {Status}", request.Status);
-                return false;
+                return (false, $"Invalid status: {request.Status}");
             }
+
+            if (st == ShipmentStatus.PickedUp && s.Status != ShipmentStatus.Booked)
+                return (false, "Shipment must be Booked before PickedUp.");
+
+            if (st == ShipmentStatus.InTransit && s.Status != ShipmentStatus.PickedUp)
+                return (false, "Shipment must be PickedUp before InTransit.");
+
+            if (st == ShipmentStatus.OutForDelivery && s.Status != ShipmentStatus.InTransit)
+                return (false, "Shipment must be InTransit before OutForDelivery.");
+
+            if (st == ShipmentStatus.Delivered && s.Status != ShipmentStatus.OutForDelivery)
+                return (false, "Shipment must be OutForDelivery before Delivered.");
+
+            if (st == ShipmentStatus.Booked && s.PickupScheduledAt == null)
+                return (false, "Cannot book shipment without scheduling pickup first.");
 
             var oldStatus = s.Status;
             s.Status = st;
-            if (st == ShipmentStatus.Delivered) s.DeliveredAt = DateTime.Now;
+            if (st == ShipmentStatus.Delivered) s.DeliveredAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}",
@@ -225,11 +245,10 @@ public class ShipmentService : IShipmentService
                 TrackingNumber = s.TrackingNumber,
                 OldStatus = oldStatus.ToString(),
                 NewStatus = s.Status.ToString(),
-                Location = request.Location ?? "Unknown Hub",     
-                UpdatedBy = "Agent-" + DateTime.Now.ToString("hhmm"),
-                UpdatedAt = DateTime.Now
+                Location = request.Location ?? "Unknown Hub",
+                UpdatedBy = "Agent-" + DateTime.UtcNow.ToString("hhmm"),
+                UpdatedAt = DateTime.UtcNow
             });
-
 
             if (s.Status == ShipmentStatus.Delivered)
             {
@@ -239,7 +258,7 @@ public class ShipmentService : IShipmentService
                     ShipmentId = s.Id,
                     TrackingNumber = s.TrackingNumber,
                     CustomerId = s.CustomerId,
-                    DeliveredAt = DateTime.Now
+                    DeliveredAt = DateTime.UtcNow
                 });
             }
 
@@ -250,10 +269,11 @@ public class ShipmentService : IShipmentService
                 {
                     ShipmentId = s.Id,
                     TrackingNumber = s.TrackingNumber,
-                    CancelledAt = DateTime.Now
+                    CancelledAt = DateTime.UtcNow
                 });
             }
-            return true;
+
+            return (true, null);
         }
         catch (Exception ex)
         {
@@ -262,32 +282,52 @@ public class ShipmentService : IShipmentService
         }
     }
 
-    public async Task<bool> SchedulePickupAsync(int id, SchedulePickupRequest request)
+    private HttpClient CreateInternalClient(string clientName)
+    {
+        var httpClient = _httpClientFactory.CreateClient(clientName);
+        var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+        if (!string.IsNullOrEmpty(token))
+            httpClient.DefaultRequestHeaders.Add("Authorization", token);
+        return httpClient;
+    }
+
+    public async Task<(bool Success, string? Error)> SchedulePickupAsync(int id, SchedulePickupRequest request)
     {
         _logger.LogInformation("Scheduling pickup for Shipment {ShipmentId} at {PickupTime}", id, request.PickupTime);
 
-        try
+        var s = await _context.Shipments.FindAsync(id);
+        if (s == null)
         {
-            var s = await _context.Shipments.FindAsync(id);
-            if (s == null)
-            {
-                _logger.LogWarning("Shipment not found for pickup scheduling: ID {ShipmentId}", id);
-                return false;
-            }
-
-            s.PickupScheduledAt = request.PickupTime;  
-            s.Status = ShipmentStatus.Booked;
-            await _context.SaveChangesAsync();
-
-            _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime}",
-                s.TrackingNumber, request.PickupTime);
-            return true;
+            _logger.LogWarning("Shipment not found: ID {ShipmentId}", id);
+            return (false, "Shipment record not found.");
         }
-        catch (Exception ex)
+
+        var httpClient = CreateInternalClient("PaymentService");
+        var response = await httpClient.GetAsync($"api/payment/shipment/{id}");
+
+        if (!response.IsSuccessStatusCode)
         {
-            _logger.LogError(ex, "Failed to schedule pickup for Shipment {ShipmentId}", id);
-            throw;
+            _logger.LogWarning("No payment record for Shipment {ShipmentId}", id);
+            return (false, "Payment not found. Please create a payment order first.");
         }
+        var payment = await response.Content.ReadFromJsonAsync<PaymentStatusDto>();
+
+        if (payment?.PaymentStatus == "Pending" && payment?.PaymentMethod == "Online")
+        {
+            _logger.LogWarning("Online payment pending for Shipment {ShipmentId}", id);
+            return (false, "Online payment not completed. Please pay before scheduling pickup.");
+        }
+
+        s.PickupScheduledAt = request.PickupTime.Kind == DateTimeKind.Utc
+            ? request.PickupTime
+            : request.PickupTime.ToUniversalTime();
+        s.Status = ShipmentStatus.Booked;
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime}",
+            s.TrackingNumber, request.PickupTime);
+
+        return (true, null);
     }
 
     public async Task<bool> ResolveExceptionAsync(int id, string resolution)
@@ -359,7 +399,12 @@ public class ShipmentService : IShipmentService
 
     private static ShipmentResponse MapToResponse(Shipment s, Address sender, Address receiver, Package pkg) => new(
         s.Id, s.TrackingNumber, s.CustomerId, s.ShipmentType.ToString(), s.Status.ToString(), s.ShippingRate,
-        s.CreatedAt, s.PickupScheduledAt, s.DeliveredAt,
+        DateTime.SpecifyKind(s.CreatedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
+        s.PickupScheduledAt.HasValue ? DateTime.SpecifyKind(s.PickupScheduledAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
+        : null,                                                  
+        s.DeliveredAt.HasValue
+        ? DateTime.SpecifyKind(s.DeliveredAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
+        : null,
         new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country),
         new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country),
         new PackageDto(pkg.WeightKg, pkg.LengthCm, pkg.WidthCm, pkg.HeightCm, pkg.Description, pkg.DeclaredValue),

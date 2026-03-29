@@ -90,7 +90,7 @@ public class AuthService : IAuthService
                 IsSuccess = false,
                 Message = "User account is inactive."
             };
-        }
+        }   
 
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
         {

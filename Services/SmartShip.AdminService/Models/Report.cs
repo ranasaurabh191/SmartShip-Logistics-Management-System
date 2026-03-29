@@ -1,4 +1,4 @@
-﻿// Models/Report.cs
+﻿
 namespace SmartShip.AdminService.Models;
 
 public enum ReportType { Operational, Performance, SLA, Delivery }
@@ -12,5 +12,5 @@ public class Report
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
     public DateTime GeneratedAt { get; set; } = DateTime.Now;
-    public string DataJson { get; set; } = string.Empty; // Serialized report data
+    public string DataJson { get; set; } = string.Empty; 
 }

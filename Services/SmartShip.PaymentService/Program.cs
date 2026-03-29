@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using Serilog;
 using SmartShip.PaymentService.Data;
-using SmartShip.PaymentService.Messaging.Consumers;
 using SmartShip.PaymentService.Middleware;
 using SmartShip.PaymentService.Services;
 using System.Text;
@@ -67,6 +66,11 @@ try
         });
     });
 
+    builder.Services.AddHttpClient("ShipmentService", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["Services:ShipmentService"]!);
+    });
+
     builder.Services.AddDbContext<PaymentDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
@@ -90,23 +94,18 @@ try
             };
         });
 
+    builder.Services.AddHttpContextAccessor();
+
     builder.Services.AddAuthorization();
 
     builder.Services.AddMassTransit(x =>
     {
-        x.AddConsumer<ShipmentCreatedConsumer>();
-
         x.UsingRabbitMq((context, cfg) =>
         {
             cfg.Host("localhost", "/", h =>
             {
                 h.Username("guest");
                 h.Password("guest");
-            });
-
-            cfg.ReceiveEndpoint("payment-shipment-created", e =>
-            {
-                e.ConfigureConsumer<ShipmentCreatedConsumer>(context);
             });
         });
     });

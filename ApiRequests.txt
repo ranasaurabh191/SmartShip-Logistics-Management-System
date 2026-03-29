@@ -1,0 +1,196 @@
+ADMIN CONTROLLER---------------------------------------------------
+
+| Method | URL                       			  | Auth  |
+| ------ | -----------------------------------------------| ----- |
+
+| GET    | http://localhost:5000/gateway/admin/dashboard  | Admin |
+
+| GET    | http://localhost:5000/gateway/admin/hubs       | Admin |
+
+| GET    | http://localhost:5000/gateway/admin/hubs/{id}  | Admin |
+
+| POST   | http://localhost:5000/gateway/admin/hubs       | Admin |
+{
+    "id": 3,
+    "name": "Gurgaon Hub",
+    "city": "Gurgaon",
+    "state": "Haryana",
+    "country": "India",
+    "contactPhone": "9800000003",
+    "isActive": true
+}
+
+| PUT    | http://localhost:5000/gateway/admin/hubs/4     | Admin |
+{
+    "id": 4,
+    "name": "Kolkata Hub",
+    "city": "Kolkata",
+    "state": "West Bengal",
+    "country": "India",
+    "contactPhone": "9800000006",
+    "isActive": true
+}
+
+| DELETE | http://localhost:5000/gateway/admin/hubs/2     | Admin |
+
+| GET    | http://localhost:5000/gateway/admin/reports    | Admin |
+
+| POST   | http://localhost:5000/gateway/admin/reports    | Admin |
+{
+  "reportType": "SLA",
+  "fromDate": "2026-01-01T00:00:00Z",
+  "toDate": "2026-12-31T23:59:59Z"
+}
+
+
+AUTH CONTROLLER----------------------------------------------------
+
+| POST   | http://localhost:5000/gateway/auth/signup
+{
+  "name": "Rahul",
+  "email": "rahul@gmail.com",
+  "phone": "2345679442",
+  "password": "Ranasrb@82"
+}
+
+| POST   | http://localhost:5000/gateway/auth/login
+{
+    "email": "rahul@gmail.com",
+    "password": "Ranasrb@82"
+}
+
+| POST   | http://localhost:5000/gateway/auth/debug-login
+{
+  "email": "string",
+  "password": "string"
+}
+
+| GET    | http://localhost:5000/gateway/auth/fix-admin
+
+
+USER CONTROLLER----------------------------------------------------
+
+| GET    | http://localhost:5000/gateway/admin/users      | Admin |
+
+| GET    | http://localhost:5000/gateway/admin/users/{id} | Admin |
+
+| PUT    | http://localhost:5000/gateway/admin/users/{id} | Admin |
+{
+  "name": "Administrator",
+  "phone": "9999900099",
+  "isActive": true,
+  "role": "ADMIN"  
+}
+
+| DELETE | http://localhost:5000/gateway/admin/users/{id} | Admin |
+
+
+PAYMENT CONTROLLER-------------------------------------------------
+
+| POST | http://localhost:5000/gateway/payment/create-order
+{
+  "shipmentId": 0,
+  "trackingNumber": "string",
+  "customerId": 0,
+  "amount": 0,
+  "paymentMethod": 0
+}
+
+| POST | http://localhost:5000/gateway/payment/verify
+{
+  "razorpayOrderId": "string",
+  "razorpayPaymentId": "string",
+  "signature": "string",
+  "shipmentId": 0,
+  "paymentMethod": "string"
+}
+
+| GET  | http://localhost:5000/gateway/payment/payment-status
+
+| GET  | http://localhost:5000/gateway/payment/shipment/{shipmentId}
+
+
+ADMIN SHIPMENT CONTROLLER-------------------------------------------
+
+| GET  | http://localhost:5000/gateway/admin/shipments/
+
+| PUT  | http://localhost:5000/gateway/admin/shipments/status/{id}
+{
+  "status": "string",
+  "location": "string"
+}
+
+| PUT  | http://localhost:5000/gateway/admin/shipments/resolve/{id}
+{
+  "status": "string",
+  "location": "string"
+}
+
+SHIPMENT CONTROLLER--------------------------------------------------
+
+| POST  | http://localhost:5000/gateway/shipments
+{
+  "senderAddress": {
+    "fullName": "string",
+    "phone": "string",
+    "street": "string",
+    "city": "string",
+    "state": "string",
+    "postalCode": "string",
+    "country": "string"
+  },
+  "receiverAddress": {
+    "fullName": "string",
+    "phone": "string",
+    "street": "string",
+    "city": "string",
+    "state": "string",
+    "postalCode": "string",
+    "country": "string"
+  },
+  "package": {
+    "weightKg": 0,
+    "lengthCm": 0,
+    "widthCm": 0,
+    "heightCm": 0,
+    "description": "string",
+    "declaredValue": 0
+  },
+  "shipmentType": "Domestic",
+  "pickupScheduledAt": "2026-03-29T06:40:33.149Z",
+  "notes": "string"
+}
+
+
+| GET  | http://localhost:5000/gateway/shipments/my
+
+| GET  | http://localhost:5000/gateway/shipments/{id}
+
+| GET  | http://localhost:5000/gateway/shipments/rate?weight=70&type=Domestic
+
+|PATCH | http://localhost:5000/gateway/shipments/pickup/{id}
+{
+  "pickupTime": "2026-03-29T06:45:38.132Z"
+}
+
+
+
+| ------ | ----------------------------------------------------------------- | ------------ |
+| GET    | http://localhost:5000/gateway/admin/hubs?pageNumber=1&pageSize=10 | Bearer Token |
+| GET    | http://localhost:5000/gateway/admin/hubs/1                        | Bearer Token |
+| POST   | http://localhost:5000/gateway/admin/hubs                          | Bearer Token |
+| PUT    | http://localhost:5000/gateway/admin/hubs/1                        | Bearer Token |
+| DELETE | http://localhost:5000/gateway/admin/hubs/1                        | Bearer Token |
+
+
+
+
+| Event Published By | Event Name            | Consumed By     | Action Taken                     |
+| ------------------ | --------------------- | --------------- | -------------------------------- |
+| IdentityService    | UserDeleted           | ShipmentService | Delete user's shipments          |
+| IdentityService    | UserDeleted           | TrackingService | Delete user's tracking events    |
+| ShipmentService    | ShipmentCreated       | TrackingService | Auto-create first tracking event |
+| ShipmentService    | ShipmentStatusUpdated | TrackingService | Add new tracking event           |
+| ShipmentService    | ShipmentDelivered     | AdminService    | Update dashboard metrics         |
+| TrackingService    | DeliveryConfirmed     | ShipmentService | Set DeliveredAt = now            |
+| AdminService       | HubDeactivated        | ShipmentService | Flag affected shipments          |

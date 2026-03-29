@@ -75,6 +75,13 @@ try
     builder.Services.AddDbContext<ShipmentDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+    builder.Services.AddHttpClient("PaymentService", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["Services:PaymentService"]!);
+    });
+
+    builder.Services.AddHttpContextAccessor();
+
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<UserDeletedConsumer>();

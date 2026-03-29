@@ -8,5 +8,5 @@ public class DashboardMetrics
     public int DeliveredToday { get; set; }
     public int Exceptions { get; set; }
     public int TotalCustomers { get; set; }
-    public DateTime LastUpdatedAt { get; set; }
+    public DateTime? LastUpdatedAt { get; set; } = DateTime.UtcNow;
 }

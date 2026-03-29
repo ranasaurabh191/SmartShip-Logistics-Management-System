@@ -27,7 +27,7 @@ public class AuthController : ControllerBase
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Message });
 
-        return Ok(result.Data);
+        return Ok(result);
     }
 
     [HttpPost("debug-login")]

@@ -41,7 +41,7 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> DeleteHub(int id)
     {
         var result = await _service.DeleteHubAsync(id);
-        return result ? Ok("Deleted Successfully") : NotFound();
+        return result ? Ok(new { message = "Deleted Successfully" }) : NotFound();
     }
 
     [HttpGet("reports")]

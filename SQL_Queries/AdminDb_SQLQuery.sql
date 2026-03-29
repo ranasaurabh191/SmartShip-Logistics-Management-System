@@ -3,11 +3,13 @@ USE SmartShip_AdminDB;
 --DELETE FROM Hubs;
 --DBCC CHECKIDENT ('Hubs', RESEED, 0);
 
-SELECT * FROM Hubs;
+--SELECT * FROM Hubs;
 
-SELECT * FROM DashboardMetrics;
 --delete from DashboardMetrics;
-select * from reports;
+SELECT * FROM DashboardMetrics;
+
 --delete from reports
+select * from reports;
+
 
 

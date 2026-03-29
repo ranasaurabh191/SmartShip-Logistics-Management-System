@@ -1,5 +1,4 @@
-﻿// Models/Hub.cs
-namespace SmartShip.AdminService.Models;
+﻿namespace SmartShip.AdminService.Models;
 
 public class Hub
 {
