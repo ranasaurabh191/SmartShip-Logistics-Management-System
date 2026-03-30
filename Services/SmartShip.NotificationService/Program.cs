@@ -1,16 +1,15 @@
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SmartShip.IdentityService.Data;
-using SmartShip.IdentityService.Middleware;
-using SmartShip.IdentityService.Services;
-using SmartShip.IdentityService.Validators;
+using SmartShip.NotificationService.Messaging.Consumers;
+using SmartShip.NotificationService.Data;
+using SmartShip.NotificationService.Middleware;
+using SmartShip.NotificationService.Services;
 using System.Text;
+using SmartShip.NotificationService.Consumers;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -18,27 +17,14 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information(" --> Starting IdentityService...");
+    Log.Information(" --> Starting NotificationService...");
 
     var builder = WebApplication.CreateBuilder(args);
-    var internalKey = builder.Configuration["InternalApi:ApiKey"];
 
-    var urls = builder.Configuration.GetSection("ServiceUrls");
-    builder.Services.AddHttpClient("IdentityService", c =>
-    {
-        c.BaseAddress = new Uri(urls["IdentityService"]!);
-        c.DefaultRequestHeaders.Add("X-Internal-Key", internalKey);  
-    });
-
-    builder.Services.AddHttpClient("ShipmentService", c =>
-    {
-        c.BaseAddress = new Uri(urls["ShipmentService"]!);
-        c.DefaultRequestHeaders.Add("X-Internal-Key", internalKey);
-    });
     builder.Host.UseSerilog((ctx, lc) => lc
         .ReadFrom.Configuration(ctx.Configuration)
         .Enrich.FromLogContext()
-        .Enrich.WithProperty("Application", "IdentityService")
+        .Enrich.WithProperty("Application", "NotificationService")
         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
     builder.Services.AddControllers()
@@ -55,19 +41,14 @@ try
             };
         });
 
-    builder.Services.AddFluentValidationAutoValidation();
-    builder.Services.AddFluentValidationClientsideAdapters();
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddValidatorsFromAssemblyContaining<SignupRequestValidator>();
-
     builder.Services.AddSwaggerGen(options =>
     {
         options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
         {
-            Title = "Identity Service",
+            Title = "Notification Service",
             Version = "v1"
         });
-
         options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
             Name = "Authorization",
@@ -77,7 +58,6 @@ try
             In = Microsoft.OpenApi.Models.ParameterLocation.Header,
             Description = "Enter your token."
         });
-
         options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
         {
             {
@@ -94,11 +74,24 @@ try
         });
     });
 
-    builder.Services.AddDbContext<IdentityDbContext>(opt =>
+    builder.Services.AddDbContext<NotificationDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+    var urls = builder.Configuration.GetSection("ServiceUrls");
+    builder.Services.AddHttpClient("IdentityService", c =>
+        c.BaseAddress = new Uri(urls["IdentityService"]!));
+    builder.Services.AddHttpClient("ShipmentService", c =>
+        c.BaseAddress = new Uri(urls["ShipmentService"]!));
 
     builder.Services.AddMassTransit(x =>
     {
+        x.AddConsumer<UserCreatedConsumer>();
+        x.AddConsumer<ShipmentCreatedConsumer>();
+        x.AddConsumer<ShipmentStatusUpdatedConsumer>();
+        x.AddConsumer<ShipmentDeliveredConsumer>();
+        x.AddConsumer<ShipmentCancelledConsumer>();
+        x.AddConsumer<PaymentCompletedConsumer>();
+
         x.UsingRabbitMq((ctx, cfg) =>
         {
             cfg.Host("localhost", "/", h =>
@@ -106,6 +99,19 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
+
+            cfg.ReceiveEndpoint("notification-user-created", e =>
+                e.ConfigureConsumer<UserCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-shipment-created", e =>
+                e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-status-updated", e =>
+                e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-shipment-delivered", e =>
+                e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-shipment-cancelled", e =>
+                e.ConfigureConsumer<ShipmentCancelledConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-payment-completed", e =>
+                e.ConfigureConsumer<PaymentCompletedConsumer>(ctx));
         });
     });
 
@@ -123,8 +129,8 @@ try
         });
 
     builder.Services.AddAuthorization();
-    builder.Services.AddScoped<IAuthService, AuthService>();
-    builder.Services.AddScoped<IUserService, UserService>();
+    builder.Services.AddScoped<INotificationService, NotificationService>();
+    builder.Services.AddScoped<IEmailService, EmailService>();
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
@@ -133,8 +139,11 @@ try
     app.UseSerilogRequestLogging(opt =>
         opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    using (var scope = app.Services.CreateScope())
-        scope.ServiceProvider.GetRequiredService<IdentityDbContext>().Database.Migrate();
+    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+    {
+        using var scope = app.Services.CreateScope();
+        scope.ServiceProvider.GetRequiredService<NotificationDbContext>().Database.Migrate();
+    }
 
     app.UseSwagger(); app.UseSwaggerUI();
     app.UseCors("AllowAll");
@@ -144,7 +153,7 @@ try
 }
 catch (Exception ex)
 {
-    Log.Fatal(ex, " !! IdentityService crashed on startup.");
+    Log.Fatal(ex, " !! NotificationService crashed on startup.");
 }
 finally
 {

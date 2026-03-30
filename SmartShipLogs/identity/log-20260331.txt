@@ -1,0 +1,6 @@
+2026-03-31 00:02:04 [INF] [IdentityService] Signup attempt for email: ranasaurabh191@gmail.com
+2026-03-31 00:02:05 [INF] [IdentityService] User created successfully: ranasaurabh191@gmail.com | Role: CUSTOMER
+2026-03-31 00:02:05 [INF] [IdentityService] User creation event published.
+2026-03-31 00:02:05 [INF] [IdentityService] Generating JWT token for user: ranasaurabh191@gmail.com, Role: CUSTOMER
+2026-03-31 00:02:05 [INF] [IdentityService] Token generated successfully for user: ranasaurabh191@gmail.com, expires in 600000 minutes
+2026-03-31 00:02:05 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 1548.8568ms

@@ -1,0 +1,7 @@
+2026-03-31 00:02:03 [INF] [Gateway] RequestId: 0HNKEHAHRREBQ:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-31 00:02:04 [INF] [Gateway] RequestId: 0HNKEHAHRREBQ:00000001, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/signup' in the route /gateway/auth/{everything}.
+2026-03-31 00:02:05 [INF] [Gateway] RequestId: 0HNKEHAHRREBQ:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/signup
+2026-03-31 00:02:05 [INF] [Gateway] GATEWAY POST /gateway/auth/signup -> 200 in 1992.3210ms

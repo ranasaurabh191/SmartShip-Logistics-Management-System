@@ -151,5 +151,14 @@ public class UserService : IUserService
         _logger.LogInformation("Delete Event published successfully: {UserId}", userId);
 
     }
-    
+    public async Task<string> GetUserEmailAsync(int userId)
+    {
+        _logger.LogInformation("Fetching email for User {UserId}", userId);
+
+        var user = await _context.Users.FindAsync(userId)
+            ?? throw new KeyNotFoundException($"User {userId} not found.");
+
+        return user.Email;
+    }
+
 }

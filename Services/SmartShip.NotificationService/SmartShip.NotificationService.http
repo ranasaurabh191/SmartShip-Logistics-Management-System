@@ -1,0 +1,6 @@
+@SmartShip.NotificationService_HostAddress = http://localhost:5215
+
+GET {{SmartShip.NotificationService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

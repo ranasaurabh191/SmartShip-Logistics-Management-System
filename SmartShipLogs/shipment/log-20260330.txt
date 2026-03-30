@@ -22492,3 +22492,6 @@ System.Collections.Generic.KeyNotFoundException: Shipment 89 not found.
 2026-03-30 21:26:31 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
 2026-03-30 21:26:31 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
 2026-03-30 21:26:32 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-30 23:59:57 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-30 23:59:57 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-30 23:59:58 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"

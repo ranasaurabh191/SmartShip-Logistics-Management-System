@@ -10,16 +10,16 @@ public class DashboardMetricsDto
     public int DeliveredToday { get; set; }
     public int Exceptions { get; set; }
     public int TotalCustomers { get; set; }
-    public string? LastUpdatedAt { get; set; }
+    public string? LastUpdatedAt { get; set; } = string.Empty;
 }
 public record ReportRequest(string ReportType, DateTime FromDate, DateTime ToDate);
 public record ReportDto(int Id, string Title, string ReportType, DateTime FromDate, DateTime ToDate, DateTime GeneratedAt, object Data);
 
 public class HubPagedRequest : PagedRequest
 {
-    public bool? IsActive { get; set; }
-    public string? City { get; set; }
-    public string? State { get; set; }
+    public bool? IsActive { get; set; } 
+    public string? City { get; set; } 
+    public string? State { get; set; } 
 }
 
 public class ReportPagedRequest : PagedRequest

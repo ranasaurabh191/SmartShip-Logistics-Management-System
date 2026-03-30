@@ -8,8 +8,9 @@
     <Project Path="Services/SmartShip.PaymentService/SmartShip.PaymentService.csproj" />
     <Project Path="Services/SmartShip.ShipmentService/SmartShip.ShipmentService.csproj" />
     <Project Path="Services/SmartShip.TrackingService/SmartShip.TrackingService.csproj" />
+    <Project Path="Services/SmartShip.NotificationService/SmartShip.NotificationService.csproj" />
   </Folder>
   <Folder Name="/Shared/">
-    <Project Path="Shared/Smartship.Shared/Smartship.Shared.csproj" DisplayName="SmartShip.Shared" />
+    <Project Path="Shared/Smartship.Shared/Smartship.Shared.csproj" />
   </Folder>
 </Solution>

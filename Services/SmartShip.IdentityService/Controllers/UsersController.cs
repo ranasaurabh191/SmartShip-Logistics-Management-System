@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SmartShip.IdentityService.DTOs;
+using SmartShip.IdentityService.Filters;
 using SmartShip.IdentityService.Services;
 
 namespace SmartShip.IdentityService.Controllers;
@@ -36,4 +38,9 @@ public class UsersController : ControllerBase
         await _userService.DeleteUserAsync(id);
         return Ok(new { message = "Deleted Successfully" }) ;
     }
+
+    [HttpGet("email/{userId}")]
+    [InternalApiKey]
+    public async Task<IActionResult> GetEmail(int userId) => Ok(new { Id = userId, Email = await _userService.GetUserEmailAsync(userId) });
+
 }

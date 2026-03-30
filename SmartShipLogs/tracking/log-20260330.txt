@@ -21704,3 +21704,6 @@ System.InvalidOperationException: Delivery proof already exists for this shipmen
    at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
    at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
    at SmartShip.TrackingService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context)
+2026-03-30 23:59:56 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-30 23:59:56 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-30 23:59:57 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"

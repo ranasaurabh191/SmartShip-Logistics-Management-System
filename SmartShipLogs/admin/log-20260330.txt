@@ -37499,3 +37499,9 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-30 21:26:30 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
 2026-03-30 21:26:30 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
 2026-03-30 21:26:32 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-30 23:59:56 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-30 23:59:56 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-30 23:59:57 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-30 23:59:57 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-30 23:59:57 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-30 23:59:58 [INF] [AdminService] Bus started: "rabbitmq://localhost/"

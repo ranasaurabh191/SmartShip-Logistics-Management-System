@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.ShipmentService.DTOs;
+using SmartShip.ShipmentService.Filters;
 using SmartShip.ShipmentService.Models;
 using SmartShip.ShipmentService.Services;
 using System.Security.Claims;
@@ -48,5 +49,9 @@ public class ShipmentsController : ControllerBase
         var rate = await _service.CalculateRateAsync(weight, shipType);
         return Ok(new { rate });
     }
+
+    [HttpGet("internal/{id}")]
+    [InternalApiKey]  
+    public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));
 }
     

@@ -1,0 +1,4 @@
+2026-03-31 00:02:05 [INF] [IdentityService] UserCreatedEvent received | UserId: 22
+2026-03-31 00:02:05 [INF] [IdentityService] Sending notification | Type: WelcomeEmail | User: 22 | Email: ranasaurabh191@gmail.com
+2026-03-31 00:02:10 [INF] [IdentityService] Email sent to ranasaurabh191@gmail.com | Subject: Welcome to SmartShip! 
+2026-03-31 00:02:10 [INF] [IdentityService] Email sent successfully | Type: WelcomeEmail | User: 22

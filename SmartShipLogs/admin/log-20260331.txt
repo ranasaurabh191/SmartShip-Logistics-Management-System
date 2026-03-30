@@ -1,0 +1,2 @@
+2026-03-31 00:02:05 [INF] [AdminService] Processing UserCreated: ranasaurabh191@gmail.com (CUSTOMER)
+2026-03-31 00:02:06 [WRN] [AdminService] The query uses the 'First'/'FirstOrDefault' operator without 'OrderBy' and filter operators. This may lead to unpredictable results.
