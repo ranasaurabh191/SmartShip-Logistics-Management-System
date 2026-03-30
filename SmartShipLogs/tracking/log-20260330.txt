@@ -19128,3 +19128,15 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
    at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
    at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
 2026-03-30 11:51:29 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-30 12:21:54 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-30 12:21:54 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-30 12:21:55 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-30 12:30:21 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-30 12:30:21 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-30 12:30:22 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-30 13:02:43 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-30 13:02:43 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-30 13:02:44 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-30 13:11:28 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-30 13:11:28 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-30 13:11:29 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"

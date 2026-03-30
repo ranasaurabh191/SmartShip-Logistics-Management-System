@@ -114,6 +114,8 @@ try
 
     builder.Services.AddMassTransit(x =>
     {
+        x.AddConsumer<SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer>();
+
         x.UsingRabbitMq((context, cfg) =>
         {
             cfg.Host("localhost", "/", h =>
@@ -121,8 +123,15 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
+
+            cfg.ReceiveEndpoint("payment-shipment-created", e =>
+            {
+                e.ConfigureConsumer<SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer>(context);
+            });
         });
     });
+
+    builder.Services.AddScoped<SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer>();
 
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p =>

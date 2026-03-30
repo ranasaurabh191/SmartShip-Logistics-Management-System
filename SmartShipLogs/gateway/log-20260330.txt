@@ -366,3 +366,12 @@ Client has been authenticated for path '/gateway/payment/payment-status' by 'Aut
 2026-03-30 11:54:52 [WRN] [Gateway] RequestId: 0HNKE4HKP2VIR:00000007, PreviousRequestId: -
 404 Not Found status code of request URI: http://localhost:5005/api/payment/payment-status
 2026-03-30 11:54:52 [INF] [Gateway] GATEWAY GET /gateway/payment/payment-status -> 404 in 311.2629ms
+2026-03-30 13:12:19 [INF] [Gateway] RequestId: 0HNKE5VFIED5J:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 13:12:19 [INF] [Gateway] RequestId: 0HNKE5VFIED5J:00000001, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 13:12:19 [INF] [Gateway] RequestId: 0HNKE5VFIED5J:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/dashboard' by 'AuthenticationTypes.Federation' scheme.
+2026-03-30 13:12:20 [INF] [Gateway] RequestId: 0HNKE5VFIED5J:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5004/api/admin/dashboard
+2026-03-30 13:12:20 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 200 in 1175.6025ms

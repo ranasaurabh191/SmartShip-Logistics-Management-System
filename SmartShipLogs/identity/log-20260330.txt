@@ -5720,3 +5720,7 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-30 11:52:55 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
 2026-03-30 11:52:55 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 600000 minutes
 2026-03-30 11:52:55 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 957.4509ms
+2026-03-30 12:21:55 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-30 12:30:22 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-30 13:02:44 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-30 13:11:29 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
