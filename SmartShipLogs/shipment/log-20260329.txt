@@ -4970,3 +4970,17 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-29 22:50:56 [INF] [ShipmentService] HTTP GET /swagger/index.js → 304 in 0.2667ms
 2026-03-29 22:50:56 [INF] [ShipmentService] HTTP GET /swagger/v1/swagger.json → 200 in 3.8137ms
 2026-03-29 22:50:56 [INF] [ShipmentService] HTTP GET /swagger/favicon-32x32.png → 304 in 0.0527ms
+2026-03-29 23:03:15 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-29 23:03:15 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-29 23:03:16 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-29 23:13:58 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-29 23:13:58 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-29 23:13:59 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/index.html → 304 in 61.1710ms
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/swagger-ui.css → 304 in 49.6621ms
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/index.css → 304 in 48.2366ms
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/swagger-ui-bundle.js → 304 in 53.8630ms
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/swagger-ui-standalone-preset.js → 304 in 2.2286ms
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/index.js → 304 in 0.5776ms
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/favicon-32x32.png → 304 in 0.2087ms
+2026-03-29 23:24:59 [INF] [ShipmentService] HTTP GET /swagger/v1/swagger.json → 200 in 17.2186ms

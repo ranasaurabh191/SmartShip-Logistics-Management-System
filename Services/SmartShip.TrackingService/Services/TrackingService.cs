@@ -53,7 +53,8 @@ public class TrackingService : ITrackingService
             _logger.LogInformation("Tracking event added: ID {EventId} for {TrackingNumber} | Status: {Status}",
                 ev.Id, ev.TrackingNumber, ev.Status);
 
-            return (new TrackingEventDto(ev.Id, ev.TrackingNumber, ev.Status, ev.Location, ev.Description, ev.EventTime, ev.UpdatedBy),null);
+            return (new TrackingEventDto(ev.Id, ev.TrackingNumber, ev.Status, ev.Location, ev.Description,
+                    DateTime.SpecifyKind(ev.EventTime, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), ev.UpdatedBy), null);
         }
         catch (Exception ex)
         {
@@ -95,7 +96,8 @@ public class TrackingService : ITrackingService
             var items = await query
                 .Skip((req.Page - 1) * req.PageSize)
                 .Take(req.PageSize)
-                .Select(t => new TrackingEventDto(t.Id, t.TrackingNumber, t.Status, t.Location, t.Description, t.EventTime, t.UpdatedBy))
+                .Select(t => new TrackingEventDto(t.Id, t.TrackingNumber, t.Status, t.Location, t.Description, 
+                    DateTime.SpecifyKind(t.EventTime, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), t.UpdatedBy))
                 .ToListAsync();
 
             _logger.LogInformation("Fetched {Count} of {Total} events for {TrackingNumber}",
@@ -132,7 +134,8 @@ public class TrackingService : ITrackingService
             p.TrackingNumber, p.DeliveredBy);
 
         return new DeliveryProofDto(p.ShipmentId, p.TrackingNumber, p.ReceiverName,
-            p.SignatureImagePath, p.PhotoPath, p.Notes, p.DeliveredAt, p.DeliveredBy);
+            p.SignatureImagePath, p.PhotoPath, p.Notes, DateTime.SpecifyKind(p.DeliveredAt, DateTimeKind.Utc)
+        .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), p.DeliveredBy);
     }
 
     public async Task<(DeliveryProofDto? Data, string? Error)> AddDeliveryProofAsync(AddDeliveryProofRequest req, string? signaturePath, string? photoPath)
@@ -170,7 +173,8 @@ public class TrackingService : ITrackingService
                 photoPath != null ? "Yes" : "No");
 
             return (new DeliveryProofDto(proof.ShipmentId, proof.TrackingNumber, proof.ReceiverName,
-                proof.SignatureImagePath, proof.PhotoPath, proof.Notes, proof.DeliveredAt, proof.DeliveredBy),null);
+                proof.SignatureImagePath, proof.PhotoPath, proof.Notes, DateTime.SpecifyKind(proof.DeliveredAt, DateTimeKind.Utc)
+        .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), proof.DeliveredBy),null);
         }
         catch (Exception ex)
         {
@@ -224,7 +228,8 @@ public class TrackingService : ITrackingService
             _logger.LogInformation("Document uploaded: ID {DocId} | {FileName} | Type: {DocType} | Shipment: {ShipmentId}",
                 doc.Id, doc.FileName, doc.DocumentType, shipmentId);
 
-            return (new DocumentDto(doc.Id, doc.FileName, doc.DocumentType.ToString(), doc.FileSizeBytes, doc.UploadedAt),null);
+            return (new DocumentDto(doc.Id, doc.FileName, doc.DocumentType.ToString(), doc.FileSizeBytes, 
+                DateTime.SpecifyKind(doc.UploadedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")), null);
         }
         catch (Exception ex)
         {
@@ -259,8 +264,9 @@ public class TrackingService : ITrackingService
             var items = await query
                 .Skip((req.Page - 1) * req.PageSize)
                 .Take(req.PageSize)
-                .Select(d => new DocumentDto(d.Id, d.FileName, d.DocumentType.ToString(), d.FileSizeBytes, d.UploadedAt))
-                .ToListAsync();
+                .Select(d => new DocumentDto(d.Id, d.FileName, d.DocumentType.ToString(),
+                    d.FileSizeBytes, DateTime.SpecifyKind(d.UploadedAt, DateTimeKind.Utc)
+                    .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"))).ToListAsync();
 
             _logger.LogInformation("Fetched {Count} of {Total} documents for Shipment {ShipmentId}",
                 items.Count, totalCount, shipmentId);

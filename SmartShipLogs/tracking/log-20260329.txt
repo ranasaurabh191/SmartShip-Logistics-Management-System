@@ -4138,3 +4138,71 @@ Error Number:2601,State:1,Class:14
 2026-03-29 22:51:14 [INF] [TrackingService] Adding tracking event for SS2026032916774 | Status: InTransit | Location: Ludhiana Hub | By: Administrator
 2026-03-29 22:51:14 [WRN] [TrackingService] Duplicate tracking event detected for SS2026032916774 | Status: InTransit
 2026-03-29 22:51:14 [INF] [TrackingService] HTTP POST /api/tracking/events → 200 in 100.5420ms
+2026-03-29 23:03:15 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-29 23:03:15 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-29 23:03:16 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-29 23:03:25 [INF] [TrackingService] Adding tracking event for SS2026032916774 | Status: InTransit | Location: Ludhiana Hub | By: Administrator
+2026-03-29 23:03:25 [WRN] [TrackingService] Duplicate event for SS2026032916774
+2026-03-29 23:03:25 [INF] [TrackingService] HTTP POST /api/tracking/events → 409 in 821.6434ms
+2026-03-29 23:03:42 [INF] [TrackingService] Adding delivery proof for 	SS2026032916774 | Receiver: Payal | By: AgentNishant
+2026-03-29 23:03:42 [WRN] [TrackingService] Delivery proof already exists for 	SS2026032916774
+2026-03-29 23:03:42 [INF] [TrackingService] HTTP POST /api/tracking/delivery-proof → 409 in 151.8759ms
+2026-03-29 23:03:52 [INF] [TrackingService] Uploading document for Shipment 7 | File: boy.png | Type: Invoice | User: 21
+2026-03-29 23:03:52 [WRN] [TrackingService] Document boy.png already uploaded for Shipment 7
+2026-03-29 23:03:52 [INF] [TrackingService] HTTP POST /api/tracking/documents/upload → 409 in 58.1981ms
+2026-03-29 23:04:05 [INF] [TrackingService] Fetching documents for Shipment 7 | Page: 1 | Type: All
+2026-03-29 23:04:06 [INF] [TrackingService] Fetched 1 of 1 documents for Shipment 7
+2026-03-29 23:04:06 [INF] [TrackingService] HTTP GET /api/tracking/documents/7 → 200 in 122.9293ms
+2026-03-29 23:13:30 [FTL] [TrackingService]  !! TrackingService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.TrackingService\Program.cs:line 103
+2026-03-29 23:13:42 [FTL] [TrackingService]  !! TrackingService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.TrackingService\Program.cs:line 103
+2026-03-29 23:13:58 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-29 23:13:58 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-29 23:13:59 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-29 23:14:37 [INF] [TrackingService] Uploading document for Shipment 7 | File: boy.png | Type: Invoice | User: 21
+2026-03-29 23:14:37 [INF] [TrackingService] File saved to disk: C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.TrackingService\Uploads\d877ca3d-7a9b-4459-ad2d-1c671ecdc46d_boy.png | Size: 18970 bytes
+2026-03-29 23:14:37 [INF] [TrackingService] Document uploaded: ID 2 | boy.png | Type: "Invoice" | Shipment: 7
+2026-03-29 23:14:37 [INF] [TrackingService] HTTP POST /api/tracking/documents/upload → 200 in 931.8245ms
+2026-03-29 23:25:37 [INF] [TrackingService] Fetching tracking timeline for SS2026032916443 | Page: 1 | PageSize: 10
+2026-03-29 23:25:38 [INF] [TrackingService] Fetched 0 of 0 events for SS2026032916443
+2026-03-29 23:25:38 [INF] [TrackingService] HTTP GET /api/tracking/SS2026032916443 → 200 in 221.8154ms
+2026-03-29 23:25:44 [INF] [TrackingService] Adding tracking event for SS2026032916774 | Status: InTransit | Location: Ludhiana Hub | By: Administrator
+2026-03-29 23:25:44 [INF] [TrackingService] Tracking event added: ID 42 for SS2026032916774 | Status: InTransit
+2026-03-29 23:25:44 [INF] [TrackingService] HTTP POST /api/tracking/events → 200 in 84.4070ms
+2026-03-29 23:25:56 [INF] [TrackingService] Adding delivery proof for 	SS2026032916774 | Receiver: Payal | By: AgentNishant
+2026-03-29 23:25:56 [INF] [TrackingService] Delivery proof saved for 	SS2026032916774 | Signature: Yes | Photo: Yes
+2026-03-29 23:25:56 [INF] [TrackingService] HTTP POST /api/tracking/delivery-proof → 200 in 66.0582ms
+2026-03-29 23:26:04 [INF] [TrackingService] Uploading document for Shipment 7 | File: boy.png | Type: Invoice | User: 21
+2026-03-29 23:26:04 [INF] [TrackingService] File saved to disk: C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.TrackingService\Uploads\1b5fccce-0490-4d73-ab1f-9abc155b338d_boy.png | Size: 18970 bytes
+2026-03-29 23:26:04 [INF] [TrackingService] Document uploaded: ID 3 | boy.png | Type: "Invoice" | Shipment: 7
+2026-03-29 23:26:04 [INF] [TrackingService] HTTP POST /api/tracking/documents/upload → 200 in 32.7853ms
+2026-03-29 23:26:11 [INF] [TrackingService] Fetching delivery proof for Shipment 7
+2026-03-29 23:26:11 [INF] [TrackingService] Delivery proof found for 	SS2026032916774 | Delivered by: AgentNishant
+2026-03-29 23:26:11 [INF] [TrackingService] HTTP GET /api/tracking/delivery/7 → 200 in 25.7643ms
+2026-03-29 23:26:19 [INF] [TrackingService] Fetching tracking timeline for SS2026032916443 | Page: 1 | PageSize: 10
+2026-03-29 23:26:19 [INF] [TrackingService] Fetched 0 of 0 events for SS2026032916443
+2026-03-29 23:26:19 [INF] [TrackingService] HTTP GET /api/tracking/SS2026032916443 → 200 in 10.7769ms
+2026-03-29 23:26:22 [INF] [TrackingService] Fetching tracking timeline for SS2026032916443 | Page: 1 | PageSize: 10
+2026-03-29 23:26:22 [INF] [TrackingService] Fetched 0 of 0 events for SS2026032916443
+2026-03-29 23:26:22 [INF] [TrackingService] HTTP GET /api/tracking/SS2026032916443 → 200 in 21.5934ms
+2026-03-29 23:26:39 [INF] [TrackingService] Fetching tracking timeline for SS2026032916774 | Page: 1 | PageSize: 10
+2026-03-29 23:26:40 [INF] [TrackingService] Fetched 1 of 1 events for SS2026032916774
+2026-03-29 23:26:40 [INF] [TrackingService] HTTP GET /api/tracking/SS2026032916774 → 200 in 19.0244ms
+2026-03-29 23:26:48 [INF] [TrackingService] Fetching documents for Shipment 7 | Page: 1 | Type: All
+2026-03-29 23:26:48 [INF] [TrackingService] Fetched 1 of 1 documents for Shipment 7
+2026-03-29 23:26:48 [INF] [TrackingService] HTTP GET /api/tracking/documents/7 → 200 in 36.3710ms

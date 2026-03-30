@@ -11,6 +11,6 @@ public class Document
     public string FilePath { get; set; } = string.Empty;
     public DocumentType DocumentType { get; set; }
     public long FileSizeBytes { get; set; }
-    public DateTime UploadedAt { get; set; } = DateTime.Now;
+    public DateTime UploadedAt { get; set; } = DateTime.UtcNow;
     public int UploadedByUserId { get; set; }
 }

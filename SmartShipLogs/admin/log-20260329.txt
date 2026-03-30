@@ -8838,3 +8838,15 @@ Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
 2026-03-29 21:36:19 [INF] [AdminService] Fetching dashboard metrics...
 2026-03-29 21:36:19 [INF] [AdminService] Dashboard metrics → Total:0 Active:0 DeliveredToday:1 Exceptions:0 Customers:0
 2026-03-29 21:36:19 [INF] [AdminService] HTTP GET /api/admin/dashboard → 200 in 16.2554ms
+2026-03-29 23:03:15 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-29 23:03:15 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-29 23:03:15 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-29 23:03:15 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-29 23:03:15 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-29 23:03:16 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-29 23:13:58 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-29 23:13:58 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-29 23:13:58 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-29 23:13:58 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-29 23:13:58 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-29 23:13:59 [INF] [AdminService] Bus started: "rabbitmq://localhost/"

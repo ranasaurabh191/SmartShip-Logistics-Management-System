@@ -9,6 +9,6 @@ public class DeliveryProof
     public string? SignatureImagePath { get; set; }
     public string? PhotoPath { get; set; }
     public string Notes { get; set; } = string.Empty;
-    public DateTime DeliveredAt { get; set; } = DateTime.Now;
+    public DateTime DeliveredAt { get; set; } = DateTime.UtcNow;
     public string DeliveredBy { get; set; } = string.Empty;
 }

@@ -16,5 +16,6 @@ public class TrackingDbContext : DbContext
         modelBuilder.Entity<TrackingEvent>().HasIndex(t => t.TrackingNumber);
         modelBuilder.Entity<Document>().HasIndex(d => d.ShipmentId);
         modelBuilder.Entity<DeliveryProof>().HasIndex(d => d.TrackingNumber).IsUnique();
+        modelBuilder.Entity<Document>().Property(d => d.DocumentType).HasConversion<string>();
     }
 }

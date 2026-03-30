@@ -2343,3 +2343,129 @@ Client has been authenticated for path '/gateway/tracking/events' by 'Authentica
 2026-03-29 22:51:14 [INF] [Gateway] RequestId: 0HNKDK952NLDP:00000001, PreviousRequestId: -
 200 OK status code of request URI: http://localhost:5003/api/tracking/events
 2026-03-29 22:51:14 [INF] [Gateway] GATEWAY POST /gateway/tracking/events -> 200 in 122.9572ms
+2026-03-29 23:03:24 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:03:24 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000001, PreviousRequestId: -
+The path '/gateway/tracking/events' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:03:24 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/events' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:03:25 [WRN] [Gateway] RequestId: 0HNKDN53S88VJ:00000001, PreviousRequestId: -
+409 Conflict status code of request URI: http://localhost:5003/api/tracking/events
+2026-03-29 23:03:25 [INF] [Gateway] GATEWAY POST /gateway/tracking/events -> 409 in 1261.8830ms
+2026-03-29 23:03:42 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:03:42 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000002, PreviousRequestId: -
+The path '/gateway/tracking/delivery-proof' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:03:42 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/delivery-proof' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:03:42 [WRN] [Gateway] RequestId: 0HNKDN53S88VJ:00000002, PreviousRequestId: -
+409 Conflict status code of request URI: http://localhost:5003/api/tracking/delivery-proof
+2026-03-29 23:03:42 [INF] [Gateway] GATEWAY POST /gateway/tracking/delivery-proof -> 409 in 171.5496ms
+2026-03-29 23:03:52 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:03:52 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000003, PreviousRequestId: -
+The path '/gateway/tracking/documents/upload' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:03:52 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/documents/upload' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:03:52 [WRN] [Gateway] RequestId: 0HNKDN53S88VJ:00000003, PreviousRequestId: -
+409 Conflict status code of request URI: http://localhost:5003/api/tracking/documents/upload
+2026-03-29 23:03:52 [INF] [Gateway] GATEWAY POST /gateway/tracking/documents/upload -> 409 in 68.7818ms
+2026-03-29 23:04:05 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:04:05 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000004, PreviousRequestId: -
+The path '/gateway/tracking/documents/7' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:04:05 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000004, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/documents/7' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:04:06 [INF] [Gateway] RequestId: 0HNKDN53S88VJ:00000004, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/documents/7
+2026-03-29 23:04:06 [INF] [Gateway] GATEWAY GET /gateway/tracking/documents/7 -> 200 in 140.8010ms
+2026-03-29 23:14:36 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ4:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:14:36 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ4:00000001, PreviousRequestId: -
+The path '/gateway/tracking/documents/upload' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:14:36 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ4:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/documents/upload' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:14:37 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ4:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/documents/upload
+2026-03-29 23:14:37 [INF] [Gateway] GATEWAY POST /gateway/tracking/documents/upload -> 200 in 1381.5764ms
+2026-03-29 23:25:37 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:25:37 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000001, PreviousRequestId: -
+The path '/gateway/tracking/SS2026032916443' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:25:37 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/SS2026032916443' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:25:38 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/SS2026032916443
+2026-03-29 23:25:38 [INF] [Gateway] GATEWAY GET /gateway/tracking/SS2026032916443 -> 200 in 254.1265ms
+2026-03-29 23:25:44 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:25:44 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000002, PreviousRequestId: -
+The path '/gateway/tracking/events' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:25:44 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000002, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/events' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:25:44 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000002, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/events
+2026-03-29 23:25:44 [INF] [Gateway] GATEWAY POST /gateway/tracking/events -> 200 in 97.1209ms
+2026-03-29 23:25:56 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:25:56 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000003, PreviousRequestId: -
+The path '/gateway/tracking/delivery-proof' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:25:56 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000003, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/delivery-proof' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:25:56 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000003, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/delivery-proof
+2026-03-29 23:25:56 [INF] [Gateway] GATEWAY POST /gateway/tracking/delivery-proof -> 200 in 76.3181ms
+2026-03-29 23:26:04 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:26:04 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000004, PreviousRequestId: -
+The path '/gateway/tracking/documents/upload' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:26:04 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000004, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/documents/upload' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:26:04 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000004, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/documents/upload
+2026-03-29 23:26:04 [INF] [Gateway] GATEWAY POST /gateway/tracking/documents/upload -> 200 in 43.1512ms
+2026-03-29 23:26:11 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000005, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:26:11 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000005, PreviousRequestId: -
+The path '/gateway/tracking/delivery/7' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:26:11 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000005, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/delivery/7' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:26:11 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000005, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/delivery/7
+2026-03-29 23:26:11 [INF] [Gateway] GATEWAY GET /gateway/tracking/delivery/7 -> 200 in 37.3917ms
+2026-03-29 23:26:19 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000006, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:26:19 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000006, PreviousRequestId: -
+The path '/gateway/tracking/SS2026032916443' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:26:19 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000006, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/SS2026032916443' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:26:19 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000006, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/SS2026032916443
+2026-03-29 23:26:19 [INF] [Gateway] GATEWAY GET /gateway/tracking/SS2026032916443 -> 200 in 20.6816ms
+2026-03-29 23:26:22 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000007, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:26:22 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000007, PreviousRequestId: -
+The path '/gateway/tracking/SS2026032916443' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:26:22 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000007, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/SS2026032916443' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:26:22 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000007, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/SS2026032916443
+2026-03-29 23:26:22 [INF] [Gateway] GATEWAY GET /gateway/tracking/SS2026032916443 -> 200 in 42.8518ms
+2026-03-29 23:26:39 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000008, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:26:39 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000008, PreviousRequestId: -
+The path '/gateway/tracking/SS2026032916774' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:26:39 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000008, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/SS2026032916774' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:26:40 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000008, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/SS2026032916774
+2026-03-29 23:26:40 [INF] [Gateway] GATEWAY GET /gateway/tracking/SS2026032916774 -> 200 in 30.9987ms
+2026-03-29 23:26:48 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000009, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/tracking/{everything}' via the EnableRateLimiting option.
+2026-03-29 23:26:48 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000009, PreviousRequestId: -
+The path '/gateway/tracking/documents/7' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-29 23:26:48 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000009, PreviousRequestId: -
+Client has been authenticated for path '/gateway/tracking/documents/7' by 'AuthenticationTypes.Federation' scheme.
+2026-03-29 23:26:48 [INF] [Gateway] RequestId: 0HNKDNBC2NMJ6:00000009, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5003/api/tracking/documents/7
+2026-03-29 23:26:48 [INF] [Gateway] GATEWAY GET /gateway/tracking/documents/7 -> 200 in 46.6663ms
