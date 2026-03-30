@@ -57,7 +57,7 @@ try
     app.MapGet("/health", () => Results.Json(new
     {
         status = "healthy",
-        timestamp = DateTime.Now,
+        timestamp = DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"),
         services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004", "payment:5005" }
     }));
 

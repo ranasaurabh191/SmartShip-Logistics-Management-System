@@ -19,7 +19,7 @@ public class TrackingService : ITrackingService
         _logger = logger;
     }
 
-    public async Task<(TrackingEventDto? Data, string? Error)> AddEventAsync(AddTrackingEventRequest req, string updatedBy)
+    public async Task<TrackingEventDto> AddEventAsync(AddTrackingEventRequest req, string updatedBy)
     {
         _logger.LogInformation("Adding tracking event for {TrackingNumber} | Status: {Status} | Location: {Location} | By: {UpdatedBy}",
             req.TrackingNumber, req.Status, req.Location, updatedBy);
@@ -35,7 +35,7 @@ public class TrackingService : ITrackingService
             if (recentDuplicate != null)
             {
                 _logger.LogWarning("Duplicate event for {TrackingNumber}", req.TrackingNumber);
-                return (null, "Duplicate tracking event submitted recently.");
+                throw new InvalidOperationException("Duplicate tracking event submitted recently.");
             }
             var ev = new TrackingEvent
             {
@@ -53,8 +53,8 @@ public class TrackingService : ITrackingService
             _logger.LogInformation("Tracking event added: ID {EventId} for {TrackingNumber} | Status: {Status}",
                 ev.Id, ev.TrackingNumber, ev.Status);
 
-            return (new TrackingEventDto(ev.Id, ev.TrackingNumber, ev.Status, ev.Location, ev.Description,
-                    DateTime.SpecifyKind(ev.EventTime, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), ev.UpdatedBy), null);
+            return new TrackingEventDto(ev.Id, ev.TrackingNumber, ev.Status, ev.Location, ev.Description,
+                    DateTime.SpecifyKind(ev.EventTime, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), ev.UpdatedBy);
         }
         catch (Exception ex)
         {
@@ -118,7 +118,7 @@ public class TrackingService : ITrackingService
         }
     }
 
-    public async Task<DeliveryProofDto?> GetDeliveryProofAsync(int shipmentId)
+    public async Task<DeliveryProofDto> GetDeliveryProofAsync(int shipmentId)
     {
         _logger.LogInformation("Fetching delivery proof for Shipment {ShipmentId}", shipmentId);
 
@@ -127,7 +127,7 @@ public class TrackingService : ITrackingService
         if (p == null)
         {
             _logger.LogWarning("Delivery proof not found for Shipment {ShipmentId}", shipmentId);
-            return null;
+            throw new KeyNotFoundException($"Delivery proof not found for Shipment {shipmentId}.");
         }
 
         _logger.LogInformation("Delivery proof found for {TrackingNumber} | Delivered by: {DeliveredBy}",
@@ -138,7 +138,7 @@ public class TrackingService : ITrackingService
         .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), p.DeliveredBy);
     }
 
-    public async Task<(DeliveryProofDto? Data, string? Error)> AddDeliveryProofAsync(AddDeliveryProofRequest req, string? signaturePath, string? photoPath)
+    public async Task<DeliveryProofDto> AddDeliveryProofAsync(AddDeliveryProofRequest req, string? signaturePath, string? photoPath)
     {
         _logger.LogInformation("Adding delivery proof for {TrackingNumber} | Receiver: {ReceiverName} | By: {DeliveredBy}",
             req.TrackingNumber, req.ReceiverName, req.DeliveredBy);
@@ -151,7 +151,7 @@ public class TrackingService : ITrackingService
             if (existing != null)
             {
                 _logger.LogWarning("Delivery proof already exists for {TrackingNumber}", req.TrackingNumber);
-                return (null, "Delivery proof already exists for this shipment.");
+                throw new InvalidOperationException("Delivery proof already exists for this shipment.");
             }
             var proof = new DeliveryProof
             {
@@ -172,9 +172,9 @@ public class TrackingService : ITrackingService
                 signaturePath != null ? "Yes" : "No",
                 photoPath != null ? "Yes" : "No");
 
-            return (new DeliveryProofDto(proof.ShipmentId, proof.TrackingNumber, proof.ReceiverName,
+            return new DeliveryProofDto(proof.ShipmentId, proof.TrackingNumber, proof.ReceiverName,
                 proof.SignatureImagePath, proof.PhotoPath, proof.Notes, DateTime.SpecifyKind(proof.DeliveredAt, DateTimeKind.Utc)
-        .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), proof.DeliveredBy),null);
+        .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"), proof.DeliveredBy);
         }
         catch (Exception ex)
         {
@@ -183,7 +183,7 @@ public class TrackingService : ITrackingService
         }
     }
 
-    public async Task<(DocumentDto? Data, string? Error)> UploadDocumentAsync(int shipmentId, string trackingNumber, IFormFile file, string docType, int userId)
+    public async Task<DocumentDto> UploadDocumentAsync(int shipmentId, string trackingNumber, IFormFile file, string docType, int userId)
     {
         _logger.LogInformation("Uploading document for Shipment {ShipmentId} | File: {FileName} | Type: {DocType} | User: {UserId}",
             shipmentId, file.FileName, docType, userId);
@@ -195,7 +195,7 @@ public class TrackingService : ITrackingService
             if (existingDoc != null)
             {
                 _logger.LogWarning("Document {FileName} already uploaded for Shipment {ShipmentId}", file.FileName, shipmentId);
-                return (null, $"Document '{file.FileName}' already uploaded for this shipment.");
+                throw new InvalidOperationException($"Document '{file.FileName}' already uploaded for this shipment.");
             }
 
             var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), _config["FileStorage:UploadPath"] ?? "Uploads");
@@ -204,8 +204,7 @@ public class TrackingService : ITrackingService
             var fileName = $"{Guid.NewGuid()}_{file.FileName}";
             var filePath = Path.Combine(uploadPath, fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-                await file.CopyToAsync(stream);
+            using (var stream = new FileStream(filePath, FileMode.Create)) await file.CopyToAsync(stream);
 
             _logger.LogInformation("File saved to disk: {FilePath} | Size: {Size} bytes", filePath, file.Length);
 
@@ -228,8 +227,8 @@ public class TrackingService : ITrackingService
             _logger.LogInformation("Document uploaded: ID {DocId} | {FileName} | Type: {DocType} | Shipment: {ShipmentId}",
                 doc.Id, doc.FileName, doc.DocumentType, shipmentId);
 
-            return (new DocumentDto(doc.Id, doc.FileName, doc.DocumentType.ToString(), doc.FileSizeBytes, 
-                DateTime.SpecifyKind(doc.UploadedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")), null);
+            return new DocumentDto(doc.Id, doc.FileName, doc.DocumentType.ToString(), doc.FileSizeBytes, 
+                DateTime.SpecifyKind(doc.UploadedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"));
         }
         catch (Exception ex)
         {

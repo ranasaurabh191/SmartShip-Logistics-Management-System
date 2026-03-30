@@ -115,7 +115,7 @@ public class AdminService : IAdminService
         }
     }
 
-    public async Task<HubDto?> GetHubByIdAsync(int id)
+    public async Task<HubDto> GetHubByIdAsync(int id)
     {
         _logger.LogInformation("Fetching hub by ID: {HubId}", id);
 
@@ -124,7 +124,7 @@ public class AdminService : IAdminService
         if (h == null)
         {
             _logger.LogWarning("Hub not found: ID {HubId}", id);
-            return null;
+            throw new KeyNotFoundException($"Hub {id} not found.");
         }
 
         _logger.LogInformation("Hub found: {HubName} | City: {City}", h.Name, h.City);
@@ -160,7 +160,7 @@ public class AdminService : IAdminService
         }
     }
 
-    public async Task<bool> UpdateHubAsync(int id, UpdateHubRequest req)
+    public async Task UpdateHubAsync(int id, UpdateHubRequest req)
     {
         _logger.LogInformation("Updating hub ID: {HubId} | Name: {HubName}", id, req.Name);
 
@@ -170,7 +170,7 @@ public class AdminService : IAdminService
             if (h == null)
             {
                 _logger.LogWarning("Hub not found for update: ID {HubId}", id);
-                return false;
+                throw new KeyNotFoundException($"Hub {id} not found.");
             }
 
             h.Name = req.Name; h.City = req.City; h.State = req.State;
@@ -179,7 +179,6 @@ public class AdminService : IAdminService
 
             _logger.LogInformation("Hub updated: ID {HubId} | {HubName} | IsActive: {IsActive}",
                 id, h.Name, h.IsActive);
-            return true;
         }
         catch (Exception ex)
         {
@@ -188,7 +187,7 @@ public class AdminService : IAdminService
         }
     }
 
-    public async Task<bool> DeleteHubAsync(int id)
+    public async Task DeleteHubAsync(int id)
     {
         _logger.LogInformation("Deleting hub ID: {HubId}", id);
 
@@ -198,14 +197,13 @@ public class AdminService : IAdminService
             if (h == null)
             {
                 _logger.LogWarning("Hub not found for deletion: ID {HubId}", id);
-                return false;
+                throw new KeyNotFoundException($"Hub {id} not found.");
             }
 
             _context.Hubs.Remove(h);
             await _context.SaveChangesAsync();
 
             _logger.LogInformation("Hub deleted: ID {HubId} | {HubName}", id, h.Name);
-            return true;
         }
         catch (Exception ex)
         {

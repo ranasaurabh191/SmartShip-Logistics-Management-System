@@ -83,7 +83,7 @@ public class UserService : IUserService
             throw;
         }
     }
-    public async Task<UserDto?> GetUserByIdAsync(int id)
+    public async Task<UserDto> GetUserByIdAsync(int id)
     {
         _logger.LogInformation("Fetching user with ID: {UserId}", id);
 
@@ -92,7 +92,7 @@ public class UserService : IUserService
         if (u == null)
         {
             _logger.LogWarning("User not found with ID: {UserId}", id);
-            return null;
+            throw new KeyNotFoundException($"User {id} not found.");
         }
 
         _logger.LogInformation("User found: {Email}", u.Email);
@@ -100,7 +100,7 @@ public class UserService : IUserService
         return new UserDto(u.Id, u.Name, u.Email, u.Phone, u.Role, u.IsActive, u.CreatedAt);
     }
 
-    public async Task<bool> UpdateUserAsync(int id, UpdateUserRequest request)
+    public async Task UpdateUserAsync(int id, UpdateUserRequest request)
     {
         _logger.LogInformation("Updating user with ID: {UserId}", id);
 
@@ -109,7 +109,7 @@ public class UserService : IUserService
         if (user == null)
         {
             _logger.LogWarning("Update failed - user not found: {UserId}", id);
-            return false;
+            throw new KeyNotFoundException($"User {id} not found.");
         }
 
         user.Name = request.Name;
@@ -121,10 +121,9 @@ public class UserService : IUserService
 
         _logger.LogInformation("User updated successfully: {UserId}", id);
 
-        return true;
     }
 
-    public async Task<bool> DeleteUserAsync(int userId)
+    public async Task DeleteUserAsync(int userId)
     {
         _logger.LogInformation("Deleting user with ID: {UserId}", userId);
 
@@ -133,7 +132,7 @@ public class UserService : IUserService
         if (user == null)
         {
             _logger.LogWarning("Delete failed - user not found: {UserId}", userId);
-            return false;
+            throw new KeyNotFoundException($"User {userId} not found.");
         }
 
         _context.Users.Remove(user);
@@ -151,7 +150,6 @@ public class UserService : IUserService
 
         _logger.LogInformation("Delete Event published successfully: {UserId}", userId);
 
-        return true;
     }
     
 }

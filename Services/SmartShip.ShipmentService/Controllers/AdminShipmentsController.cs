@@ -19,15 +19,16 @@ public class AdminShipmentsController : ControllerBase
     [HttpPut("status/{id}")]
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
     {
-        var (success, error) = await _service.UpdateStatusAsync(id, request);
-        if (!success) return BadRequest(new { message = error });
+        await _service.UpdateStatusAsync(id, request);      
         return Ok(new { message = "Status updated successfully." });
     }
 
     [HttpPut("resolve/{id}")]
     public async Task<IActionResult> Resolve(int id, [FromBody] UpdateStatusRequest req)
     {
-        var result = await _service.ResolveExceptionAsync(id, req.Status);
-        return result ? Ok(result) : NotFound(new { message = "Shipment record not found" });
+        if (string.IsNullOrEmpty(req.Resolution)) throw new ArgumentException("Resolution text is required.");
+
+        await _service.ResolveExceptionAsync(id, req.Resolution);
+        return Ok(new { message = "Exception resolved successfully." });
     }
 }

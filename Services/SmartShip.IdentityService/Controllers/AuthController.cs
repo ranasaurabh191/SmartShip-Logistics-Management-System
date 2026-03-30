@@ -15,7 +15,6 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Signup([FromBody] SignupRequest request)
     {
         var result = await _authService.SignupAsync(request);
-        if (result == null) return Conflict(new { message = "Email already exists." });
         return Ok(result);
     }
 
@@ -23,10 +22,6 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var result = await _authService.LoginAsync(request);
-
-        if (!result.IsSuccess)
-            return BadRequest(new { message = result.Message });
-
         return Ok(result);
     }
 

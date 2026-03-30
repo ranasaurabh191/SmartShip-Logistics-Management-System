@@ -31,18 +31,13 @@ public class ShipmentsController : ControllerBase
     Ok(await _service.GetMyShipmentsPagedAsync(GetUserId(), request));
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var s = await _service.GetByIdAsync(id);
-        return s == null ? NotFound() : Ok(s);
-    }
+    public async Task<IActionResult> GetById(int id) =>  Ok(await _service.GetByIdAsync(id));
 
     [HttpPatch("pickup/{id}")]
     [Authorize(Roles = "CUSTOMER")]
     public async Task<IActionResult> SchedulePickup(int id, [FromBody] SchedulePickupRequest request)
     {
-        var (success, error) = await _service.SchedulePickupAsync(id, request);
-        if (!success) return BadRequest(new { message = error });
+        await _service.SchedulePickupAsync(id, request);        
         return Ok(new { message = "Pickup scheduled successfully." });
     }
 

@@ -22,17 +22,13 @@ public class TrackingController : ControllerBase
     public async Task<IActionResult> AddEvent([FromBody] AddTrackingEventRequest req)
     {
         var updatedBy = User.FindFirstValue(ClaimTypes.Name) ?? "System";
-        var (result, error) = await _service.AddEventAsync(req, updatedBy);
-        if (error != null) return Conflict(new { message = error });
+        var result = await _service.AddEventAsync(req, updatedBy);
         return Ok(result);
     }
 
     [HttpGet("delivery/{shipmentId}")]
-    public async Task<IActionResult> GetDeliveryProof(int shipmentId)
-    {
-        var result = await _service.GetDeliveryProofAsync(shipmentId);
-        return result == null ? NotFound(new { message = "Delivery proof not found." }) : Ok(result);
-    }
+    public async Task<IActionResult> GetDeliveryProof(int shipmentId) => Ok(await _service.GetDeliveryProofAsync(shipmentId));
+
 
     [HttpPost("delivery-proof")]
     [Authorize(Roles = "ADMIN")]
@@ -56,25 +52,27 @@ public class TrackingController : ControllerBase
             await photo.CopyToAsync(s);
         }
 
-        var (result, error) = await _service.AddDeliveryProofAsync(req, sigPath, photoPath);
-        if (error != null) return Conflict(new { message = error });
+        var result = await _service.AddDeliveryProofAsync(req, sigPath, photoPath);
         return Ok(result);
     }
 
     [HttpPost("documents/upload")]
+    [Consumes("multipart/form-data")]
     public async Task<IActionResult> UploadDocument(
         [FromForm] int shipmentId, [FromForm] string trackingNumber,
-        [FromForm] string documentType, IFormFile file)
+        [FromForm] string documentType, IFormFile? file)
     {
-        if (file.Length > 10 * 1024 * 1024) return BadRequest("File must be under 10MB");
+        if (file == null) throw new ArgumentException("File is required.");
+
+        if (file.Length > 10 * 1024 * 1024) throw new ArgumentException("File must be under 10MB.");  
+
         var allowed = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
         var ext = Path.GetExtension(file.FileName).ToLower();
-        if (!allowed.Contains(ext)) return BadRequest("Only PDF, JPG, PNG allowed");
+        if (!allowed.Contains(ext)) throw new ArgumentException("Only PDF, JPG, PNG allowed.");  
 
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var (result, error) = await _service.UploadDocumentAsync(shipmentId, trackingNumber, file, documentType, userId);
-        if (error != null) return Conflict(new { message = error });
-        return Ok(result);
+        var result = await _service.UploadDocumentAsync(shipmentId, trackingNumber, file, documentType, userId);
+        return Ok(result); 
     }
 
     [HttpGet("documents/{shipmentId}")]

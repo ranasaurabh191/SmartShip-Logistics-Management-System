@@ -33,15 +33,15 @@ public class AdminController : ControllerBase
     [HttpPut("hubs/{id}")]
     public async Task<IActionResult> UpdateHub(int id, [FromBody] UpdateHubRequest req)
     {
-        var result = await _service.UpdateHubAsync(id, req);
-        return result ? Ok("Updated Successfully") : NotFound();
+        await _service.UpdateHubAsync(id, req);
+        return Ok("Updated Successfully");
     }
 
     [HttpDelete("hubs/{id}")]
     public async Task<IActionResult> DeleteHub(int id)
     {
-        var result = await _service.DeleteHubAsync(id);
-        return result ? Ok(new { message = "Deleted Successfully" }) : NotFound();
+        await _service.DeleteHubAsync(id);
+        return Ok(new { message = "Deleted Successfully" });
     }
 
     [HttpGet("reports")]

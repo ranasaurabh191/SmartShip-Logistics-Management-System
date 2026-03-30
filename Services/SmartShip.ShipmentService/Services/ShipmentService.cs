@@ -181,7 +181,7 @@ public class ShipmentService : IShipmentService
         }
     }
 
-    public async Task<ShipmentResponse?> GetByIdAsync(int id)
+    public async Task<ShipmentResponse> GetByIdAsync(int id)
     {
         _logger.LogInformation("Fetching shipment by ID: {ShipmentId}", id);
 
@@ -194,42 +194,45 @@ public class ShipmentService : IShipmentService
         if (s == null)
         {
             _logger.LogWarning("Shipment not found: ID {ShipmentId}", id);
-            return null;
+            throw new KeyNotFoundException($"Shipment {id} not found.");
         }
 
         _logger.LogInformation("Shipment found: {TrackingNumber} | Status: {Status}", s.TrackingNumber, s.Status);
         return MapToResponse(s, s.SenderAddress, s.ReceiverAddress, s.Package);
     }
 
-    public async Task<(bool Success, string? Error)> UpdateStatusAsync(int id, UpdateStatusRequest request)
+    public async Task UpdateStatusAsync(int id, UpdateStatusRequest request)
     {
         _logger.LogInformation("Updating status for Shipment {ShipmentId} -> {Status}", id, request.Status);
 
         try
         {
-            var s = await _context.Shipments.FindAsync(id);
-            if (s == null) return (false, "Shipment record not found.");
+            var s = await _context.Shipments.FindAsync(id)
+                ?? throw new KeyNotFoundException($"Shipment {id} not found.");
 
             if (!Enum.TryParse<ShipmentStatus>(request.Status, true, out var st))
             {
                 _logger.LogWarning("Invalid status value: {Status}", request.Status);
-                return (false, $"Invalid status: {request.Status}");
+                throw new ArgumentException($"Invalid status: {request.Status}");
             }
 
+            if (st == ShipmentStatus.Cancelled && s.Status == ShipmentStatus.Delivered)
+                throw new InvalidOperationException("Cannot cancel a delivered shipment.");
+
             if (st == ShipmentStatus.PickedUp && s.Status != ShipmentStatus.Booked)
-                return (false, "Shipment must be Booked before PickedUp.");
+                throw new InvalidOperationException("Shipment must be Booked before PickedUp.");
 
             if (st == ShipmentStatus.InTransit && s.Status != ShipmentStatus.PickedUp)
-                return (false, "Shipment must be PickedUp before InTransit.");
+                throw new InvalidOperationException("Shipment must be PickedUp before InTransit.");
 
             if (st == ShipmentStatus.OutForDelivery && s.Status != ShipmentStatus.InTransit)
-                return (false, "Shipment must be InTransit before OutForDelivery.");
+                throw new InvalidOperationException("Shipment must be InTransit before OutForDelivery.");
 
             if (st == ShipmentStatus.Delivered && s.Status != ShipmentStatus.OutForDelivery)
-                return (false, "Shipment must be OutForDelivery before Delivered.");
+                throw new InvalidOperationException("Shipment must be OutForDelivery before Delivered.");
 
             if (st == ShipmentStatus.Booked && s.PickupScheduledAt == null)
-                return (false, "Cannot book shipment without scheduling pickup first.");
+                throw new InvalidOperationException("Cannot book shipment without scheduling pickup first.");
 
             var oldStatus = s.Status;
             s.Status = st;
@@ -272,8 +275,6 @@ public class ShipmentService : IShipmentService
                     CancelledAt = DateTime.UtcNow
                 });
             }
-
-            return (true, null);
         }
         catch (Exception ex)
         {
@@ -282,66 +283,59 @@ public class ShipmentService : IShipmentService
         }
     }
 
-    private HttpClient CreateInternalClient(string clientName)
-    {
-        var httpClient = _httpClientFactory.CreateClient(clientName);
-        var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
-        if (!string.IsNullOrEmpty(token))
-            httpClient.DefaultRequestHeaders.Add("Authorization", token);
-        return httpClient;
-    }
-
-    public async Task<(bool Success, string? Error)> SchedulePickupAsync(int id, SchedulePickupRequest request)
+    public async Task SchedulePickupAsync(int id, SchedulePickupRequest request)
     {
         _logger.LogInformation("Scheduling pickup for Shipment {ShipmentId} at {PickupTime}", id, request.PickupTime);
 
-        var s = await _context.Shipments.FindAsync(id);
-        if (s == null)
+        try
         {
-            _logger.LogWarning("Shipment not found: ID {ShipmentId}", id);
-            return (false, "Shipment record not found.");
+            var s = await _context.Shipments.FindAsync(id)
+                ?? throw new KeyNotFoundException($"Shipment {id} not found.");
+
+            if (s.Status == ShipmentStatus.Delivered || s.Status == ShipmentStatus.Cancelled)
+                throw new InvalidOperationException("Cannot schedule pickup for a delivered or cancelled shipment.");
+
+            var httpClient = CreateInternalClient("PaymentService");
+            var response = await httpClient.GetAsync($"api/payment/shipment/{id}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("No payment record for Shipment {ShipmentId}", id);
+                throw new InvalidOperationException("Payment not found. Please create a payment order first.");
+            }
+
+            var payment = await response.Content.ReadFromJsonAsync<PaymentStatusDto>();
+
+            if (payment?.PaymentStatus == "Pending" && payment?.PaymentMethod == "Online")
+            {
+                _logger.LogWarning("Online payment pending for Shipment {ShipmentId}", id);
+                throw new InvalidOperationException("Online payment not completed. Please pay before scheduling pickup.");
+            }
+
+            s.PickupScheduledAt = request.PickupTime.Kind == DateTimeKind.Utc
+                ? request.PickupTime
+                : request.PickupTime.ToUniversalTime();
+            s.Status = ShipmentStatus.Booked;
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime}",
+                s.TrackingNumber, request.PickupTime);
         }
-
-        var httpClient = CreateInternalClient("PaymentService");
-        var response = await httpClient.GetAsync($"api/payment/shipment/{id}");
-
-        if (!response.IsSuccessStatusCode)
+        catch (Exception ex)
         {
-            _logger.LogWarning("No payment record for Shipment {ShipmentId}", id);
-            return (false, "Payment not found. Please create a payment order first.");
+            _logger.LogError(ex, "Failed to schedule pickup for Shipment {ShipmentId}", id);
+            throw;
         }
-        var payment = await response.Content.ReadFromJsonAsync<PaymentStatusDto>();
-
-        if (payment?.PaymentStatus == "Pending" && payment?.PaymentMethod == "Online")
-        {
-            _logger.LogWarning("Online payment pending for Shipment {ShipmentId}", id);
-            return (false, "Online payment not completed. Please pay before scheduling pickup.");
-        }
-
-        s.PickupScheduledAt = request.PickupTime.Kind == DateTimeKind.Utc
-            ? request.PickupTime
-            : request.PickupTime.ToUniversalTime();
-        s.Status = ShipmentStatus.Booked;
-        await _context.SaveChangesAsync();
-
-        _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime}",
-            s.TrackingNumber, request.PickupTime);
-
-        return (true, null);
     }
 
-    public async Task<bool> ResolveExceptionAsync(int id, string resolution)
+    public async Task ResolveExceptionAsync(int id, string resolution)
     {
         _logger.LogInformation("Resolving exception for Shipment {ShipmentId}", id);
 
         try
         {
-            var s = await _context.Shipments.FindAsync(id);
-            if (s == null)
-            {
-                _logger.LogWarning("Shipment not found for exception resolution: ID {ShipmentId}", id);
-                return false;
-            }
+            var s = await _context.Shipments.FindAsync(id)
+                ?? throw new KeyNotFoundException($"Shipment {id} not found.");
 
             s.Notes = resolution;
             s.Status = ShipmentStatus.InTransit;
@@ -349,7 +343,6 @@ public class ShipmentService : IShipmentService
 
             _logger.LogInformation("Exception resolved for {TrackingNumber} | Resolution: {Resolution}",
                 s.TrackingNumber, resolution);
-            return true;
         }
         catch (Exception ex)
         {
@@ -373,8 +366,17 @@ public class ShipmentService : IShipmentService
         return Task.FromResult(finalRate);
     }
 
+    private HttpClient CreateInternalClient(string clientName)
+    {
+        var httpClient = _httpClientFactory.CreateClient(clientName);
+        var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+        if (!string.IsNullOrEmpty(token))
+            httpClient.DefaultRequestHeaders.Add("Authorization", token);
+        return httpClient;
+    }
 
-    private static string GenerateTrackingNumber() => "SS" + DateTime.Now.ToString("yyyyMMdd") + Random.Shared.Next(10000, 99999);
+    private static string GenerateTrackingNumber() =>
+        "SS" + DateTime.Now.ToString("yyyyMMdd") + Random.Shared.Next(10000, 99999);
 
     private static Address MapAddress(AddressDto d) => new()
     {
@@ -400,11 +402,12 @@ public class ShipmentService : IShipmentService
     private static ShipmentResponse MapToResponse(Shipment s, Address sender, Address receiver, Package pkg) => new(
         s.Id, s.TrackingNumber, s.CustomerId, s.ShipmentType.ToString(), s.Status.ToString(), s.ShippingRate,
         DateTime.SpecifyKind(s.CreatedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
-        s.PickupScheduledAt.HasValue ? DateTime.SpecifyKind(s.PickupScheduledAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
-        : null,                                                  
+        s.PickupScheduledAt.HasValue
+            ? DateTime.SpecifyKind(s.PickupScheduledAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
+            : null,
         s.DeliveredAt.HasValue
-        ? DateTime.SpecifyKind(s.DeliveredAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
-        : null,
+            ? DateTime.SpecifyKind(s.DeliveredAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
+            : null,
         new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country),
         new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country),
         new PackageDto(pkg.WeightKg, pkg.LengthCm, pkg.WidthCm, pkg.HeightCm, pkg.Description, pkg.DeclaredValue),

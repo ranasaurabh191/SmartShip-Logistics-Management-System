@@ -24,8 +24,6 @@ public class PaymentController : ControllerBase
     {
         _logger.LogInformation("Create order request for Shipment {ShipmentId} | Method: {Method}", request.ShipmentId, request.PaymentMethod);
         var result = await _paymentService.CreateOrderAsync(request);
-        if (result == null) return NotFound(new { message = "Payment creation failed." });
-        if (result.ShipmentId == null || result.ShipmentId == 0) return NotFound(new { message = result.Message });
         return Ok(result);
     }
 
@@ -34,7 +32,7 @@ public class PaymentController : ControllerBase
     {
         _logger.LogInformation("Verify payment request for Order {OrderId}", request.RazorpayOrderId);
         var result = await _paymentService.VerifyPaymentAsync(request);
-        return result != null ? Ok(result) : NotFound(new { message = "Payment record not found." });
+        return Ok(result);
     }
 
     [HttpGet("payment-status")]
@@ -54,7 +52,7 @@ public class PaymentController : ControllerBase
         };
 
         var result = await _paymentService.PaymentStatusAsync(request);
-        return result != null ? Ok(result) : NotFound(new { message = "Payment record not found." });
+        return Ok(result);
     }
 
     [HttpGet("shipment/{shipmentId}")]
@@ -62,6 +60,6 @@ public class PaymentController : ControllerBase
     {
         _logger.LogInformation("Fetching payment for Shipment {ShipmentId}", shipmentId);
         var result = await _paymentService.GetByShipmentIdAsync(shipmentId);
-        return result != null ? Ok(result) : NotFound(new { message = "Payment record not found." });
+        return Ok(result);
     }
 }

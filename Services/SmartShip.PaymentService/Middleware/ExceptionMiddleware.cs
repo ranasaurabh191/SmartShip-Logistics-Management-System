@@ -30,6 +30,9 @@
                 KeyNotFoundException => 404,
                 UnauthorizedAccessException => 401,
                 ArgumentException => 400,
+                InvalidOperationException => 409,   
+                NotImplementedException => 501,    
+                TimeoutException => 408,
                 _ => 500
             };
 
@@ -41,9 +44,11 @@
                     KeyNotFoundException => ex.Message,
                     UnauthorizedAccessException => "Unauthorized.",
                     ArgumentException => ex.Message,
+                    InvalidOperationException => ex.Message,   
+                    TimeoutException => "Request timed out.",
                     _ => "An unexpected error occurred."
                 },
-                timestamp = DateTime.Now
+                timestamp = DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt")
             });
         }
     }

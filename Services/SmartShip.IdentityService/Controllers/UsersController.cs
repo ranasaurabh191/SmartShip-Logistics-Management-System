@@ -26,14 +26,14 @@ public class UsersController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateUserRequest request)
     {
-        var result = await _userService.UpdateUserAsync(id, request);
-        return result ? Ok(new { message = "Updated Successfully" }) : NotFound(new { message = "User Not Found" });
+        await _userService.UpdateUserAsync(id, request);
+        return Ok(new { message = "Updated Successfully" });
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
-        var result = await _userService.DeleteUserAsync(id);
-        return result ? Ok(new { message = "Deleted Successfully" }) : NotFound(new { message = "User Not Found" });
+        await _userService.DeleteUserAsync(id);
+        return Ok(new { message = "Deleted Successfully" }) ;
     }
 }

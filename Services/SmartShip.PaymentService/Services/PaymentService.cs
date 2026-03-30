@@ -37,7 +37,7 @@ public class PaymentService : IPaymentService
         return httpClient;
     }
 
-    public async Task<PaymentResponse?> CreateOrderAsync(CreateOrderRequest request)
+    public async Task<PaymentResponse> CreateOrderAsync(CreateOrderRequest request)
     {
         _logger.LogInformation("Create order request for Shipment {ShipmentId} | Method: {Method}",
         request.ShipmentId, request.PaymentMethod);
@@ -48,19 +48,19 @@ public class PaymentService : IPaymentService
         if (!shipmentCheck.IsSuccessStatusCode)
         {
             _logger.LogWarning("Shipment {ShipmentId} not found. Cannot create payment order.", request.ShipmentId);
-            return new PaymentResponse { Message = $"Shipment not found for ID {request.ShipmentId}. Please create a shipment first." };
+            throw new KeyNotFoundException($"Shipment not found for ID {request.ShipmentId}. Please create a shipment first.");
         }
 
         _logger.LogInformation("Shipment {ShipmentId} verified. Proceeding with payment.", request.ShipmentId);
 
         var shipment = await shipmentCheck.Content.ReadFromJsonAsync<ShipmentDTOs>();
 
-        if (shipment == null) return new PaymentResponse { Message = "Failed to read shipment details." };
+        if (shipment == null) throw new KeyNotFoundException("Failed to read shipment details.");
 
         if (shipment.CustomerId != request.CustomerId)
         {
             _logger.LogWarning("CustomerId mismatch for Shipment {ShipmentId}.", request.ShipmentId);
-            return new PaymentResponse { Message = "You are not authorized to pay for this shipment." };
+            throw new UnauthorizedAccessException("You are not authorized to pay for this shipment.");
         }
 
         _logger.LogInformation("Shipment {ShipmentId} verified | TrackingNumber: {TrackingNumber}",
@@ -73,19 +73,19 @@ public class PaymentService : IPaymentService
             if (existing.PaymentStatus == PaymentStatus.Paid)
             {
                 _logger.LogWarning("Payment already completed for {ShipmentId}", request.ShipmentId);
-                return MapToResponse(existing, "You have already paid for this shipment.");
+                throw new InvalidOperationException("You have already paid for this shipment.");
             }
 
             if (existing.PaymentMethod == PaymentMethod.COD)
             {
                 _logger.LogWarning("COD already registered for {ShipmentId}", request.ShipmentId);
-                return MapToResponse(existing, "COD already registered. Pay on delivery.");
+                throw new InvalidOperationException("COD already registered. Pay on delivery.");
             }
 
             if (existing.PaymentMethod == PaymentMethod.Online)
             {
                 _logger.LogWarning("Online payment already initiated for {ShipmentId}", request.ShipmentId);
-                return MapToResponse(existing, "Payment already initiated. Please complete your payment.");
+                throw new InvalidOperationException("Payment already initiated. Please complete your payment.");
             }
         }
 
@@ -154,10 +154,10 @@ public class PaymentService : IPaymentService
         }
 
         _logger.LogWarning("Unknown payment method: {Method} for Shipment {ShipmentId}", request.PaymentMethod, request.ShipmentId);
-        return new PaymentResponse { Message = $"Unsupported payment method: {request.PaymentMethod}" };
+        throw new ArgumentException($"Unsupported payment method: {request.PaymentMethod}");
     }
 
-    public async Task<PaymentResponse?> VerifyPaymentAsync(VerifyPaymentRequest request)
+    public async Task<PaymentResponse> VerifyPaymentAsync(VerifyPaymentRequest request)
     {
         _logger.LogInformation("Verifying payment for Order {OrderId}", request.RazorpayOrderId);
 
@@ -166,7 +166,7 @@ public class PaymentService : IPaymentService
         if (payment == null)
         {
             _logger.LogWarning("Payment not found for Order {OrderId}", request.RazorpayOrderId);
-            return null;
+            throw new KeyNotFoundException($"Payment record not found for Order {request.RazorpayOrderId}.");
         }
 
         //var attributes = new Dictionary<string, string>
@@ -208,7 +208,7 @@ public class PaymentService : IPaymentService
         return MapToResponse(payment, "Payment successful!");
     }
 
-    public async Task<PaymentResponse?> PaymentStatusAsync(PaymentStatusRequest request)
+    public async Task<PaymentResponse> PaymentStatusAsync(PaymentStatusRequest request)
     {
         _logger.LogInformation("Fetching payment status | OrderId:{OrderId} | ShipmentId:{ShipmentId} | Tracking:{Tracking}",
             request.RazorpayOrderId, request.ShipmentId, request.TrackingNumber);
@@ -234,7 +234,7 @@ public class PaymentService : IPaymentService
         if (payment == null)
         {
             _logger.LogWarning("Payment not found for Order {OrderId}", request.RazorpayOrderId);
-            return null;
+            throw new KeyNotFoundException("Payment record not found.");
         }
 
         _logger.LogInformation("Payment status found -> {TrackingNumber} | Status: {Status} | Method: {Method}",
@@ -272,7 +272,7 @@ public class PaymentService : IPaymentService
         };
     }
 
-    public async Task<PaymentResponse?> GetByShipmentIdAsync(int shipmentId)
+    public async Task<PaymentResponse> GetByShipmentIdAsync(int shipmentId)
     {
         _logger.LogInformation("Fetching payment for Shipment {ShipmentId}", shipmentId);
 
@@ -282,7 +282,7 @@ public class PaymentService : IPaymentService
         if (payment == null)
         {
             _logger.LogWarning("Payment not found for Shipment {ShipmentId}", shipmentId);
-            return null;
+            throw new KeyNotFoundException($"Payment record not found for Shipment {shipmentId}.");
         }
 
         var message = payment.PaymentStatus switch
