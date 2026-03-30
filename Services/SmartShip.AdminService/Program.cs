@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi;
 using Serilog;
 using SmartShip.AdminService.Data;
 using SmartShip.AdminService.Messaging.Consumers;
@@ -91,22 +90,40 @@ try
             });
         });
     });
-    builder.Services.AddSwaggerGen(c =>
+    builder.Services.AddSwaggerGen(options =>
     {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Admin Service", Version = "v1" });
-        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+        {
+            Title = "Admin Service",
+            Version = "v1"
+        });
+
+        options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
             Name = "Authorization",
-            Type = SecuritySchemeType.Http,
+            Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
             Scheme = "Bearer",
             BearerFormat = "JWT",
-            In = ParameterLocation.Header
+            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+            Description = "Enter your token."
         });
-        c.AddSecurityRequirement(_ => new OpenApiSecurityRequirement
+
+        options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
         {
-            { new OpenApiSecuritySchemeReference("Bearer"), new List<string>() }
+            {
+                new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                    {
+                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
         });
     });
+
 
     builder.Services.AddDbContext<AdminDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -138,10 +155,11 @@ try
     {
         scope.ServiceProvider.GetRequiredService<AdminDbContext>().Database.Migrate();
     }
-
-    app.UseSwagger(); app.UseSwaggerUI();
+    app.UseSwagger(); 
+    app.UseSwaggerUI();
     app.UseCors("AllowAll");
-    app.UseAuthentication(); app.UseAuthorization();
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapControllers();
     app.Run();
 }

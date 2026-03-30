@@ -1,0 +1,368 @@
+2026-03-30 09:52:47 [INF] [Gateway] GATEWAY GET / -> 200 in 136.6742ms
+2026-03-30 09:52:47 [INF] [Gateway] GATEWAY GET /favicon.ico -> 404 in 0.9874ms
+2026-03-30 09:52:53 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 404 in 5.5214ms
+2026-03-30 09:52:55 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 404 in 0.1947ms
+2026-03-30 09:52:55 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 404 in 0.1673ms
+2026-03-30 09:56:17 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 153.6207ms
+2026-03-30 09:56:17 [INF] [Gateway] GATEWAY GET /swagger/index.js -> 200 in 3.7952ms
+2026-03-30 09:56:17 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 87.1699ms
+2026-03-30 09:56:17 [INF] [Gateway] GATEWAY GET /swagger/swagger-ui.css -> 200 in 116.8764ms
+2026-03-30 09:56:17 [INF] [Gateway] GATEWAY GET /swagger/swagger-ui-standalone-preset.js -> 200 in 26.2856ms
+2026-03-30 09:56:17 [INF] [Gateway] GATEWAY GET /swagger/swagger-ui-bundle.js -> 200 in 82.8554ms
+2026-03-30 09:56:17 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.5504ms
+2026-03-30 09:56:18 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 413.9520ms
+2026-03-30 09:56:27 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/shipmentservice -> 200 in 130.7182ms
+2026-03-30 09:56:30 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/trackingservice -> 200 in 140.3704ms
+2026-03-30 09:56:33 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/adminservice -> 200 in 121.1615ms
+2026-03-30 09:56:36 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/paymentservice -> 200 in 133.9928ms
+2026-03-30 09:56:39 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/adminservice -> 200 in 45.9700ms
+2026-03-30 09:57:06 [INF] [Gateway] RequestId: 0HNKE2HU5U5GB:0000000A, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 09:57:06 [INF] [Gateway] RequestId: 0HNKE2HU5U5GB:0000000A, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 09:57:06 [WRN] [Gateway] RequestId: 0HNKE2HU5U5GB:0000000A, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/dashboard' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!;
+2026-03-30 09:57:06 [WRN] [Gateway] RequestId: 0HNKE2HU5U5GB:0000000A, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!
+Setting error response for request: GET /gateway/admin/dashboard
+2026-03-30 09:57:06 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 401 in 70.5721ms
+2026-03-30 09:59:12 [INF] [Gateway] RequestId: 0HNKE2HU5U5GF:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 09:59:12 [INF] [Gateway] RequestId: 0HNKE2HU5U5GF:00000001, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 09:59:12 [INF] [Gateway] RequestId: 0HNKE2HU5U5GF:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/dashboard' by 'AuthenticationTypes.Federation' scheme.
+2026-03-30 09:59:13 [INF] [Gateway] RequestId: 0HNKE2HU5U5GF:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5004/api/admin/dashboard
+2026-03-30 09:59:13 [ERR] [Gateway] RequestId: 0HNKE2HU5U5GF:00000001, PreviousRequestId: -
+ArgumentException caught in global error handler!
+DONE reporting of a total 0 inner exceptions for request 0HNKE2HU5U5GF:00000001 of the original ArgumentException below ->
+System.ArgumentException: An item with the same key has already been added. Key: UtcNow
+   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   at Ocelot.RateLimiting.RateLimitingMiddleware.Invoke(HttpContext context)
+   at Ocelot.Request.Middleware.DownstreamRequestInitialiserMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Headers.Middleware.HttpHeadersTransformationMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Security.Middleware.SecurityMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Multiplexer.MultiplexingMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.DownstreamRouteFinder.Middleware.DownstreamRouteFinderMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Responder.Middleware.ResponderMiddleware.Invoke(HttpContext context)
+   at Ocelot.Errors.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2026-03-30 09:59:13 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 200 in 1314.5178ms
+2026-03-30 10:26:24 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 268.8551ms
+2026-03-30 10:26:25 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 75.5226ms
+2026-03-30 10:26:25 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.9679ms
+2026-03-30 10:26:27 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/adminservice -> 200 in 2628.1922ms
+2026-03-30 10:26:33 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 122.7461ms
+2026-03-30 10:26:39 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/adminservice -> 200 in 22.9326ms
+2026-03-30 10:26:46 [INF] [Gateway] RequestId: 0HNKE32OPLR4A:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:26:46 [INF] [Gateway] RequestId: 0HNKE32OPLR4A:00000001, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:26:46 [INF] [Gateway] RequestId: 0HNKE32OPLR4A:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/dashboard' by 'AuthenticationTypes.Federation' scheme.
+2026-03-30 10:26:46 [INF] [Gateway] RequestId: 0HNKE32OPLR4A:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5004/api/admin/dashboard
+2026-03-30 10:26:46 [ERR] [Gateway] RequestId: 0HNKE32OPLR4A:00000001, PreviousRequestId: -
+ArgumentException caught in global error handler!
+DONE reporting of a total 0 inner exceptions for request 0HNKE32OPLR4A:00000001 of the original ArgumentException below ->
+System.ArgumentException: An item with the same key has already been added. Key: UtcNow
+   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   at Ocelot.RateLimiting.RateLimitingMiddleware.Invoke(HttpContext context)
+   at Ocelot.Request.Middleware.DownstreamRequestInitialiserMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Headers.Middleware.HttpHeadersTransformationMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Security.Middleware.SecurityMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Multiplexer.MultiplexingMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.DownstreamRouteFinder.Middleware.DownstreamRouteFinderMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Responder.Middleware.ResponderMiddleware.Invoke(HttpContext context)
+   at Ocelot.Errors.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2026-03-30 10:26:46 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 200 in 894.5045ms
+2026-03-30 10:27:02 [INF] [Gateway] RequestId: 0HNKE32OPLR48:00000005, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:27:02 [INF] [Gateway] RequestId: 0HNKE32OPLR48:00000005, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:27:02 [WRN] [Gateway] RequestId: 0HNKE32OPLR48:00000005, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/dashboard' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!;
+2026-03-30 10:27:02 [WRN] [Gateway] RequestId: 0HNKE32OPLR48:00000005, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!
+Setting error response for request: GET /gateway/admin/dashboard
+2026-03-30 10:27:02 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 401 in 16.0160ms
+2026-03-30 10:27:11 [INF] [Gateway] RequestId: 0HNKE32OPLR48:00000006, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:27:11 [INF] [Gateway] RequestId: 0HNKE32OPLR48:00000006, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:27:11 [WRN] [Gateway] RequestId: 0HNKE32OPLR48:00000006, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/dashboard' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!;
+2026-03-30 10:27:11 [WRN] [Gateway] RequestId: 0HNKE32OPLR48:00000006, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!
+Setting error response for request: GET /gateway/admin/dashboard
+2026-03-30 10:27:11 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 401 in 11.4680ms
+2026-03-30 10:27:13 [INF] [Gateway] RequestId: 0HNKE32OPLR48:00000007, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:27:13 [INF] [Gateway] RequestId: 0HNKE32OPLR48:00000007, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:27:13 [WRN] [Gateway] RequestId: 0HNKE32OPLR48:00000007, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/dashboard' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!;
+2026-03-30 10:27:13 [WRN] [Gateway] RequestId: 0HNKE32OPLR48:00000007, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!
+Setting error response for request: GET /gateway/admin/dashboard
+2026-03-30 10:27:13 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 401 in 13.2245ms
+2026-03-30 10:27:18 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 0.9279ms
+2026-03-30 10:27:18 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 0.1392ms
+2026-03-30 10:27:18 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.1236ms
+2026-03-30 10:27:18 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/adminservice -> 200 in 46.6275ms
+2026-03-30 10:27:30 [INF] [Gateway] RequestId: 0HNKE32OPLR45:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:27:30 [INF] [Gateway] RequestId: 0HNKE32OPLR45:00000004, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:27:30 [WRN] [Gateway] RequestId: 0HNKE32OPLR45:00000004, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/dashboard' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!;
+2026-03-30 10:27:30 [WRN] [Gateway] RequestId: 0HNKE32OPLR45:00000004, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/dashboard' was unauthenticated!
+Setting error response for request: GET /gateway/admin/dashboard
+2026-03-30 10:27:30 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 401 in 6.1909ms
+2026-03-30 10:29:50 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 0.3899ms
+2026-03-30 10:29:50 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 0.1315ms
+2026-03-30 10:29:50 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.2500ms
+2026-03-30 10:29:50 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/adminservice -> 200 in 48.1856ms
+2026-03-30 10:29:53 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 40.1164ms
+2026-03-30 10:30:19 [INF] [Gateway] RequestId: 0HNKE32OPLR48:0000000E, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:30:19 [INF] [Gateway] RequestId: 0HNKE32OPLR48:0000000E, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/login' in the route /gateway/auth/{everything}.
+2026-03-30 10:31:20 [INF] [Gateway] RequestId: 0HNKE35H0389N:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:31:20 [INF] [Gateway] RequestId: 0HNKE35H0389N:00000001, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/login' in the route /gateway/auth/{everything}.
+2026-03-30 10:31:22 [INF] [Gateway] RequestId: 0HNKE35H0389N:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/login
+2026-03-30 10:31:22 [ERR] [Gateway] RequestId: 0HNKE35H0389N:00000001, PreviousRequestId: -
+ArgumentException caught in global error handler!
+DONE reporting of a total 0 inner exceptions for request 0HNKE35H0389N:00000001 of the original ArgumentException below ->
+System.ArgumentException: An item with the same key has already been added. Key: UtcNow
+   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   at Ocelot.RateLimiting.RateLimitingMiddleware.Invoke(HttpContext context)
+   at Ocelot.Request.Middleware.DownstreamRequestInitialiserMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Headers.Middleware.HttpHeadersTransformationMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Security.Middleware.SecurityMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Multiplexer.MultiplexingMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.DownstreamRouteFinder.Middleware.DownstreamRouteFinderMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Responder.Middleware.ResponderMiddleware.Invoke(HttpContext context)
+   at Ocelot.Errors.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2026-03-30 10:31:22 [INF] [Gateway] GATEWAY POST /gateway/auth/login -> 200 in 1991.9621ms
+2026-03-30 10:31:38 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:31:38 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000001, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/login' in the route /gateway/auth/{everything}.
+2026-03-30 10:31:38 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/login
+2026-03-30 10:31:38 [ERR] [Gateway] RequestId: 0HNKE35H0389O:00000001, PreviousRequestId: -
+ArgumentException caught in global error handler!
+DONE reporting of a total 0 inner exceptions for request 0HNKE35H0389O:00000001 of the original ArgumentException below ->
+System.ArgumentException: An item with the same key has already been added. Key: UtcNow
+   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   at Ocelot.RateLimiting.RateLimitingMiddleware.Invoke(HttpContext context)
+   at Ocelot.Request.Middleware.DownstreamRequestInitialiserMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Headers.Middleware.HttpHeadersTransformationMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Security.Middleware.SecurityMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Multiplexer.MultiplexingMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.DownstreamRouteFinder.Middleware.DownstreamRouteFinderMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Responder.Middleware.ResponderMiddleware.Invoke(HttpContext context)
+   at Ocelot.Errors.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2026-03-30 10:31:38 [INF] [Gateway] GATEWAY POST /gateway/auth/login -> 200 in 365.2092ms
+2026-03-30 10:32:08 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000002, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:32:08 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000002, PreviousRequestId: -
+The path '/gateway/admin/users' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:32:08 [WRN] [Gateway] RequestId: 0HNKE35H0389O:00000002, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!;
+2026-03-30 10:32:08 [WRN] [Gateway] RequestId: 0HNKE35H0389O:00000002, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users
+2026-03-30 10:32:08 [INF] [Gateway] GATEWAY GET /gateway/admin/users -> 401 in 22.8119ms
+2026-03-30 10:32:22 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:32:22 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000003, PreviousRequestId: -
+The path '/gateway/admin/users' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:32:22 [WRN] [Gateway] RequestId: 0HNKE35H0389O:00000003, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!;
+2026-03-30 10:32:22 [WRN] [Gateway] RequestId: 0HNKE35H0389O:00000003, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users
+2026-03-30 10:32:22 [INF] [Gateway] GATEWAY GET /gateway/admin/users -> 401 in 11.9406ms
+2026-03-30 10:32:34 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:32:34 [INF] [Gateway] RequestId: 0HNKE35H0389O:00000004, PreviousRequestId: -
+The path '/gateway/admin/users/1' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:32:34 [WRN] [Gateway] RequestId: 0HNKE35H0389O:00000004, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users/1' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!;
+2026-03-30 10:32:34 [WRN] [Gateway] RequestId: 0HNKE35H0389O:00000004, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users/1
+2026-03-30 10:32:34 [INF] [Gateway] GATEWAY GET /gateway/admin/users/1 -> 401 in 7.2900ms
+2026-03-30 10:40:58 [INF] [Gateway] RequestId: 0HNKE3AT9D8E8:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:40:58 [INF] [Gateway] RequestId: 0HNKE3AT9D8E8:00000001, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:40:58 [INF] [Gateway] RequestId: 0HNKE3AT9D8E8:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/dashboard' by 'AuthenticationTypes.Federation' scheme.
+2026-03-30 10:41:00 [INF] [Gateway] RequestId: 0HNKE3AT9D8E8:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5004/api/admin/dashboard
+2026-03-30 10:41:00 [ERR] [Gateway] RequestId: 0HNKE3AT9D8E8:00000001, PreviousRequestId: -
+ArgumentException caught in global error handler!
+DONE reporting of a total 0 inner exceptions for request 0HNKE3AT9D8E8:00000001 of the original ArgumentException below ->
+System.ArgumentException: An item with the same key has already been added. Key: UtcNow
+   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   at Ocelot.RateLimiting.RateLimitingMiddleware.Invoke(HttpContext context)
+   at Ocelot.Request.Middleware.DownstreamRequestInitialiserMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Headers.Middleware.HttpHeadersTransformationMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Security.Middleware.SecurityMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Multiplexer.MultiplexingMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.DownstreamRouteFinder.Middleware.DownstreamRouteFinderMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Responder.Middleware.ResponderMiddleware.Invoke(HttpContext context)
+   at Ocelot.Errors.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2026-03-30 10:41:00 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 200 in 1951.4696ms
+2026-03-30 10:41:13 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 87.4222ms
+2026-03-30 10:41:13 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 10.9803ms
+2026-03-30 10:41:13 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.4992ms
+2026-03-30 10:41:13 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 293.6473ms
+2026-03-30 10:42:03 [INF] [Gateway] RequestId: 0HNKE3AT9D8EB:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:42:03 [INF] [Gateway] RequestId: 0HNKE3AT9D8EB:00000003, PreviousRequestId: -
+The path '/gateway/admin/users/1' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:42:03 [WRN] [Gateway] RequestId: 0HNKE3AT9D8EB:00000003, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users/1' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!;
+2026-03-30 10:42:03 [WRN] [Gateway] RequestId: 0HNKE3AT9D8EB:00000003, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users/1
+2026-03-30 10:42:03 [INF] [Gateway] GATEWAY GET /gateway/admin/users/1 -> 401 in 18.4372ms
+2026-03-30 10:42:38 [INF] [Gateway] RequestId: 0HNKE3AT9D8EB:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:42:38 [INF] [Gateway] RequestId: 0HNKE3AT9D8EB:00000004, PreviousRequestId: -
+The path '/gateway/admin/users' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:42:38 [WRN] [Gateway] RequestId: 0HNKE3AT9D8EB:00000004, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!;
+2026-03-30 10:42:38 [WRN] [Gateway] RequestId: 0HNKE3AT9D8EB:00000004, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users
+2026-03-30 10:42:38 [INF] [Gateway] GATEWAY GET /gateway/admin/users -> 401 in 13.0425ms
+2026-03-30 10:43:01 [INF] [Gateway] RequestId: 0HNKE3AT9D8ED:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:43:01 [INF] [Gateway] RequestId: 0HNKE3AT9D8ED:00000001, PreviousRequestId: -
+The path '/gateway/admin/dashboard' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:43:01 [INF] [Gateway] RequestId: 0HNKE3AT9D8ED:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/dashboard' by 'AuthenticationTypes.Federation' scheme.
+2026-03-30 10:43:01 [INF] [Gateway] RequestId: 0HNKE3AT9D8ED:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5004/api/admin/dashboard
+2026-03-30 10:43:01 [ERR] [Gateway] RequestId: 0HNKE3AT9D8ED:00000001, PreviousRequestId: -
+ArgumentException caught in global error handler!
+DONE reporting of a total 0 inner exceptions for request 0HNKE3AT9D8ED:00000001 of the original ArgumentException below ->
+System.ArgumentException: An item with the same key has already been added. Key: UtcNow
+   at System.Collections.Generic.Dictionary`2.Add(TKey key, TValue value)
+   at Ocelot.RateLimiting.RateLimitingMiddleware.Invoke(HttpContext context)
+   at Ocelot.Request.Middleware.DownstreamRequestInitialiserMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Headers.Middleware.HttpHeadersTransformationMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Security.Middleware.SecurityMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Multiplexer.MultiplexingMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.DownstreamRouteFinder.Middleware.DownstreamRouteFinderMiddleware.Invoke(HttpContext httpContext)
+   at Ocelot.Responder.Middleware.ResponderMiddleware.Invoke(HttpContext context)
+   at Ocelot.Errors.Middleware.ExceptionHandlerMiddleware.Invoke(HttpContext context)
+2026-03-30 10:43:01 [INF] [Gateway] GATEWAY GET /gateway/admin/dashboard -> 200 in 141.3581ms
+2026-03-30 10:50:39 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 190.6224ms
+2026-03-30 10:50:39 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 71.2023ms
+2026-03-30 10:50:39 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.4135ms
+2026-03-30 10:50:39 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 338.3599ms
+2026-03-30 10:51:12 [INF] [Gateway] RequestId: 0HNKE3GA9H8VU:00000003, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:51:12 [INF] [Gateway] RequestId: 0HNKE3GA9H8VU:00000003, PreviousRequestId: -
+The path '/gateway/admin/users' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:51:12 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VU:00000003, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!;
+2026-03-30 10:51:12 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VU:00000003, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users
+2026-03-30 10:51:12 [INF] [Gateway] GATEWAY GET /gateway/admin/users -> 401 in 70.5454ms
+2026-03-30 10:51:26 [INF] [Gateway] RequestId: 0HNKE3GA9H8VU:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:51:26 [INF] [Gateway] RequestId: 0HNKE3GA9H8VU:00000004, PreviousRequestId: -
+The path '/gateway/admin/users/1' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:51:26 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VU:00000004, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users/1' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!;
+2026-03-30 10:51:26 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VU:00000004, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users/1
+2026-03-30 10:51:26 [INF] [Gateway] GATEWAY GET /gateway/admin/users/1 -> 401 in 7.3295ms
+2026-03-30 10:54:32 [INF] [Gateway] RequestId: 0HNKE3GA9H8VU:00000005, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:54:32 [INF] [Gateway] RequestId: 0HNKE3GA9H8VU:00000005, PreviousRequestId: -
+The path '/gateway/admin/users/1' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:54:32 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VU:00000005, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users/1' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!;
+2026-03-30 10:54:32 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VU:00000005, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users/1
+2026-03-30 10:54:32 [INF] [Gateway] GATEWAY GET /gateway/admin/users/1 -> 401 in 6.8847ms
+2026-03-30 10:54:48 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 0.7080ms
+2026-03-30 10:54:48 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 36.3440ms
+2026-03-30 10:54:48 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.1315ms
+2026-03-30 10:54:48 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 53.5282ms
+2026-03-30 10:55:16 [INF] [Gateway] RequestId: 0HNKE3GA9H8VR:00000004, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:55:16 [INF] [Gateway] RequestId: 0HNKE3GA9H8VR:00000004, PreviousRequestId: -
+The path '/gateway/admin/users/1' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:55:16 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VR:00000004, PreviousRequestId: -
+Client has NOT been authenticated for path '/gateway/admin/users/1' and pipeline error set. UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!;
+2026-03-30 10:55:16 [WRN] [Gateway] RequestId: 0HNKE3GA9H8VR:00000004, PreviousRequestId: -
+ResponderMiddleware found 1 error ->
+UnauthenticatedError: Request for authenticated route '/gateway/admin/users/1' was unauthenticated!
+Setting error response for request: GET /gateway/admin/users/1
+2026-03-30 10:55:16 [INF] [Gateway] GATEWAY GET /gateway/admin/users/1 -> 401 in 11.9876ms
+2026-03-30 10:55:41 [INF] [Gateway] RequestId: 0HNKE3GA9H900:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/admin/users/{everything}' via the EnableRateLimiting option.
+2026-03-30 10:55:41 [INF] [Gateway] RequestId: 0HNKE3GA9H900:00000001, PreviousRequestId: -
+The path '/gateway/admin/users/' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 10:55:41 [INF] [Gateway] RequestId: 0HNKE3GA9H900:00000001, PreviousRequestId: -
+Client has been authenticated for path '/gateway/admin/users/' by 'AuthenticationTypes.Federation' scheme.
+2026-03-30 10:55:42 [INF] [Gateway] RequestId: 0HNKE3GA9H900:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/admin/users/
+2026-03-30 10:55:42 [INF] [Gateway] GATEWAY GET /gateway/admin/users/ -> 200 in 857.5994ms
+2026-03-30 11:15:18 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 216.8521ms
+2026-03-30 11:15:18 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 33.1346ms
+2026-03-30 11:15:18 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.5593ms
+2026-03-30 11:15:19 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 319.3352ms
+2026-03-30 11:50:17 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 150.8248ms
+2026-03-30 11:50:17 [INF] [Gateway] GATEWAY GET /swagger/index.css -> 304 in 36.3105ms
+2026-03-30 11:50:18 [INF] [Gateway] GATEWAY GET /swagger/favicon-32x32.png -> 304 in 0.5995ms
+2026-03-30 11:50:18 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 281.0859ms
+2026-03-30 11:50:20 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/shipmentservice -> 200 in 142.7432ms
+2026-03-30 11:50:22 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/trackingservice -> 200 in 108.8287ms
+2026-03-30 11:50:24 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/adminservice -> 200 in 13.8630ms
+2026-03-30 11:50:26 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/paymentservice -> 200 in 131.7605ms
+2026-03-30 11:52:54 [INF] [Gateway] RequestId: 0HNKE4HKP2VIU:00000001, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/auth/{everything}' via the EnableRateLimiting option.
+2026-03-30 11:52:54 [INF] [Gateway] RequestId: 0HNKE4HKP2VIU:00000001, PreviousRequestId: -
+No authentication is required for the path '/gateway/auth/login' in the route /gateway/auth/{everything}.
+2026-03-30 11:52:55 [INF] [Gateway] RequestId: 0HNKE4HKP2VIU:00000001, PreviousRequestId: -
+200 OK status code of request URI: http://localhost:5001/api/auth/login
+2026-03-30 11:52:55 [INF] [Gateway] GATEWAY POST /gateway/auth/login -> 200 in 1064.3705ms
+2026-03-30 11:54:52 [INF] [Gateway] RequestId: 0HNKE4HKP2VIR:00000007, PreviousRequestId: -
+Rate limiting is disabled for route '/gateway/payment/payment-status' via the EnableRateLimiting option.
+2026-03-30 11:54:52 [INF] [Gateway] RequestId: 0HNKE4HKP2VIR:00000007, PreviousRequestId: -
+The path '/gateway/payment/payment-status' is an authenticated route! AuthenticationMiddleware checking if client is authenticated...
+2026-03-30 11:54:52 [INF] [Gateway] RequestId: 0HNKE4HKP2VIR:00000007, PreviousRequestId: -
+Client has been authenticated for path '/gateway/payment/payment-status' by 'AuthenticationTypes.Federation' scheme.
+2026-03-30 11:54:52 [WRN] [Gateway] RequestId: 0HNKE4HKP2VIR:00000007, PreviousRequestId: -
+404 Not Found status code of request URI: http://localhost:5005/api/payment/payment-status
+2026-03-30 11:54:52 [INF] [Gateway] GATEWAY GET /gateway/payment/payment-status -> 404 in 311.2629ms

@@ -22,7 +22,7 @@ try
         .Enrich.WithProperty("Application", "Gateway")
         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
-    var jwtKey = "SmartShip$SuperSecret$Key$2026!@#XYZ";
+    var jwt = builder.Configuration.GetSection("JwtSettings");
     builder.Services.AddAuthentication("Bearer")
         .AddJwtBearer("Bearer", opt =>
         {
@@ -33,15 +33,16 @@ try
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = "SmartShipGateway",
-                ValidAudience = "SmartShipClients",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                ValidIssuer = jwt["Issuer"],
+                ValidAudience = jwt["Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
             };
         });
 
-    builder.Services.AddCors(opt =>
-        opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+    builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+    
     builder.Services.AddOcelot(builder.Configuration);
+    builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
     var app = builder.Build();
 
@@ -50,6 +51,7 @@ try
 
     app.UseCors("AllowAll");
     app.UseAuthentication();
+    app.UseAuthorization();
 
     app.MapGet("/", () => "SmartShip Gateway Running");
     app.MapGet("/health", () => Results.Json(new
@@ -59,10 +61,19 @@ try
         services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004", "payment:5005" }
     }));
 
-    app.UseWhen(
-        ctx => ctx.Request.Path.StartsWithSegments("/gateway"),
-        ocelotBranch => ocelotBranch.UseOcelot().Wait()
-    );
+    app.UseSwaggerForOcelotUI(opt =>
+    {
+        opt.PathToSwaggerGenerator = "/swagger/docs";
+    },
+    uiOpt =>   
+    {
+        uiOpt.OAuthClientId("swagger-ui");
+        uiOpt.OAuthAppName("SmartShip Swagger UI");
+        uiOpt.OAuthUsePkce();
+        uiOpt.ConfigObject.AdditionalItems["persistAuthorization"] = true;
+    });
+    
+    await app.UseOcelot();
 
     app.Run();
 }
