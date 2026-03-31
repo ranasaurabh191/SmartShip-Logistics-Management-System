@@ -7,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SmartShip.IdentityService.Data;
+using SmartShip.IdentityService.DTOs;
 using SmartShip.IdentityService.Middleware;
 using SmartShip.IdentityService.Services;
 using SmartShip.IdentityService.Validators;
+using SmartShip.NotificationService.Services;
 using System.Text;
 
 Log.Logger = new LoggerConfiguration()
@@ -29,6 +31,9 @@ try
         c.BaseAddress = new Uri(urls["IdentityService"]!);
         c.DefaultRequestHeaders.Add("X-Internal-Key", internalKey);  
     });
+
+    builder.Services.AddScoped<IValidator<SignupOtpRequest>, SignupOtpRequestValidator>();
+    builder.Services.AddScoped<IValidator<VerifyOtpRequest>, VerifyOtpRequestValidator>();
 
     builder.Services.AddHttpClient("ShipmentService", c =>
     {
@@ -123,6 +128,7 @@ try
         });
 
     builder.Services.AddAuthorization();
+    builder.Services.AddScoped<IEmailService, EmailService>();
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<IUserService, UserService>();
     builder.Services.AddCors(opt =>

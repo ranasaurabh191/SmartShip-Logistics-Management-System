@@ -1,0 +1,321 @@
+2026-03-31 12:11:01 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:11:01 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:11:02 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:12:29 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:12:29 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:12:30 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:13:31 [INF] [TrackingService] HTTP GET /swagger/v1/swagger.json → 200 in 20.0266ms
+2026-03-31 12:18:40 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:18:40 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:18:41 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:30:06 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:30:06 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:30:07 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:35:13 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:35:13 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:35:14 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:39:58 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:39:58 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:39:59 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:43:50 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:43:50 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:43:51 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:43:57 [INF] [TrackingService] HTTP GET /swagger/v1/swagger.json → 200 in 19.8871ms
+2026-03-31 12:54:32 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:54:33 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:54:34 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:54:58 [INF] [TrackingService] HTTP GET /health → 404 in 146.8556ms
+2026-03-31 12:54:58 [INF] [TrackingService] HTTP GET /health → 404 in 2.7814ms
+2026-03-31 12:54:58 [INF] [TrackingService] HTTP GET /health → 404 in 7.2066ms
+2026-03-31 12:54:58 [INF] [TrackingService] HTTP GET /health → 404 in 0.1853ms
+2026-03-31 12:54:58 [INF] [TrackingService] HTTP GET /health → 404 in 0.2189ms
+2026-03-31 12:54:58 [INF] [TrackingService] HTTP GET /health → 404 in 0.1368ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2587ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.7703ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2547ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2610ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1604ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.5216ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.5229ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1995ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1752ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1748ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2097ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1845ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1658ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2016ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2621ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1952ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.3162ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1854ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1839ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2733ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1842ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.3242ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1908ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1924ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.1489ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2210ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2340ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2346ms
+2026-03-31 12:54:59 [INF] [TrackingService] HTTP GET /health → 404 in 0.2133ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1610ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.2036ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1614ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.2703ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1555ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1853ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1403ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1968ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1502ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1508ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1482ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1359ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1439ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1665ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1445ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1436ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1586ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1656ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.2151ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.2002ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1454ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.2300ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1574ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1454ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.2741ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1467ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1311ms
+2026-03-31 12:55:00 [INF] [TrackingService] HTTP GET /health → 404 in 0.1370ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1385ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1871ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1109ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1907ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1589ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.2016ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1557ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.2296ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.2194ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1528ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1992ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1175ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1470ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1418ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.8121ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.3631ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1517ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.2049ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1292ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1721ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.2276ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1786ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1313ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1591ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1150ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1462ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1133ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1047ms
+2026-03-31 12:55:01 [INF] [TrackingService] HTTP GET /health → 404 in 0.1480ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1994ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1804ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1216ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.2889ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1490ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1343ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1398ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1911ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.2159ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1905ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.2198ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1907ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1458ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.2952ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.3737ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.2632ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.2736ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1062ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1602ms
+2026-03-31 12:55:02 [INF] [TrackingService] HTTP GET /health → 404 in 0.1399ms
+2026-03-31 12:56:29 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 12:56:29 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 12:56:30 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:24:20 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:24:21 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:24:21 [WRN] [TrackingService] Connection Failed: "rabbitmq://localhost/"
+RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.EndOfStreamException: Pipe is completed.
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+2026-03-31 14:24:23 [INF] [TrackingService] Retrying "00:00:06.8869218": Broker unreachable: guest@localhost:5672/
+MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:5672/
+ ---> RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.EndOfStreamException: Pipe is completed.
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+   --- End of inner exception stack trace ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 129
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.TransportStartExtensions.OnTransportStartup[T](ReceiveEndpointContext context, ITransportSupervisor`1 supervisor, CancellationToken cancellationToken) in /_/src/MassTransit/Transports/TransportStartExtensions.cs:line 19
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.SupervisorExtensions.<>c__DisplayClass5_0`2.<<CreateAgent>g__HandleSupervisorTask|0>d.MoveNext() in /_/src/MassTransit/SupervisorExtensions.cs:line 139
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 200
+   at MassTransit.SupervisorExtensions.CreateAgent[T,TAgent](ISupervisor`1 supervisor, IAsyncPipeContextAgent`1 asyncContext, Func`3 agentFactory, CancellationToken cancellationToken) in /_/src/MassTransit/SupervisorExtensions.cs:line 158
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 203
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+2026-03-31 14:24:23 [INF] [TrackingService] Retrying "00:00:06.3644449": Broker unreachable: guest@localhost:5672/
+MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:5672/
+ ---> RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.EndOfStreamException: Pipe is completed.
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+   --- End of inner exception stack trace ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 129
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.TransportStartExtensions.OnTransportStartup[T](ReceiveEndpointContext context, ITransportSupervisor`1 supervisor, CancellationToken cancellationToken) in /_/src/MassTransit/Transports/TransportStartExtensions.cs:line 19
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.SupervisorExtensions.<>c__DisplayClass5_0`2.<<CreateAgent>g__HandleSupervisorTask|0>d.MoveNext() in /_/src/MassTransit/SupervisorExtensions.cs:line 139
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 200
+   at MassTransit.SupervisorExtensions.CreateAgent[T,TAgent](ISupervisor`1 supervisor, IAsyncPipeContextAgent`1 asyncContext, Func`3 agentFactory, CancellationToken cancellationToken) in /_/src/MassTransit/SupervisorExtensions.cs:line 158
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 203
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+2026-03-31 14:24:23 [INF] [TrackingService] Retrying "00:00:05.9027414": Broker unreachable: guest@localhost:5672/
+MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:5672/
+ ---> RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.EndOfStreamException: Pipe is completed.
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+   --- End of inner exception stack trace ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 129
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.TransportStartExtensions.OnTransportStartup[T](ReceiveEndpointContext context, ITransportSupervisor`1 supervisor, CancellationToken cancellationToken) in /_/src/MassTransit/Transports/TransportStartExtensions.cs:line 19
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.SupervisorExtensions.<>c__DisplayClass5_0`2.<<CreateAgent>g__HandleSupervisorTask|0>d.MoveNext() in /_/src/MassTransit/SupervisorExtensions.cs:line 139
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 200
+   at MassTransit.SupervisorExtensions.CreateAgent[T,TAgent](ISupervisor`1 supervisor, IAsyncPipeContextAgent`1 asyncContext, Func`3 agentFactory, CancellationToken cancellationToken) in /_/src/MassTransit/SupervisorExtensions.cs:line 158
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 203
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+2026-03-31 14:24:30 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:27:33 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:27:33 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:27:34 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:33:18 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:33:18 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:33:19 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:38:41 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:38:41 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:38:41 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:44:42 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:44:42 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:44:43 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:51:08 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:51:08 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:51:09 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:52:44 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:52:44 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:52:45 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:54:36 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:54:36 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:54:37 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:58:56 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 14:58:56 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 14:58:57 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:45:25 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 15:45:25 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 15:45:25 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:52:46 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 15:52:46 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 15:52:47 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"

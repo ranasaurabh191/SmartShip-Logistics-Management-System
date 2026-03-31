@@ -8,4 +8,6 @@ public interface IAuthService
     Task<AuthResponse> LoginAsync(LoginRequest request);
     Task<object> DebugLoginAsync(LoginRequest request);  
     Task<object> FixAdminAsync();
+    Task<OtpResponse> RequestSignupOtpAsync(SignupOtpRequest request);  
+    Task<OtpResponse> VerifySignupOtpAsync(VerifyOtpRequest request);
 }

@@ -1,0 +1,445 @@
+2026-03-31 12:11:01 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:11:02 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:12:29 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:12:30 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:13:35 [INF] [ShipmentService] HTTP GET /swagger/v1/swagger.json → 200 in 19.1299ms
+2026-03-31 12:18:41 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:18:42 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:30:06 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:30:07 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:35:14 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:35:14 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:39:58 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:39:59 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:43:50 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:43:51 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:44:03 [INF] [ShipmentService] HTTP GET /swagger/v1/swagger.json → 200 in 19.4559ms
+2026-03-31 12:54:32 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:54:33 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:54:58 [INF] [ShipmentService] HTTP GET /health → 404 in 149.5391ms
+2026-03-31 12:54:58 [INF] [ShipmentService] HTTP GET /health → 404 in 1.9728ms
+2026-03-31 12:54:58 [INF] [ShipmentService] HTTP GET /health → 404 in 5.9706ms
+2026-03-31 12:54:58 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2783ms
+2026-03-31 12:54:58 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1970ms
+2026-03-31 12:54:58 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2322ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2380ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2304ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2114ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1858ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2416ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1802ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.3724ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2945ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2827ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2086ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2551ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2365ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1964ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1588ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.4200ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2096ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2056ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.5190ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1994ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2257ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.3131ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1730ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1791ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1904ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1722ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1789ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1695ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.3786ms
+2026-03-31 12:54:59 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1458ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2034ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2551ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2059ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1533ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1663ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1795ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1890ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1646ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2750ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1366ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1624ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1449ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1554ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1659ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1648ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1534ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1398ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1641ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2068ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1474ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.4009ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1575ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1255ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1999ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1758ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2079ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1240ms
+2026-03-31 12:55:00 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1425ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1351ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2153ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.3849ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1337ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1512ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1412ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1448ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2120ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1430ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1847ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1183ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1639ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1927ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1404ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1471ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.3254ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1240ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1121ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2233ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1440ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1622ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1034ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1623ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1597ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1360ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2116ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1375ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2212ms
+2026-03-31 12:55:01 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1643ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1480ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1170ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1659ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2976ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1231ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1619ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1561ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1780ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1311ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.4870ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1544ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.3734ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.5007ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2927ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1181ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2269ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.2068ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1279ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1057ms
+2026-03-31 12:55:02 [INF] [ShipmentService] HTTP GET /health → 404 in 0.1741ms
+2026-03-31 12:56:29 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 12:56:30 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:24:21 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:24:22 [WRN] [ShipmentService] Connection Failed: "rabbitmq://localhost/"
+RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.ReadInternalAsync(Nullable`1 minimumSize, CancellationToken cancellationToken)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Impl.SocketFrameHandler.ReadFrameAsync(InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Threading.Tasks.Task`1.InnerInvoke()
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+2026-03-31 14:24:23 [INF] [ShipmentService] Retrying "00:00:06.0509621": Broker unreachable: guest@localhost:5672/
+MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:5672/
+ ---> RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.ReadInternalAsync(Nullable`1 minimumSize, CancellationToken cancellationToken)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Impl.SocketFrameHandler.ReadFrameAsync(InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Threading.Tasks.Task`1.InnerInvoke()
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+   --- End of inner exception stack trace ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 129
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateSharedConnection(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 74
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.SupervisorExtensions.<>c__DisplayClass5_0`2.<<CreateAgent>g__HandleSupervisorTask|0>d.MoveNext() in /_/src/MassTransit/SupervisorExtensions.cs:line 139
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.TransportStartExtensions.OnTransportStartup[T](ReceiveEndpointContext context, ITransportSupervisor`1 supervisor, CancellationToken cancellationToken) in /_/src/MassTransit/Transports/TransportStartExtensions.cs:line 19
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 203
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 200
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+2026-03-31 14:24:23 [INF] [ShipmentService] Retrying "00:00:07.1752170": Broker unreachable: guest@localhost:5672/
+MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:5672/
+ ---> RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.ReadInternalAsync(Nullable`1 minimumSize, CancellationToken cancellationToken)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Impl.SocketFrameHandler.ReadFrameAsync(InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Threading.Tasks.Task`1.InnerInvoke()
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+   --- End of inner exception stack trace ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 129
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateSharedConnection(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 74
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.SupervisorExtensions.<>c__DisplayClass5_0`2.<<CreateAgent>g__HandleSupervisorTask|0>d.MoveNext() in /_/src/MassTransit/SupervisorExtensions.cs:line 139
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.TransportStartExtensions.OnTransportStartup[T](ReceiveEndpointContext context, ITransportSupervisor`1 supervisor, CancellationToken cancellationToken) in /_/src/MassTransit/Transports/TransportStartExtensions.cs:line 19
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 203
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 200
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+2026-03-31 14:24:28 [WRN] [ShipmentService] Connection Failed: "rabbitmq://localhost/"
+RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.EndOfStreamException: Pipe is completed.
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+2026-03-31 14:24:29 [INF] [ShipmentService] Retrying "00:00:08.3913852": Broker unreachable: guest@localhost:5672/
+MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:5672/
+ ---> RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.ReadInternalAsync(Nullable`1 minimumSize, CancellationToken cancellationToken)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Impl.SocketFrameHandler.ReadFrameAsync(InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Threading.Tasks.Task`1.InnerInvoke()
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+   --- End of inner exception stack trace ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 129
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateSharedConnection(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 74
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.SupervisorExtensions.<>c__DisplayClass5_0`2.<<CreateAgent>g__HandleSupervisorTask|0>d.MoveNext() in /_/src/MassTransit/SupervisorExtensions.cs:line 139
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.TransportStartExtensions.OnTransportStartup[T](ReceiveEndpointContext context, ITransportSupervisor`1 supervisor, CancellationToken cancellationToken) in /_/src/MassTransit/Transports/TransportStartExtensions.cs:line 19
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 203
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 200
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+2026-03-31 14:24:40 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:27:33 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:27:34 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:33:19 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:33:20 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:38:41 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:38:42 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:44:43 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:44:44 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:51:09 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:51:10 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:52:44 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:52:45 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:54:36 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:54:37 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:58:56 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 14:58:57 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:45:25 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 15:45:26 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:52:47 [INF] [ShipmentService] Configured endpoint payment-shipment-created, Consumer: SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer
+2026-03-31 15:52:47 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"

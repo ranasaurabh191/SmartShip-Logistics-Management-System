@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
@@ -44,6 +43,7 @@ try
     builder.Services.AddOcelot(builder.Configuration);
     builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
+
     var app = builder.Build();
 
     app.UseSerilogRequestLogging(opt =>
@@ -58,7 +58,7 @@ try
     {
         status = "healthy",
         timestamp = DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"),
-        services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004", "payment:5005" }
+        services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004", "payment:5005", "notification: 5006" }
     }));
 
     app.UseSwaggerForOcelotUI(opt =>

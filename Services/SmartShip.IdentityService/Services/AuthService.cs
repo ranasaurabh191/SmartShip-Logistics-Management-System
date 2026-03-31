@@ -5,6 +5,7 @@ using Serilog.Core;
 using SmartShip.IdentityService.Data;
 using SmartShip.IdentityService.DTOs;
 using SmartShip.IdentityService.Models;
+using SmartShip.NotificationService.Services;
 using SmartShip.Shared.Events;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,13 +19,17 @@ public class AuthService : IAuthService
     private readonly IConfiguration _config;
     private readonly ILogger<AuthService> _logger;
     private readonly IPublishEndpoint _publisher;
+    private readonly IEmailService _emailService;
 
-    public AuthService(IdentityDbContext context, IConfiguration config, ILogger<AuthService> logger, IPublishEndpoint publisher)
+    public AuthService(IdentityDbContext context, IConfiguration config,
+    ILogger<AuthService> logger, IPublishEndpoint publisher,
+    IEmailService emailService)  
     {
         _context = context;
         _config = config;
         _logger = logger;
         _publisher = publisher;
+        _emailService = emailService;  
     }
     public async Task<AuthResponse?> SignupAsync(SignupRequest request)
     {
@@ -129,6 +134,118 @@ public class AuthService : IAuthService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
+    private static string GenerateOtp()
+    {
+        return Random.Shared.Next(100000, 999999).ToString();
+    }
+
+    private static string HashOtp(string otp)
+    {
+        return BCrypt.Net.BCrypt.HashPassword(otp);
+    }
+
+    private static bool VerifyOtp(string enteredOtp, string storedHash)
+    {
+        return BCrypt.Net.BCrypt.Verify(enteredOtp, storedHash);
+    }
+
+    public async Task<OtpResponse> RequestSignupOtpAsync(SignupOtpRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Email)) throw new ArgumentException("Email is required");
+
+        _logger.LogInformation("OTP request for signup | Email: {Email}", request.Email);
+
+        if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            throw new InvalidOperationException("Email already registered. Please login.");
+
+        var existingOtp = await _context.OtpVerifications
+            .FirstOrDefaultAsync(o => o.Email == request.Email && o.Purpose == "Signup");
+
+        var otp = GenerateOtp();
+        var otpHash = HashOtp(otp);
+        var expiresAt = DateTime.UtcNow.AddMinutes(5);
+
+        if (existingOtp != null)
+        {
+            existingOtp.OtpHash = otpHash;
+            existingOtp.ExpiresAt = expiresAt;
+        }
+        else
+        {
+            existingOtp = new OtpVerification
+            {
+                Email = request.Email,
+                Purpose = "Signup",
+                OtpHash = otpHash,
+                ExpiresAt = expiresAt
+            };
+            _context.OtpVerifications.Add(existingOtp);
+        }
+
+        await _context.SaveChangesAsync();
+
+        if (!string.IsNullOrWhiteSpace(request.Email))
+        {
+            await _emailService.SendOtpEmailAsync(request.Email, otp);
+        }
+        else
+        {
+            _logger.LogWarning("Skipping email - empty email address");
+        }
+
+        return new OtpResponse("Verify the OTP sent to your email. It expires in 5 minutes.", true);
+    }
+
+    public async Task<OtpResponse> VerifySignupOtpAsync(VerifyOtpRequest request)
+    {
+        _logger.LogInformation("OTP verification for signup | Email: {Email}", request.Email);
+
+        var otpRecord = await _context.OtpVerifications
+            .FirstOrDefaultAsync(o => o.Email == request.Email && o.Purpose == "Signup");
+
+        if (otpRecord == null) throw new KeyNotFoundException("No OTP found for this email. Please request a new one.");
+
+        if (otpRecord.IsUsed) throw new InvalidOperationException("OTP already used. Please request a new one.");
+
+        if (DateTime.UtcNow > otpRecord.ExpiresAt)
+        {
+            _context.OtpVerifications.Remove(otpRecord);
+            await _context.SaveChangesAsync();
+            throw new InvalidOperationException("OTP expired. Please request a new one.");
+        }
+
+        if (!VerifyOtp(request.Otp, otpRecord.OtpHash))  throw new InvalidOperationException("Invalid OTP. Please try again.");
+
+        otpRecord.IsUsed = true;
+        await _context.SaveChangesAsync();
+
+        var user = new User
+        {
+            Name = request.Name ?? "User",  
+            Email = request.Email,
+            Phone = request.Phone ?? "",    
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+            Role = "CUSTOMER",
+            IsActive = true
+        };
+
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("User created via OTP | Email: {Email}", request.Email);
+
+        await _publisher.Publish(new UserCreatedEvent
+        {
+            UserId = user.Id,
+            Email = user.Email,
+            Name = user.Name,
+            Role = user.Role,
+            CreatedAt = user.CreatedAt
+        });
+
+        var token = GenerateToken(user);
+        return new OtpResponse("Account created successfully!", true, token, user.Id.ToString());
+    }
     public async Task<object> DebugLoginAsync(LoginRequest request)
     {
         _logger.LogInformation("Debug login attempt for email: {Email}", request.Email);

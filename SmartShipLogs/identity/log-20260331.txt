@@ -4,3 +4,998 @@
 2026-03-31 00:02:05 [INF] [IdentityService] Generating JWT token for user: ranasaurabh191@gmail.com, Role: CUSTOMER
 2026-03-31 00:02:05 [INF] [IdentityService] Token generated successfully for user: ranasaurabh191@gmail.com, expires in 600000 minutes
 2026-03-31 00:02:05 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 1548.8568ms
+2026-03-31 12:09:15 [FTL] [IdentityService]  !! IdentityService crashed on startup.
+System.InvalidOperationException: An error was generated for warning 'Microsoft.EntityFrameworkCore.Migrations.PendingModelChangesWarning': The model for context 'IdentityDbContext' has pending changes. Add a new migration before updating the database. See https://aka.ms/efcore-docs-pending-changes. This exception can be suppressed or logged by passing event ID 'RelationalEventId.PendingModelChangesWarning' to the 'ConfigureWarnings' method in 'DbContext.OnConfiguring' or 'AddDbContext'.
+   at Microsoft.EntityFrameworkCore.Diagnostics.EventDefinition`1.Log[TLoggerCategory](IDiagnosticsLogger`1 logger, TParam arg)
+   at Microsoft.EntityFrameworkCore.Diagnostics.RelationalLoggerExtensions.PendingModelChangesWarning(IDiagnosticsLogger`1 diagnostics, Type contextType)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.ValidateMigrations(Boolean useTransaction, String targetMigration)
+   at Microsoft.EntityFrameworkCore.Migrations.Internal.Migrator.Migrate(String targetMigration)
+   at Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions.Migrate(DatabaseFacade databaseFacade)
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Program.cs:line 139
+2026-03-31 12:10:29 [FTL] [IdentityService]  !! IdentityService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Program.cs:line 133
+2026-03-31 12:10:45 [FTL] [IdentityService]  !! IdentityService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Program.cs:line 133
+2026-03-31 12:11:02 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:12:02 [FTL] [IdentityService]  !! IdentityService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Program.cs:line 133
+2026-03-31 12:12:10 [FTL] [IdentityService]  !! IdentityService crashed on startup.
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Program.<Main>$(String[] args) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Program.cs:line 133
+2026-03-31 12:12:30 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:13:25 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 38.3263ms
+2026-03-31 12:18:42 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:30:07 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:31:38 [INF] [IdentityService] Login attempt: admin@smartship.com
+2026-03-31 12:31:39 [INF] [IdentityService] Login successful: admin@smartship.com | Role: ADMIN
+2026-03-31 12:31:39 [INF] [IdentityService] Generating JWT token for user: admin@smartship.com, Role: ADMIN
+2026-03-31 12:31:39 [INF] [IdentityService] Token generated successfully for user: admin@smartship.com, expires in 600000 minutes
+2026-03-31 12:31:39 [INF] [IdentityService] HTTP POST /api/auth/login → 200 in 1257.7884ms
+2026-03-31 12:34:19 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 12.7351ms
+2026-03-31 12:34:30 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 8.3643ms
+2026-03-31 12:35:14 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:39:59 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:43:52 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:43:54 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 35.0275ms
+2026-03-31 12:54:33 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 12:54:58 [INF] [IdentityService] HTTP GET /health → 404 in 125.1222ms
+2026-03-31 12:54:58 [INF] [IdentityService] HTTP GET /health → 404 in 2.8369ms
+2026-03-31 12:54:58 [INF] [IdentityService] HTTP GET /health → 404 in 6.3952ms
+2026-03-31 12:54:58 [INF] [IdentityService] HTTP GET /health → 404 in 0.2174ms
+2026-03-31 12:54:58 [INF] [IdentityService] HTTP GET /health → 404 in 1.7719ms
+2026-03-31 12:54:58 [INF] [IdentityService] HTTP GET /health → 404 in 0.2247ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2074ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2394ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2161ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2150ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2277ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2143ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.1421ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2488ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2665ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2796ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2381ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2205ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2501ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2044ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.1917ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.1982ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.3181ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.1577ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2087ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.4222ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2979ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.4107ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2009ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2426ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2311ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2975ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2110ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2999ms
+2026-03-31 12:54:59 [INF] [IdentityService] HTTP GET /health → 404 in 0.2296ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2175ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1718ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1680ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.4909ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1994ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1665ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1968ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2344ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2208ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2987ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1537ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2745ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1613ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2137ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1899ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1815ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.3128ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2090ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.3123ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1661ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1801ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2067ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2129ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1864ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2138ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2837ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.1464ms
+2026-03-31 12:55:00 [INF] [IdentityService] HTTP GET /health → 404 in 0.2992ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1525ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.2101ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1502ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1660ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.2554ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1912ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1480ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.2751ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.3338ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.2782ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1015ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1083ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1408ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1770ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1535ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1431ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.3161ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.3191ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1907ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1237ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1439ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1656ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1481ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1456ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1168ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.2407ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1317ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.2133ms
+2026-03-31 12:55:01 [INF] [IdentityService] HTTP GET /health → 404 in 0.1583ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1336ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1207ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1440ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1428ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.2287ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1304ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1545ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.2949ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1675ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.2007ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1589ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.2580ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.3393ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.7946ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1511ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1446ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1453ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.2355ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1454ms
+2026-03-31 12:55:02 [INF] [IdentityService] HTTP GET /health → 404 in 0.1730ms
+2026-03-31 12:56:30 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:24:22 [WRN] [IdentityService] Connection Failed: "rabbitmq://localhost/"
+RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.ReadInternalAsync(Nullable`1 minimumSize, CancellationToken cancellationToken)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Impl.SocketFrameHandler.ReadFrameAsync(InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Threading.Tasks.Task`1.InnerInvoke()
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+2026-03-31 14:24:24 [INF] [IdentityService] Retrying "00:00:06.0049366": Broker unreachable: guest@localhost:5672/
+MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:5672/
+ ---> RabbitMQ.Client.Exceptions.BrokerUnreachableException: None of the specified endpoints were reachable
+ ---> System.IO.IOException: connection.start was never received, likely due to a network timeout
+ ---> System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine..
+ ---> System.Net.Sockets.SocketException (10053): An established connection was aborted by the software in your host machine.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.CreateException(SocketError error, Boolean forAsyncThrow)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ReceiveAsync(Socket socket, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.ReceiveAsync(Memory`1 buffer, SocketFlags socketFlags, Boolean fromNetworkStream, CancellationToken cancellationToken)
+   at System.Net.Sockets.NetworkStream.ReadAsync(Memory`1 buffer, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.IO.Pipelines.StreamPipeReader.ReadInternalAsync(Nullable`1 minimumSize, CancellationToken cancellationToken)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Impl.SocketFrameHandler.ReadFrameAsync(InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   at System.Threading.Tasks.Task`1.InnerInvoke()
+   at System.Threading.ExecutionContext.RunFromThreadPoolDispatchLoop(Thread threadPoolThread, ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+
+   --- End of inner exception stack trace ---
+   at System.IO.Pipelines.StreamPipeReader.<ReadInternalAsync>g__Core|39_0(StreamPipeReader reader, Nullable`1 minimumSize, CancellationTokenSource tokenSource, CancellationToken cancellationToken)
+   at System.Runtime.CompilerServices.PoolingAsyncValueTaskMethodBuilder`1.StateMachineBox`1.System.Threading.Tasks.Sources.IValueTaskSource<TResult>.GetResult(Int16 token)
+   at RabbitMQ.Client.Impl.InboundFrame.ReadFromPipeAsync(PipeReader reader, UInt32 maxInboundMessageBodySize, InboundFrame frame, CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.ReceiveLoopAsync(CancellationToken mainLoopCancellationToken)
+   at RabbitMQ.Client.Framing.Connection.MainLoop()
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.Framing.Connection.StartAndTuneAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.Framing.Connection.OpenAsync(CancellationToken cancellationToken)
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at RabbitMQ.Client.ConnectionFactory.CreateConnectionAsync(IEndpointResolver endpointResolver, String clientProvidedName, CancellationToken cancellationToken)
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 102
+   --- End of inner exception stack trace ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateConnection(ISupervisor supervisor) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 129
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+--- End of stack trace from previous location ---
+   at MassTransit.RabbitMqTransport.ConnectionContextFactory.CreateSharedConnection(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ConnectionContextFactory.cs:line 74
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.SupervisorExtensions.<>c__DisplayClass5_0`2.<<CreateAgent>g__HandleSupervisorTask|0>d.MoveNext() in /_/src/MassTransit/SupervisorExtensions.cs:line 139
+--- End of stack trace from previous location ---
+   at MassTransit.Internals.TaskExtensions.<>c__DisplayClass2_0`1.<<OrCanceled>g__WaitAsync|0>d.MoveNext() in /_/src/MassTransit.Abstractions/Internals/Extensions/TaskExtensions.cs:line 72
+   at MassTransit.SupervisorExtensions.CreateAgent[T,TAgent](ISupervisor`1 supervisor, IAsyncPipeContextAgent`1 asyncContext, Func`3 agentFactory, CancellationToken cancellationToken) in /_/src/MassTransit/SupervisorExtensions.cs:line 158
+   at MassTransit.RabbitMqTransport.ChannelContextFactory.CreateSharedChannel(Task`1 context, CancellationToken cancellationToken) in /_/src/Transports/MassTransit.RabbitMqTransport/RabbitMqTransport/ChannelContextFactory.cs:line 77
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 51
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 61
+   at MassTransit.Agents.PipeContextSupervisor`1.Send(IPipe`1 pipe, CancellationToken cancellationToken) in /_/src/MassTransit/Agents/PipeContextSupervisor.cs:line 67
+   at MassTransit.Transports.TransportStartExtensions.OnTransportStartup[T](ReceiveEndpointContext context, ITransportSupervisor`1 supervisor, CancellationToken cancellationToken) in /_/src/MassTransit/Transports/TransportStartExtensions.cs:line 19
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 200
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.RunTransport() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 208
+   at MassTransit.Transports.ReceiveTransport`1.ReceiveTransportAgent.Run() in /_/src/MassTransit/Transports/ReceiveTransport.cs:line 145
+2026-03-31 14:24:28 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 29.4041ms
+2026-03-31 14:24:31 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:25:47 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:26:14 [ERR] [IdentityService] HTTP POST /api/auth/signup/request-otp → 500 in 26373.5051ms
+System.ArgumentNullException: Value cannot be null. (Parameter 'address')
+   at MimeKit.MailboxAddress..ctor(Encoding encoding, String name, String address)
+   at MimeKit.MailboxAddress..ctor(String name, String address)
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 23
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 54
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 185
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 14:26:14 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/request-otp
+System.ArgumentNullException: Value cannot be null. (Parameter 'address')
+   at MimeKit.MailboxAddress..ctor(Encoding encoding, String name, String address)
+   at MimeKit.MailboxAddress..ctor(String name, String address)
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 23
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 54
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 185
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 14:27:19 [INF] [IdentityService] Bus stopped: "rabbitmq://localhost/"
+2026-03-31 14:27:34 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:28:24 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:28:28 [ERR] [IdentityService] HTTP POST /api/auth/signup/request-otp → 500 in 4725.0738ms
+System.ArgumentNullException: Value cannot be null. (Parameter 'address')
+   at MimeKit.MailboxAddress..ctor(Encoding encoding, String name, String address)
+   at MimeKit.MailboxAddress..ctor(String name, String address)
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 23
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 54
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 185
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 14:28:29 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/request-otp
+System.ArgumentNullException: Value cannot be null. (Parameter 'address')
+   at MimeKit.MailboxAddress..ctor(Encoding encoding, String name, String address)
+   at MimeKit.MailboxAddress..ctor(String name, String address)
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 23
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 54
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 185
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 14:33:19 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:33:20 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 60.6573ms
+2026-03-31 14:34:17 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:34:49 [ERR] [IdentityService] HTTP POST /api/auth/signup/request-otp → 500 in 32741.2897ms
+System.InvalidOperationException: SenderEmail missing
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 25
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 56
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 14:34:49 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/request-otp
+System.InvalidOperationException: SenderEmail missing
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 25
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 56
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 14:38:42 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:38:50 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 36.9817ms
+2026-03-31 14:41:10 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:41:17 [ERR] [IdentityService] HTTP POST /api/auth/signup/request-otp → 500 in 7205.9955ms
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 32
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 73
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 14:41:17 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/request-otp
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 32
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 73
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 14:44:43 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:45:29 [INF] [IdentityService] EmailService loaded - Sender: NULL
+2026-03-31 14:45:29 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:45:39 [ERR] [IdentityService] HTTP POST /api/auth/signup/request-otp → 500 in 10452.1802ms
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 35
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 76
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 14:45:39 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/request-otp
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 35
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 76
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 14:46:58 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-31 14:46:58 [INF] [IdentityService] Total users after filtering: 3
+2026-03-31 14:46:58 [INF] [IdentityService] Returning 3 users for Page 1
+2026-03-31 14:46:58 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 285.3495ms
+2026-03-31 14:47:11 [INF] [IdentityService] Deleting user with ID: 22
+2026-03-31 14:47:11 [INF] [IdentityService] User deleted successfully: 22
+2026-03-31 14:47:11 [INF] [IdentityService] Delete Event published successfully: 22
+2026-03-31 14:47:11 [INF] [IdentityService] HTTP DELETE /api/admin/users/22 → 200 in 368.4997ms
+2026-03-31 14:47:16 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-31 14:47:16 [INF] [IdentityService] Total users after filtering: 2
+2026-03-31 14:47:16 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-31 14:47:16 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 23.5680ms
+2026-03-31 14:47:25 [INF] [IdentityService] EmailService loaded - Sender: NULL
+2026-03-31 14:47:25 [INF] [IdentityService] Signup attempt for email: ranasaurabh191@gmail.com
+2026-03-31 14:47:25 [INF] [IdentityService] User created successfully: ranasaurabh191@gmail.com | Role: CUSTOMER
+2026-03-31 14:47:25 [INF] [IdentityService] User creation event published.
+2026-03-31 14:47:25 [INF] [IdentityService] Generating JWT token for user: ranasaurabh191@gmail.com, Role: CUSTOMER
+2026-03-31 14:47:25 [INF] [IdentityService] Token generated successfully for user: ranasaurabh191@gmail.com, expires in 600000 minutes
+2026-03-31 14:47:25 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 409.8810ms
+2026-03-31 14:51:09 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:51:13 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-31 14:51:13 [INF] [IdentityService] Total users after filtering: 3
+2026-03-31 14:51:13 [INF] [IdentityService] Returning 3 users for Page 1
+2026-03-31 14:51:13 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 812.3928ms
+2026-03-31 14:51:20 [INF] [IdentityService] Deleting user with ID: 23
+2026-03-31 14:51:21 [INF] [IdentityService] User deleted successfully: 23
+2026-03-31 14:51:21 [INF] [IdentityService] Delete Event published successfully: 23
+2026-03-31 14:51:21 [INF] [IdentityService] HTTP DELETE /api/admin/users/23 → 200 in 512.4043ms
+2026-03-31 14:51:27 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-31 14:51:27 [INF] [IdentityService] Total users after filtering: 2
+2026-03-31 14:51:27 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-31 14:51:27 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 25.9800ms
+2026-03-31 14:52:45 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:52:52 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 14:52:52 [INF] [IdentityService] EmailSettings exists: false
+2026-03-31 14:52:52 [INF] [IdentityService] SenderEmail: 'NULL '
+2026-03-31 14:52:52 [INF] [IdentityService] Host: 'NULL '
+2026-03-31 14:52:52 [INF] [IdentityService] Port: 'NULL '
+2026-03-31 14:52:52 [INF] [IdentityService] ===============================
+2026-03-31 14:52:52 [INF] [IdentityService] Signup attempt for email: ranasaurabh191@gmail.com
+2026-03-31 14:52:53 [INF] [IdentityService] User created successfully: ranasaurabh191@gmail.com | Role: CUSTOMER
+2026-03-31 14:52:53 [INF] [IdentityService] User creation event published.
+2026-03-31 14:52:53 [INF] [IdentityService] Generating JWT token for user: ranasaurabh191@gmail.com, Role: CUSTOMER
+2026-03-31 14:52:53 [INF] [IdentityService] Token generated successfully for user: ranasaurabh191@gmail.com, expires in 600000 minutes
+2026-03-31 14:52:53 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 1399.5505ms
+2026-03-31 14:53:30 [INF] [IdentityService] Deleting user with ID: 24
+2026-03-31 14:53:30 [INF] [IdentityService] User deleted successfully: 24
+2026-03-31 14:53:30 [INF] [IdentityService] Delete Event published successfully: 24
+2026-03-31 14:53:30 [INF] [IdentityService] HTTP DELETE /api/admin/users/24 → 200 in 316.5822ms
+2026-03-31 14:53:34 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-31 14:53:35 [INF] [IdentityService] Total users after filtering: 2
+2026-03-31 14:53:35 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-31 14:53:35 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 97.1799ms
+2026-03-31 14:53:41 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 14:53:41 [INF] [IdentityService] EmailSettings exists: false
+2026-03-31 14:53:41 [INF] [IdentityService] SenderEmail: 'NULL '
+2026-03-31 14:53:41 [INF] [IdentityService] Host: 'NULL '
+2026-03-31 14:53:41 [INF] [IdentityService] Port: 'NULL '
+2026-03-31 14:53:41 [INF] [IdentityService] ===============================
+2026-03-31 14:53:41 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:54:10 [ERR] [IdentityService] HTTP POST /api/auth/signup/request-otp → 500 in 29137.7350ms
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 39
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 80
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 14:54:10 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/request-otp
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 39
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 80
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 14:54:37 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:56:55 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 14:56:55 [INF] [IdentityService] EmailSettings exists: false
+2026-03-31 14:56:55 [INF] [IdentityService] SenderEmail: 'NULL '
+2026-03-31 14:56:55 [INF] [IdentityService] Host: 'NULL '
+2026-03-31 14:56:55 [INF] [IdentityService] Port: 'NULL '
+2026-03-31 14:56:55 [INF] [IdentityService] ===============================
+2026-03-31 14:56:55 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:57:00 [ERR] [IdentityService] HTTP POST /api/auth/signup/request-otp → 500 in 5307.2918ms
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 39
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 80
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 14:57:00 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/request-otp
+System.InvalidOperationException: SenderEmail missing from EmailSettings
+   at SmartShip.NotificationService.Services.EmailService.SendEmailAsync(String toEmail, String subject, String body) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 39
+   at SmartShip.NotificationService.Services.EmailService.SendOtpEmailAsync(String toEmail, String otp) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.NotificationService\Services\EmailService.cs:line 80
+   at SmartShip.IdentityService.Services.AuthService.RequestSignupOtpAsync(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 189
+   at SmartShip.IdentityService.Controllers.AuthController.RequestSignupOtp(SignupOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 31
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 14:57:21 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 14:57:21 [INF] [IdentityService] EmailSettings exists: false
+2026-03-31 14:57:21 [INF] [IdentityService] SenderEmail: 'NULL '
+2026-03-31 14:57:21 [INF] [IdentityService] Host: 'NULL '
+2026-03-31 14:57:21 [INF] [IdentityService] Port: 'NULL '
+2026-03-31 14:57:21 [INF] [IdentityService] ===============================
+2026-03-31 14:57:21 [INF] [IdentityService] Signup attempt for email: ranasaurabh191@gmail.com
+2026-03-31 14:57:22 [INF] [IdentityService] User created successfully: ranasaurabh191@gmail.com | Role: CUSTOMER
+2026-03-31 14:57:22 [INF] [IdentityService] User creation event published.
+2026-03-31 14:57:22 [INF] [IdentityService] Generating JWT token for user: ranasaurabh191@gmail.com, Role: CUSTOMER
+2026-03-31 14:57:22 [INF] [IdentityService] Token generated successfully for user: ranasaurabh191@gmail.com, expires in 600000 minutes
+2026-03-31 14:57:22 [INF] [IdentityService] HTTP POST /api/auth/signup → 200 in 706.6537ms
+2026-03-31 14:58:57 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 14:59:04 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 14:59:04 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 14:59:04 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 14:59:04 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 14:59:04 [INF] [IdentityService] Port: '587'
+2026-03-31 14:59:04 [INF] [IdentityService] ===============================
+2026-03-31 14:59:04 [INF] [IdentityService] OTP request for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 14:59:09 [INF] [IdentityService] Email sent to shubhamjha3039@gmail.com
+2026-03-31 14:59:09 [INF] [IdentityService] HTTP POST /api/auth/signup/request-otp → 200 in 5164.4758ms
+2026-03-31 15:01:31 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:01:31 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:01:31 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:01:31 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:01:31 [INF] [IdentityService] Port: '587'
+2026-03-31 15:01:31 [INF] [IdentityService] ===============================
+2026-03-31 15:01:31 [INF] [IdentityService] OTP verification for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 15:01:35 [ERR] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 500 in 3751.1050ms
+System.InvalidOperationException: Invalid OTP. Please try again.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 217
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 38
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 15:01:35 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/verify-otp
+System.InvalidOperationException: Invalid OTP. Please try again.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 217
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 38
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 15:01:48 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:01:48 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:01:48 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:01:48 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:01:48 [INF] [IdentityService] Port: '587'
+2026-03-31 15:01:48 [INF] [IdentityService] ===============================
+2026-03-31 15:01:48 [INF] [IdentityService] OTP verification for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 15:01:49 [INF] [IdentityService] User created via OTP | Email: shubhamjha3039@gmail.com
+2026-03-31 15:01:49 [INF] [IdentityService] Generating JWT token for user: shubhamjha3039@gmail.com, Role: CUSTOMER
+2026-03-31 15:01:49 [INF] [IdentityService] Token generated successfully for user: shubhamjha3039@gmail.com, expires in 600000 minutes
+2026-03-31 15:01:49 [INF] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 200 in 563.7859ms
+2026-03-31 15:02:31 [INF] [IdentityService] Deleting user with ID: 25
+2026-03-31 15:02:31 [INF] [IdentityService] User deleted successfully: 25
+2026-03-31 15:02:31 [INF] [IdentityService] Delete Event published successfully: 25
+2026-03-31 15:02:31 [INF] [IdentityService] HTTP DELETE /api/admin/users/25 → 200 in 140.9917ms
+2026-03-31 15:02:56 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-31 15:02:56 [INF] [IdentityService] Total users after filtering: 3
+2026-03-31 15:02:56 [INF] [IdentityService] Returning 3 users for Page 1
+2026-03-31 15:02:56 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 92.2787ms
+2026-03-31 15:03:02 [INF] [IdentityService] Deleting user with ID: 26
+2026-03-31 15:03:02 [INF] [IdentityService] User deleted successfully: 26
+2026-03-31 15:03:02 [INF] [IdentityService] Delete Event published successfully: 26
+2026-03-31 15:03:02 [INF] [IdentityService] HTTP DELETE /api/admin/users/26 → 200 in 21.7668ms
+2026-03-31 15:03:08 [INF] [IdentityService] Fetching paged users | Page: 1, PageSize: 10, Role: null, IsActive: null, Search: null
+2026-03-31 15:03:08 [INF] [IdentityService] Total users after filtering: 2
+2026-03-31 15:03:08 [INF] [IdentityService] Returning 2 users for Page 1
+2026-03-31 15:03:08 [INF] [IdentityService] HTTP GET /api/admin/users/ → 200 in 10.7587ms
+2026-03-31 15:24:41 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 19.1002ms
+2026-03-31 15:45:26 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:46:24 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:46:24 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:46:24 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:46:24 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:46:24 [INF] [IdentityService] Port: '587'
+2026-03-31 15:46:24 [INF] [IdentityService] ===============================
+2026-03-31 15:46:25 [INF] [IdentityService] HTTP POST /api/auth/signup/request-otp → 400 in 246.8106ms
+2026-03-31 15:46:47 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:46:47 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:46:47 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:46:47 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:46:47 [INF] [IdentityService] Port: '587'
+2026-03-31 15:46:47 [INF] [IdentityService] ===============================
+2026-03-31 15:46:47 [INF] [IdentityService] OTP verification for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 15:46:50 [ERR] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 500 in 2642.0190ms
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 15:46:50 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/verify-otp
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 15:48:03 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:48:03 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:48:03 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:48:03 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:48:03 [INF] [IdentityService] Port: '587'
+2026-03-31 15:48:03 [INF] [IdentityService] ===============================
+2026-03-31 15:48:03 [INF] [IdentityService] OTP verification for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 15:48:05 [ERR] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 500 in 1717.1294ms
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 15:48:05 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/verify-otp
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 15:48:12 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:48:12 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:48:12 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:48:12 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:48:12 [INF] [IdentityService] Port: '587'
+2026-03-31 15:48:12 [INF] [IdentityService] ===============================
+2026-03-31 15:48:12 [INF] [IdentityService] OTP verification for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 15:48:13 [ERR] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 500 in 1083.5460ms
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 15:48:13 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/verify-otp
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 15:48:21 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:48:21 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:48:21 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:48:21 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:48:21 [INF] [IdentityService] Port: '587'
+2026-03-31 15:48:21 [INF] [IdentityService] ===============================
+2026-03-31 15:48:21 [INF] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 400 in 9.8739ms
+2026-03-31 15:48:28 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:48:28 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:48:28 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:48:28 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:48:28 [INF] [IdentityService] Port: '587'
+2026-03-31 15:48:28 [INF] [IdentityService] ===============================
+2026-03-31 15:48:29 [INF] [IdentityService] OTP verification for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 15:48:44 [ERR] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 500 in 15383.2196ms
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 15:48:44 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/verify-otp
+System.InvalidOperationException: OTP already used. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 208
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 15:50:22 [INF] [IdentityService] === EmailService Config Debug ===
+2026-03-31 15:50:22 [INF] [IdentityService] EmailSettings exists: true
+2026-03-31 15:50:22 [INF] [IdentityService] SenderEmail: 'srbrana82@gmail.com'
+2026-03-31 15:50:22 [INF] [IdentityService] Host: 'smtp.gmail.com'
+2026-03-31 15:50:22 [INF] [IdentityService] Port: '587'
+2026-03-31 15:50:22 [INF] [IdentityService] ===============================
+2026-03-31 15:50:22 [INF] [IdentityService] OTP verification for signup | Email: shubhamjha3039@gmail.com
+2026-03-31 15:50:27 [ERR] [IdentityService] HTTP POST /api/auth/signup/verify-otp → 500 in 5809.5646ms
+System.Collections.Generic.KeyNotFoundException: No OTP found for this email. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 206
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+2026-03-31 15:50:27 [ERR] [IdentityService] Unhandled exception for POST /api/auth/signup/verify-otp
+System.Collections.Generic.KeyNotFoundException: No OTP found for this email. Please request a new one.
+   at SmartShip.IdentityService.Services.AuthService.VerifySignupOtpAsync(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Services\AuthService.cs:line 206
+   at SmartShip.IdentityService.Controllers.AuthController.VerifySignupOtp(VerifyOtpRequest request) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Controllers\AuthController.cs:line 52
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
+2026-03-31 15:52:47 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"

@@ -1,5 +1,6 @@
 {
   "Routes": [
+    
     {
       "DownstreamPathTemplate": "/api/auth/{everything}",
       "DownstreamScheme": "http",
@@ -165,6 +166,23 @@
         "AllowedScopes": []
       },
       "SwaggerKey": "paymentservice"
+    },
+    {
+      "DownstreamPathTemplate": "/api/notifications/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/gateway/notifications/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "PATCH" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "SwaggerKey": "notificationservice"
     }
   ],
 
@@ -216,6 +234,17 @@
           "Name": "Payment Service",
           "Version": "v1",
           "Url": "http://localhost:5005/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "notificationservice",
+      "TransformByOcelotConfig": true,
+      "Config": [
+        {
+          "Name": "Notification Service",
+          "Version": "v1",
+          "Url": "http://localhost:5006/swagger/v1/swagger.json"
         }
       ]
     }

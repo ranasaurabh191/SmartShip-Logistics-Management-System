@@ -24,7 +24,7 @@ try
     builder.Host.UseSerilog((ctx, lc) => lc
         .ReadFrom.Configuration(ctx.Configuration)
         .Enrich.FromLogContext()
-        .Enrich.WithProperty("Application", "NotificationService")
+        .Enrich.WithProperty("Application", "NotificationService")  
         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
     builder.Services.AddControllers()
