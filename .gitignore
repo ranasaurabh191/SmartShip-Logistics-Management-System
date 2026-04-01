@@ -3,4 +3,27 @@ bin/
 obj/
 *.user
 *.suo
+
+# Ignore all JSON files
 *.json
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# Docker overrides
+docker-compose.override.yml
+
+# Test outputs
+TestResults/
+coverage/
+
+# Environment files
+.env
+.env.*
+
+# OS files
+Thumbs.db
+.DS_Store
