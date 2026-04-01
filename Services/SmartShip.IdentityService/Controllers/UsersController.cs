@@ -40,6 +40,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("email/{userId}")]
+    [AllowAnonymous]
     [InternalApiKey]
     public async Task<IActionResult> GetEmail(int userId) => Ok(new { Id = userId, Email = await _userService.GetUserEmailAsync(userId) });
 

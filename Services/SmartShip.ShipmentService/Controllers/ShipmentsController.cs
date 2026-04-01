@@ -32,6 +32,7 @@ public class ShipmentsController : ControllerBase
     Ok(await _service.GetMyShipmentsPagedAsync(GetUserId(), request));
 
     [HttpGet("{id}")]
+    [Authorize(Roles = "CUSTOMER")]
     public async Task<IActionResult> GetById(int id) =>  Ok(await _service.GetByIdAsync(id));
 
     [HttpPatch("pickup/{id}")]

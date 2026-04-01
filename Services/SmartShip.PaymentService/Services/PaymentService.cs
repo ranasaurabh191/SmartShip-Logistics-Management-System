@@ -39,6 +39,17 @@ public class PaymentService : IPaymentService
 
     public async Task<PaymentResponse> CreateOrderAsync(CreateOrderRequest request)
     {
+        var userIdClaim = _httpContextAccessor.HttpContext?.User
+        .FindFirst("userId")?.Value
+        ?? _httpContextAccessor.HttpContext?.User
+        .FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var authenticatedUserId))
+        {
+            _logger.LogWarning("JWT userId claim missing or invalid.");
+            throw new UnauthorizedAccessException("Unauthorized: Invalid or missing user token.");
+        }
+
         _logger.LogInformation("Create order request for Shipment {ShipmentId} | Method: {Method}",
         request.ShipmentId, request.PaymentMethod);
 
@@ -57,9 +68,10 @@ public class PaymentService : IPaymentService
 
         if (shipment == null) throw new KeyNotFoundException("Failed to read shipment details.");
 
-        if (shipment.CustomerId != request.CustomerId)
+        if (shipment.CustomerId != authenticatedUserId)
         {
-            _logger.LogWarning("CustomerId mismatch for Shipment {ShipmentId}.", request.ShipmentId);
+            _logger.LogWarning("Ownership mismatch: Token userId={AuthUserId} but Shipment {ShipmentId} belongs to CustomerId={ShipmentOwner}",
+                authenticatedUserId, request.ShipmentId, shipment.CustomerId);
             throw new UnauthorizedAccessException("You are not authorized to pay for this shipment.");
         }
 
@@ -71,29 +83,18 @@ public class PaymentService : IPaymentService
         if (existing != null)
         {
             if (existing.PaymentStatus == PaymentStatus.Paid)
-            {
-                _logger.LogWarning("Payment already completed for {ShipmentId}", request.ShipmentId);
                 throw new InvalidOperationException("You have already paid for this shipment.");
-            }
-
             if (existing.PaymentMethod == PaymentMethod.COD)
-            {
-                _logger.LogWarning("COD already registered for {ShipmentId}", request.ShipmentId);
                 throw new InvalidOperationException("COD already registered. Pay on delivery.");
-            }
-
             if (existing.PaymentMethod == PaymentMethod.Online)
-            {
-                _logger.LogWarning("Online payment already initiated for {ShipmentId}", request.ShipmentId);
                 throw new InvalidOperationException("Payment already initiated. Please complete your payment.");
-            }
         }
 
         var payment = new ShipmentPayment
         {
             ShipmentId = request.ShipmentId,
             TrackingNumber = shipment.TrackingNumber,
-            CustomerId = request.CustomerId,
+            CustomerId = authenticatedUserId,
             Amount = shipment.ShippingRate,
             PaymentMethod = request.PaymentMethod,
             PaymentStatus = PaymentStatus.Pending,
@@ -111,8 +112,10 @@ public class PaymentService : IPaymentService
                 ShipmentId = payment.ShipmentId,
                 TrackingNumber = payment.TrackingNumber,
                 PaymentMethod = "COD",
-                PaymentStatus = "Pending"
+                PaymentStatus = "Pending",
+                CustomerId = payment.CustomerId
             });
+            _logger.LogInformation("Event published for COD with {ShipmentId}", request.ShipmentId);
             _logger.LogInformation("COD order created for {ShipmentId}", request.ShipmentId);
 
             return MapToResponse(payment, "COD order created. Pay on delivery.");
@@ -159,15 +162,39 @@ public class PaymentService : IPaymentService
 
     public async Task<PaymentResponse> VerifyPaymentAsync(VerifyPaymentRequest request)
     {
+        var userIdClaim = _httpContextAccessor.HttpContext?.User
+        .FindFirst("userId")?.Value
+        ?? _httpContextAccessor.HttpContext?.User
+        .FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var authenticatedUserId))
+        {
+            _logger.LogWarning("JWT userId claim missing during payment verification.");
+            throw new UnauthorizedAccessException("Unauthorized: Invalid or missing user token.");
+        }
+
         _logger.LogInformation("Verifying payment for Order {OrderId}", request.RazorpayOrderId);
 
-        var payment = await _context.Payments.FirstOrDefaultAsync(p => p.RazorpayOrderId == request.RazorpayOrderId);
+        var payment = await _context.Payments.FirstOrDefaultAsync(p =>
+        p.RazorpayOrderId == request.RazorpayOrderId &&
+        p.ShipmentId == request.ShipmentId);
 
         if (payment == null)
         {
-            _logger.LogWarning("Payment not found for Order {OrderId}", request.RazorpayOrderId);
-            throw new KeyNotFoundException($"Payment record not found for Order {request.RazorpayOrderId}.");
+            _logger.LogWarning("Payment not found for OrderId {OrderId} + ShipmentId {ShipmentId}",
+                request.RazorpayOrderId, request.ShipmentId);
+            throw new KeyNotFoundException("Payment record not found for this order and shipment.");
         }
+
+        if (payment.CustomerId != authenticatedUserId)
+        {
+            _logger.LogWarning("Ownership mismatch: Token userId={AuthUserId} but Payment belongs to CustomerId={Owner}",
+                authenticatedUserId, payment.CustomerId);
+            throw new UnauthorizedAccessException("You are not authorized to verify this payment.");
+        }
+
+        if (payment.PaymentStatus == PaymentStatus.Paid)
+            throw new InvalidOperationException("Payment already verified and completed.");
 
         //var attributes = new Dictionary<string, string>
         //{
@@ -202,8 +229,10 @@ public class PaymentService : IPaymentService
             ShipmentId = payment.ShipmentId,
             TrackingNumber = payment.TrackingNumber,
             PaymentMethod = "Online",
-            PaymentStatus = "Paid"
+            PaymentStatus = "Paid",
+            CustomerId = payment.CustomerId
         });
+        _logger.LogInformation("Event published for Online Payment with {ShipmentId}", request.ShipmentId);
 
         return MapToResponse(payment, "Payment successful!");
     }

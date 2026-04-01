@@ -42,7 +42,7 @@
                 message = ex switch
                 {
                     KeyNotFoundException => ex.Message,
-                    UnauthorizedAccessException => "Unauthorized.",
+                    UnauthorizedAccessException => ex.Message,
                     ArgumentException => ex.Message,
                     InvalidOperationException => ex.Message,   
                     TimeoutException => "Request timed out.",

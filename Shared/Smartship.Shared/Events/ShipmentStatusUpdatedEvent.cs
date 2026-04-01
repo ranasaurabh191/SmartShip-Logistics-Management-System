@@ -9,4 +9,6 @@ public class ShipmentStatusUpdatedEvent
     public string Location { get; set; } = string.Empty;
     public string UpdatedBy { get; set; } = string.Empty;
     public DateTime UpdatedAt { get; set; }
+    public int CustomerId { get; set; }
+
 }

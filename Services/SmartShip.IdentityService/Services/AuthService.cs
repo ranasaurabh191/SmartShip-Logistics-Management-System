@@ -243,6 +243,8 @@ public class AuthService : IAuthService
             CreatedAt = user.CreatedAt
         });
 
+        _logger.LogInformation("UserCreatedEvent Published.");
+
         var token = GenerateToken(user);
         return new OtpResponse("Account created successfully!", true, token, user.Id.ToString());
     }

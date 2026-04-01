@@ -17,18 +17,18 @@ public class UserCreatedConsumer : IConsumer<UserCreatedEvent>
 
     public async Task Consume(ConsumeContext<UserCreatedEvent> context)
     {
-        var e = context.Message;
-        _logger.LogInformation("UserCreatedEvent received | UserId: {UserId}", e.UserId);
+        var msg = context.Message;
+        _logger.LogInformation("UserCreatedEvent received | UserId: {UserId}", msg.UserId);
 
         await _notification.SendAndSaveAsync(
-            e.UserId, e.Email,
+            msg.UserId, msg.Email,
             type: "WelcomeEmail",
             subject: "Welcome to SmartShip! ",
             body: $"""
-                <h2>Hi {e.Name}, Welcome to SmartShip!</h2>
+                <h2>Hi {msg.Name}, Welcome to SmartShip!</h2>
                 <p>Your account has been created successfully.</p>
-                <p><b>Email:</b> {e.Email}</p>
-                <p><b>Role:</b> {e.Role}</p>
+                <p><b>Email:</b> {msg.Email}</p>
+                <p><b>Role:</b> {msg.Role}</p>
                 <br/>
                 <p>Start shipping today!</p>
                 <p>— SmartShip Team</p>

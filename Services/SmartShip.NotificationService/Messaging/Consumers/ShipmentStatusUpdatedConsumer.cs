@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Microsoft.VisualBasic;
 using SmartShip.NotificationService.Helpers;
 using SmartShip.NotificationService.Services;
 using SmartShip.Shared.Events;
@@ -10,36 +11,37 @@ public class ShipmentStatusUpdatedConsumer : IConsumer<ShipmentStatusUpdatedEven
     private readonly INotificationService _notification;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<ShipmentStatusUpdatedConsumer> _logger;
+    private readonly IConfiguration _config;
 
     public ShipmentStatusUpdatedConsumer(INotificationService notification,
-        IHttpClientFactory httpClientFactory, ILogger<ShipmentStatusUpdatedConsumer> logger)
+        IHttpClientFactory httpClientFactory, ILogger<ShipmentStatusUpdatedConsumer> logger, IConfiguration config)
     {
         _notification = notification;
         _httpClientFactory = httpClientFactory;
         _logger = logger;
+        _config = config;
     }
 
     public async Task Consume(ConsumeContext<ShipmentStatusUpdatedEvent> context)
     {
-        var e = context.Message;
-        _logger.LogInformation("ShipmentStatusUpdatedEvent received | Tracking: {TrackingNumber}", e.TrackingNumber);
+        var msg = context.Message;
+        _logger.LogInformation("ShipmentStatusUpdatedEvent received | Tracking: {TrackingNumber}", msg.TrackingNumber);
 
-        var customerId = await ConsumerHelper.GetCustomerIdAsync(_httpClientFactory, _logger, e.ShipmentId);
-        if (customerId == null) return;
+        var customerId = msg.CustomerId;
 
-        var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, customerId.Value);
+        var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, customerId, _config);
         if (email == null) return;
 
         await _notification.SendAndSaveAsync(
-            customerId.Value, email,
+            customerId, email,
             type: "StatusUpdated",
-            subject: $"Shipment Update — {e.TrackingNumber}",
+            subject: $"Shipment Update — {msg.TrackingNumber}",
             body: $"""
             <h2>Your Shipment Status Has Changed!</h2>
-            <p><b>Tracking Number:</b> {e.TrackingNumber}</p>
-            <p><b>Status:</b> {e.OldStatus} -> <b>{e.NewStatus}</b></p>
-            <p><b>Location:</b> {e.Location}</p>
-            <p><b>Updated At:</b> {e.UpdatedAt:dd-MMM-yyyy hh:mm tt}</p>
+            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
+            <p><b>Status:</b> {msg.OldStatus} -> <b>{msg.NewStatus}</b></p>
+            <p><b>Location:</b> {msg.Location}</p>
+            <p><b>Updated At:</b> {msg.UpdatedAt:dd-MMM-yyyy hh:mm tt}</p>
             <p>— SmartShip Team</p>
         """
         );

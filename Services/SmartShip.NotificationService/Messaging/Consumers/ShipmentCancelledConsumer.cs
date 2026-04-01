@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Microsoft.VisualBasic;
 using SmartShip.NotificationService.DTOs;
 using SmartShip.NotificationService.Helpers;
 using SmartShip.NotificationService.Services;
@@ -11,34 +12,36 @@ public class ShipmentCancelledConsumer : IConsumer<ShipmentCancelledEvent>
     private readonly INotificationService _notification;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<ShipmentCancelledConsumer> _logger;
+    private readonly IConfiguration _config;
 
     public ShipmentCancelledConsumer(INotificationService notification,
-        IHttpClientFactory httpClientFactory, ILogger<ShipmentCancelledConsumer> logger)
+        IHttpClientFactory httpClientFactory, ILogger<ShipmentCancelledConsumer> logger, IConfiguration config)
     {
         _notification = notification;
         _httpClientFactory = httpClientFactory;
         _logger = logger;
+        _config = config;
+        _config = config;
     }
 
     public async Task Consume(ConsumeContext<ShipmentCancelledEvent> context)
     {
-        var e = context.Message;
-        _logger.LogInformation("ShipmentCancelledEvent received | Tracking: {TrackingNumber}", e.TrackingNumber);
+        var msg = context.Message;
+        _logger.LogInformation("ShipmentCancelledEvent received | Tracking: {TrackingNumber}", msg.TrackingNumber);
 
-        var customerId = await ConsumerHelper.GetCustomerIdAsync(_httpClientFactory, _logger, e.ShipmentId);
-        if (customerId == null) return;
+        var customerId = msg.CustomerId;
 
-        var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, customerId.Value);
+        var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, customerId, _config);
         if (email == null) return;
 
         await _notification.SendAndSaveAsync(
-            customerId.Value, email,
+            customerId, email,
             type: "ShipmentCancelled",
-            subject: $"Shipment Cancelled — {e.TrackingNumber}",
+            subject: $"Shipment Cancelled — {msg.TrackingNumber}",
             body: $"""
             <h2>Your Shipment Has Been Cancelled</h2>
-            <p><b>Tracking Number:</b> {e.TrackingNumber}</p>
-            <p><b>Cancelled At:</b> {e.CancelledAt:dd-MMM-yyyy hh:mm tt}</p>
+            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
+            <p><b>Cancelled At:</b> {msg.CancelledAt:dd-MMM-yyyy hh:mm tt}</p>
             <br/>
             <p>If this was a mistake, please contact support.</p>
             <p>— SmartShip Team</p>
