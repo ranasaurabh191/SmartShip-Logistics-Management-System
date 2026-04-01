@@ -999,3 +999,6 @@ System.Collections.Generic.KeyNotFoundException: No OTP found for this email. Pl
    at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
    at SmartShip.IdentityService.Middleware.ExceptionMiddleware.InvokeAsync(HttpContext context) in C:\Users\ASUS\OneDrive\Desktop\SmartShip Logistics Management System\Services\SmartShip.IdentityService\Middleware\ExceptionMiddleware.cs:line 13
 2026-03-31 15:52:47 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:53:55 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 16:21:02 [INF] [IdentityService] Bus started: "rabbitmq://localhost/"
+2026-03-31 16:21:02 [INF] [IdentityService] HTTP GET /swagger/v1/swagger.json → 200 in 76.7328ms

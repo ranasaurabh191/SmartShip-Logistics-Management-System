@@ -1,4 +1,5 @@
 USE SmartShip_IdentityDB;
 
+select * from users;
 
-SELECT * FROM Users;
+SELECT * FROM OtpVerifications;

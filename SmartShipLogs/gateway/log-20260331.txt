@@ -31319,3 +31319,7 @@ No authentication is required for the path '/gateway/auth/signup/verify-otp' in 
 2026-03-31 15:50:27 [WRN] [Gateway] RequestId: 0HNKF1Q81UJQE:00000001, PreviousRequestId: -
 404 Not Found status code of request URI: http://localhost:5001/api/auth/signup/verify-otp
 2026-03-31 15:50:27 [INF] [Gateway] GATEWAY POST /gateway/auth/signup/verify-otp -> 404 in 5898.3701ms
+2026-03-31 16:20:59 [INF] [Gateway] GATEWAY GET /swagger/index.html -> 200 in 300.0680ms
+2026-03-31 16:21:02 [INF] [Gateway] GATEWAY GET /swagger/docs/v1/userservice -> 200 in 2623.9389ms
+2026-03-31 16:21:06 [INF] [Gateway] GATEWAY GET /health -> 200 in 27.3193ms
+2026-03-31 16:21:06 [INF] [Gateway] GATEWAY GET /favicon.ico -> 404 in 0.3750ms

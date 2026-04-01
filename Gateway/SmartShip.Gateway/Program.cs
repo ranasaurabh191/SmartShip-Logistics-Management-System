@@ -72,8 +72,11 @@ try
         uiOpt.OAuthUsePkce();
         uiOpt.ConfigObject.AdditionalItems["persistAuthorization"] = true;
     });
-    
-    await app.UseOcelot();
+
+    app.UseWhen(
+        ctx => ctx.Request.Path.StartsWithSegments("/gateway"),
+        ocelotBranch => ocelotBranch.UseOcelot().Wait()
+    );
 
     app.Run();
 }

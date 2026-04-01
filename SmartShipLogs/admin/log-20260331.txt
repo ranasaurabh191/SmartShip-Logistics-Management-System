@@ -975,3 +975,15 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-31 15:52:47 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
 2026-03-31 15:52:47 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
 2026-03-31 15:52:48 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:53:54 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-31 15:53:54 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-31 15:53:54 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-31 15:53:54 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-31 15:53:54 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-31 15:53:55 [INF] [AdminService] Bus started: "rabbitmq://localhost/"
+2026-03-31 16:21:01 [INF] [AdminService] Configured endpoint admin-shipment-delivered, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentDeliveredConsumer
+2026-03-31 16:21:01 [INF] [AdminService] Configured endpoint admin-user-created, Consumer: SmartShip.AdminService.Messaging.Consumers.UserCreatedConsumer
+2026-03-31 16:21:01 [INF] [AdminService] Configured endpoint admin-user-deleted, Consumer: SmartShip.AdminService.Messaging.Consumers.UserDeletedConsumer
+2026-03-31 16:21:01 [INF] [AdminService] Configured endpoint admin-shipment-created, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCreatedMetricsConsumer
+2026-03-31 16:21:01 [INF] [AdminService] Configured endpoint admin-shipment-cancelled, Consumer: SmartShip.AdminService.Messaging.Consumers.ShipmentCancelledConsumer
+2026-03-31 16:21:02 [INF] [AdminService] Bus started: "rabbitmq://localhost/"

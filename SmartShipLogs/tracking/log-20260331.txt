@@ -319,3 +319,9 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-31 15:52:46 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
 2026-03-31 15:52:46 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
 2026-03-31 15:52:47 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:53:53 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 15:53:54 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 15:53:55 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"
+2026-03-31 16:21:01 [INF] [TrackingService] Configured endpoint tracking-shipment-created, Consumer: ShipmentCreatedConsumer
+2026-03-31 16:21:01 [INF] [TrackingService] Configured endpoint tracking-status-updated, Consumer: ShipmentStatusUpdatedConsumer
+2026-03-31 16:21:02 [INF] [TrackingService] Bus started: "rabbitmq://localhost/"

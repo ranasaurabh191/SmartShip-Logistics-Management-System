@@ -567,3 +567,9 @@ MassTransit.RabbitMqConnectionException: Broker unreachable: guest@localhost:567
 2026-03-31 15:52:47 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
 2026-03-31 15:52:47 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
 2026-03-31 15:52:48 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 15:53:54 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-31 15:53:54 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-31 15:53:55 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
+2026-03-31 16:21:01 [INF] [ShipmentService] Configured endpoint shipment-user-deleted, Consumer: SmartShip.ShipmentService.Messaging.Consumers.UserDeletedConsumer
+2026-03-31 16:21:01 [INF] [ShipmentService] Configured endpoint shipment-payment-completed, Consumer: SmartShip.ShipmentService.Messaging.Consumers.PaymentCompletedConsumer
+2026-03-31 16:21:02 [INF] [ShipmentService] Bus started: "rabbitmq://localhost/"
