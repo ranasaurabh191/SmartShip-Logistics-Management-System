@@ -19,8 +19,8 @@ public class SignupOtpRequestValidator : AbstractValidator<SignupOtpRequest>
             .MaximumLength(150).WithMessage("Email cannot exceed 150 characters.");
 
         RuleFor(x => x.Phone)
-            .NotEmpty().WithMessage("Phone is required (+91xxxxxxxxx).")
-            .Matches(@"^\+91[6-9]\d{9}$").WithMessage("Phone must be +91 followed by 10 digits (6-9 start).");
+            .NotEmpty().WithMessage("Phone is required.")
+            .Matches(@"^\d{10}$").WithMessage("Phone must be exactly 10 digits.");
 
         RuleFor(x => x.Password)
             .NotEmpty().WithMessage("Password is required.")
@@ -51,8 +51,8 @@ public class VerifyOtpRequestValidator : AbstractValidator<VerifyOtpRequest>
             .Matches(@"^[a-zA-Z\s]+$");
 
         RuleFor(x => x.Phone)
-            .NotEmpty().WithMessage("Phone is required (+91xxxxxxxxx).")
-            .Matches(@"^\+91[6-9]\d{9}$");
+            .NotEmpty().WithMessage("Phone is required.")
+            .Matches(@"^\d{10}$").WithMessage("Phone must be exactly 10 digits.");
 
         RuleFor(x => x.Password)
             .MinimumLength(8)

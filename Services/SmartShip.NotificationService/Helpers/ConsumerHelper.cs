@@ -16,10 +16,13 @@ public static class ConsumerHelper
             logger.LogInformation("DEBUG | Calling URL: api/admin/users/email/{UserId}", userId);
 
             if (!string.IsNullOrEmpty(apiKey))
+            {
                 client.DefaultRequestHeaders.Add("X-Internal-Key", apiKey);
+            }
             else
+            {
                 logger.LogWarning("DEBUG | ApiKey is NULL or EMPTY — check appsettings.json");
-
+            }
             var response = await client.GetFromJsonAsync<UserEmailDto>($"api/admin/users/email/{userId}");
 
             if (response?.Email == null)
@@ -33,4 +36,4 @@ public static class ConsumerHelper
             return null;
         }
     }
-}
+ }

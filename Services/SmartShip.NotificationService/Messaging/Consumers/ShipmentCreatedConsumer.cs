@@ -29,19 +29,23 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
         var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, msg.CustomerId, _config);
         if (email == null) return;
 
+        var ist = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        var createdAtIst = TimeZoneInfo.ConvertTimeFromUtc(
+            DateTime.SpecifyKind(msg.CreatedAt, DateTimeKind.Utc), ist);
+
         await _notification.SendAndSaveAsync(
             msg.CustomerId, email,
             type: "ShipmentCreated",
             subject: $"Shipment Created — {msg.TrackingNumber}",
             body: $"""
-                <h2>Your Shipment Has Been Created!</h2>
-                <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-                <p><b>From:</b> {msg.SenderCity}</p>
-                <p><b>Created At:</b> {msg.CreatedAt:dd-MMM-yyyy hh:mm tt}</p>
-                <br/>
-                <p>Please complete payment and schedule pickup to proceed.</p>
-                <p>— SmartShip Team</p>
-            """
+            <h2>Your Shipment Has Been Created!</h2>
+            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
+            <p><b>From:</b> {msg.SenderCity}</p>
+            <p><b>Created At:</b> {createdAtIst:dd-MMM-yyyy hh:mm tt}</p>
+            <br/>
+            <p>Please complete payment and schedule pickup to proceed.</p>
+            <p>— SmartShip Team</p>
+        """
         );
     }
 }

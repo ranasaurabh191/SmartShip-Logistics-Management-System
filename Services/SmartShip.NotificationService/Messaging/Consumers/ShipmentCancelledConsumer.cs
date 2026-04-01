@@ -34,6 +34,10 @@ public class ShipmentCancelledConsumer : IConsumer<ShipmentCancelledEvent>
         var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, customerId, _config);
         if (email == null) return;
 
+        var ist = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        var cancelledAtIst = TimeZoneInfo.ConvertTimeFromUtc(
+            DateTime.SpecifyKind(msg.CancelledAt, DateTimeKind.Utc), ist);
+
         await _notification.SendAndSaveAsync(
             customerId, email,
             type: "ShipmentCancelled",
@@ -41,7 +45,7 @@ public class ShipmentCancelledConsumer : IConsumer<ShipmentCancelledEvent>
             body: $"""
             <h2>Your Shipment Has Been Cancelled</h2>
             <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>Cancelled At:</b> {msg.CancelledAt:dd-MMM-yyyy hh:mm tt}</p>
+            <p><b>Cancelled At:</b> {cancelledAtIst:dd-MMM-yyyy hh:mm tt}</p>
             <br/>
             <p>If this was a mistake, please contact support.</p>
             <p>— SmartShip Team</p>

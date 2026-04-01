@@ -155,10 +155,16 @@ public class UserService : IUserService
     {
         _logger.LogInformation("Fetching email for User {UserId}", userId);
 
-        var user = await _context.Users.FindAsync(userId)
-            ?? throw new KeyNotFoundException($"User {userId} not found.");
+        var user = await _context.Users.FindAsync(userId) ?? throw new KeyNotFoundException($"User {userId} not found.");
 
         return user.Email;
+    }
+
+    public async Task<bool> UserExistsAsync(int userId)
+    {
+        _logger.LogInformation("Checking user existence for UserId : {UserId}", userId);
+
+        return await _context.Users.AnyAsync(u => u.Id == userId && u.IsActive);
     }
 
 }

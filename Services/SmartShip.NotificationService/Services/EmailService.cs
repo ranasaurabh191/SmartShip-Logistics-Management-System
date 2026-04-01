@@ -70,7 +70,7 @@ public class EmailService : IEmailService
                 <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center;">
                     <h1 style="font-size: 48px; letter-spacing: 8px; margin: 0; color: #007bff;">{otp}</h1>
                 </div>
-                <p style="color: #666; margin-top: 20px;">
+                <p>
                     This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.
                 </p>
                 <p>— SmartShip Team</p>

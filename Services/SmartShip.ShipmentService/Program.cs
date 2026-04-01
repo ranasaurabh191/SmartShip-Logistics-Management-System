@@ -96,6 +96,11 @@ try
         client.BaseAddress = new Uri(builder.Configuration["Services:PaymentService"]!);
     });
 
+    builder.Services.AddHttpClient("IdentityService", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["Services:IdentityService"]!);
+    });
+
     builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddMassTransit(x =>

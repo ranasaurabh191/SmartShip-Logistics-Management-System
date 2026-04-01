@@ -44,4 +44,9 @@ public class UsersController : ControllerBase
     [InternalApiKey]
     public async Task<IActionResult> GetEmail(int userId) => Ok(new { Id = userId, Email = await _userService.GetUserEmailAsync(userId) });
 
+    [HttpGet("exists/{userId}")]
+    [AllowAnonymous]
+    [InternalApiKey]
+    public async Task<IActionResult> UserExists(int userId) => await _userService.UserExistsAsync(userId) ? 
+        Ok(new { exists = true }) : NotFound(new { exists = false });
 }

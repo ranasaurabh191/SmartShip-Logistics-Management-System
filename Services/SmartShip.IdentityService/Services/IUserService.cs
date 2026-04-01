@@ -10,4 +10,5 @@ public interface IUserService
     Task DeleteUserAsync(int id);
     Task<PagedResponse<UserDto>> GetAllUsersPagedAsync(UserPagedRequest request);
     Task<string> GetUserEmailAsync(int userId);
+    Task<bool> UserExistsAsync(int userId);
 }

@@ -29,6 +29,10 @@ public class ShipmentDeliveredConsumer : IConsumer<ShipmentDeliveredEvent>
         var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, msg.CustomerId, _config);
         if (email == null) return;
 
+        var ist = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        var deliveredAtIst = TimeZoneInfo.ConvertTimeFromUtc(
+            DateTime.SpecifyKind(msg.DeliveredAt, DateTimeKind.Utc), ist);
+
         await _notification.SendAndSaveAsync(
             msg.CustomerId, email,
             type: "ShipmentDelivered",
@@ -36,7 +40,7 @@ public class ShipmentDeliveredConsumer : IConsumer<ShipmentDeliveredEvent>
             body: $"""
             <h2>Your Shipment Has Been Delivered!</h2>
             <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>Delivered At:</b> {msg.DeliveredAt:dd-MMM-yyyy hh:mm tt}</p>
+            <p><b>Delivered At:</b> {deliveredAtIst:dd-MMM-yyyy hh:mm tt}</p>
             <br/>
             <p>Thank you for using SmartShip!</p>
             <p>— SmartShip Team</p>

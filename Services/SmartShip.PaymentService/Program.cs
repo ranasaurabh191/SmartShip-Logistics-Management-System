@@ -85,6 +85,7 @@ try
         client.BaseAddress = new Uri(builder.Configuration["Services:ShipmentService"]!);
     });
 
+
     builder.Services.AddDbContext<PaymentDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 

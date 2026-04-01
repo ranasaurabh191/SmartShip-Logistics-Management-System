@@ -4,7 +4,7 @@ using MassTransit;
 using SmartShip.ShipmentService.Data;
 using SmartShip.ShipmentService.DTOs;
 using SmartShip.ShipmentService.Models;
-
+using SmartShip.ShipmentService.Helpers;
 namespace SmartShip.ShipmentService.Services;
 
 public class ShipmentService : IShipmentService
@@ -14,15 +14,17 @@ public class ShipmentService : IShipmentService
     private readonly IPublishEndpoint _publisher;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IConfiguration _config;
 
     public ShipmentService(ShipmentDbContext context, ILogger<ShipmentService> logger,
-        IPublishEndpoint publisher, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
+        IPublishEndpoint publisher, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor, IConfiguration config )
     {
         _context = context;
         _logger = logger;
         _publisher = publisher;
         _httpClientFactory = httpClientFactory;
         _httpContextAccessor = httpContextAccessor;
+        _config = config;
     }
 
     public async Task<PagedResponse<ShipmentResponse>> GetAllPagedAsync(ShipmentPagedRequest req)
@@ -132,6 +134,16 @@ public class ShipmentService : IShipmentService
 
         try
         {
+            var customerExists = await ConsumerHelper.ValidateCustomerExistsAsync(
+            _httpClientFactory, _logger, customerId, _config);
+
+            if (!customerExists)
+            {
+                _logger.LogWarning("Shipment creation rejected — Customer {CustomerId} not found or inactive.", customerId);
+                throw new KeyNotFoundException($"Customer {customerId} does not exist or is inactive.");
+            }
+
+            _logger.LogInformation("Customer {CustomerId} validated. Proceeding with shipment creation.", customerId);
             var rate = await CalculateRateAsync(req.Package.WeightKg, req.ShipmentType);
             _logger.LogInformation("Calculated shipping rate: {Rate} for Type: {Type}", rate, req.ShipmentType);
 
