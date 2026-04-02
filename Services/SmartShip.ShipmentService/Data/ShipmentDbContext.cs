@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartShip.ShipmentService.Models;
+using SmartShip.ShipmentService.Sagas;
 
 namespace SmartShip.ShipmentService.Data;
 
@@ -10,7 +11,7 @@ public class ShipmentDbContext : DbContext
     public DbSet<Shipment> Shipments => Set<Shipment>();
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Package> Packages => Set<Package>();
-
+    public DbSet<ShipmentOrderState> ShipmentOrderSagas => Set<ShipmentOrderState>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Shipment>(e =>
@@ -30,5 +31,16 @@ public class ShipmentDbContext : DbContext
             e.Property(p => p.DeclaredValue)
              .HasColumnType("decimal(18,2)");
         });
+        modelBuilder.Entity<ShipmentOrderState>(e =>
+        {
+            e.HasKey(s => s.CorrelationId);
+            e.Property(s => s.CurrentState).HasMaxLength(64);
+            e.Property(s => s.TrackingNumber).HasMaxLength(50);
+            e.Property(s => s.ShipmentIdKey).HasMaxLength(20); 
+            e.HasIndex(s => s.ShipmentIdKey).IsUnique();
+            e.Property(s => s.Amount).HasPrecision(18, 2);
+            e.Property(s => s.RowVersion).IsRowVersion(); 
+        });
+
     }
 }

@@ -49,6 +49,26 @@ namespace SmartShip.ShipmentService.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ShipmentOrderSagas",
+                columns: table => new
+                {
+                    CorrelationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrentState = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    ShipmentId = table.Column<int>(type: "int", nullable: false),
+                    ShipmentIdKey = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
+                    TrackingNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    RowVersion = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShipmentOrderSagas", x => x.CorrelationId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Shipments",
                 columns: table => new
                 {
@@ -56,8 +76,8 @@ namespace SmartShip.ShipmentService.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TrackingNumber = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
-                    ShipmentType = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    ShipmentType = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ShippingRate = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PickupScheduledAt = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -91,6 +111,12 @@ namespace SmartShip.ShipmentService.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShipmentOrderSagas_ShipmentIdKey",
+                table: "ShipmentOrderSagas",
+                column: "ShipmentIdKey",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Shipments_PackageId",
                 table: "Shipments",
                 column: "PackageId");
@@ -115,6 +141,9 @@ namespace SmartShip.ShipmentService.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ShipmentOrderSagas");
+
             migrationBuilder.DropTable(
                 name: "Shipments");
 

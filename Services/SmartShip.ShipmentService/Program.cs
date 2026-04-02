@@ -13,6 +13,7 @@ using SmartShip.ShipmentService.Services;
 using SmartShip.ShipmentService.Validators;
 using System.Text;
 using System.Text.Json.Serialization;
+using SmartShip.ShipmentService.Sagas;          
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -107,7 +108,15 @@ try
     {
         x.AddConsumer<UserDeletedConsumer>();
         x.AddConsumer<PaymentCompletedConsumer>();
+        x.AddConsumer<CancelShipmentConsumer>();
 
+        x.AddSagaStateMachine<ShipmentOrderStateMachine, ShipmentOrderState>()
+        .EntityFrameworkRepository(r =>
+        {
+            r.ConcurrencyMode = ConcurrencyMode.Optimistic;
+            r.ExistingDbContext<ShipmentDbContext>();
+            r.UseSqlServer(); 
+        });
         x.UsingRabbitMq((ctx, cfg) =>
         {
             cfg.Host("localhost", "/", h =>
@@ -124,6 +133,10 @@ try
             {
                 e.ConfigureConsumer<PaymentCompletedConsumer>(ctx);
             });
+            cfg.ReceiveEndpoint("shipment-cancel-command", e =>  
+            e.ConfigureConsumer<CancelShipmentConsumer>(ctx));
+
+            cfg.ConfigureEndpoints(ctx);
         });
     });
 

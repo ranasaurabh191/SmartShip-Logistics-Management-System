@@ -181,7 +181,8 @@ public class ShipmentService : IShipmentService
                 TrackingNumber = shipment.TrackingNumber,
                 CustomerId = shipment.CustomerId,
                 SenderCity = sender.City,
-                CreatedAt = shipment.CreatedAt
+                CreatedAt = shipment.CreatedAt,
+                Amount = shipment.ShippingRate
             });
 
             return MapToResponse(shipment, sender, receiver, package);
@@ -251,20 +252,23 @@ public class ShipmentService : IShipmentService
             if (st == ShipmentStatus.Delivered) s.DeliveredAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
-            _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}",
-                s.TrackingNumber, oldStatus, st);
-
-            await _publisher.Publish(new ShipmentStatusUpdatedEvent
+            _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}", s.TrackingNumber, oldStatus, st);
+            if (s.Status != ShipmentStatus.Booked
+                && s.Status != ShipmentStatus.Delivered
+                && s.Status != ShipmentStatus.Cancelled)
             {
-                ShipmentId = s.Id,
-                TrackingNumber = s.TrackingNumber,
-                OldStatus = oldStatus.ToString(),
-                NewStatus = s.Status.ToString(),
-                Location = request.Location ?? "Unknown Hub",
-                UpdatedBy = "Agent-" + DateTime.UtcNow.ToString("hhmm"),
-                UpdatedAt = DateTime.UtcNow
-            });
-
+                await _publisher.Publish(new ShipmentStatusUpdatedEvent
+                {
+                    ShipmentId = s.Id,
+                    TrackingNumber = s.TrackingNumber,
+                    OldStatus = oldStatus.ToString(),
+                    NewStatus = s.Status.ToString(),
+                    Location = request.Location ?? "Unknown Hub",
+                    UpdatedBy = "Agent-" + DateTime.UtcNow.ToString("hhmm"),
+                    UpdatedAt = DateTime.UtcNow,
+                    CustomerId = s.CustomerId
+                });
+            }
             if (s.Status == ShipmentStatus.Delivered)
             {
                 _logger.LogInformation("Publishing ShipmentDeliveredEvent for {TrackingNumber}", s.TrackingNumber);
@@ -284,7 +288,8 @@ public class ShipmentService : IShipmentService
                 {
                     ShipmentId = s.Id,
                     TrackingNumber = s.TrackingNumber,
-                    CancelledAt = DateTime.UtcNow
+                    CancelledAt = DateTime.UtcNow,
+                    CustomerId = s.CustomerId
                 });
             }
         }

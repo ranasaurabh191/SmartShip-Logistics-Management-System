@@ -101,6 +101,13 @@ public class PaymentService : IPaymentService
             CreatedAt = DateTime.UtcNow
         };
 
+        var correlation = await _context.SagaCorrelations.FirstOrDefaultAsync(x => x.ShipmentId == request.ShipmentId);
+        if (correlation == null || correlation.CorrelationId == Guid.Empty)
+        {
+            _logger.LogWarning("No valid CorrelationId found for Shipment {ShipmentId}. Saga will not be updated.", request.ShipmentId);
+        }
+        payment.SagaCorrelationId = correlation?.CorrelationId ?? Guid.Empty;
+
         if (request.PaymentMethod == PaymentMethod.COD)
         {
             payment.PaymentStatus = PaymentStatus.Pending; 
@@ -109,6 +116,7 @@ public class PaymentService : IPaymentService
 
             await _publisher.Publish(new PaymentCompletedEvent
             {
+                CorrelationId = correlation?.CorrelationId ?? Guid.Empty,
                 ShipmentId = payment.ShipmentId,
                 TrackingNumber = payment.TrackingNumber,
                 PaymentMethod = "COD",
@@ -224,15 +232,23 @@ public class PaymentService : IPaymentService
         _logger.LogInformation("Payment verified -> {TrackingNumber} Paid at {PaidAt}",
             payment.TrackingNumber, payment.PaidAt?.ToLocalTime().ToString("dd-MMM hh:mm tt"));
 
+        var correlation = await _context.SagaCorrelations
+        .FirstOrDefaultAsync(x => x.ShipmentId == payment.ShipmentId);
+
+        _logger.LogInformation("Saga CorrelationId for Shipment {ShipmentId}: {CorrelationId}",
+            payment.ShipmentId, correlation?.CorrelationId);
+
+
         await _publisher.Publish(new PaymentCompletedEvent
         {
+            CorrelationId = correlation?.CorrelationId ?? Guid.Empty,
             ShipmentId = payment.ShipmentId,
             TrackingNumber = payment.TrackingNumber,
             PaymentMethod = "Online",
             PaymentStatus = "Paid",
             CustomerId = payment.CustomerId
         });
-        _logger.LogInformation("Event published for Online Payment with {ShipmentId}", request.ShipmentId);
+        _logger.LogInformation("Event published for Online Payment with ShipmentID: {ShipmentId}", request.ShipmentId);
 
         return MapToResponse(payment, "Payment successful!");
     }

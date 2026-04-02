@@ -1,0 +1,67 @@
+﻿using MassTransit;
+using SmartShip.Shared.Events;
+
+namespace SmartShip.ShipmentService.Sagas;
+
+public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderState>
+{
+    public State PaymentPending { get; private set; } = null!;
+    public State Confirmed { get; private set; } = null!;
+    public State Cancelled { get; private set; } = null!;
+
+    public Event<ShipmentCreatedEvent> ShipmentCreated { get; private set; } = null!;
+    public Event<PaymentCompletedEvent> PaymentCompleted { get; private set; } = null!;
+    public Event<PaymentFailedEvent> PaymentFailed { get; private set; } = null!;
+
+    public ShipmentOrderStateMachine()
+    {
+        InstanceState(x => x.CurrentState);
+
+        Event(() => ShipmentCreated, x =>
+        {
+            x.CorrelateBy<string>(state => state.ShipmentIdKey,
+                ctx => ctx.Message.ShipmentId.ToString());
+            x.SelectId(_ => NewId.NextGuid());
+        });
+
+        Event(() => PaymentCompleted,
+            x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
+
+        Event(() => PaymentFailed,
+            x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
+
+        Initially(
+            When(ShipmentCreated)
+                .Then(ctx =>
+                {
+                    ctx.Saga.ShipmentId = ctx.Message.ShipmentId;
+                    ctx.Saga.ShipmentIdKey = ctx.Message.ShipmentId.ToString();
+                    ctx.Saga.CustomerId = ctx.Message.CustomerId;
+                    ctx.Saga.TrackingNumber = ctx.Message.TrackingNumber;
+                    ctx.Saga.CreatedAt = DateTime.UtcNow;
+                    ctx.Saga.Amount = ctx.Message.Amount;
+                })
+                .TransitionTo(PaymentPending)
+        );
+
+        During(PaymentPending,
+            When(PaymentCompleted)
+                .Then(ctx => ctx.Saga.UpdatedAt = DateTime.UtcNow)
+                .TransitionTo(Confirmed),
+
+            When(PaymentFailed)
+                .Then(ctx => ctx.Saga.UpdatedAt = DateTime.UtcNow)
+                .Publish(ctx => new CancelShipmentCommand
+                {
+                    CorrelationId = ctx.Saga.CorrelationId,
+                    ShipmentId = ctx.Saga.ShipmentId,
+                    TrackingNumber = ctx.Saga.TrackingNumber,
+                    CustomerId = ctx.Saga.CustomerId,
+                    Reason = ctx.Message.Reason
+                })
+                .TransitionTo(Cancelled)
+        );
+
+        SetCompletedWhenFinalized();
+    }
+}

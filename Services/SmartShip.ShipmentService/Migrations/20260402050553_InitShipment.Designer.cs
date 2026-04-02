@@ -12,7 +12,7 @@ using SmartShip.ShipmentService.Data;
 namespace SmartShip.ShipmentService.Migrations
 {
     [DbContext(typeof(ShipmentDbContext))]
-    [Migration("20260325152503_InitShipment")]
+    [Migration("20260402050553_InitShipment")]
     partial class InitShipment
     {
         /// <inheritdoc />
@@ -130,15 +130,19 @@ namespace SmartShip.ShipmentService.Migrations
                     b.Property<int>("SenderAddressId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShipmentType")
-                        .HasColumnType("int");
+                    b.Property<string>("ShipmentType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("ShippingRate")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("TrackingNumber")
                         .IsRequired()
@@ -156,6 +160,56 @@ namespace SmartShip.ShipmentService.Migrations
                         .IsUnique();
 
                     b.ToTable("Shipments");
+                });
+
+            modelBuilder.Entity("SmartShip.ShipmentService.Sagas.ShipmentOrderState", b =>
+                {
+                    b.Property<Guid>("CorrelationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrentState")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("ShipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShipmentIdKey")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TrackingNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CorrelationId");
+
+                    b.HasIndex("ShipmentIdKey")
+                        .IsUnique();
+
+                    b.ToTable("ShipmentOrderSagas");
                 });
 
             modelBuilder.Entity("SmartShip.ShipmentService.Models.Shipment", b =>

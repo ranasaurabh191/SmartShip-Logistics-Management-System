@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SmartShip.ShipmentService.Data;
 using SmartShip.ShipmentService.DTOs;
 using SmartShip.ShipmentService.Filters;
 using SmartShip.ShipmentService.Models;
@@ -14,7 +16,8 @@ namespace SmartShip.ShipmentService.Controllers;
 public class ShipmentsController : ControllerBase
 {
     private readonly IShipmentService _service;
-    public ShipmentsController(IShipmentService service) => _service = service;
+    private readonly ShipmentDbContext _context;
+    public ShipmentsController(IShipmentService service, ShipmentDbContext context) { _service = service; _context = context; }
 
     private int GetUserId() => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
@@ -54,5 +57,19 @@ public class ShipmentsController : ControllerBase
     [HttpGet("internal/{id}")]
     [InternalApiKey]  
     public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));
+
+    [HttpGet("{shipmentId}/saga-correlation")]
+    [AllowAnonymous] 
+    public async Task<IActionResult> GetSagaCorrelation(int shipmentId)
+    {
+        var saga = await _context.ShipmentOrderSagas
+            .FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
+
+        if (saga == null)
+            return NotFound();
+
+        return Ok(new { correlationId = saga.CorrelationId });
+    }
+
 }
     

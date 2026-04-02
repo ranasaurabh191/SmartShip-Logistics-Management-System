@@ -1,11 +1,10 @@
 ﻿namespace SmartShip.Shared.Events;
 
-public class ShipmentCreatedEvent
+public class CancelShipmentCommand
 {
+    public Guid CorrelationId { get; set; }
     public int ShipmentId { get; set; }
     public string TrackingNumber { get; set; } = string.Empty;
     public int CustomerId { get; set; }
-    public string SenderCity { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; }
-    public decimal Amount { get; set; }
+    public string Reason { get; set; } = string.Empty;
 }

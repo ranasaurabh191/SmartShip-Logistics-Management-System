@@ -9,6 +9,8 @@ public class PaymentDbContext : DbContext
 
     public PaymentDbContext(DbContextOptions<PaymentDbContext> options) : base(options) { }
 
+    public DbSet<ShipmentSagaCorrelation> SagaCorrelations => Set<ShipmentSagaCorrelation>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<ShipmentPayment>(entity =>
@@ -19,6 +21,11 @@ public class PaymentDbContext : DbContext
             entity.HasIndex(p => p.TrackingNumber).IsUnique();
             entity.Property(p => p.PaymentMethod).HasConversion<string>();
             entity.Property(p => p.PaymentStatus).HasConversion<string>();
+        });
+        modelBuilder.Entity<ShipmentSagaCorrelation>(e =>
+        {
+            e.HasKey(x => x.ShipmentId);
+            e.Property(x => x.ShipmentId).ValueGeneratedNever();
         });
     }
 }

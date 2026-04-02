@@ -32,16 +32,20 @@ public class ShipmentStatusUpdatedConsumer : IConsumer<ShipmentStatusUpdatedEven
         var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, customerId, _config);
         if (email == null) return;
 
+        var ist = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        var updatedAtIst = TimeZoneInfo.ConvertTimeFromUtc(
+            DateTime.SpecifyKind(msg.UpdatedAt, DateTimeKind.Utc), ist);
+
         await _notification.SendAndSaveAsync(
             customerId, email,
             type: "StatusUpdated",
             subject: $"Shipment Update — {msg.TrackingNumber}",
             body: $"""
-            <h2>Your Shipment Status Has Changed!</h2>
+            <h2>Your Shipment Status Has Updated!</h2>
             <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
             <p><b>Status:</b> {msg.OldStatus} -> <b>{msg.NewStatus}</b></p>
             <p><b>Location:</b> {msg.Location}</p>
-            <p><b>Updated At:</b> {msg.UpdatedAt:dd-MMM-yyyy hh:mm tt}</p>
+            <p><b>Updated At:</b> {updatedAtIst:dd-MMM-yyyy hh:mm tt}</p>
             <p>— SmartShip Team</p>
         """
         );

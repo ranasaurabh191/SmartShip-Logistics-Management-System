@@ -159,6 +159,56 @@ namespace SmartShip.ShipmentService.Migrations
                     b.ToTable("Shipments");
                 });
 
+            modelBuilder.Entity("SmartShip.ShipmentService.Sagas.ShipmentOrderState", b =>
+                {
+                    b.Property<Guid>("CorrelationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CurrentState")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("ShipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ShipmentIdKey")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TrackingNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CorrelationId");
+
+                    b.HasIndex("ShipmentIdKey")
+                        .IsUnique();
+
+                    b.ToTable("ShipmentOrderSagas");
+                });
+
             modelBuilder.Entity("SmartShip.ShipmentService.Models.Shipment", b =>
                 {
                     b.HasOne("SmartShip.ShipmentService.Models.Package", "Package")
