@@ -3,6 +3,7 @@ USE SmartShip_ShipmentDB;
 --DELETE FROM Packages;
 --DELETE FROM Addresses;
 --delete from shipments
+--delete from ShipmentOrderSagas;
 --DBCC CHECKIDENT ('Shipments', RESEED, 0);
 --DBCC CHECKIDENT ('Packages', RESEED, 0);
 --DBCC CHECKIDENT ('Addresses', RESEED, 0);

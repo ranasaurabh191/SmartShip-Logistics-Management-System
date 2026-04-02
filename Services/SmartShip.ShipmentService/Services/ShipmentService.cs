@@ -211,6 +211,18 @@ public class ShipmentService : IShipmentService
 
         bool wasPaid = shipment.Status == ShipmentStatus.Booked;
 
+        var saga = await _context.ShipmentOrderSagas.FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
+
+        var correlationId = saga?.CorrelationId ?? Guid.Empty;
+
+        shipment.Status = ShipmentStatus.Cancelled;
+        shipment.Notes = $"Cancelled by customer: {reason}";
+        shipment.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Shipment {TrackingNumber} cancelled by Customer {CustomerId} | WasPaid: {WasPaid}",
+            shipment.TrackingNumber, customerId, wasPaid);
+
         var oldStatus = shipment.Status;
         shipment.Status = ShipmentStatus.Cancelled;
         shipment.Notes = $"Cancelled by customer: {reason}";
@@ -222,6 +234,7 @@ public class ShipmentService : IShipmentService
 
         await _publisher.Publish(new ShipmentCancelledByCustomerEvent
         {
+            CorrelationId = correlationId,
             ShipmentId = shipment.Id,
             TrackingNumber = shipment.TrackingNumber,
             CustomerId = customerId,

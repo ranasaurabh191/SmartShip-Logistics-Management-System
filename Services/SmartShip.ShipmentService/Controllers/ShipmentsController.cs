@@ -62,7 +62,7 @@ public class ShipmentsController : ControllerBase
         var rate = await _service.CalculateRateAsync(weight, shipType);
         return Ok(new { rate });
     }
-    [HttpDelete("{id}/cancel")]
+    [HttpPatch("{id}/cancel")]
     public async Task<IActionResult> CancelShipment(int id, [FromBody] CancelShipmentRequest request)
     {
         var userIdClaim = User.FindFirst("userId")?.Value

@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Serilog.Core;
 using SmartShip.Shared.Events;
 
 namespace SmartShip.ShipmentService.Sagas;
@@ -12,9 +13,13 @@ public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderSt
     public Event<ShipmentCreatedEvent> ShipmentCreated { get; private set; } = null!;
     public Event<PaymentCompletedEvent> PaymentCompleted { get; private set; } = null!;
     public Event<PaymentFailedEvent> PaymentFailed { get; private set; } = null!;
+    public Event<ShipmentCancelledByCustomerEvent> ShipmentCancelledByCustomer { get; private set; } = null!;
 
-    public ShipmentOrderStateMachine()
+    private readonly ILogger<ShipmentOrderStateMachine> _logger;
+    public ShipmentOrderStateMachine(ILogger<ShipmentOrderStateMachine> logger)
     {
+        _logger = logger;
+
         InstanceState(x => x.CurrentState);
 
         Event(() => ShipmentCreated, x =>
@@ -28,6 +33,9 @@ public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderSt
             x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
 
         Event(() => PaymentFailed,
+            x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
+
+        Event(() => ShipmentCancelledByCustomer,
             x => x.CorrelateById(ctx => ctx.Message.CorrelationId));
 
         Initially(
@@ -58,9 +66,22 @@ public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderSt
                     TrackingNumber = ctx.Saga.TrackingNumber,
                     CustomerId = ctx.Saga.CustomerId,
                     Reason = ctx.Message.Reason
-                })
-                .TransitionTo(Cancelled)
-        );
+                }).TransitionTo(Cancelled),
+             When(ShipmentCancelledByCustomer)
+                    .TransitionTo(Cancelled)
+                    .Then(ctx => _logger.LogInformation(
+                        "Saga cancelled by customer (pre-payment) | ShipmentId: {ShipmentId}",
+                        ctx.Saga.ShipmentId))
+            );
+
+        During(Confirmed,
+                When(ShipmentCancelledByCustomer)
+                    .TransitionTo(Cancelled)
+                    .Then(ctx => _logger.LogInformation(
+                        "Saga cancelled by customer (post-payment) | ShipmentId: {ShipmentId}",
+                        ctx.Saga.ShipmentId))
+        
+            );
 
         SetCompletedWhenFinalized();
     }
