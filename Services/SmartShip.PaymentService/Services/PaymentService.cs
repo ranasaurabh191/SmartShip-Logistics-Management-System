@@ -12,16 +12,14 @@ namespace SmartShip.PaymentService.Services;
 public class PaymentService : IPaymentService
 {
     private readonly PaymentDbContext _context;
-    private readonly IConfiguration _config;
     private readonly IPublishEndpoint _publisher;
     private readonly ILogger<PaymentService> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    public PaymentService(PaymentDbContext context, IConfiguration config,
+    public PaymentService(PaymentDbContext context,
         IPublishEndpoint publisher, ILogger<PaymentService> logger, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
-        _config = config;
         _publisher = publisher;
         _logger = logger;
         _httpClientFactory = httpClientFactory;
@@ -189,10 +187,39 @@ public class PaymentService : IPaymentService
 
         if (payment == null)
         {
-            _logger.LogWarning("Payment not found for OrderId {OrderId} + ShipmentId {ShipmentId}",
+            _logger.LogWarning("Invalid OrderId {OrderId} for ShipmentId {ShipmentId} — publishing PaymentFailedEvent.",
                 request.RazorpayOrderId, request.ShipmentId);
-            throw new KeyNotFoundException("Payment record not found for this order and shipment.");
+
+            var existingPayment = await _context.Payments.FirstOrDefaultAsync(p => p.ShipmentId == (request.ShipmentId ?? 0));
+
+            if (existingPayment != null)
+            {
+                existingPayment.PaymentStatus = PaymentStatus.Failed;
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Payment marked as Failed for ShipmentId {ShipmentId} due to failure.", request.ShipmentId);
+            }
+
+
+            var failCorrelation = await _context.SagaCorrelations
+                .FirstOrDefaultAsync(x => x.ShipmentId == request.ShipmentId);
+
+            if (failCorrelation != null && failCorrelation.CorrelationId != Guid.Empty)
+            {
+                await _publisher.Publish(new PaymentFailedEvent
+                {
+                    CorrelationId = failCorrelation.CorrelationId,
+                    ShipmentId = request.ShipmentId ?? 0,
+                    TrackingNumber = "",  
+                    CustomerId = authenticatedUserId,
+                    Reason = $"Invalid Order ID: {request.RazorpayOrderId}"
+                });
+
+                _logger.LogInformation("PaymentFailedEvent published for ShipmentId {ShipmentId}", request.ShipmentId);
+            }
+
+            throw new KeyNotFoundException($"Invalid Order ID '{request.RazorpayOrderId}'. Payment failed.");
         }
+
 
         if (payment.CustomerId != authenticatedUserId)
         {
@@ -222,7 +249,33 @@ public class PaymentService : IPaymentService
         //    await _context.SaveChangesAsync();
         //    throw new Exception("Invalid payment signature");
         //}
+        //if (request.Signature == "fail")
+        //{
+        //    _logger.LogWarning("Signature verification failed for Order {OrderId}", request.RazorpayOrderId);
 
+        //    payment.PaymentStatus = PaymentStatus.Failed;
+        //    await _context.SaveChangesAsync();
+
+        //    var correlation = await _context.SagaCorrelations
+        //        .FirstOrDefaultAsync(x => x.ShipmentId == payment.ShipmentId);
+
+        //    if (correlation != null && correlation.CorrelationId != Guid.Empty)
+        //    {
+        //        await _publisher.Publish(new PaymentFailedEvent
+        //        {
+        //            CorrelationId = correlation.CorrelationId,
+        //            ShipmentId = payment.ShipmentId,
+        //            TrackingNumber = payment.TrackingNumber,
+        //            CustomerId = payment.CustomerId,
+        //            Reason = "Payment signature verification failed."
+        //        });
+
+        //        _logger.LogInformation("PaymentFailedEvent published for failed signature | ShipmentId {ShipmentId}",
+        //            payment.ShipmentId);
+        //    }
+
+        //    throw new InvalidOperationException("Invalid payment signature. Payment failed.");
+        //}
         payment.PaymentStatus = PaymentStatus.Paid;
         payment.RazorpayPaymentId = request.RazorpayPaymentId;
         payment.RazorpaySignature = request.Signature;

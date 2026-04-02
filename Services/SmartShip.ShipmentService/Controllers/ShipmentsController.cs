@@ -17,8 +17,17 @@ public class ShipmentsController : ControllerBase
 {
     private readonly IShipmentService _service;
     private readonly ShipmentDbContext _context;
-    public ShipmentsController(IShipmentService service, ShipmentDbContext context) { _service = service; _context = context; }
+    private readonly IConfiguration _config;
+    private readonly ILogger<ShipmentsController> _logger;
 
+    public ShipmentsController(IShipmentService service, ShipmentDbContext context, IConfiguration config, ILogger<ShipmentsController> logger)
+    {
+        _service = service;
+        _context = context; 
+        _config = config;
+        _logger = logger;
+    }
+    
     private int GetUserId() => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
     [HttpPost]
@@ -59,14 +68,21 @@ public class ShipmentsController : ControllerBase
     public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));
 
     [HttpGet("{shipmentId}/saga-correlation")]
-    [AllowAnonymous] 
-    public async Task<IActionResult> GetSagaCorrelation(int shipmentId)
+    [AllowAnonymous]
+    public async Task<IActionResult> GetSagaCorrelation(int shipmentId,
+    [FromHeader(Name = "X-Internal-Key")] string? internalKey)
     {
+        if (internalKey != _config["InternalApi:Key"])
+            return Unauthorized();
+
         var saga = await _context.ShipmentOrderSagas
             .FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
 
         if (saga == null)
             return NotFound();
+
+        _logger.LogInformation("Returning CorrelationId {CorrelationId} for ShipmentId {ShipmentId}",
+            saga.CorrelationId, shipmentId);
 
         return Ok(new { correlationId = saga.CorrelationId });
     }

@@ -10,16 +10,19 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
 {
     private readonly PaymentDbContext _context;
     private readonly ILogger<ShipmentCreatedConsumer> _logger;
-    private readonly IHttpClientFactory _httpClientFactory;  
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _config;  
 
     public ShipmentCreatedConsumer(
         PaymentDbContext context,
         ILogger<ShipmentCreatedConsumer> logger,
-        IHttpClientFactory httpClientFactory)               
+        IHttpClientFactory httpClientFactory,
+        IConfiguration config)             
     {
         _context = context;
         _logger = logger;
-        _httpClientFactory = httpClientFactory;          
+        _httpClientFactory = httpClientFactory;
+        _config = config;
     }
 
     public async Task Consume(ConsumeContext<ShipmentCreatedEvent> context)
@@ -27,26 +30,39 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
         var msg = context.Message;
         _logger.LogInformation("ShipmentCreatedEvent received | ShipmentId: {ShipmentId}", msg.ShipmentId);
 
-        await Task.Delay(500); 
-
         var httpClient = _httpClientFactory.CreateClient("ShipmentService");
-        var response = await httpClient.GetAsync($"api/shipments/{msg.ShipmentId}/saga-correlation");
+        httpClient.DefaultRequestHeaders.Add("X-Internal-Key", _config["InternalApi:Key"]); 
 
         Guid correlationId = Guid.Empty;
 
-        if (response.IsSuccessStatusCode)
+        for (int attempt = 1; attempt <= 5; attempt++)
         {
-            var result = await response.Content.ReadFromJsonAsync<SagaCorrelationDto>();
-            correlationId = result?.CorrelationId ?? Guid.Empty;
-            _logger.LogInformation("Fetched real CorrelationId: {CorrelationId} for Shipment {ShipmentId}",
-                correlationId, msg.ShipmentId);
-        }
-        else
-        {
-            _logger.LogWarning("Could not fetch CorrelationId for Shipment {ShipmentId}", msg.ShipmentId);
+            await Task.Delay(attempt * 400); 
+
+            var response = await httpClient.GetAsync($"api/shipments/{msg.ShipmentId}/saga-correlation");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<SagaCorrelationDto>();
+                correlationId = result?.CorrelationId ?? Guid.Empty;
+
+                if (correlationId != Guid.Empty)
+                {
+                    _logger.LogInformation("Got CorrelationId on attempt {Attempt}: {CorrelationId} for Shipment {ShipmentId}",
+                        attempt, correlationId, msg.ShipmentId);
+                    break;
+                }
+            }
+
+            _logger.LogWarning("Attempt {Attempt}/5: Saga not ready for Shipment {ShipmentId}, retrying...",
+                attempt, msg.ShipmentId);
         }
 
-        var existing = await _context.SagaCorrelations.FirstOrDefaultAsync(x => x.ShipmentId == msg.ShipmentId);
+        if (correlationId == Guid.Empty)
+            _logger.LogError("Could not get CorrelationId for Shipment {ShipmentId} after 5 attempts.", msg.ShipmentId);
+
+        var existing = await _context.SagaCorrelations
+            .FirstOrDefaultAsync(x => x.ShipmentId == msg.ShipmentId);
 
         if (existing == null)
         {
@@ -58,10 +74,11 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
         }
         else
         {
-            existing.CorrelationId = correlationId; 
+            existing.CorrelationId = correlationId;
         }
 
         await _context.SaveChangesAsync();
-        _logger.LogInformation("CorrelationId stored for Shipment {ShipmentId}: {CorrelationId}", msg.ShipmentId, correlationId);
+        _logger.LogInformation("CorrelationId stored for Shipment {ShipmentId}: {CorrelationId}",
+            msg.ShipmentId, correlationId);
     }
 }
