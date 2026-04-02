@@ -62,7 +62,19 @@ public class ShipmentsController : ControllerBase
         var rate = await _service.CalculateRateAsync(weight, shipType);
         return Ok(new { rate });
     }
+    [HttpDelete("{id}/cancel")]
+    public async Task<IActionResult> CancelShipment(int id, [FromBody] CancelShipmentRequest request)
+    {
+        var userIdClaim = User.FindFirst("userId")?.Value
+            ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var customerId))
+            return Unauthorized("Invalid token.");
+
+        await _service.CancelByCustomerAsync(id, customerId, request.Reason);
+        return Ok(new { message = "Shipment cancelled successfully." });
+
+    }
     [HttpGet("internal/{id}")]
     [InternalApiKey]  
     public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));

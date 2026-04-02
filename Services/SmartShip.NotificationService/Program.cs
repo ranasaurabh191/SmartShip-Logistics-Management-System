@@ -91,6 +91,7 @@ try
         x.AddConsumer<ShipmentDeliveredConsumer>();
         x.AddConsumer<ShipmentCancelledConsumer>();
         x.AddConsumer<PaymentCompletedConsumer>();
+        x.AddConsumer<PaymentRefundedConsumer>();
 
         x.UsingRabbitMq((ctx, cfg) =>
         {
@@ -100,18 +101,14 @@ try
                 h.Password("guest");
             });
 
-            cfg.ReceiveEndpoint("notification-user-created", e =>
-                e.ConfigureConsumer<UserCreatedConsumer>(ctx));
-            cfg.ReceiveEndpoint("notification-shipment-created", e =>
-                e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
-            cfg.ReceiveEndpoint("notification-status-updated", e =>
-                e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
-            cfg.ReceiveEndpoint("notification-shipment-delivered", e =>
-                e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx));
-            cfg.ReceiveEndpoint("notification-shipment-cancelled", e =>
-                e.ConfigureConsumer<ShipmentCancelledConsumer>(ctx));
-            cfg.ReceiveEndpoint("notification-payment-completed", e =>
-                e.ConfigureConsumer<PaymentCompletedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-user-created", e => e.ConfigureConsumer<UserCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-shipment-created", e => e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-status-updated", e => e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-shipment-delivered", e => e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-shipment-cancelled", e => e.ConfigureConsumer<ShipmentCancelledConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-payment-completed", e => e.ConfigureConsumer<PaymentCompletedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-payment-refunded", e => e.ConfigureConsumer<PaymentRefundedConsumer>(ctx));
+           
         });
     });
 

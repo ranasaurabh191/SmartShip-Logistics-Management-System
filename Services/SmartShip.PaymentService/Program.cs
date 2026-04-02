@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SmartShip.PaymentService.Data;
+using SmartShip.PaymentService.Messaging.Consumers;
 using SmartShip.PaymentService.Middleware;
 using SmartShip.PaymentService.Services;
 using System.Text;
@@ -115,7 +116,8 @@ try
 
     builder.Services.AddMassTransit(x =>
     {
-        x.AddConsumer<SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer>();
+        x.AddConsumer<ShipmentCreatedConsumer>();
+        x.AddConsumer<ShipmentCancelledByCustomerConsumer>();
 
         x.UsingRabbitMq((context, cfg) =>
         {
@@ -124,15 +126,18 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
-
             cfg.ReceiveEndpoint("payment-shipment-created", e =>
             {
-                e.ConfigureConsumer<SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer>(context);
+                e.ConfigureConsumer<ShipmentCreatedConsumer>(context);
+            });
+            cfg.ReceiveEndpoint("payment-shipment-cancelled-by-customer", e =>
+            {
+                e.ConfigureConsumer<ShipmentCancelledByCustomerConsumer>(context);
             });
         });
     });
 
-    builder.Services.AddScoped<SmartShip.PaymentService.Messaging.Consumers.ShipmentCreatedConsumer>();
+    builder.Services.AddScoped<ShipmentCreatedConsumer>();
 
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p =>

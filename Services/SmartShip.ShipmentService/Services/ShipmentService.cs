@@ -194,6 +194,54 @@ public class ShipmentService : IShipmentService
         }
     }
 
+    public async Task CancelByCustomerAsync(int shipmentId, int customerId, string reason)
+    {
+        var shipment = await _context.Shipments.FirstOrDefaultAsync(s => s.Id == shipmentId && s.CustomerId == customerId);
+
+        if (shipment == null)
+            throw new KeyNotFoundException("Shipment not found.");
+
+        if (shipment.CustomerId != customerId)
+            throw new UnauthorizedAccessException("You are not authorized to cancel this shipment.");
+
+        if (shipment.Status != ShipmentStatus.Draft && shipment.Status != ShipmentStatus.Booked)
+            throw new InvalidOperationException(
+                $"Shipment cannot be cancelled. Current status: {shipment.Status}. " +
+                "Only Draft or Booked shipments can be cancelled.");
+
+        bool wasPaid = shipment.Status == ShipmentStatus.Booked;
+
+        var oldStatus = shipment.Status;
+        shipment.Status = ShipmentStatus.Cancelled;
+        shipment.Notes = $"Cancelled by customer: {reason}";
+        shipment.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        _logger.LogInformation("Shipment {TrackingNumber} cancelled by Customer {CustomerId} | WasPaid: {WasPaid}",
+            shipment.TrackingNumber, customerId, wasPaid);
+
+        await _publisher.Publish(new ShipmentCancelledByCustomerEvent
+        {
+            ShipmentId = shipment.Id,
+            TrackingNumber = shipment.TrackingNumber,
+            CustomerId = customerId,
+            Amount = shipment.ShippingRate,
+            WasPaid = wasPaid,
+            CancelledAt = DateTime.UtcNow,
+            Reason = reason
+        });
+
+        await _publisher.Publish(new ShipmentCancelledEvent
+        {
+            ShipmentId = shipment.Id,
+            TrackingNumber = shipment.TrackingNumber,
+            CustomerId = customerId,
+            CancelledAt = DateTime.UtcNow
+        });
+
+        _logger.LogInformation("ShipmentCancelledByCustomerEvent published for {TrackingNumber}", shipment.TrackingNumber);
+    }
+
     public async Task<ShipmentResponse> GetByIdAsync(int id)
     {
         _logger.LogInformation("Fetching shipment by ID: {ShipmentId}", id);

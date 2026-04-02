@@ -1,3 +1,3 @@
 ﻿namespace SmartShip.PaymentService.Models.Enums;
 
-public enum PaymentStatus { Pending, Paid, Failed }
+public enum PaymentStatus { Pending, Paid, Failed, Refunded }

@@ -13,5 +13,7 @@ namespace SmartShip.ShipmentService.Services
         Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type);
         Task<PagedResponse<ShipmentResponse>> GetAllPagedAsync(ShipmentPagedRequest request);
         Task<PagedResponse<ShipmentResponse>> GetMyShipmentsPagedAsync(int customerId, PagedRequest request);
+        Task CancelByCustomerAsync(int shipmentId, int customerId, string reason);
+
     }
 }

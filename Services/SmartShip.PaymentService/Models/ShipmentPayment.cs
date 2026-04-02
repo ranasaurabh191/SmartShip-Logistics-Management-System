@@ -17,4 +17,5 @@ public class ShipmentPayment
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? PaidAt { get; set; }
     public Guid SagaCorrelationId { get; set; }
+    public DateTime? RefundedAt { get; set; }
 }
