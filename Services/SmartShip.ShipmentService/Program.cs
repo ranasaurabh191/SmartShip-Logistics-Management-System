@@ -6,14 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SmartShip.ShipmentService.Data;
-using SmartShip.ShipmentService.Messaging.Consumers;
-using SmartShip.ShipmentService.Middleware;
-using SmartShip.ShipmentService.Services;
-using SmartShip.ShipmentService.Validators;
 using System.Text;
 using System.Text.Json.Serialization;
-using SmartShip.ShipmentService.Sagas;          
+using SmartShip.ShipmentService.API.Middleware;
+using SmartShip.ShipmentService.Infrastructure.Data;
+using SmartShip.ShipmentService.Infrastructure.Messaging.Consumers;
+using SmartShip.ShipmentService.Core.Services;
+using SmartShip.ShipmentService.Core.Validators;
+using SmartShip.ShipmentService.Domain.Entities;
+using SmartShip.ShipmentService.Core.Interfaces.Services;
+using SmartShip.ShipmentService.Core.Sagas;
+using SmartShip.ShipmentService.Core.Interfaces.Persistence;
+using SmartShip.ShipmentService.Core.Interfaces.Repositories;
+using SmartShip.ShipmentService.Infrastructure.Persistence;
+using SmartShip.ShipmentService.Infrastructure.Repositories;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -154,18 +160,20 @@ try
         });
 
     builder.Services.AddAuthorization();
+    builder.Services.AddScoped<IShipmentRepository, ShipmentRepository>();
+    builder.Services.AddScoped<IAddressRepository, AddressRepository>();
+    builder.Services.AddScoped<IPackageRepository, PackageRepository>();
+    builder.Services.AddScoped<IShipmentOrderSagaRepository, ShipmentOrderSagaRepository>();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped<IShipmentService, ShipmentService>();
-    builder.Services.AddScoped<UserDeletedConsumer>();
-    builder.Services.AddCors(opt =>
-        opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+    builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
     var app = builder.Build();
     app.UseMiddleware<ExceptionMiddleware>();
-    app.UseSerilogRequestLogging(opt =>
-        opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
+    app.UseSerilogRequestLogging(opt => opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    using (var scope = app.Services.CreateScope())
-        scope.ServiceProvider.GetRequiredService<ShipmentDbContext>().Database.Migrate();
+    using (var scope = app.Services.CreateScope()) scope.ServiceProvider.GetRequiredService<ShipmentDbContext>().Database.Migrate();
 
     app.UseSwagger(); app.UseSwaggerUI();
     app.UseCors("AllowAll");

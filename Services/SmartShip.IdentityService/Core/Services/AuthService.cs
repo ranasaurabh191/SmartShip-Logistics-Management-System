@@ -41,43 +41,7 @@ public class AuthService : IAuthService
         _emailService = emailService;
     }
 
-    public async Task<AuthResponse?> SignupAsync(SignupRequest request)
-    {
-        _logger.LogInformation("Signup attempt for email: {Email}", request.Email);
-
-        if (await _userRepository.ExistsByEmailAsync(request.Email))
-        {
-            _logger.LogWarning("Signup failed - email already exists: {Email}", request.Email);
-            throw new InvalidOperationException("Email already exists.");
-        }
-
-        var user = new User
-        {
-            Name = request.Name,
-            Email = request.Email,
-            Phone = request.Phone,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-            Role = "CUSTOMER"
-        };
-
-        await _userRepository.AddAsync(user);
-        await _unitOfWork.SaveChangesAsync();
-
-        _logger.LogInformation("User created successfully: {Email} | Role: {Role}", user.Email, user.Role);
-
-        await _publisher.Publish(new UserCreatedEvent
-        {
-            UserId = user.Id,
-            Email = user.Email,
-            Name = user.Name,
-            Role = user.Role,
-            CreatedAt = user.CreatedAt
-        });
-
-        _logger.LogInformation("User creation event published.");
-
-        return new AuthResponse(GenerateToken(user), user.Role, user.Name, user.Id);
-    }
+   
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {

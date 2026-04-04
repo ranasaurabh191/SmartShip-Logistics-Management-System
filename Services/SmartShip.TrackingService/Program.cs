@@ -4,9 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SmartShip.TrackingService.Data;
-using SmartShip.TrackingService.Middleware;
-using SmartShip.TrackingService.Services;
+using SmartShip.TrackingService.API.Middleware;
+using SmartShip.TrackingService.Core.Interfaces.Persistence;
+using SmartShip.TrackingService.Core.Interfaces.Repositories;
+using SmartShip.TrackingService.Core.Interfaces.Services;
+using SmartShip.TrackingService.Core.Services;
+using SmartShip.TrackingService.Infrastructure.Data;
+using SmartShip.TrackingService.Infrastructure.Persistence;
+using SmartShip.TrackingService.Infrastructure.Repositories;
 using System.Text;
 
 Log.Logger = new LoggerConfiguration()
@@ -114,21 +119,26 @@ try
         });
 
     builder.Services.AddAuthorization();
+
+    builder.Services.AddScoped<ITrackingEventRepository, TrackingEventRepository>();
+    builder.Services.AddScoped<IDeliveryProofRepository, DeliveryProofRepository>();
+    builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped<ITrackingService, TrackingService>();
-    builder.Services.AddCors(opt =>
-        opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+    builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
     var app = builder.Build();
-    app.UseMiddleware<ExceptionMiddleware>();
-    app.UseSerilogRequestLogging(opt =>
-        opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    using (var scope = app.Services.CreateScope())
-        scope.ServiceProvider.GetRequiredService<TrackingDbContext>().Database.Migrate();
+    app.UseMiddleware<ExceptionMiddleware>();
+    app.UseSerilogRequestLogging(opt => opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
+
+    using (var scope = app.Services.CreateScope()) scope.ServiceProvider.GetRequiredService<TrackingDbContext>().Database.Migrate();
 
     app.UseSwagger(); app.UseSwaggerUI();
     app.UseCors("AllowAll");
-    app.UseAuthentication(); app.UseAuthorization();
+    app.UseAuthentication(); 
+    app.UseAuthorization();
     app.MapControllers();
     app.Run();
 }

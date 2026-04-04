@@ -22,13 +22,6 @@ public class AuthController : ControllerBase
         _verifyOtpValidator = verifyOtpValidator;
     }
 
-    [HttpPost("signup")]
-    public async Task<IActionResult> Signup([FromBody] SignupRequest request)
-    {
-        var result = await _authService.SignupAsync(request);
-        return Ok(result);
-    }
-
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
