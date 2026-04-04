@@ -1,10 +1,11 @@
-﻿using SmartShip.AdminService.Core.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text.Json;
+using SmartShip.AdminService.Core.DTOs;
 using SmartShip.AdminService.Core.Interfaces.Services;
 using SmartShip.AdminService.Domain.Entities;
 using SmartShip.AdminService.Domain.Enums;
 using SmartShip.AdminService.Infrastructure.Data;
-using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
 
 namespace SmartShip.AdminService.Core.Services;
 
@@ -12,21 +13,52 @@ public class AdminService : IAdminService
 {
     private readonly AdminDbContext _context;
     private readonly ILogger<AdminService> _logger;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public AdminService(AdminDbContext context, ILogger<AdminService> logger)
+    public AdminService(
+        AdminDbContext context,
+        ILogger<AdminService> logger,
+        IHttpContextAccessor httpContextAccessor)
     {
         _context = context;
         _logger = logger;
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    private static void EnsureAuthorized(string? userOrRole)
+    private ClaimsPrincipal GetCurrentUser()
     {
-        if (string.IsNullOrWhiteSpace(userOrRole))
+        var user = _httpContextAccessor.HttpContext?.User;
+
+        if (user == null || user.Identity == null || !user.Identity.IsAuthenticated)
             throw new UnauthorizedAccessException("Unauthorized.");
+
+        return user;
+    }
+
+    private void EnsureAdminAccess()
+    {
+        var user = GetCurrentUser();
+
+        var roleClaims = user.FindAll(ClaimTypes.Role).Select(x => x.Value).ToList();
+        var hasAdminRole = roleClaims.Any(r => r.Equals("ADMIN", StringComparison.OrdinalIgnoreCase));
+
+        if (!hasAdminRole)
+            throw new UnauthorizedAccessException("Unauthorized.");
+    }
+
+    private string GetCurrentUserName()
+    {
+        var user = GetCurrentUser();
+
+        return user.FindFirstValue(ClaimTypes.Name)
+               ?? user.FindFirstValue(ClaimTypes.Email)
+               ?? "Admin";
     }
 
     public async Task<DashboardMetricsDto> GetDashboardAsync()
     {
+        EnsureAdminAccess();
+
         _logger.LogInformation("Fetching dashboard metrics...");
 
         var metrics = await _context.DashboardMetrics.FirstOrDefaultAsync();
@@ -72,6 +104,8 @@ public class AdminService : IAdminService
 
     public async Task<PagedResponse<HubDto>> GetHubsPagedAsync(HubPagedRequest req)
     {
+        EnsureAdminAccess();
+
         _logger.LogInformation("Fetching hubs | Page: {Page} | PageSize: {PageSize} | City: {City} | State: {State} | IsActive: {IsActive}",
             req.Page, req.PageSize, req.City ?? "All", req.State ?? "All", req.IsActive?.ToString() ?? "All");
 
@@ -126,6 +160,8 @@ public class AdminService : IAdminService
 
     public async Task<HubDto> GetHubByIdAsync(int id)
     {
+        EnsureAdminAccess();
+
         _logger.LogInformation("Fetching hub by ID: {HubId}", id);
 
         var h = await _context.Hubs.FindAsync(id);
@@ -142,6 +178,8 @@ public class AdminService : IAdminService
 
     public async Task<HubDto> CreateHubAsync(CreateHubRequest req)
     {
+        EnsureAdminAccess();
+
         _logger.LogInformation("Creating hub: {HubName} | City: {City} | State: {State}",
             req.Name, req.City, req.State);
 
@@ -171,6 +209,8 @@ public class AdminService : IAdminService
 
     public async Task UpdateHubAsync(int id, UpdateHubRequest req)
     {
+        EnsureAdminAccess();
+
         _logger.LogInformation("Updating hub ID: {HubId} | Name: {HubName}", id, req.Name);
 
         try
@@ -203,6 +243,8 @@ public class AdminService : IAdminService
 
     public async Task DeleteHubAsync(int id)
     {
+        EnsureAdminAccess();
+
         _logger.LogInformation("Deleting hub ID: {HubId}", id);
 
         try
@@ -226,18 +268,19 @@ public class AdminService : IAdminService
         }
     }
 
-    public async Task<ReportDto> GenerateReportAsync(ReportRequest req, string generatedBy)
+    public async Task<ReportDto> GenerateReportAsync(ReportRequest req)
     {
-        _logger.LogInformation("Generating {ReportType} report | From: {From} | To: {To} | By: {GeneratedBy}",
-            req.ReportType, req.FromDate, req.ToDate, generatedBy);
+        EnsureAdminAccess();
+
+        _logger.LogInformation("Generating {ReportType} report | From: {From} | To: {To}",
+            req.ReportType, req.FromDate, req.ToDate);
 
         try
         {
-            EnsureAuthorized(generatedBy);
-
             Enum.TryParse<ReportType>(req.ReportType, true, out var rt);
 
             var metrics = await _context.DashboardMetrics.FirstOrDefaultAsync();
+            var currentUserName = GetCurrentUserName();
 
             var data = new
             {
@@ -253,7 +296,7 @@ public class AdminService : IAdminService
             {
                 Title = $"{req.ReportType} Report ({req.FromDate:d} - {req.ToDate:d})",
                 ReportType = rt,
-                GeneratedBy = generatedBy,
+                GeneratedBy = currentUserName,
                 FromDate = req.FromDate,
                 ToDate = req.ToDate,
                 DataJson = JsonSerializer.Serialize(data)
@@ -277,6 +320,8 @@ public class AdminService : IAdminService
 
     public async Task<PagedResponse<ReportDto>> GetReportsPagedAsync(ReportPagedRequest req)
     {
+        EnsureAdminAccess();
+
         _logger.LogInformation("Fetching reports | Page: {Page} | PageSize: {PageSize} | Type: {ReportType}",
             req.Page, req.PageSize, req.ReportType ?? "All");
 

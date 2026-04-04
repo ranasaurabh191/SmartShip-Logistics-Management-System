@@ -51,7 +51,7 @@ public class AdminController : ControllerBase
     public async Task<IActionResult> GenerateReport([FromBody] ReportRequest req)
     {
         var user = User.FindFirstValue(ClaimTypes.Name) ?? "Admin";
-        var result = await _service.GenerateReportAsync(req, user);
+        var result = await _service.GenerateReportAsync(req);
         return Ok(result);
     }
 }

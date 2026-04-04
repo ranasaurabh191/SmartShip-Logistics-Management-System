@@ -9,7 +9,7 @@ public interface IAdminService
     Task UpdateHubAsync(int id, UpdateHubRequest req);
     Task DeleteHubAsync(int id);
     Task<PagedResponse<ReportDto>> GetReportsPagedAsync(ReportPagedRequest request);
-    Task<ReportDto> GenerateReportAsync(ReportRequest req, string generatedBy);
+    Task<ReportDto> GenerateReportAsync(ReportRequest req);
 
    
 }

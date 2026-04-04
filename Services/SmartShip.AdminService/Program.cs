@@ -46,6 +46,7 @@ try
             };
         });
 
+    builder.Services.AddHttpContextAccessor();
     builder.Services.AddFluentValidationAutoValidation();
     builder.Services.AddFluentValidationClientsideAdapters();
     builder.Services.AddEndpointsApiExplorer();
