@@ -2,6 +2,7 @@
 using SmartShip.AdminService.Core.DTOs;
 using SmartShip.AdminService.Core.Interfaces.Repositories;
 using SmartShip.AdminService.Domain.Entities;
+using SmartShip.AdminService.Domain.Enums;
 using SmartShip.AdminService.Infrastructure.Data;
 
 namespace SmartShip.AdminService.Infrastructure.Repositories;

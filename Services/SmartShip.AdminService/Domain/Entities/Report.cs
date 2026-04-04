@@ -1,4 +1,5 @@
-﻿namespace SmartShip.AdminService.Domain.Entities;
+﻿using SmartShip.AdminService.Domain.Enums;
+namespace SmartShip.AdminService.Domain.Entities;
 
 public class Report
 {
