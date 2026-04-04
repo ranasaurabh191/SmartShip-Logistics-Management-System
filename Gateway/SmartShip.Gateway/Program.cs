@@ -1,8 +1,12 @@
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using Serilog;
+using SmartShip.Gateway.HealthChecks;
 using System.Text;
+using System.Text.Json;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -38,11 +42,23 @@ try
             };
         });
 
-    builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-    
+    builder.Services.AddCors(opt =>
+        opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+    builder.Services.AddHttpClient("HealthCheckClient", c =>
+    {
+        c.Timeout = TimeSpan.FromSeconds(3);
+    });
+
+    builder.Services.AddHealthChecks()
+        .AddCheck<DownstreamServicesHealthCheck>(
+            "downstream_services",
+            failureStatus: HealthStatus.Unhealthy,
+            tags: new[] { "services" });
+
+
     builder.Services.AddOcelot(builder.Configuration);
     builder.Services.AddSwaggerForOcelot(builder.Configuration);
-
 
     var app = builder.Build();
 
@@ -53,19 +69,52 @@ try
     app.UseAuthentication();
     app.UseAuthorization();
 
-    app.MapGet("/", () => "SmartShip Gateway Running");
-    app.MapGet("/health", () => Results.Json(new
+    app.MapGet("/", () => " --> SmartShip Gateway Running");
+
+    app.MapHealthChecks("/health", new HealthCheckOptions
     {
-        status = "healthy",
-        timestamp = DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"),
-        services = new[] { "identity:5001", "shipment:5002", "tracking:5003", "admin:5004", "payment:5005", "notification: 5006" }
-    }));
+        AllowCachingResponses = false,
+        ResultStatusCodes =
+        {
+            [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+            [HealthStatus.Degraded]  = StatusCodes.Status200OK,
+            [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+        },
+        ResponseWriter = async (context, report) =>
+        {
+            context.Response.ContentType = "application/json";
+
+            var serviceData = report.Entries
+                .SelectMany(e => e.Value.Data)
+                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+
+            var response = new
+            {
+                gateway = "SmartShip Gateway",
+                status = report.Status.ToString(),
+                timestamp = DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss tt"),
+                totalDurationMs = Math.Round(report.TotalDuration.TotalMilliseconds, 2) + " ms",
+                services = serviceData,
+                summary = new
+                {
+                    total = serviceData.Count,
+                    healthy = serviceData.Values.Count(v => v?.ToString()?.Contains("Healthy") == true),
+                    unhealthy = serviceData.Values.Count(v => v?.ToString()?.Contains("Unreachable") == true
+                                                           || v?.ToString()?.Contains("Timeout") == true),
+                    degraded = serviceData.Values.Count(v => v?.ToString()?.Contains("Degraded") == true)
+                }
+            };
+
+            await context.Response.WriteAsync(
+                JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }));
+        }
+    });
 
     app.UseSwaggerForOcelotUI(opt =>
     {
         opt.PathToSwaggerGenerator = "/swagger/docs";
     },
-    uiOpt =>   
+    uiOpt =>
     {
         uiOpt.OAuthClientId("swagger-ui");
         uiOpt.OAuthAppName("SmartShip Swagger UI");

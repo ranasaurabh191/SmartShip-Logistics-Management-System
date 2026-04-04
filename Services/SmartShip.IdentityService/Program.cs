@@ -4,6 +4,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SmartShip.IdentityService.API.Middleware;
@@ -19,6 +20,7 @@ using SmartShip.IdentityService.Infrastructure.Repositories;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Services;
 using System.Text;
+using RabbitMQ.Client;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -145,10 +147,60 @@ try
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
+    builder.Services.AddSingleton<IConnection>(sp =>
+    {
+        var factory = new ConnectionFactory
+        {
+            Uri = new Uri("amqp://guest:guest@localhost:5672/"),
+            AutomaticRecoveryEnabled = true
+        };
+
+        return factory.CreateConnectionAsync().GetAwaiter().GetResult();
+    });
+
+    builder.Services.AddHealthChecks()
+    .AddSqlServer(
+        connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
+        name: "sqlserver",
+        failureStatus: HealthStatus.Unhealthy,
+        tags: new[] { "db" })
+    .AddRabbitMQ(
+        name: "rabbitmq",
+        failureStatus: HealthStatus.Unhealthy,
+        tags: new[] { "messaging" });
+
     var app = builder.Build();
+    app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+    {
+        AllowCachingResponses = false,
+        ResultStatusCodes =
+        {
+            [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+            [HealthStatus.Degraded]  = StatusCodes.Status200OK,
+            [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+        },
+        ResponseWriter = async (context, report) =>
+        {
+            context.Response.ContentType = "application/json";
+            var result = new
+            {
+                service = "IdentityService",
+                status = report.Status.ToString(),
+                timestamp = DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"),
+                checks = report.Entries.Select(e => new
+                {
+                    name = e.Key,
+                    status = e.Value.Status.ToString(),
+                    description = e.Value.Description ?? (e.Value.Status == HealthStatus.Healthy ? "OK" : "Check failed"),
+                    durationMs = Math.Round(e.Value.Duration.TotalMilliseconds, 2)
+                })
+            };
+            await context.Response.WriteAsync(
+                System.Text.Json.JsonSerializer.Serialize(result, new System.Text.Json.JsonSerializerOptions { WriteIndented = true }));
+        }
+    });
     app.UseMiddleware<ExceptionMiddleware>();
-    app.UseSerilogRequestLogging(opt =>
-        opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
+    app.UseSerilogRequestLogging(opt => opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
     using (var scope = app.Services.CreateScope())
         scope.ServiceProvider.GetRequiredService<IdentityDbContext>().Database.Migrate();
