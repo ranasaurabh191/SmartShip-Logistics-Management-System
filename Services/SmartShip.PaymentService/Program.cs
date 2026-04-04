@@ -4,10 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SmartShip.PaymentService.Data;
-using SmartShip.PaymentService.Messaging.Consumers;
-using SmartShip.PaymentService.Middleware;
-using SmartShip.PaymentService.Services;
+using SmartShip.PaymentService.API.Middleware;
+using SmartShip.PaymentService.Core.Interfaces.Services;
+using SmartShip.PaymentService.Core.Services;
+using SmartShip.PaymentService.Infrastructure.Data;
+using SmartShip.PaymentService.Infrastructure.Messaging.Consumers;
+using SmartShip.PaymentService.Core.Interfaces.Persistence;
+using SmartShip.PaymentService.Core.Interfaces.Repositories;
+using SmartShip.PaymentService.Infrastructure.Persistence;
+using SmartShip.PaymentService.Infrastructure.Repositories;
 using System.Text;
 
 Log.Logger = new LoggerConfiguration()
@@ -90,6 +95,9 @@ try
     builder.Services.AddDbContext<PaymentDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
+    builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+    builder.Services.AddScoped<ISagaCorrelationRepository, SagaCorrelationRepository>();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped<IPaymentService, PaymentService>();
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

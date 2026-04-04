@@ -19,13 +19,12 @@ public class DashboardMetricsRepository : IDashboardMetricsRepository
 
     public async Task AddAsync(DashboardMetrics metrics)
     {
-        _context.DashboardMetrics.Add(metrics);
-        await _context.SaveChangesAsync();
+        await _context.DashboardMetrics.AddAsync(metrics);
     }
 
-    public async Task UpdateAsync(DashboardMetrics metrics)
+    public Task UpdateAsync(DashboardMetrics metrics)
     {
         _context.DashboardMetrics.Update(metrics);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 }

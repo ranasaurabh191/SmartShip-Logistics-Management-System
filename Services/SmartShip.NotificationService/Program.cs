@@ -4,12 +4,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SmartShip.NotificationService.Messaging.Consumers;
-using SmartShip.NotificationService.Data;
-using SmartShip.NotificationService.Middleware;
-using SmartShip.NotificationService.Services;
 using System.Text;
-using SmartShip.NotificationService.Consumers;
+using SmartShip.NotificationService.API.Middleware;
+using SmartShip.NotificationService.Infrastructure.Data;
+using SmartShip.NotificationService.Infrastructure.Messaging.Consumers;
+using SmartShip.NotificationService.Core.Services;
+using SmartShip.NotificationService.Core.Interfaces.Services;
+using SmartShip.NotificationService.Core.Interfaces.Persistence;
+using SmartShip.NotificationService.Core.Interfaces.Repositories;
+using SmartShip.NotificationService.Infrastructure.Persistence;
+using SmartShip.NotificationService.Infrastructure.Repositories;
+using SmartShip.NotificationService.Infrastructure.Services;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -126,8 +131,12 @@ try
         });
 
     builder.Services.AddAuthorization();
+
+    builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped<INotificationService, NotificationService>();
     builder.Services.AddScoped<IEmailService, EmailService>();
+
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 

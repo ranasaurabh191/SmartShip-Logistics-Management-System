@@ -7,12 +7,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using SmartShip.AdminService.API.Middleware;
+using SmartShip.AdminService.Core.Interfaces.Persistence;
 using SmartShip.AdminService.Core.Interfaces.Repositories;
 using SmartShip.AdminService.Core.Interfaces.Services;
 using SmartShip.AdminService.Core.Services;
 using SmartShip.AdminService.Core.Validators;
 using SmartShip.AdminService.Infrastructure.Data;
 using SmartShip.AdminService.Infrastructure.Messaging.Consumers;
+using SmartShip.AdminService.Infrastructure.Persistence;
 using SmartShip.AdminService.Infrastructure.Repositories;
 using System.Text;
 
@@ -145,10 +147,14 @@ try
         });
 
     builder.Services.AddAuthorization();
-    builder.Services.AddScoped<IAdminService, AdminService>();
+
     builder.Services.AddScoped<IHubRepository, HubRepository>();
     builder.Services.AddScoped<IReportRepository, ReportRepository>();
     builder.Services.AddScoped<IDashboardMetricsRepository, DashboardMetricsRepository>();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+    builder.Services.AddScoped<IAdminService, AdminService>();
+    builder.Services.AddHttpContextAccessor();
+
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 

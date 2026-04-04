@@ -6,12 +6,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SmartShip.IdentityService.Data;
-using SmartShip.IdentityService.DTOs;
-using SmartShip.IdentityService.Middleware;
-using SmartShip.IdentityService.Services;
-using SmartShip.IdentityService.Validators;
-using SmartShip.NotificationService.Services;
+using SmartShip.IdentityService.API.Middleware;
+using SmartShip.IdentityService.Core.DTOs;
+using SmartShip.IdentityService.Core.Interfaces.Persistence;
+using SmartShip.IdentityService.Core.Interfaces.Repositories;
+using SmartShip.IdentityService.Core.Interfaces.Services;
+using SmartShip.IdentityService.Core.Services;
+using SmartShip.IdentityService.Core.Validators;
+using SmartShip.IdentityService.Infrastructure.Data;
+using SmartShip.IdentityService.Infrastructure.Persistence;
+using SmartShip.IdentityService.Infrastructure.Repositories;
+using SmartShip.NotificationService.Core.Interfaces.Services;
+using SmartShip.NotificationService.Infrastructure.Services;
 using System.Text;
 
 Log.Logger = new LoggerConfiguration()
@@ -125,12 +131,17 @@ try
             ValidIssuer = jwt["Issuer"],
             ValidAudience = jwt["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
-        });
+        }); 
 
     builder.Services.AddAuthorization();
+
     builder.Services.AddScoped<IEmailService, EmailService>();
+    builder.Services.AddScoped<IUserRepository, UserRepository>();
+    builder.Services.AddScoped<IOtpVerificationRepository, OtpVerificationRepository>();
+    builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<IUserService, UserService>();
+
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 

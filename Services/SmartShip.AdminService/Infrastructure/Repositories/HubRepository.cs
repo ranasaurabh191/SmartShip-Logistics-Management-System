@@ -61,20 +61,19 @@ public class HubRepository : IHubRepository
 
     public async Task<Hub> AddAsync(Hub hub)
     {
-        _context.Hubs.Add(hub);
-        await _context.SaveChangesAsync();
+        await _context.Hubs.AddAsync(hub);
         return hub;
     }
 
-    public async Task UpdateAsync(Hub hub)
+    public Task UpdateAsync(Hub hub)
     {
         _context.Hubs.Update(hub);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 
-    public async Task DeleteAsync(Hub hub)
+    public Task DeleteAsync(Hub hub)
     {
         _context.Hubs.Remove(hub);
-        await _context.SaveChangesAsync();
+        return Task.CompletedTask;
     }
 }

@@ -18,8 +18,7 @@ public class ReportRepository : IReportRepository
 
     public async Task<Report> AddAsync(Report report)
     {
-        _context.Reports.Add(report);
-        await _context.SaveChangesAsync();
+        await _context.Reports.AddAsync(report);
         return report;
     }
 
