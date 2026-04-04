@@ -1,9 +1,13 @@
-<Solution>
+﻿<Solution>
   <Folder Name="/Gateway/">
     <Project Path="Gateway/SmartShip.Gateway/SmartShip.Gateway.csproj" />
   </Folder>
   <Folder Name="/Services/">
     <Project Path="Services/SmartShip.AdminService/SmartShip.AdminService.csproj" />
+    <Project Path="Services/SmartShip.AdminService.Models/SmartShip.AdminService.Models.csproj" />
+    <Project Path="Services/SmartShip.AdminService.Data/SmartShip.AdminService.Data.csproj" />
+    <Project Path="Services/SmartShip.AdminService.Business/SmartShip.AdminService.Business.csproj" />
+    <Project Path="Services/SmartShip.AdminService.API/SmartShip.AdminService.API.csproj" />
     <Project Path="Services/SmartShip.IdentityService/SmartShip.IdentityService.csproj" />
     <Project Path="Services/SmartShip.NotificationService/SmartShip.NotificationService.csproj" />
     <Project Path="Services/SmartShip.PaymentService/SmartShip.PaymentService.csproj" />

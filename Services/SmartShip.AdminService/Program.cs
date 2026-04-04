@@ -6,11 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using SmartShip.AdminService.Data;
-using SmartShip.AdminService.Messaging.Consumers;
-using SmartShip.AdminService.Middleware;
-using SmartShip.AdminService.Services;
-using SmartShip.AdminService.Validators;
+using SmartShip.AdminService.API.Middleware;
+using SmartShip.AdminService.Core.Interfaces.Repositories;
+using SmartShip.AdminService.Core.Interfaces.Services;
+using SmartShip.AdminService.Core.Services;
+using SmartShip.AdminService.Core.Validators;
+using SmartShip.AdminService.Infrastructure.Data;
+using SmartShip.AdminService.Infrastructure.Messaging.Consumers;
+using SmartShip.AdminService.Infrastructure.Repositories;
 using System.Text;
 
 Log.Logger = new LoggerConfiguration()
@@ -49,7 +52,6 @@ try
     builder.Services.AddValidatorsFromAssemblyContaining<CreateHubRequestValidator>();
     builder.Services.AddMassTransit(x =>
     {
-        x.AddConsumer<ShipmentDeliveredConsumer>();
         x.AddConsumer<UserCreatedConsumer>();
         x.AddConsumer<UserDeletedConsumer>();
         x.AddConsumer<ShipmentCreatedMetricsConsumer>();
@@ -143,6 +145,9 @@ try
 
     builder.Services.AddAuthorization();
     builder.Services.AddScoped<IAdminService, AdminService>();
+    builder.Services.AddScoped<IHubRepository, HubRepository>();
+    builder.Services.AddScoped<IReportRepository, ReportRepository>();
+    builder.Services.AddScoped<IDashboardMetricsRepository, DashboardMetricsRepository>();
     builder.Services.AddCors(opt =>
         opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
