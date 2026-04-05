@@ -125,6 +125,17 @@ public class PaymentService : IPaymentService
             await _paymentRepository.AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
 
+            await _publisher.Publish(new PaymentCreatedEvent
+            {
+                ShipmentId = payment.ShipmentId,
+                TrackingNumber = payment.TrackingNumber,
+                CustomerId = payment.CustomerId,
+                PaymentMethod = payment.PaymentMethod.ToString(),
+                Amount = payment.Amount
+            });
+
+            _logger.LogInformation("PaymentCreatedEvent published for COD with {ShipmentId}", request.ShipmentId);
+
             await _publisher.Publish(new PaymentCompletedEvent
             {
                 CorrelationId = correlation?.CorrelationId ?? Guid.Empty,
@@ -135,7 +146,8 @@ public class PaymentService : IPaymentService
                 CustomerId = payment.CustomerId
             });
 
-            _logger.LogInformation("Event published for COD with {ShipmentId}", request.ShipmentId);
+            _logger.LogInformation("PaymentCompletedEvent published for COD with {ShipmentId}", request.ShipmentId);
+
             _logger.LogInformation("COD order created for {ShipmentId}", request.ShipmentId);
 
             return MapToResponse(payment, "COD order created. Pay on delivery.");
@@ -148,14 +160,23 @@ public class PaymentService : IPaymentService
             await _paymentRepository.AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
 
-            _logger.LogInformation("Mock Razorpay order created: {OrderId} for {ShipmentId}",
-                payment.RazorpayOrderId, payment.ShipmentId);
+            await _publisher.Publish(new PaymentCreatedEvent
+            {
+                ShipmentId = payment.ShipmentId,
+                TrackingNumber = payment.TrackingNumber,
+                CustomerId = payment.CustomerId,
+                PaymentMethod = payment.PaymentMethod.ToString(),
+                Amount = payment.Amount
+            });
+
+            _logger.LogInformation("PaymentCreatedEvent published for Online Payment with {ShipmentId}", request.ShipmentId);
+
+            _logger.LogInformation("Mock Razorpay order created: {OrderId} for {ShipmentId}", payment.RazorpayOrderId, payment.ShipmentId);
 
             return MapToResponse(payment, "Online payment order created. Please complete payment.");
         }
 
-        _logger.LogWarning("Unknown payment method: {Method} for Shipment {ShipmentId}",
-            request.PaymentMethod, request.ShipmentId);
+        _logger.LogWarning("Unknown payment method: {Method} for Shipment {ShipmentId}", request.PaymentMethod, request.ShipmentId);
         throw new ArgumentException($"Unsupported payment method: {request.PaymentMethod}");
     }
 

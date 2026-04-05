@@ -8,4 +8,5 @@ public interface ITrackingEventRepository
     Task<TrackingEvent?> GetRecentDuplicateAsync(string trackingNumber, string status, string location, DateTime sinceUtc);
     Task AddAsync(TrackingEvent trackingEvent);
     Task<PagedResponse<TrackingEvent>> GetByTrackingNumberPagedAsync(string trackingNumber, TrackingEventPagedRequest request);
+    Task<PagedResponse<TrackingEvent>> GetAllPagedAsync(TrackingEventPagedRequest req);
 }

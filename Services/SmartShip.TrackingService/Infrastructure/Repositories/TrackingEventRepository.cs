@@ -14,7 +14,27 @@ public class TrackingEventRepository : ITrackingEventRepository
     {
         _context = context;
     }
+    public async Task<PagedResponse<TrackingEvent>> GetAllPagedAsync(TrackingEventPagedRequest req)
+    {
+        var query = _context.TrackingEvents
+            .OrderByDescending(x => x.EventTime)
+            .AsQueryable();
 
+        var total = await query.CountAsync();
+
+        var data = await query
+            .Skip((req.Page - 1) * req.PageSize)
+            .Take(req.PageSize)
+            .ToListAsync();
+
+        return new PagedResponse<TrackingEvent>
+        {
+            Data = data,
+            TotalCount = total,
+            Page = req.Page,
+            PageSize = req.PageSize
+        };
+    }
     public async Task<TrackingEvent?> GetRecentDuplicateAsync(string trackingNumber, string status, string location, DateTime sinceUtc)
     {
         return await _context.TrackingEvents.FirstOrDefaultAsync(t =>

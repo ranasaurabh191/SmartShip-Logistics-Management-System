@@ -33,10 +33,6 @@ public class PaymentCompletedConsumer : IConsumer<PaymentCompletedEvent>
             return;
         }
 
-        shipment.Status = ShipmentStatus.Booked;  
-        await _db.SaveChangesAsync();
-
-        _logger.LogInformation("Shipment {TrackingNumber} -> Status updated to Booked after payment",
-            msg.TrackingNumber);
+        _logger.LogInformation("Shipment {TrackingNumber} -> Status updated to Booked after payment", msg.TrackingNumber);
     }
 }

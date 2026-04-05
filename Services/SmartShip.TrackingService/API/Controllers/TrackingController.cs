@@ -13,6 +13,11 @@ public class TrackingController : ControllerBase
 {
     private readonly ITrackingService _service;
     public TrackingController(ITrackingService service) => _service = service;
+    
+    [HttpGet("events")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> GetAllEvents([FromQuery] TrackingEventPagedRequest request) =>
+    Ok(await _service.GetAllEventsPagedAsync(request));
 
     [HttpGet("{trackingNumber}")]
     public async Task<IActionResult> GetTimeline( string trackingNumber, [FromQuery] TrackingEventPagedRequest request) =>
@@ -28,6 +33,7 @@ public class TrackingController : ControllerBase
     }
 
     [HttpGet("delivery/{shipmentId}")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetDeliveryProof(int shipmentId) => Ok(await _service.GetDeliveryProofAsync(shipmentId));
 
 
@@ -62,22 +68,22 @@ public class TrackingController : ControllerBase
     public async Task<IActionResult> UploadDocument(
         [FromForm] int shipmentId, [FromForm] string trackingNumber,
         [FromForm] string documentType, IFormFile? file)
-    {
-        if (file == null) throw new ArgumentException("File is required.");
+        {
+            if (file == null) throw new ArgumentException("File is required.");
 
-        if (file.Length > 10 * 1024 * 1024) throw new ArgumentException("File must be under 10MB.");  
+            if (file.Length > 10 * 1024 * 1024) throw new ArgumentException("File must be under 10MB.");  
 
-        var allowed = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
-        var ext = Path.GetExtension(file.FileName).ToLower();
-        if (!allowed.Contains(ext)) throw new ArgumentException("Only PDF, JPG, PNG allowed.");  
+            var allowed = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+            var ext = Path.GetExtension(file.FileName).ToLower();
+            if (!allowed.Contains(ext)) throw new ArgumentException("Only PDF, JPG, PNG allowed.");  
 
-        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-        var result = await _service.UploadDocumentAsync(shipmentId, trackingNumber, file, documentType, userId);
-        return Ok(result); 
-    }
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+            var result = await _service.UploadDocumentAsync(shipmentId, trackingNumber, file, documentType, userId);
+            return Ok(result); 
+        }
 
     [HttpGet("documents/{shipmentId}")]
+    [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetDocuments(
-        int shipmentId, [FromQuery] DocumentPagedRequest request) =>
-        Ok(await _service.GetDocumentsPagedAsync(shipmentId, request));
+        int shipmentId, [FromQuery] DocumentPagedRequest request) => Ok(await _service.GetDocumentsPagedAsync(shipmentId, request));
 }

@@ -12,6 +12,7 @@ using SmartShip.TrackingService.Core.Interfaces.Repositories;
 using SmartShip.TrackingService.Core.Interfaces.Services;
 using SmartShip.TrackingService.Core.Services;
 using SmartShip.TrackingService.Infrastructure.Data;
+using SmartShip.TrackingService.Infrastructure.Messaging.Consumers;
 using SmartShip.TrackingService.Infrastructure.Persistence;
 using SmartShip.TrackingService.Infrastructure.Repositories;
 using System.Text;
@@ -90,6 +91,10 @@ try
     {
         x.AddConsumer<ShipmentCreatedConsumer>();
         x.AddConsumer<ShipmentStatusUpdatedConsumer>();
+        x.AddConsumer<PaymentCreatedConsumer>();
+        x.AddConsumer<PaymentCompletedTrackingConsumer>();
+        x.AddConsumer<PaymentFailedTrackingConsumer>();
+        x.AddConsumer<PaymentRefundedTrackingConsumer>();
 
         x.UsingRabbitMq((ctx, cfg) =>
         {
@@ -99,11 +104,12 @@ try
                 h.Password("guest");
             });
 
-            cfg.ReceiveEndpoint("tracking-shipment-created", e =>
-                e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
-
-            cfg.ReceiveEndpoint("tracking-status-updated", e =>
-                e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-shipment-created", e => e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-status-updated", e => e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-payment-created", e => e.ConfigureConsumer<PaymentCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-payment-completed", e => e.ConfigureConsumer<PaymentCompletedTrackingConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-payment-failed", e => e.ConfigureConsumer<PaymentFailedTrackingConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-payment-refunded", e => e.ConfigureConsumer<PaymentRefundedTrackingConsumer>(ctx));
         });
     });
 
@@ -142,15 +148,15 @@ try
     });
 
     builder.Services.AddHealthChecks()
-    .AddSqlServer(
-        connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
-        name: "sqlserver",
-        failureStatus: HealthStatus.Unhealthy,
-        tags: new[] { "db" })
-    .AddRabbitMQ(
-        name: "rabbitmq",
-        failureStatus: HealthStatus.Unhealthy,
-        tags: new[] { "messaging" });
+        .AddSqlServer(
+            connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
+            name: "sqlserver",
+            failureStatus: HealthStatus.Unhealthy,
+            tags: new[] { "db" })
+        .AddRabbitMQ(
+            name: "rabbitmq",
+            failureStatus: HealthStatus.Unhealthy,
+            tags: new[] { "messaging" });
 
     var app = builder.Build();
  
@@ -158,11 +164,11 @@ try
     {
         AllowCachingResponses = false,
         ResultStatusCodes =
-    {
-        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
-        [HealthStatus.Degraded]  = StatusCodes.Status200OK,
-        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
-    },
+        {
+            [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+            [HealthStatus.Degraded]  = StatusCodes.Status200OK,
+            [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+        },
         ResponseWriter = async (context, report) =>
         {
             context.Response.ContentType = "application/json";

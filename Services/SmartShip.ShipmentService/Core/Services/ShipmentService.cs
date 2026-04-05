@@ -370,6 +370,18 @@ public class ShipmentService : IShipmentService
 
             s.Status = ShipmentStatus.Booked;
 
+            await _publisher.Publish(new ShipmentStatusUpdatedEvent
+            {
+                ShipmentId = s.Id,
+                TrackingNumber = s.TrackingNumber,
+                OldStatus = "Draft",
+                NewStatus = "Booked",
+                Location = s.SenderAddress?.City ?? "Warehouse",
+                UpdatedBy = "system",
+                UpdatedAt = DateTime.UtcNow,
+                CustomerId = s.CustomerId
+            });
+
             _shipmentRepository.Update(s);
             await _unitOfWork.SaveChangesAsync();
 

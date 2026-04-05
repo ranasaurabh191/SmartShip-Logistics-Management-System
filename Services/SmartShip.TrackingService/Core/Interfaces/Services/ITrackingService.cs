@@ -6,6 +6,7 @@ public interface ITrackingService
 {
     Task<TrackingEventDto> AddEventAsync(AddTrackingEventRequest req, string updatedBy);
     Task<PagedResponse<TrackingEventDto>> GetByTrackingNumberPagedAsync(string trackingNumber, TrackingEventPagedRequest request);
+    Task<PagedResponse<TrackingEventDto>> GetAllEventsPagedAsync(TrackingEventPagedRequest req);
     Task<DeliveryProofDto> GetDeliveryProofAsync(int shipmentId);
     Task<DeliveryProofDto> AddDeliveryProofAsync(AddDeliveryProofRequest req, string? sigPath, string? photoPath);
     Task<PagedResponse<DocumentDto>> GetDocumentsPagedAsync(int shipmentId, DocumentPagedRequest request);

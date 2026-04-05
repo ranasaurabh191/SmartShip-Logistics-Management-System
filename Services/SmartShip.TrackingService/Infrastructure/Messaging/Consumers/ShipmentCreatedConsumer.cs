@@ -8,28 +8,38 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
     private readonly TrackingDbContext _db;
     private readonly ILogger<ShipmentCreatedConsumer> _logger;
 
-    public ShipmentCreatedConsumer(TrackingDbContext db, ILogger<ShipmentCreatedConsumer> logger)
+    public ShipmentCreatedConsumer(
+        TrackingDbContext db,
+        ILogger<ShipmentCreatedConsumer> logger)
     {
         _db = db;
         _logger = logger;
     }
+
     public async Task Consume(ConsumeContext<ShipmentCreatedEvent> context)
     {
         var msg = context.Message;
-        _logger.LogInformation("Processing ShipmentCreated: {TrackingNumber} (ID: {Id})", msg.TrackingNumber, msg.ShipmentId);
+
+        _logger.LogInformation(
+            "Processing ShipmentCreated: {TrackingNumber} (ID: {Id})",
+            msg.TrackingNumber,
+            msg.ShipmentId);
 
         _db.TrackingEvents.Add(new TrackingEvent
         {
             ShipmentId = msg.ShipmentId,
             TrackingNumber = msg.TrackingNumber,
-            Status = "Booked",
+            Status = "Draft",
             Location = msg.SenderCity,
-            Description = "Shipment booked successfully",
+            Description = "Shipment created",
             EventTime = msg.CreatedAt,
             UpdatedBy = "system"
         });
 
         await _db.SaveChangesAsync();
-        _logger.LogInformation("Created Booked event for {TrackingNumber}", msg.TrackingNumber);
+
+        _logger.LogInformation(
+            "Created Draft event for {TrackingNumber}",
+            msg.TrackingNumber);
     }
 }

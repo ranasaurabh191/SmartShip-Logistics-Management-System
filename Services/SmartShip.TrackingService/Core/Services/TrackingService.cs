@@ -83,6 +83,41 @@ public class TrackingService : ITrackingService
         }
     }
 
+    public async Task<PagedResponse<TrackingEventDto>> GetAllEventsPagedAsync(TrackingEventPagedRequest req)
+    {
+        _logger.LogInformation("Fetching all tracking events | Page: {Page} | PageSize: {PageSize}",
+            req.Page, req.PageSize);
+
+        try
+        {
+            var result = await _trackingEventRepository.GetAllPagedAsync(req);
+
+            var items = result.Data.Select(t => new TrackingEventDto(
+                t.Id,
+                t.TrackingNumber,
+                t.Status,
+                t.Location,
+                t.Description,
+                DateTime.SpecifyKind(t.EventTime, DateTimeKind.Utc)
+                    .ToLocalTime()
+                    .ToString("dd-MMM-yyyy hh:mm tt"),
+                t.UpdatedBy)).ToList();
+
+            return new PagedResponse<TrackingEventDto>
+            {
+                Data = items,
+                TotalCount = result.TotalCount,
+                Page = result.Page,
+                PageSize = result.PageSize
+            };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to fetch all tracking events");
+            throw;
+        }
+    }
+
     public async Task<PagedResponse<TrackingEventDto>> GetByTrackingNumberPagedAsync(string trackingNumber, TrackingEventPagedRequest req)
     {
         _logger.LogInformation("Fetching tracking timeline for {TrackingNumber} | Page: {Page} | PageSize: {PageSize}",
