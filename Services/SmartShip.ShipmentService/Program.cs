@@ -115,7 +115,6 @@ try
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<UserDeletedConsumer>();
-        x.AddConsumer<PaymentCompletedConsumer>();
         x.AddConsumer<CancelShipmentConsumer>();
 
         x.AddSagaStateMachine<ShipmentOrderStateMachine, ShipmentOrderState>()
@@ -132,9 +131,12 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
-
-
-            cfg.ConfigureEndpoints(ctx);
+            cfg.ReceiveEndpoint("shipment-user-deleted", e =>
+            {
+                e.ConfigureConsumer<UserDeletedConsumer>(ctx);
+            });
+            cfg.ReceiveEndpoint("shipment-order-state", e =>  e.ConfigureSaga<ShipmentOrderState>(ctx));
+            cfg.ReceiveEndpoint("shipment-cancel-command", e =>  e.ConfigureConsumer<CancelShipmentConsumer>(ctx));
         });
     });
 

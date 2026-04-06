@@ -70,7 +70,6 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
-
             cfg.ReceiveEndpoint("admin-shipment-delivered", e =>
             {
                 e.ConfigureConsumer<ShipmentDeliveredConsumer>(context);

@@ -202,18 +202,16 @@ public class PaymentService : IPaymentService
             _logger.LogWarning("Invalid OrderId {OrderId} for ShipmentId {ShipmentId} — publishing PaymentFailedEvent.",
                 request.RazorpayOrderId, request.ShipmentId);
 
+            ShipmentPayment? existingPayment = null;
             if (request.ShipmentId.HasValue)
             {
-                var existingPayment = await _paymentRepository.GetByShipmentIdAsync(request.ShipmentId.Value);
-
+                existingPayment = await _paymentRepository.GetByShipmentIdAsync(request.ShipmentId.Value);
                 if (existingPayment != null)
                 {
                     existingPayment.PaymentStatus = PaymentStatus.Failed;
                     _paymentRepository.Update(existingPayment);
                     await _unitOfWork.SaveChangesAsync();
-
-                    _logger.LogInformation("Payment marked as Failed for ShipmentId {ShipmentId} due to failure.",
-                        request.ShipmentId);
+                    _logger.LogInformation("Payment marked as Failed for ShipmentId {ShipmentId}", request.ShipmentId);
                 }
             }
 
@@ -221,19 +219,18 @@ public class PaymentService : IPaymentService
                 ? await _sagaCorrelationRepository.GetByShipmentIdAsync(request.ShipmentId.Value)
                 : null;
 
-            if (failCorrelation != null && failCorrelation.CorrelationId != Guid.Empty)
+            await _publisher.Publish(new PaymentFailedEvent
             {
-                await _publisher.Publish(new PaymentFailedEvent
-                {
-                    CorrelationId = failCorrelation.CorrelationId,
-                    ShipmentId = request.ShipmentId ?? 0,
-                    TrackingNumber = "",
-                    CustomerId = authenticatedUserId,
-                    Reason = $"Invalid Order ID: {request.RazorpayOrderId}"
-                });
+                CorrelationId = failCorrelation?.CorrelationId ?? Guid.Empty,
+                ShipmentId = request.ShipmentId ?? 0,
+                TrackingNumber = existingPayment?.TrackingNumber ?? string.Empty,
+                CustomerId = authenticatedUserId,
+                Reason = $"Invalid Order ID: {request.RazorpayOrderId}",
+                FailedAt = DateTime.UtcNow
+            });
 
-                _logger.LogInformation("PaymentFailedEvent published for ShipmentId {ShipmentId}", request.ShipmentId);
-            }
+            _logger.LogInformation("PaymentFailedEvent published for ShipmentId {ShipmentId} | CorrelationId: {CorrelationId}",
+                request.ShipmentId, failCorrelation?.CorrelationId ?? Guid.Empty);
 
             throw new KeyNotFoundException($"Invalid Order ID '{request.RazorpayOrderId}'. Payment failed.");
         }

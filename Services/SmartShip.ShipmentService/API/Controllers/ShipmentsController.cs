@@ -79,24 +79,5 @@ public class ShipmentsController : ControllerBase
     [InternalApiKey]  
     public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));
 
-    [HttpGet("{shipmentId}/saga-correlation")]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetSagaCorrelation(int shipmentId,
-    [FromHeader(Name = "X-Internal-Key")] string? internalKey)
-    {
-        if (internalKey != _config["InternalApi:ApiKey"])
-            return Unauthorized();
-
-        var saga = await _context.ShipmentOrderSagas
-            .FirstOrDefaultAsync(s => s.ShipmentId == shipmentId);
-
-        if (saga == null)  return NotFound();
-
-        _logger.LogInformation("Returning CorrelationId {CorrelationId} for ShipmentId {ShipmentId}",
-            saga.CorrelationId, shipmentId);
-
-        return Ok(new { correlationId = saga.CorrelationId });
-    }
-
 }
     

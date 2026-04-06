@@ -1,20 +1,23 @@
 ﻿using MassTransit;
 using SmartShip.Shared.Events;
-using SmartShip.ShipmentService.Infrastructure.Data;
+using SmartShip.ShipmentService.Core.Interfaces.Persistence;
+using SmartShip.ShipmentService.Core.Interfaces.Repositories;
 using SmartShip.ShipmentService.Domain.Enums;
 
 namespace SmartShip.ShipmentService.Infrastructure.Messaging.Consumers;
 
 public class CancelShipmentConsumer : IConsumer<CancelShipmentCommand>
 {
-    private readonly ShipmentDbContext _context;
     private readonly ILogger<CancelShipmentConsumer> _logger;
     private readonly IPublishEndpoint _publisher;
+    private readonly IShipmentRepository _repo;
+    private readonly IUnitOfWork _uow;
 
-    public CancelShipmentConsumer(ShipmentDbContext context,
+    public CancelShipmentConsumer(IShipmentRepository repo, IUnitOfWork uow,
         ILogger<CancelShipmentConsumer> logger, IPublishEndpoint publisher)
     {
-        _context = context;
+        _repo = repo;
+        _uow = uow;
         _logger = logger;
         _publisher = publisher;
     }
@@ -25,7 +28,7 @@ public class CancelShipmentConsumer : IConsumer<CancelShipmentCommand>
         _logger.LogInformation("CancelShipmentCommand received | ShipmentId: {ShipmentId} | Reason: {Reason}",
             msg.ShipmentId, msg.Reason);
 
-        var shipment = await _context.Shipments.FindAsync(msg.ShipmentId);
+        var shipment = await _repo.GetByIdAsync(msg.ShipmentId);
 
         if (shipment == null)
         {
@@ -42,7 +45,7 @@ public class CancelShipmentConsumer : IConsumer<CancelShipmentCommand>
 
         shipment.Status = ShipmentStatus.Cancelled;
         shipment.Notes = $"Auto-cancelled: {msg.Reason}";
-        await _context.SaveChangesAsync();
+        await _uow.SaveChangesAsync();
 
         _logger.LogInformation("Shipment {TrackingNumber} auto-cancelled due to payment failure.",
             msg.TrackingNumber);

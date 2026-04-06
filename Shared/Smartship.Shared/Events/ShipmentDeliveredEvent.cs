@@ -6,4 +6,5 @@ public class ShipmentDeliveredEvent
     public string TrackingNumber { get; set; } = string.Empty;
     public int CustomerId { get; set; }
     public DateTime DeliveredAt { get; set; }
+    public string? Location { get; set; }
 }

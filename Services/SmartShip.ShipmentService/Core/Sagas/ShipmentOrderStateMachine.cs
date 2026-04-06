@@ -24,9 +24,8 @@ public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderSt
 
         Event(() => ShipmentCreated, x =>
         {
-            x.CorrelateBy<string>(state => state.ShipmentIdKey,
-                ctx => ctx.Message.ShipmentId.ToString());
-            x.SelectId(_ => NewId.NextGuid());
+            x.CorrelateById(ctx => ctx.Message.CorrelationId);
+            x.SelectId(ctx => ctx.Message.CorrelationId);  
         });
 
         Event(() => PaymentCompleted,

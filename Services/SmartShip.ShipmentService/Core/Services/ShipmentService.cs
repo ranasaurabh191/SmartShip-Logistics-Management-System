@@ -147,6 +147,8 @@ public class ShipmentService : IShipmentService
             shipment.ReceiverAddress = receiver;
             shipment.Package = package;
 
+            var correlationId = NewId.NextSequentialGuid();
+
             await _shipmentRepository.AddAsync(shipment);
             await _unitOfWork.SaveChangesAsync();
 
@@ -160,9 +162,10 @@ public class ShipmentService : IShipmentService
                 CustomerId = shipment.CustomerId,
                 SenderCity = sender.City,
                 CreatedAt = shipment.CreatedAt,
-                Amount = shipment.ShippingRate
+                Amount = shipment.ShippingRate,
+                CorrelationId = correlationId
             });
-
+            _logger.LogInformation("Shipment created Event Published.");
             return MapToResponse(shipment, sender, receiver, package);
         }
         catch (Exception ex)
@@ -285,10 +288,8 @@ public class ShipmentService : IShipmentService
             _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}",
                 s.TrackingNumber, oldStatus, st);
 
-            if (s.Status != ShipmentStatus.Booked
-                && s.Status != ShipmentStatus.Delivered
-                && s.Status != ShipmentStatus.Cancelled)
-            {
+            if (st is not (ShipmentStatus.Booked or ShipmentStatus.Delivered or ShipmentStatus.Cancelled))
+{
                 await _publisher.Publish(new ShipmentStatusUpdatedEvent
                 {
                     ShipmentId = s.Id,
@@ -310,6 +311,7 @@ public class ShipmentService : IShipmentService
                 {
                     ShipmentId = s.Id,
                     TrackingNumber = s.TrackingNumber,
+                    Location = request.Location ?? "Customer Address",
                     CustomerId = s.CustomerId,
                     DeliveredAt = DateTime.UtcNow
                 });
@@ -344,8 +346,9 @@ public class ShipmentService : IShipmentService
             var s = await _shipmentRepository.GetByIdAsync(id)
                 ?? throw new KeyNotFoundException($"Shipment {id} not found.");
 
-            if (s.Status == ShipmentStatus.Delivered || s.Status == ShipmentStatus.Cancelled)
-                throw new InvalidOperationException("Cannot schedule pickup for a delivered or cancelled shipment.");
+            if (s.Status != ShipmentStatus.Draft)
+                throw new InvalidOperationException(
+                    $"Pickup can only be scheduled for Draft shipments. Current status: {s.Status}.");
 
             var httpClient = CreateInternalClient("PaymentService");
             var response = await httpClient.GetAsync($"api/payment/shipment/{id}");
@@ -370,6 +373,9 @@ public class ShipmentService : IShipmentService
 
             s.Status = ShipmentStatus.Booked;
 
+            _shipmentRepository.Update(s);
+            await _unitOfWork.SaveChangesAsync();
+
             await _publisher.Publish(new ShipmentStatusUpdatedEvent
             {
                 ShipmentId = s.Id,
@@ -381,9 +387,6 @@ public class ShipmentService : IShipmentService
                 UpdatedAt = DateTime.UtcNow,
                 CustomerId = s.CustomerId
             });
-
-            _shipmentRepository.Update(s);
-            await _unitOfWork.SaveChangesAsync();
 
             _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime}",
                 s.TrackingNumber, request.PickupTime);

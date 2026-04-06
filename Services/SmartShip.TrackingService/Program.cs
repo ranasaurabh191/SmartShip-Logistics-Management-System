@@ -95,6 +95,7 @@ try
         x.AddConsumer<PaymentCompletedTrackingConsumer>();
         x.AddConsumer<PaymentFailedTrackingConsumer>();
         x.AddConsumer<PaymentRefundedTrackingConsumer>();
+        x.AddConsumer<ShipmentDeliveredConsumer>();
 
         x.UsingRabbitMq((ctx, cfg) =>
         {
@@ -103,13 +104,20 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
-
-            cfg.ReceiveEndpoint("tracking-shipment-created", e => e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
-            cfg.ReceiveEndpoint("tracking-status-updated", e => e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
-            cfg.ReceiveEndpoint("tracking-payment-created", e => e.ConfigureConsumer<PaymentCreatedConsumer>(ctx));
-            cfg.ReceiveEndpoint("tracking-payment-completed", e => e.ConfigureConsumer<PaymentCompletedTrackingConsumer>(ctx));
-            cfg.ReceiveEndpoint("tracking-payment-failed", e => e.ConfigureConsumer<PaymentFailedTrackingConsumer>(ctx));
-            cfg.ReceiveEndpoint("tracking-payment-refunded", e => e.ConfigureConsumer<PaymentRefundedTrackingConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-shipment-created", e =>
+                e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-status-updated", e =>
+                e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-payment-created", e =>
+                e.ConfigureConsumer<PaymentCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-payment-completed", e =>
+                e.ConfigureConsumer<PaymentCompletedTrackingConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-failed-payment", e =>
+                e.ConfigureConsumer<PaymentFailedTrackingConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-payment-refunded", e =>
+                e.ConfigureConsumer<PaymentRefundedTrackingConsumer>(ctx));
+            cfg.ReceiveEndpoint("tracking-shipment-delivered", e =>
+                e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx));
         });
     });
 

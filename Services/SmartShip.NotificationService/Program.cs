@@ -99,6 +99,7 @@ try
         x.AddConsumer<ShipmentCancelledConsumer>();
         x.AddConsumer<PaymentCompletedConsumer>();
         x.AddConsumer<PaymentRefundedConsumer>();
+        x.AddConsumer<PaymentFailedConsumer>();
 
         x.UsingRabbitMq((ctx, cfg) =>
         {
@@ -107,7 +108,6 @@ try
                 h.Username("guest");
                 h.Password("guest");
             });
-
             cfg.ReceiveEndpoint("notification-user-created", e => e.ConfigureConsumer<UserCreatedConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-shipment-created", e => e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-status-updated", e => e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
@@ -115,7 +115,8 @@ try
             cfg.ReceiveEndpoint("notification-shipment-cancelled", e => e.ConfigureConsumer<ShipmentCancelledConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-payment-completed", e => e.ConfigureConsumer<PaymentCompletedConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-payment-refunded", e => e.ConfigureConsumer<PaymentRefundedConsumer>(ctx));
-           
+            cfg.ReceiveEndpoint("notification-payment-failed", e => e.ConfigureConsumer<PaymentFailedConsumer>(ctx));
+
         });
     });
 

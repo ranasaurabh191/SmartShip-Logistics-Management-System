@@ -7,4 +7,5 @@ public class PaymentFailedEvent
     public string TrackingNumber { get; set; } = string.Empty;
     public int CustomerId { get; set; }
     public string Reason { get; set; } = string.Empty;
+    public DateTime FailedAt { get; set; }
 }

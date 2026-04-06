@@ -87,13 +87,11 @@ try
             }
         });
     });
-
+    builder.Services.AddHttpContextAccessor();
     builder.Services.AddHttpClient("ShipmentService", client =>
     {
         client.BaseAddress = new Uri(builder.Configuration["Services:ShipmentService"]!);
     });
-
-
     builder.Services.AddDbContext<PaymentDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
@@ -119,8 +117,6 @@ try
                     Encoding.UTF8.GetBytes(jwt["Key"]!))
             };
         });
-
-    builder.Services.AddHttpContextAccessor();
 
     builder.Services.AddAuthorization();
 
