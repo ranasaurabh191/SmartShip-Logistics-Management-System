@@ -35,10 +35,10 @@ public class ShipmentDbContext : DbContext
             e.HasKey(s => s.CorrelationId);
             e.Property(s => s.CurrentState).HasMaxLength(64);
             e.Property(s => s.TrackingNumber).HasMaxLength(50);
-            e.Property(s => s.ShipmentIdKey).HasMaxLength(20); 
+            e.Property(s => s.ShipmentIdKey).HasMaxLength(20);
             e.HasIndex(s => s.ShipmentIdKey).IsUnique();
             e.Property(s => s.Amount).HasPrecision(18, 2);
-            e.Property(s => s.RowVersion).IsRowVersion(); 
+            e.Property(s => s.RowVersion).IsRowVersion();
         });
 
     }

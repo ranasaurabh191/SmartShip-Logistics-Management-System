@@ -44,7 +44,7 @@ public class ShipmentsController : ControllerBase
     Ok(await _service.GetMyShipmentsPagedAsync(GetUserId(), request));
 
     [HttpGet("{id}")]
-    [Authorize(Roles = "CUSTOMER")]
+    [Authorize]
     public async Task<IActionResult> GetById(int id) =>  Ok(await _service.GetByIdAsync(id));
 
     [HttpPatch("pickup/{id}")]
@@ -63,6 +63,7 @@ public class ShipmentsController : ControllerBase
         return Ok(new { rate });
     }
     [HttpPatch("{id}/cancel")]
+    [Authorize(Roles = "CUSTOMER")]
     public async Task<IActionResult> CancelShipment(int id, [FromBody] CancelShipmentRequest request)
     {
         var userIdClaim = User.FindFirst("userId")?.Value

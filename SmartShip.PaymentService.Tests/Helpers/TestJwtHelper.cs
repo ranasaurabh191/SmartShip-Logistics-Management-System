@@ -7,7 +7,6 @@ namespace SmartShip.PaymentService.Tests.Helpers;
 
 public static class TestJwtHelper
 {
-    // Must match the secret in your appsettings.Development.json
     private const string Secret = "SmartShip$SuperSecret$Key$2026!@#XYZ";
 
     public static string GenerateToken(int userId, string role = "Customer")

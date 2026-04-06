@@ -32,7 +32,7 @@ try
     Log.Information(" --> Starting ShipmentService...");
 
     var builder = WebApplication.CreateBuilder(args);
-
+    var isTesting = builder.Environment.IsEnvironment("Testing");
     builder.Host.UseSerilog((ctx, lc) => lc
         .ReadFrom.Configuration(ctx.Configuration)
         .Enrich.FromLogContext()
@@ -117,27 +117,38 @@ try
         x.AddConsumer<UserDeletedConsumer>();
         x.AddConsumer<CancelShipmentConsumer>();
 
-        x.AddSagaStateMachine<ShipmentOrderStateMachine, ShipmentOrderState>()
-        .EntityFrameworkRepository(r =>
+        if (isTesting)
         {
-            r.ConcurrencyMode = ConcurrencyMode.Optimistic;
-            r.ExistingDbContext<ShipmentDbContext>();
-            r.UseSqlServer(); 
-        });
-        x.UsingRabbitMq((ctx, cfg) =>
+            x.AddSagaStateMachine<ShipmentOrderStateMachine, ShipmentOrderState>()
+                .InMemoryRepository();
+
+            x.UsingInMemory((ctx, cfg) => cfg.ConfigureEndpoints(ctx));
+        }
+        else
         {
-            cfg.Host("localhost", "/", h =>
+            x.AddSagaStateMachine<ShipmentOrderStateMachine, ShipmentOrderState>()
+                .EntityFrameworkRepository(r =>
+                {
+                    r.ConcurrencyMode = ConcurrencyMode.Optimistic;
+                    r.ExistingDbContext<ShipmentDbContext>();
+                    r.UseSqlServer();
+                });
+
+            x.UsingRabbitMq((ctx, cfg) =>
             {
-                h.Username("guest");
-                h.Password("guest");
+                cfg.Host("localhost", "/", h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+                cfg.ReceiveEndpoint("shipment-user-deleted", e =>
+                    e.ConfigureConsumer<UserDeletedConsumer>(ctx));
+                cfg.ReceiveEndpoint("shipment-order-state", e =>
+                    e.ConfigureSaga<ShipmentOrderState>(ctx));
+                cfg.ReceiveEndpoint("shipment-cancel-command", e =>
+                    e.ConfigureConsumer<CancelShipmentConsumer>(ctx));
             });
-            cfg.ReceiveEndpoint("shipment-user-deleted", e =>
-            {
-                e.ConfigureConsumer<UserDeletedConsumer>(ctx);
-            });
-            cfg.ReceiveEndpoint("shipment-order-state", e =>  e.ConfigureSaga<ShipmentOrderState>(ctx));
-            cfg.ReceiveEndpoint("shipment-cancel-command", e =>  e.ConfigureConsumer<CancelShipmentConsumer>(ctx));
-        });
+        }
     });
 
     var jwt = builder.Configuration.GetSection("JwtSettings");
@@ -162,39 +173,45 @@ try
     builder.Services.AddScoped<IShipmentService, ShipmentService>();
 
     builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-    builder.Services.AddSingleton<IConnection>(sp =>
+    if (!isTesting)
     {
-        var factory = new ConnectionFactory
+        builder.Services.AddSingleton<IConnection>(sp =>
         {
-            Uri = new Uri("amqp://guest:guest@localhost:5672/"),
-            AutomaticRecoveryEnabled = true
-        };
+            var factory = new ConnectionFactory
+            {
+                Uri = new Uri("amqp://guest:guest@localhost:5672/"),
+                AutomaticRecoveryEnabled = true
+            };
+            return factory.CreateConnectionAsync().GetAwaiter().GetResult();
+        });
+    }
 
-        return factory.CreateConnectionAsync().GetAwaiter().GetResult();
-    });
-
-    builder.Services.AddHealthChecks()
-    .AddSqlServer(
-        connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
-        name: "sqlserver",
-        failureStatus: HealthStatus.Unhealthy,
-        tags: new[] { "db" })
-    .AddRabbitMQ(
-        name: "rabbitmq",
-        failureStatus: HealthStatus.Unhealthy,
-        tags: new[] { "messaging" });
+    var healthBuilder = builder.Services.AddHealthChecks();
+    if (!isTesting)
+    {
+        healthBuilder
+            .AddSqlServer(
+                connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
+                name: "sqlserver",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: new[] { "db" })
+            .AddRabbitMQ(
+                name: "rabbitmq",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: new[] { "messaging" });
+    }
 
     var app = builder.Build();
 
     app.MapHealthChecks("/health", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
-    {
-        AllowCachingResponses = false,
-        ResultStatusCodes =
-    {
-        [HealthStatus.Healthy]   = StatusCodes.Status200OK,
-        [HealthStatus.Degraded]  = StatusCodes.Status200OK,
-        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
-    },
+        {
+            AllowCachingResponses = false,
+            ResultStatusCodes =
+        {
+            [HealthStatus.Healthy]   = StatusCodes.Status200OK,
+            [HealthStatus.Degraded]  = StatusCodes.Status200OK,
+            [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+        },
         ResponseWriter = async (context, report) =>
         {
             context.Response.ContentType = "application/json";
@@ -219,7 +236,12 @@ try
     app.UseMiddleware<ExceptionMiddleware>();
     app.UseSerilogRequestLogging(opt => opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    using (var scope = app.Services.CreateScope()) scope.ServiceProvider.GetRequiredService<ShipmentDbContext>().Database.Migrate();
+    if (!app.Environment.IsEnvironment("Testing"))
+    {
+        using var scope = app.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<ShipmentDbContext>();
+        db.Database.Migrate();
+    }
 
     app.UseSwagger(); app.UseSwaggerUI();
     app.UseCors("AllowAll");
