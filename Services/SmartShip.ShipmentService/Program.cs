@@ -133,16 +133,6 @@ try
                 h.Password("guest");
             });
 
-            cfg.ReceiveEndpoint("shipment-user-deleted", e =>
-            {
-                e.ConfigureConsumer<UserDeletedConsumer>(ctx);
-            });
-            cfg.ReceiveEndpoint("shipment-payment-completed", e =>
-            {
-                e.ConfigureConsumer<PaymentCompletedConsumer>(ctx);
-            });
-            cfg.ReceiveEndpoint("shipment-cancel-command", e =>  
-            e.ConfigureConsumer<CancelShipmentConsumer>(ctx));
 
             cfg.ConfigureEndpoints(ctx);
         });
