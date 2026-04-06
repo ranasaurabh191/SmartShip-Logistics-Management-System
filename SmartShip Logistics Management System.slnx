@@ -13,4 +13,7 @@
   <Folder Name="/Shared/">
     <Project Path="Shared/Smartship.Shared/Smartship.Shared.csproj" />
   </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="SmartShip.PaymentService.Tests/SmartShip.PaymentService.Tests.csproj" Id="86afbc73-dab6-4ec9-aca7-9cfee58ef77a" />
+  </Folder>
 </Solution>
