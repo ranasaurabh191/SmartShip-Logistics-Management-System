@@ -11,7 +11,12 @@
     <Project Path="Services/SmartShip.TrackingService/SmartShip.TrackingService.csproj" />
   </Folder>
   <Folder Name="/Shared/">
-    <Project Path="Shared/Smartship.Shared/Smartship.Shared.csproj" />
+    <Project Path="Shared/SmartShip.Shared/SmartShip.Shared.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yml" />
+    <File Path="Jenkinsfile" />
+    <File Path="nuget.config" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="SmartShip.PaymentService.Tests/SmartShip.PaymentService.Tests.csproj" Id="86afbc73-dab6-4ec9-aca7-9cfee58ef77a" />

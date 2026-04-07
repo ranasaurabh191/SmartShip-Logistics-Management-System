@@ -93,7 +93,7 @@ try
         client.BaseAddress = new Uri(builder.Configuration["Services:ShipmentService"]!);
     });
     builder.Services.AddDbContext<PaymentDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
     builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
     builder.Services.AddScoped<ISagaCorrelationRepository, SagaCorrelationRepository>();
@@ -120,6 +120,8 @@ try
 
     builder.Services.AddAuthorization();
 
+    var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
+
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<ShipmentCreatedConsumer>();
@@ -127,10 +129,10 @@ try
 
         x.UsingRabbitMq((context, cfg) =>
         {
-            cfg.Host("localhost", "/", h =>
+            cfg.Host(rabbitHost, "/", h =>
             {
-                h.Username("guest");
-                h.Password("guest");
+                h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+                h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
             });
             cfg.ReceiveEndpoint("payment-shipment-created", e =>
             {
@@ -147,18 +149,18 @@ try
 
     builder.Services.AddSingleton<IConnection>(sp =>
     {
+        var host = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
         var factory = new ConnectionFactory
         {
-            Uri = new Uri("amqp://guest:guest@localhost:5672/"),
+            Uri = new Uri($"amqp://guest:guest@{host}:5672"),
             AutomaticRecoveryEnabled = true
         };
-
         return factory.CreateConnectionAsync().GetAwaiter().GetResult();
     });
 
     builder.Services.AddHealthChecks()
         .AddSqlServer(
-            connectionString: builder.Configuration.GetConnectionString("Default")!,
+            connectionString: builder.Configuration.GetConnectionString("DefaultConnection")!,
             name: "sqlserver",
             failureStatus: HealthStatus.Unhealthy,
             tags: new[] { "db" })
@@ -175,11 +177,25 @@ try
         opt.MessageTemplate =
             "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    if (!app.Environment.IsEnvironment("Testing"))
     {
-        using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
-        db.Database.Migrate();
+        var retries = 10;
+        while (retries > 0)
+        {
+            try
+            {
+                using var scope = app.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
+                db.Database.Migrate();
+                Log.Information("Payment database migrated successfully.");
+                break;
+            }
+            catch (Exception ex)
+            {
+                retries--;
+                Log.Warning("Migration failed ({Retries} left): {Message}", retries, ex.Message);
+                Thread.Sleep(5000);
+            }
+        }
     }
 
     app.UseSwagger();

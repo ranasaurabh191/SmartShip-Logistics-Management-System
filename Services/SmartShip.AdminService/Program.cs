@@ -55,6 +55,9 @@ try
     builder.Services.AddFluentValidationClientsideAdapters();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddValidatorsFromAssemblyContaining<CreateHubRequestValidator>();
+
+    var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
+
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<UserCreatedConsumer>();
@@ -65,31 +68,27 @@ try
 
         x.UsingRabbitMq((context, cfg) =>
         {
-            cfg.Host("localhost", "/", h =>
+            cfg.Host(rabbitHost, "/", h =>
             {
-                h.Username("guest");
-                h.Password("guest");
+                h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+                h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
             });
             cfg.ReceiveEndpoint("admin-shipment-delivered", e =>
             {
                 e.ConfigureConsumer<ShipmentDeliveredConsumer>(context);
             });
-
             cfg.ReceiveEndpoint("admin-user-created", e =>
             {
                 e.ConfigureConsumer<UserCreatedConsumer>(context);
             });
-
             cfg.ReceiveEndpoint("admin-user-deleted", e =>
             {
                 e.ConfigureConsumer<UserDeletedConsumer>(context);
             });
-
             cfg.ReceiveEndpoint("admin-shipment-created", e =>
             {
                 e.ConfigureConsumer<ShipmentCreatedMetricsConsumer>(context);
             });
-
             cfg.ReceiveEndpoint("admin-shipment-cancelled", e =>
             {
                 e.ConfigureConsumer<ShipmentCancelledConsumer>(context);
@@ -160,12 +159,12 @@ try
 
     builder.Services.AddSingleton<IConnection>(sp =>
     {
+        var host = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
         var factory = new ConnectionFactory
         {
-            Uri = new Uri("amqp://guest:guest@localhost:5672/"),
+            Uri = new Uri($"amqp://guest:guest@{host}:5672"),
             AutomaticRecoveryEnabled = true
         };
-
         return factory.CreateConnectionAsync().GetAwaiter().GetResult();
     });
 
@@ -217,8 +216,10 @@ try
     app.UseSerilogRequestLogging(opt =>
         opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    using (var scope = app.Services.CreateScope())
+    if (!app.Environment.IsEnvironment("Testing") &&
+    !app.Environment.IsEnvironment("DockerJenkins") == false)
     {
+        using var scope = app.Services.CreateScope();
         scope.ServiceProvider.GetRequiredService<AdminDbContext>().Database.Migrate();
     }
     app.UseSwagger(); 

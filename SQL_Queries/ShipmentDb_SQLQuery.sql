@@ -12,7 +12,6 @@ SELECT * FROM ShipmentOrderSagas;
 	
 --SELECT * FROM Addresses;
 
-
 --SELECT * FROM Packages;
 
 

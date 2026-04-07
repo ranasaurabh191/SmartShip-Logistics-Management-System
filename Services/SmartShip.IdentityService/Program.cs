@@ -110,14 +110,16 @@ try
     builder.Services.AddDbContext<IdentityDbContext>(opt =>
         opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+    var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
+
     builder.Services.AddMassTransit(x =>
     {
         x.UsingRabbitMq((ctx, cfg) =>
         {
-            cfg.Host("localhost", "/", h =>
+            cfg.Host(rabbitHost, "/", h =>
             {
-                h.Username("guest");
-                h.Password("guest");
+                h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+                h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
             });
         });
     });
@@ -149,12 +151,12 @@ try
 
     builder.Services.AddSingleton<IConnection>(sp =>
     {
+        var host = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
         var factory = new ConnectionFactory
         {
-            Uri = new Uri("amqp://guest:guest@localhost:5672/"),
+            Uri = new Uri($"amqp://guest:guest@{host}:5672"),
             AutomaticRecoveryEnabled = true
         };
-
         return factory.CreateConnectionAsync().GetAwaiter().GetResult();
     });
 
@@ -202,9 +204,12 @@ try
     app.UseMiddleware<ExceptionMiddleware>();
     app.UseSerilogRequestLogging(opt => opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    using (var scope = app.Services.CreateScope())
+    if (!app.Environment.IsEnvironment("Testing") &&
+    !app.Environment.IsEnvironment("DockerJenkins") == false)
+    {
+        using var scope = app.Services.CreateScope();
         scope.ServiceProvider.GetRequiredService<IdentityDbContext>().Database.Migrate();
-
+    }
     app.UseSwagger(); app.UseSwaggerUI();
     app.UseCors("AllowAll");
     app.UseAuthentication(); app.UseAuthorization();

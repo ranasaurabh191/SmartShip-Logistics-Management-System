@@ -112,6 +112,8 @@ try
 
     builder.Services.AddHttpContextAccessor();
 
+    var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
+
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<UserDeletedConsumer>();
@@ -136,10 +138,10 @@ try
 
             x.UsingRabbitMq((ctx, cfg) =>
             {
-                cfg.Host("localhost", "/", h =>
+                cfg.Host(rabbitHost, "/", h =>
                 {
-                    h.Username("guest");
-                    h.Password("guest");
+                    h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+                    h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
                 });
                 cfg.ReceiveEndpoint("shipment-user-deleted", e =>
                     e.ConfigureConsumer<UserDeletedConsumer>(ctx));
@@ -177,9 +179,10 @@ try
     {
         builder.Services.AddSingleton<IConnection>(sp =>
         {
+            var host = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
             var factory = new ConnectionFactory
             {
-                Uri = new Uri("amqp://guest:guest@localhost:5672/"),
+                Uri = new Uri($"amqp://guest:guest@{host}:5672"),
                 AutomaticRecoveryEnabled = true
             };
             return factory.CreateConnectionAsync().GetAwaiter().GetResult();
@@ -236,11 +239,11 @@ try
     app.UseMiddleware<ExceptionMiddleware>();
     app.UseSerilogRequestLogging(opt => opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    if (!app.Environment.IsEnvironment("Testing"))
+    if (!app.Environment.IsEnvironment("Testing") &&
+    !app.Environment.IsEnvironment("DockerJenkins") == false)
     {
         using var scope = app.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<ShipmentDbContext>();
-        db.Database.Migrate();
+        scope.ServiceProvider.GetRequiredService<ShipmentDbContext>().Database.Migrate();
     }
 
     app.UseSwagger(); app.UseSwaggerUI();

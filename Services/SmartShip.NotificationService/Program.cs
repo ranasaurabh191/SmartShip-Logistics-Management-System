@@ -90,6 +90,8 @@ try
     builder.Services.AddHttpClient("ShipmentService", c =>
         c.BaseAddress = new Uri(urls["ShipmentService"]!));
 
+    var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
+
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<UserCreatedConsumer>();
@@ -103,10 +105,10 @@ try
 
         x.UsingRabbitMq((ctx, cfg) =>
         {
-            cfg.Host("localhost", "/", h =>
+            cfg.Host(rabbitHost, "/", h =>
             {
-                h.Username("guest");
-                h.Password("guest");
+                h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+                h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
             });
             cfg.ReceiveEndpoint("notification-user-created", e => e.ConfigureConsumer<UserCreatedConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-shipment-created", e => e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
@@ -144,12 +146,12 @@ try
 
     builder.Services.AddSingleton<IConnection>(sp =>
     {
+        var host = builder.Configuration["RabbitMQ:Host"] ?? "localhost";
         var factory = new ConnectionFactory
         {
-            Uri = new Uri("amqp://guest:guest@localhost:5672/"),
+            Uri = new Uri($"amqp://guest:guest@{host}:5672"),
             AutomaticRecoveryEnabled = true
         };
-
         return factory.CreateConnectionAsync().GetAwaiter().GetResult();
     });
 
@@ -201,7 +203,8 @@ try
     app.UseSerilogRequestLogging(opt =>
         opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
+    if (!app.Environment.IsEnvironment("Testing") &&
+    !app.Environment.IsEnvironment("DockerJenkins") == false)
     {
         using var scope = app.Services.CreateScope();
         scope.ServiceProvider.GetRequiredService<NotificationDbContext>().Database.Migrate();

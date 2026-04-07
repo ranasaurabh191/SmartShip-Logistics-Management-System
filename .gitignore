@@ -1,5 +1,6 @@
 .vs/
 bin/
+localfeed/
 obj/
 *.user
 *.suo
@@ -23,7 +24,8 @@ coverage/
 # Environment files
 .env
 .env.*
-
+*.txt
+*.config
 # OS files
 Thumbs.db
 .DS_Store

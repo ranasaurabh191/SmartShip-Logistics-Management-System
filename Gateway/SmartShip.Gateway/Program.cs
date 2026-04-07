@@ -17,7 +17,11 @@ try
     Log.Information(" --> Starting SmartShip Gateway...");
 
     var builder = WebApplication.CreateBuilder(args);
-    builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+
+    builder.Configuration
+        .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true)
+        .AddJsonFile($"ocelot.{builder.Environment.EnvironmentName}.json",
+                      optional: true, reloadOnChange: true);
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .ReadFrom.Configuration(ctx.Configuration)
@@ -38,12 +42,14 @@ try
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = jwt["Issuer"],
                 ValidAudience = jwt["Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwt["Key"]!))
             };
         });
 
     builder.Services.AddCors(opt =>
-        opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+        opt.AddPolicy("AllowAll", p =>
+            p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
     builder.Services.AddHttpClient("HealthCheckClient", c =>
     {
@@ -56,6 +62,40 @@ try
             failureStatus: HealthStatus.Unhealthy,
             tags: new[] { "services" });
 
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+        {
+            Title = "Payment Service",
+            Version = "v1"
+        });
+
+        options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+            Scheme = "Bearer",
+            BearerFormat = "JWT",
+            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+            Description = "Enter your token."
+        });
+
+        options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+        {
+            {
+                new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                {
+                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                    {
+                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+    });
 
     builder.Services.AddOcelot(builder.Configuration);
     builder.Services.AddSwaggerForOcelot(builder.Configuration);
@@ -63,11 +103,25 @@ try
     var app = builder.Build();
 
     app.UseSerilogRequestLogging(opt =>
-        opt.MessageTemplate = "GATEWAY {RequestMethod} {RequestPath} -> {StatusCode} in {Elapsed:0.0000}ms");
+        opt.MessageTemplate =
+            "GATEWAY {RequestMethod} {RequestPath} -> {StatusCode} in {Elapsed:0.0000}ms");
 
     app.UseCors("AllowAll");
     app.UseAuthentication();
     app.UseAuthorization();
+
+    app.UseSwagger();
+    app.UseSwaggerForOcelotUI(opt =>
+    {
+        opt.PathToSwaggerGenerator = "/swagger/docs";
+    },
+    uiOpt =>
+    {
+        uiOpt.OAuthClientId("swagger-ui");
+        uiOpt.OAuthAppName("SmartShip Swagger UI");
+        uiOpt.OAuthUsePkce();
+        uiOpt.ConfigObject.AdditionalItems["persistAuthorization"] = true;
+    });
 
     app.MapGet("/", () => " --> SmartShip Gateway Running");
 
@@ -98,28 +152,20 @@ try
                 summary = new
                 {
                     total = serviceData.Count,
-                    healthy = serviceData.Values.Count(v => v?.ToString()?.Contains("Healthy") == true),
-                    unhealthy = serviceData.Values.Count(v => v?.ToString()?.Contains("Unreachable") == true
-                                                           || v?.ToString()?.Contains("Timeout") == true),
-                    degraded = serviceData.Values.Count(v => v?.ToString()?.Contains("Degraded") == true)
+                    healthy = serviceData.Values.Count(v =>
+                                    v?.ToString()?.Contains("Healthy") == true),
+                    unhealthy = serviceData.Values.Count(v =>
+                                    v?.ToString()?.Contains("Unreachable") == true
+                                 || v?.ToString()?.Contains("Timeout") == true),
+                    degraded = serviceData.Values.Count(v =>
+                                    v?.ToString()?.Contains("Degraded") == true)
                 }
             };
 
             await context.Response.WriteAsync(
-                JsonSerializer.Serialize(response, new JsonSerializerOptions { WriteIndented = true }));
+                JsonSerializer.Serialize(response,
+                    new JsonSerializerOptions { WriteIndented = true }));
         }
-    });
-
-    app.UseSwaggerForOcelotUI(opt =>
-    {
-        opt.PathToSwaggerGenerator = "/swagger/docs";
-    },
-    uiOpt =>
-    {
-        uiOpt.OAuthClientId("swagger-ui");
-        uiOpt.OAuthAppName("SmartShip Swagger UI");
-        uiOpt.OAuthUsePkce();
-        uiOpt.ConfigObject.AdditionalItems["persistAuthorization"] = true;
     });
 
     app.UseWhen(
