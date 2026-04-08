@@ -1,6 +1,5 @@
 .vs/
 bin/
-localfeed/
 obj/
 *.user
 *.suo
