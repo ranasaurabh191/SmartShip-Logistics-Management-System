@@ -3,7 +3,7 @@ bin/
 obj/
 *.user
 *.suo
-
+localfeed/
 # Ignore all JSON files
 *.json
 
