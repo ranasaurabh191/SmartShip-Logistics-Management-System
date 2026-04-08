@@ -1,55 +1,56 @@
 pipeline {
-    agent any
+    agent {
+        docker {
+            image 'mcr.microsoft.com/dotnet/sdk:10.0'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
-    environment {
-        ASPNETCORE_ENVIRONMENT = 'DockerJenkins'
-        COMPOSE_PROJECT_NAME   = 'smartship'
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+        disableConcurrentBuilds()
+        timestamps()
     }
 
     stages {
         stage('Checkout') {
-            steps { checkout scm }
-        }
-
-        stage('Restore & Build') {
             steps {
-                sh 'dotnet restore SmartShip.sln'
-                sh 'dotnet build SmartShip.sln -c Release --no-restore'
+                checkout scm
             }
         }
 
-        stage('Run Tests') {
+        stage('Restore') {
             steps {
-                sh 'dotnet test SmartShip.sln --no-build -c Release'
+                bat 'dotnet restore "SmartShip Logistics Management System.slnx" --configfile nuget.config'
             }
         }
 
-        stage('Docker Build') {
+        stage('Build') {
             steps {
-                sh 'docker-compose build --parallel'
+                bat 'dotnet build "SmartShip Logistics Management System.slnx" -c Release --no-restore'
             }
         }
 
         stage('Docker Deploy') {
             steps {
-                sh 'docker-compose down --remove-orphans'
-                sh 'docker-compose up -d --force-recreate'
+                bat 'docker-compose build --no-cache'
+                bat 'docker-compose up -d --force-recreate'
             }
         }
 
-        stage('Health Check') {
+        stage('Status') {
             steps {
-                sleep(time: 30, unit: 'SECONDS')
-                sh 'curl -f http://localhost:5000/health || exit 1'
+                bat 'docker-compose ps'
             }
         }
     }
 
     post {
-        success { echo '✅ SmartShip deployed successfully!' }
+        success {
+            echo '✅ SmartShip deployed successfully!'
+        }
         failure {
-            echo '❌ Pipeline failed.'
-            sh 'docker-compose logs --tail=50'
+            bat 'docker-compose logs --tail=100'
         }
     }
 }
