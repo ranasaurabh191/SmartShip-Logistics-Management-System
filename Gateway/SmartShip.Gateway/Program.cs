@@ -67,7 +67,7 @@ try
     {
         options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
         {
-            Title = "Payment Service",
+            Title = "Gateway",
             Version = "v1"
         });
 
