@@ -29,3 +29,5 @@ coverage/
 # OS files
 Thumbs.db
 .DS_Store
+!nuget.config
+!docker-compose.yml
