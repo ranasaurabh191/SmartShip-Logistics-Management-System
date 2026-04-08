@@ -1,15 +1,10 @@
 pipeline {
     agent {
         docker {
-            image 'mcr.microsoft.com/dotnet/sdk:10.0'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
+            image 'mcr.microsoft.com/dotnet/sdk:10.0-windowsservercore-ltsc2022'
+            args '-v //var/run/docker.sock://var/run/docker.sock -v //c/Users/ASUS/OneDrive/Desktop/SmartShip:/workspace'
+            reuseNode true
         }
-    }
-
-    options {
-        buildDiscarder(logRotator(numToKeepStr: '5'))
-        disableConcurrentBuilds()
-        timestamps()
     }
 
     stages {
@@ -31,23 +26,17 @@ pipeline {
             }
         }
 
-        stage('Docker Deploy') {
+        stage('Deploy') {
             steps {
                 bat 'docker-compose build --no-cache'
                 bat 'docker-compose up -d --force-recreate'
-            }
-        }
-
-        stage('Status') {
-            steps {
-                bat 'docker-compose ps'
             }
         }
     }
 
     post {
         success {
-            echo '✅ SmartShip deployed successfully!'
+            echo '✅ SmartShip deployed!'
         }
         failure {
             bat 'docker-compose logs --tail=100'
