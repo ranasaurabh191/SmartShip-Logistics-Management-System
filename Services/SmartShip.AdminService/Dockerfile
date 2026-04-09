@@ -12,6 +12,7 @@ RUN dotnet restore "Services/SmartShip.AdminService/SmartShip.AdminService.cspro
 COPY Shared/ Shared/
 COPY Services/SmartShip.AdminService/ Services/SmartShip.AdminService/
 WORKDIR "/src/Services/SmartShip.AdminService"
+RUN mkdir -p /app/logs/admin
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final

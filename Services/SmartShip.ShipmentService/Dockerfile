@@ -12,6 +12,7 @@ RUN dotnet restore "Services/SmartShip.ShipmentService/SmartShip.ShipmentService
 COPY Shared/ Shared/
 COPY Services/SmartShip.ShipmentService/ Services/SmartShip.ShipmentService/
 WORKDIR "/src/Services/SmartShip.ShipmentService"
+RUN mkdir -p /app/logs/shipment
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final

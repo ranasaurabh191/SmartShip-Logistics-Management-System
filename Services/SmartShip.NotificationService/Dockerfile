@@ -12,6 +12,7 @@ RUN dotnet restore "Services/SmartShip.NotificationService/SmartShip.Notificatio
 COPY Shared/ Shared/
 COPY Services/SmartShip.NotificationService/ Services/SmartShip.NotificationService/
 WORKDIR "/src/Services/SmartShip.NotificationService"
+RUN mkdir -p /app/logs/notification
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final

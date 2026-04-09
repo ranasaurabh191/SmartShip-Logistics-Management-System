@@ -12,6 +12,7 @@ RUN dotnet restore "Services/SmartShip.PaymentService/SmartShip.PaymentService.c
 COPY Shared/ Shared/
 COPY Services/SmartShip.PaymentService/ Services/SmartShip.PaymentService/
 WORKDIR "/src/Services/SmartShip.PaymentService"
+RUN mkdir -p /app/logs/payment
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final

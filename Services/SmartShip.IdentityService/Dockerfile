@@ -14,6 +14,7 @@ COPY Shared/ Shared/
 COPY Services/SmartShip.NotificationService/ Services/SmartShip.NotificationService/
 COPY Services/SmartShip.IdentityService/ Services/SmartShip.IdentityService/
 WORKDIR "/src/Services/SmartShip.IdentityService"
+RUN mkdir -p /app/logs/identity
 RUN dotnet publish -c Release -o /app/publish \
     /p:ErrorOnDuplicatePublishOutputFiles=false
 

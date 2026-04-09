@@ -12,6 +12,7 @@ RUN dotnet restore "Gateway/SmartShip.Gateway/SmartShip.Gateway.csproj"
 COPY Shared/ Shared/
 COPY Gateway/SmartShip.Gateway/ Gateway/SmartShip.Gateway/
 WORKDIR "/src/Gateway/SmartShip.Gateway"
+RUN mkdir -p /app/logs/gateway
 RUN dotnet publish -c Release -o /app/publish
 
 FROM base AS final
