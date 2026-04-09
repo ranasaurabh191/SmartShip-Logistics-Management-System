@@ -1,20 +1,23 @@
 pipeline {
-    agent any  // Native Windows agent - has .NET + Docker
+    agent any
 
     options {
         buildDiscarder(logRotator(numToKeepStr: '5'))
         disableConcurrentBuilds()
         timestamps()
+        skipDefaultCheckout(true)
     }
 
     environment {
-        FULL_REBUILD = 'false'
-        BUILD_IDENTITY = 'false'
-        BUILD_ADMIN = 'false'
-        BUILD_SHIPMENT = 'false'
-        BUILD_PAYMENT = 'false'
+        FULL_REBUILD       = 'false'
+        BUILD_IDENTITY     = 'false'
+        BUILD_ADMIN        = 'false'
+        BUILD_SHIPMENT     = 'false'
+        BUILD_PAYMENT      = 'false'
         BUILD_NOTIFICATION = 'false'
-        BUILD_GATEWAY = 'false'
+        BUILD_GATEWAY      = 'false'
+        DOCKER_BUILDKIT    = '1'
+        COMPOSE_DOCKER_CLI_BUILD = '1'
     }
 
     stages {
@@ -27,113 +30,156 @@ pipeline {
         stage('Detect Changes') {
             steps {
                 script {
-                    def changedFiles = bat(
-                        script: 'git diff --name-only HEAD~1 HEAD || echo FIRST_BUILD',
-                        returnStdout: true
-                    ).trim()
+                    def changedFiles = ''
+                    try {
+                        changedFiles = bat(
+                            script: '@echo off\r\ngit diff --name-only HEAD~1 HEAD',
+                            returnStdout: true
+                        ).trim()
+                    } catch (Exception ex) {
+                        changedFiles = 'FIRST_BUILD'
+                    }
+
+                    if (!changedFiles?.trim()) {
+                        changedFiles = 'NO_CHANGES_DETECTED'
+                    }
 
                     echo "Changed files:\n${changedFiles}"
 
-                    // Full rebuild triggers
-                    if (changedFiles.contains('FIRST_BUILD') || 
-                        changedFiles.contains('docker-compose.yml') || 
-                        changedFiles.contains('nuget.config') || 
-                        changedFiles.contains('Jenkinsfile') || 
-                        changedFiles.contains('localfeed') ||
-                        changedFiles.contains('SmartShip.Shared')) {
+                    def files = changedFiles.readLines()
+
+                    def touches = { keyword ->
+                        files.any { it.replace('\\', '/').contains(keyword) }
+                    }
+
+                    if (
+                        changedFiles.contains('FIRST_BUILD') ||
+                        touches('docker-compose.yml') ||
+                        touches('nuget.config') ||
+                        touches('Jenkinsfile') ||
+                        touches('BuildingBlocks/SmartShip.Shared') ||
+                        touches('localfeed/')
+                    ) {
                         env.FULL_REBUILD = 'true'
                     }
 
-                    // Service-specific triggers
-                    if (changedFiles.contains('SmartShip.IdentityService')) env.BUILD_IDENTITY = 'true'
-                    if (changedFiles.contains('SmartShip.AdminService')) env.BUILD_ADMIN = 'true'
-                    if (changedFiles.contains('SmartShip.ShipmentService')) env.BUILD_SHIPMENT = 'true'
-                    if (changedFiles.contains('SmartShip.PaymentService')) env.BUILD_PAYMENT = 'true'
-                    if (changedFiles.contains('SmartShip.NotificationService')) env.BUILD_NOTIFICATION = 'true'
-                    if (changedFiles.contains('SmartShip.Gateway')) env.BUILD_GATEWAY = 'true'
+                    if (touches('Services/SmartShip.IdentityService/'))     env.BUILD_IDENTITY = 'true'
+                    if (touches('Services/SmartShip.AdminService/'))        env.BUILD_ADMIN = 'true'
+                    if (touches('Services/SmartShip.ShipmentService/'))     env.BUILD_SHIPMENT = 'true'
+                    if (touches('Services/SmartShip.PaymentService/'))      env.BUILD_PAYMENT = 'true'
+                    if (touches('Services/SmartShip.NotificationService/')) env.BUILD_NOTIFICATION = 'true'
+                    if (touches('Gateway/SmartShip.Gateway/'))              env.BUILD_GATEWAY = 'true'
 
                     if (env.FULL_REBUILD == 'true') {
-                        env.BUILD_IDENTITY = env.BUILD_ADMIN = env.BUILD_SHIPMENT = env.BUILD_PAYMENT = env.BUILD_NOTIFICATION = env.BUILD_GATEWAY = 'true'
+                        env.BUILD_IDENTITY     = 'true'
+                        env.BUILD_ADMIN        = 'true'
+                        env.BUILD_SHIPMENT     = 'true'
+                        env.BUILD_PAYMENT      = 'true'
+                        env.BUILD_NOTIFICATION = 'true'
+                        env.BUILD_GATEWAY      = 'true'
                     }
 
-                    echo "FULL_REBUILD=${env.FULL_REBUILD} | Services: ${env.BUILD_IDENTITY}/${env.BUILD_ADMIN}/${env.BUILD_SHIPMENT}/${env.BUILD_PAYMENT}/${env.BUILD_NOTIFICATION}/${env.BUILD_GATEWAY}"
+                    echo """
+FULL_REBUILD=${env.FULL_REBUILD}
+BUILD_IDENTITY=${env.BUILD_IDENTITY}
+BUILD_ADMIN=${env.BUILD_ADMIN}
+BUILD_SHIPMENT=${env.BUILD_SHIPMENT}
+BUILD_PAYMENT=${env.BUILD_PAYMENT}
+BUILD_NOTIFICATION=${env.BUILD_NOTIFICATION}
+BUILD_GATEWAY=${env.BUILD_GATEWAY}
+"""
                 }
             }
         }
 
         stage('Restore') {
+            when {
+                expression { env.FULL_REBUILD == 'true' }
+            }
             steps {
                 bat 'dotnet restore "SmartShip Logistics Management System.slnx" --configfile nuget.config'
             }
         }
 
         stage('Build Identity') {
-            when { expression { env.BUILD_IDENTITY == 'true' } }
+            when {
+                beforeAgent true
+                expression { env.BUILD_IDENTITY == 'true' }
+            }
             steps {
-                bat 'dotnet build "Services\\SmartShip.IdentityService\\SmartShip.IdentityService.csproj" -c Release --no-restore'
-                bat 'docker-compose build --no-cache identity-service'
-                bat 'docker-compose up -d --force-recreate identity-service'
+                bat 'docker compose build identity-service'
+                bat 'docker compose up -d --no-deps identity-service'
             }
         }
 
         stage('Build Admin') {
-            when { expression { env.BUILD_ADMIN == 'true' } }
+            when {
+                beforeAgent true
+                expression { env.BUILD_ADMIN == 'true' }
+            }
             steps {
-                bat 'dotnet build "Services\\SmartShip.AdminService\\SmartShip.AdminService.csproj" -c Release --no-restore'
-                bat 'docker-compose build --no-cache admin-service'
-                bat 'docker-compose up -d --force-recreate admin-service'
+                bat 'docker compose build admin-service'
+                bat 'docker compose up -d --no-deps admin-service'
             }
         }
 
         stage('Build Shipment') {
-            when { expression { env.BUILD_SHIPMENT == 'true' } }
+            when {
+                beforeAgent true
+                expression { env.BUILD_SHIPMENT == 'true' }
+            }
             steps {
-                bat 'dotnet build "Services\\SmartShip.ShipmentService\\SmartShip.ShipmentService.csproj" -c Release --no-restore'
-                bat 'docker-compose build --no-cache shipment-service'
-                bat 'docker-compose up -d --force-recreate shipment-service'
+                bat 'docker compose build shipment-service'
+                bat 'docker compose up -d --no-deps shipment-service'
             }
         }
 
         stage('Build Payment') {
-            when { expression { env.BUILD_PAYMENT == 'true' } }
+            when {
+                beforeAgent true
+                expression { env.BUILD_PAYMENT == 'true' }
+            }
             steps {
-                bat 'dotnet build "Services\\SmartShip.PaymentService\\SmartShip.PaymentService.csproj" -c Release --no-restore'
-                bat 'docker-compose build --no-cache payment-service'
-                bat 'docker-compose up -d --force-recreate payment-service'
+                bat 'docker compose build payment-service'
+                bat 'docker compose up -d --no-deps payment-service'
             }
         }
 
         stage('Build Notification') {
-            when { expression { env.BUILD_NOTIFICATION == 'true' } }
+            when {
+                beforeAgent true
+                expression { env.BUILD_NOTIFICATION == 'true' }
+            }
             steps {
-                bat 'dotnet build "Services\\SmartShip.NotificationService\\SmartShip.NotificationService.csproj" -c Release --no-restore'
-                bat 'docker-compose build --no-cache notification-service'
-                bat 'docker-compose up -d --force-recreate notification-service'
+                bat 'docker compose build notification-service'
+                bat 'docker compose up -d --no-deps notification-service'
             }
         }
 
         stage('Build Gateway') {
-            when { expression { env.BUILD_GATEWAY == 'true' } }
+            when {
+                beforeAgent true
+                expression { env.BUILD_GATEWAY == 'true' }
+            }
             steps {
-                bat 'dotnet build "Gateway\\SmartShip.Gateway\\SmartShip.Gateway.csproj" -c Release --no-restore'
-                bat 'docker-compose build --no-cache gateway'
-                bat 'docker-compose up -d --force-recreate gateway'
+                bat 'docker compose build gateway'
+                bat 'docker compose up -d --no-deps gateway'
             }
         }
 
         stage('Status') {
             steps {
-                bat 'docker-compose ps'
+                bat 'docker compose ps'
             }
         }
     }
 
     post {
         success {
-            echo '✅ SmartShip selective CI/CD complete!'
+            echo 'SmartShip selective CI/CD complete'
         }
         failure {
-            bat 'docker-compose logs --tail=100'
+            bat 'docker compose logs --tail=100'
         }
     }
 }

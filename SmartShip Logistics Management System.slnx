@@ -14,6 +14,7 @@
     <Project Path="Shared/SmartShip.Shared/SmartShip.Shared.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
+    <File Path=".dockerignore" />
     <File Path="docker-compose.yml" />
     <File Path="Jenkinsfile" />
     <File Path="nuget.config" />

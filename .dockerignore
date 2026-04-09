@@ -1,0 +1,15 @@
+**/bin
+**/obj
+**/.vs
+**/*.user
+**/*.suo
+**/*.log
+**/TestResults
+**/coverage
+**/node_modules
+**/.git
+**/.github
+**/localfeed
+README.md
+Jenkinsfile
+docker-compose*.yml
