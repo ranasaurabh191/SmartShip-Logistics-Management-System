@@ -12,8 +12,8 @@ using SmartShip.IdentityService.Infrastructure.Data;
 namespace SmartShip.IdentityService.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20260331064203_OtpDtoAdded")]
-    partial class OtpDtoAdded
+    [Migration("20260409093953_InitIdentity")]
+    partial class InitIdentity
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace SmartShip.IdentityService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.IdentityService.Models.OtpVerification", b =>
+            modelBuilder.Entity("SmartShip.IdentityService.Domain.Entities.OtpVerification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,7 +59,7 @@ namespace SmartShip.IdentityService.Migrations
                     b.ToTable("OtpVerifications");
                 });
 
-            modelBuilder.Entity("SmartShip.IdentityService.Models.User", b =>
+            modelBuilder.Entity("SmartShip.IdentityService.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,19 +101,6 @@ namespace SmartShip.IdentityService.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
-                            Email = "admin@smartship.com",
-                            IsActive = true,
-                            Name = "Super Admin",
-                            PasswordHash = "$2a$11$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
-                            Phone = "9999999999",
-                            Role = "ADMIN"
-                        });
                 });
 #pragma warning restore 612, 618
         }

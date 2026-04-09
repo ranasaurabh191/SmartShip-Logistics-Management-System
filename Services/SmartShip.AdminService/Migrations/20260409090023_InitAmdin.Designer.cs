@@ -12,8 +12,8 @@ using SmartShip.AdminService.Infrastructure.Data;
 namespace SmartShip.AdminService.Migrations
 {
     [DbContext(typeof(AdminDbContext))]
-    [Migration("20260328050211_SeedDashboardMetrics")]
-    partial class SeedDashboardMetrics
+    [Migration("20260409090023_InitAmdin")]
+    partial class InitAmdin
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace SmartShip.AdminService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.AdminService.Models.DashboardMetrics", b =>
+            modelBuilder.Entity("SmartShip.AdminService.Domain.Entities.DashboardMetrics", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -42,7 +42,7 @@ namespace SmartShip.AdminService.Migrations
                     b.Property<int>("Exceptions")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastUpdatedAt")
+                    b.Property<DateTime?>("LastUpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("TotalCustomers")
@@ -68,7 +68,7 @@ namespace SmartShip.AdminService.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SmartShip.AdminService.Models.Hub", b =>
+            modelBuilder.Entity("SmartShip.AdminService.Domain.Entities.Hub", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -131,7 +131,7 @@ namespace SmartShip.AdminService.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SmartShip.AdminService.Models.Report", b =>
+            modelBuilder.Entity("SmartShip.AdminService.Domain.Entities.Report", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -22,7 +22,7 @@ namespace SmartShip.TrackingService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.TrackingService.Models.DeliveryProof", b =>
+            modelBuilder.Entity("SmartShip.TrackingService.Domain.Entities.DeliveryProof", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -66,7 +66,7 @@ namespace SmartShip.TrackingService.Migrations
                     b.ToTable("DeliveryProofs");
                 });
 
-            modelBuilder.Entity("SmartShip.TrackingService.Models.Document", b =>
+            modelBuilder.Entity("SmartShip.TrackingService.Domain.Entities.Document", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -109,7 +109,7 @@ namespace SmartShip.TrackingService.Migrations
                     b.ToTable("Documents");
                 });
 
-            modelBuilder.Entity("SmartShip.TrackingService.Models.TrackingEvent", b =>
+            modelBuilder.Entity("SmartShip.TrackingService.Domain.Entities.TrackingEvent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

@@ -12,8 +12,8 @@ using SmartShip.PaymentService.Infrastructure.Data;
 namespace SmartShip.PaymentService.Migrations
 {
     [DbContext(typeof(PaymentDbContext))]
-    [Migration("20260328170512_AddUniqueTrackingNumber")]
-    partial class AddUniqueTrackingNumber
+    [Migration("20260409090257_InitPayment")]
+    partial class InitPayment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace SmartShip.PaymentService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.PaymentService.Models.ShipmentPayment", b =>
+            modelBuilder.Entity("SmartShip.PaymentService.Domain.Entities.ShipmentPayment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,6 +63,12 @@ namespace SmartShip.PaymentService.Migrations
                     b.Property<string>("RazorpaySignature")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("RefundedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("SagaCorrelationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("ShipmentId")
                         .HasColumnType("int");
 
@@ -78,6 +84,19 @@ namespace SmartShip.PaymentService.Migrations
                         .IsUnique();
 
                     b.ToTable("Payments");
+                });
+
+            modelBuilder.Entity("SmartShip.PaymentService.Domain.Entities.ShipmentSagaCorrelation", b =>
+                {
+                    b.Property<int>("ShipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("CorrelationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ShipmentId");
+
+                    b.ToTable("SagaCorrelations");
                 });
 #pragma warning restore 612, 618
         }

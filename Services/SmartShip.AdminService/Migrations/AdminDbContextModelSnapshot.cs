@@ -22,7 +22,7 @@ namespace SmartShip.AdminService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.AdminService.Models.DashboardMetrics", b =>
+            modelBuilder.Entity("SmartShip.AdminService.Domain.Entities.DashboardMetrics", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace SmartShip.AdminService.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SmartShip.AdminService.Models.Hub", b =>
+            modelBuilder.Entity("SmartShip.AdminService.Domain.Entities.Hub", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,7 +128,7 @@ namespace SmartShip.AdminService.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SmartShip.AdminService.Models.Report", b =>
+            modelBuilder.Entity("SmartShip.AdminService.Domain.Entities.Report", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

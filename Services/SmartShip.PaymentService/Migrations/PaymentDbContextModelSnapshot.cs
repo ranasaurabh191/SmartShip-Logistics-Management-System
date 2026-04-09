@@ -22,7 +22,7 @@ namespace SmartShip.PaymentService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.PaymentService.Models.ShipmentPayment", b =>
+            modelBuilder.Entity("SmartShip.PaymentService.Domain.Entities.ShipmentPayment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,7 +83,7 @@ namespace SmartShip.PaymentService.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("SmartShip.PaymentService.Models.ShipmentSagaCorrelation", b =>
+            modelBuilder.Entity("SmartShip.PaymentService.Domain.Entities.ShipmentSagaCorrelation", b =>
                 {
                     b.Property<int>("ShipmentId")
                         .HasColumnType("int");

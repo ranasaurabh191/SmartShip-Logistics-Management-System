@@ -19,16 +19,5 @@ public class IdentityDbContext : DbContext
             e.Property(u => u.Role).HasDefaultValue("CUSTOMER");
         });
 
-        modelBuilder.Entity<User>().HasData(new User
-        {
-            Id = 1,
-            Name = "Super Admin",
-            Email = "admin@smartship.com",
-            Phone = "9999999999",
-            PasswordHash = "$2a$11$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi",
-            Role = "ADMIN",
-            IsActive = true,
-            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-        });
-    }
+        }
 }

@@ -8,11 +8,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SmartShip.AdminService.Migrations
 {
     /// <inheritdoc />
-    public partial class InitAdmin : Migration
+    public partial class InitAmdin : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "DashboardMetrics",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TotalShipments = table.Column<int>(type: "int", nullable: false),
+                    ActiveShipments = table.Column<int>(type: "int", nullable: false),
+                    DeliveredToday = table.Column<int>(type: "int", nullable: false),
+                    Exceptions = table.Column<int>(type: "int", nullable: false),
+                    TotalCustomers = table.Column<int>(type: "int", nullable: false),
+                    LastUpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DashboardMetrics", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Hubs",
                 columns: table => new
@@ -52,6 +70,11 @@ namespace SmartShip.AdminService.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "DashboardMetrics",
+                columns: new[] { "Id", "ActiveShipments", "DeliveredToday", "Exceptions", "LastUpdatedAt", "TotalCustomers", "TotalShipments" },
+                values: new object[] { 1, 0, 0, 0, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 0, 0 });
+
+            migrationBuilder.InsertData(
                 table: "Hubs",
                 columns: new[] { "Id", "City", "ContactPhone", "Country", "CreatedAt", "IsActive", "Name", "State" },
                 values: new object[,]
@@ -64,6 +87,9 @@ namespace SmartShip.AdminService.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "DashboardMetrics");
+
             migrationBuilder.DropTable(
                 name: "Hubs");
 

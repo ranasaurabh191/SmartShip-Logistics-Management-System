@@ -22,7 +22,7 @@ namespace SmartShip.ShipmentService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.ShipmentService.Models.Address", b =>
+            modelBuilder.Entity("SmartShip.ShipmentService.Domain.Entities.Address", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace SmartShip.ShipmentService.Migrations
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("SmartShip.ShipmentService.Models.Package", b =>
+            modelBuilder.Entity("SmartShip.ShipmentService.Domain.Entities.Package", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -95,7 +95,7 @@ namespace SmartShip.ShipmentService.Migrations
                     b.ToTable("Packages");
                 });
 
-            modelBuilder.Entity("SmartShip.ShipmentService.Models.Shipment", b =>
+            modelBuilder.Entity("SmartShip.ShipmentService.Domain.Entities.Shipment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -162,7 +162,7 @@ namespace SmartShip.ShipmentService.Migrations
                     b.ToTable("Shipments");
                 });
 
-            modelBuilder.Entity("SmartShip.ShipmentService.Sagas.ShipmentOrderState", b =>
+            modelBuilder.Entity("SmartShip.ShipmentService.Domain.Entities.ShipmentOrderState", b =>
                 {
                     b.Property<Guid>("CorrelationId")
                         .ValueGeneratedOnAdd()
@@ -212,21 +212,21 @@ namespace SmartShip.ShipmentService.Migrations
                     b.ToTable("ShipmentOrderSagas");
                 });
 
-            modelBuilder.Entity("SmartShip.ShipmentService.Models.Shipment", b =>
+            modelBuilder.Entity("SmartShip.ShipmentService.Domain.Entities.Shipment", b =>
                 {
-                    b.HasOne("SmartShip.ShipmentService.Models.Package", "Package")
+                    b.HasOne("SmartShip.ShipmentService.Domain.Entities.Package", "Package")
                         .WithMany()
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SmartShip.ShipmentService.Models.Address", "ReceiverAddress")
+                    b.HasOne("SmartShip.ShipmentService.Domain.Entities.Address", "ReceiverAddress")
                         .WithMany()
                         .HasForeignKey("ReceiverAddressId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("SmartShip.ShipmentService.Models.Address", "SenderAddress")
+                    b.HasOne("SmartShip.ShipmentService.Domain.Entities.Address", "SenderAddress")
                         .WithMany()
                         .HasForeignKey("SenderAddressId")
                         .OnDelete(DeleteBehavior.Restrict)

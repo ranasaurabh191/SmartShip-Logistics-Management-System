@@ -41,7 +41,7 @@ namespace SmartShip.TrackingService.Migrations
                     TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DocumentType = table.Column<int>(type: "int", nullable: false),
+                    DocumentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileSizeBytes = table.Column<long>(type: "bigint", nullable: false),
                     UploadedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UploadedByUserId = table.Column<int>(type: "int", nullable: false)

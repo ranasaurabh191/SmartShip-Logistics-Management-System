@@ -22,7 +22,7 @@ namespace SmartShip.NotificationService.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SmartShip.NotificationService.Models.Notification", b =>
+            modelBuilder.Entity("SmartShip.NotificationService.Domain.Entities.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
