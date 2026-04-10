@@ -4,8 +4,8 @@ def BUILD_ADMIN = false
 def BUILD_SHIPMENT = false
 def BUILD_PAYMENT = false
 def BUILD_NOTIFICATION = false
-def BUILD_GATEWAY = false
 def BUILD_TRACKING = false
+def BUILD_GATEWAY = false
 
 pipeline {
     agent any
@@ -29,6 +29,7 @@ pipeline {
             }
         }
 
+        
         stage('Detect Changes') {
             steps {
                 script {
@@ -53,8 +54,6 @@ pipeline {
                         .collect { it.trim().replace('\\', '/') }
                         .findAll { it }
 
-                    echo "Normalized files: ${files}"
-
                     def touches = { prefix ->
                         files.any { f -> f.contains(prefix) }
                     }
@@ -64,8 +63,9 @@ pipeline {
                         touches('docker-compose.yml') ||
                         touches('nuget.config') ||
                         touches('Jenkinsfile') ||
-                        touches('BuildingBlocks/SmartShip.Shared/') ||
-                        touches('localfeed/')
+                        touches('localfeed/') ||
+                        touches('Shared/SmartShip.Shared/') ||
+                        touches('BuildingBlocks/SmartShip.Shared/')
                     ) {
                         FULL_REBUILD = true
                     }
@@ -74,10 +74,9 @@ pipeline {
                     if (touches('Services/SmartShip.AdminService/'))        BUILD_ADMIN = true
                     if (touches('Services/SmartShip.ShipmentService/'))     BUILD_SHIPMENT = true
                     if (touches('Services/SmartShip.PaymentService/'))      BUILD_PAYMENT = true
-                    if (touches('Services/SmartShip.TrackingService/'))     BUILD_TRACKING = true
                     if (touches('Services/SmartShip.NotificationService/')) BUILD_NOTIFICATION = true
+                    if (touches('Services/SmartShip.TrackingService/'))     BUILD_TRACKING = true
                     if (touches('Gateway/SmartShip.Gateway/'))              BUILD_GATEWAY = true
-
 
                     if (FULL_REBUILD) {
                         BUILD_IDENTITY = true
@@ -90,110 +89,110 @@ pipeline {
                     }
 
                     echo """
-                        FULL_REBUILD=${FULL_REBUILD}
-                        BUILD_IDENTITY=${BUILD_IDENTITY}
-                        BUILD_ADMIN=${BUILD_ADMIN}
-                        BUILD_SHIPMENT=${BUILD_SHIPMENT}
-                        BUILD_PAYMENT=${BUILD_PAYMENT}
-                        BUILD_NOTIFICATION=${BUILD_NOTIFICATION}
-                        BUILD_TRACKING=${BUILD_TRACKING}
-                        BUILD_GATEWAY=${BUILD_GATEWAY}
-                        """
+FULL_REBUILD=${FULL_REBUILD}
+BUILD_IDENTITY=${BUILD_IDENTITY}
+BUILD_ADMIN=${BUILD_ADMIN}
+BUILD_SHIPMENT=${BUILD_SHIPMENT}
+BUILD_PAYMENT=${BUILD_PAYMENT}
+BUILD_NOTIFICATION=${BUILD_NOTIFICATION}
+BUILD_TRACKING=${BUILD_TRACKING}
+BUILD_GATEWAY=${BUILD_GATEWAY}
+"""
                 }
             }
         }
-        stage('Prepare Local Feed') {
-            steps {
-                script {
-                    if (!fileExists('localfeed')) {
-                        echo 'Creating localfeed directory (empty - Docker will handle restore)'
-                        bat 'mkdir localfeed'
-                    }
-                }
-            }
-        }
-        stage('Restore') {
+
+        stage('Full Rebuild') {
             when {
-                expression { FULL_REBUILD && fileExists('localfeed') }
+                expression { FULL_REBUILD }
             }
             steps {
-                bat 'dotnet restore "SmartShip Logistics Management System.slnx" --configfile nuget.config'
+                bat 'docker compose down --remove-orphans'
+                bat 'docker compose build --no-cache'
+                bat 'docker compose up -d'
             }
         }
 
         stage('Build Identity') {
             when {
-                expression { BUILD_IDENTITY }
+                expression { !FULL_REBUILD && BUILD_IDENTITY }
             }
             steps {
-                bat 'docker rm -f smartship-identity 2>nul || exit /b 0'
-                bat 'docker compose build identity-service'
+                bat 'docker compose stop identity-service'
+                bat 'docker compose rm -f identity-service'
+                bat 'docker compose build --no-cache identity-service'
                 bat 'docker compose up -d --no-deps identity-service'
             }
         }
 
         stage('Build Admin') {
             when {
-                expression { BUILD_ADMIN }
+                expression { !FULL_REBUILD && BUILD_ADMIN }
             }
             steps {
-                bat 'docker rm -f smartship-admin 2>nul || exit /b 0'
-                bat 'docker compose build admin-service'
+                bat 'docker compose stop admin-service'
+                bat 'docker compose rm -f admin-service'
+                bat 'docker compose build --no-cache admin-service'
                 bat 'docker compose up -d --no-deps admin-service'
             }
         }
 
         stage('Build Shipment') {
             when {
-                expression { BUILD_SHIPMENT }
+                expression { !FULL_REBUILD && BUILD_SHIPMENT }
             }
             steps {
-                bat 'docker rm -f smartship-shipment 2>nul || exit /b 0'
-                bat 'docker compose build shipment-service'
+                bat 'docker compose stop shipment-service'
+                bat 'docker compose rm -f shipment-service'
+                bat 'docker compose build --no-cache shipment-service'
                 bat 'docker compose up -d --no-deps shipment-service'
             }
         }
 
         stage('Build Payment') {
             when {
-                expression { BUILD_PAYMENT }
+                expression { !FULL_REBUILD && BUILD_PAYMENT }
             }
             steps {
-                bat 'docker rm -f smartship-payment 2>nul || exit /b 0'
-                bat 'docker compose build payment-service'
+                bat 'docker compose stop payment-service'
+                bat 'docker compose rm -f payment-service'
+                bat 'docker compose build --no-cache payment-service'
                 bat 'docker compose up -d --no-deps payment-service'
             }
         }
 
         stage('Build Notification') {
             when {
-                expression { BUILD_NOTIFICATION }
+                expression { !FULL_REBUILD && BUILD_NOTIFICATION }
             }
             steps {
-                bat 'docker rm -f smartship-notification 2>nul || exit /b 0'
-                bat 'docker compose build notification-service'
+                bat 'docker compose stop notification-service'
+                bat 'docker compose rm -f notification-service'
+                bat 'docker compose build --no-cache notification-service'
                 bat 'docker compose up -d --no-deps notification-service'
             }
         }
 
         stage('Build Tracking') {
             when {
-                expression { BUILD_TRACKING }
+                expression { !FULL_REBUILD && BUILD_TRACKING }
             }
             steps {
-                bat 'docker rm -f smartship-tracking 2>nul || exit /b 0'
-                bat 'docker compose build tracking-service'
+                bat 'docker compose stop tracking-service'
+                bat 'docker compose rm -f tracking-service'
+                bat 'docker compose build --no-cache tracking-service'
                 bat 'docker compose up -d --no-deps tracking-service'
             }
         }
 
         stage('Build Gateway') {
             when {
-                expression { BUILD_GATEWAY }
+                expression { !FULL_REBUILD && BUILD_GATEWAY }
             }
             steps {
-                bat 'docker rm -f smartship-gateway 2>nul || exit /b 0'
-                bat 'docker compose build api-gateway'
+                bat 'docker compose stop api-gateway'
+                bat 'docker compose rm -f api-gateway'
+                bat 'docker compose build --no-cache api-gateway'
                 bat 'docker compose up -d --no-deps api-gateway'
             }
         }
@@ -207,7 +206,7 @@ pipeline {
 
     post {
         success {
-            echo 'SmartShip Selective CI/CD complete'
+            echo 'SmartShip selective CI/CD complete'
         }
         failure {
             bat 'docker compose logs --tail=100'
