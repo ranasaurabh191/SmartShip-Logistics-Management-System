@@ -17,26 +17,28 @@ pipeline {
         stage('Selective Rebuild') {
             steps {
                 script {
-                    // Get changed files
-                    def changedFiles = bat(
-                        script: 'git diff --name-only HEAD~1 HEAD || echo FIRST_BUILD',
-                        returnStdout: true
-                    ).trim()
+                    // cd to project directory first (where docker-compose.yml exists)
+                    dir('SmartShip Logistics Management System') {
+                        def changedFiles = bat(
+                            script: 'git diff --name-only HEAD~1 HEAD || echo FIRST_BUILD',
+                            returnStdout: true
+                        ).trim()
 
-                    def files = changedFiles.split('\n').collect { it.trim() }
-                    def serviceChanged = files.any { 
-                        it.contains('Services/SmartShip.') || 
-                        it.contains('Gateway/SmartShip.Gateway')
-                    }
+                        def files = changedFiles.split('\n').collect { it.trim() }
+                        def serviceChanged = files.any { 
+                            it.contains('Services/SmartShip.') || 
+                            it.contains('Gateway/SmartShip.Gateway')
+                        }
 
-                    if (serviceChanged || !files) {
-                        // Full rebuild (your exact manual flow)
-                        bat 'docker compose down --remove-orphans'
-                        bat 'docker compose build --no-cache'
-                        bat 'docker compose up -d'
-                        echo 'Full rebuild complete (matches manual docker compose flow)'
-                    } else {
-                        echo 'No service changes detected - skipping rebuild'
+                        if (serviceChanged || !files) {
+                            // Your EXACT manual flow from the right directory
+                            bat 'docker compose down --remove-orphans'
+                            bat 'docker compose build --no-cache'
+                            bat 'docker compose up -d'
+                            echo 'Full rebuild complete from project root'
+                        } else {
+                            echo 'No service changes - skipping'
+                        }
                     }
                 }
             }
@@ -44,14 +46,18 @@ pipeline {
 
         stage('Status') {
             steps {
-                bat 'docker compose ps'
+                dir('SmartShip Logistics Management System') {
+                    bat 'docker compose ps'
+                }
             }
         }
     }
 
     post {
         failure {
-            bat 'docker compose logs --tail=100'
+            dir('SmartShip Logistics Management System') {
+                bat 'docker compose logs --tail=100'
+            }
         }
     }
 }
