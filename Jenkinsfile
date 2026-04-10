@@ -46,18 +46,23 @@ pipeline {
 
                     echo "Changed files:\n${changedFiles}"
 
-                    def files = changedFiles.readLines()
+                    def files = changedFiles
+                        .split('\r?\n')
+                        .collect { it.trim().replace('\\', '/') }
+                        .findAll { it }
 
-                    def touches = { keyword ->
-                        files.any { it.replace('\\', '/').contains(keyword) }
+                    echo "Normalized files: ${files}"
+
+                    def touches = { prefix ->
+                        return files.any { it.contains(prefix) }
                     }
 
                     if (
-                        changedFiles.contains('FIRST_BUILD') ||
+                        files.contains('FIRST_BUILD') ||
                         touches('docker-compose.yml') ||
                         touches('nuget.config') ||
                         touches('Jenkinsfile') ||
-                        touches('BuildingBlocks/SmartShip.Shared') ||
+                        touches('BuildingBlocks/SmartShip.Shared/') ||
                         touches('localfeed/')
                     ) {
                         env.FULL_REBUILD = 'true'
@@ -78,16 +83,21 @@ pipeline {
                         env.BUILD_NOTIFICATION = 'true'
                         env.BUILD_GATEWAY      = 'true'
                     }
-
+                    files.each { f ->
+                        echo "FILE=>>${f}<<"
+                        echo "SHIPMENT_MATCH=${f.contains('Services/SmartShip.ShipmentService/')}"
+                        echo "GATEWAY_MATCH=${f.contains('Gateway/SmartShip.Gateway/')}"
+                        echo "JENKINS_MATCH=${f.contains('Jenkinsfile')}"
+                    }
                     echo """
-FULL_REBUILD=${env.FULL_REBUILD}
-BUILD_IDENTITY=${env.BUILD_IDENTITY}
-BUILD_ADMIN=${env.BUILD_ADMIN}
-BUILD_SHIPMENT=${env.BUILD_SHIPMENT}
-BUILD_PAYMENT=${env.BUILD_PAYMENT}
-BUILD_NOTIFICATION=${env.BUILD_NOTIFICATION}
-BUILD_GATEWAY=${env.BUILD_GATEWAY}
-"""
+                        FULL_REBUILD=${env.FULL_REBUILD}
+                        BUILD_IDENTITY=${env.BUILD_IDENTITY}
+                        BUILD_ADMIN=${env.BUILD_ADMIN}
+                        BUILD_SHIPMENT=${env.BUILD_SHIPMENT}
+                        BUILD_PAYMENT=${env.BUILD_PAYMENT}
+                        BUILD_NOTIFICATION=${env.BUILD_NOTIFICATION}
+                        BUILD_GATEWAY=${env.BUILD_GATEWAY}
+                        """
                 }
             }
         }
@@ -162,7 +172,7 @@ BUILD_GATEWAY=${env.BUILD_GATEWAY}
                 expression { env.BUILD_GATEWAY == 'true' }
             }
             steps {
-                bat 'docker compose build gateway'
+                bat 'docker compose build api-gateway'
                 bat 'docker compose up -d --no-deps gateway'
             }
         }
