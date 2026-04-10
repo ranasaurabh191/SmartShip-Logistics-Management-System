@@ -29,7 +29,11 @@ pipeline {
             }
         }
 
-        
+        stage('Restore Packages') {
+            steps {
+                bat 'dotnet restore "SmartShip Logistics Management System.slnx" --packages localfeed'
+            }
+        }
         stage('Detect Changes') {
             steps {
                 script {
