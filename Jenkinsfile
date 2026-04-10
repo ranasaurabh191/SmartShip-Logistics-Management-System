@@ -97,10 +97,19 @@ BUILD_GATEWAY=${BUILD_GATEWAY}
                 }
             }
         }
-
+        stage('Prepare Local Feed') {
+            steps {
+                script {
+                    if (!fileExists('localfeed')) {
+                        echo 'Creating localfeed directory (empty - Docker will handle restore)'
+                        bat 'mkdir localfeed'
+                    }
+                }
+            }
+        }
         stage('Restore') {
             when {
-                expression { FULL_REBUILD }
+                expression { FULL_REBUILD && fileExists('localfeed') }
             }
             steps {
                 bat 'dotnet restore "SmartShip Logistics Management System.slnx" --configfile nuget.config'
