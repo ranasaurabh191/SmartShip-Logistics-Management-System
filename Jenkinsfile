@@ -1,3 +1,11 @@
+def FULL_REBUILD = false
+def BUILD_IDENTITY = false
+def BUILD_ADMIN = false
+def BUILD_SHIPMENT = false
+def BUILD_PAYMENT = false
+def BUILD_NOTIFICATION = false
+def BUILD_GATEWAY = false
+
 pipeline {
     agent any
 
@@ -9,14 +17,7 @@ pipeline {
     }
 
     environment {
-        FULL_REBUILD       = 'false'
-        BUILD_IDENTITY     = 'false'
-        BUILD_ADMIN        = 'false'
-        BUILD_SHIPMENT     = 'false'
-        BUILD_PAYMENT      = 'false'
-        BUILD_NOTIFICATION = 'false'
-        BUILD_GATEWAY      = 'false'
-        DOCKER_BUILDKIT    = '1'
+        DOCKER_BUILDKIT = '1'
         COMPOSE_DOCKER_CLI_BUILD = '1'
     }
 
@@ -54,7 +55,7 @@ pipeline {
                     echo "Normalized files: ${files}"
 
                     def touches = { prefix ->
-                        return files.any { it.contains(prefix) }
+                        files.any { f -> f.contains(prefix) }
                     }
 
                     if (
@@ -65,46 +66,41 @@ pipeline {
                         touches('BuildingBlocks/SmartShip.Shared/') ||
                         touches('localfeed/')
                     ) {
-                        env.FULL_REBUILD = 'true'
+                        FULL_REBUILD = true
                     }
 
-                    if (touches('Services/SmartShip.IdentityService/'))     env.BUILD_IDENTITY = 'true'
-                    if (touches('Services/SmartShip.AdminService/'))        env.BUILD_ADMIN = 'true'
-                    if (touches('Services/SmartShip.ShipmentService/'))     env.BUILD_SHIPMENT = 'true'
-                    if (touches('Services/SmartShip.PaymentService/'))      env.BUILD_PAYMENT = 'true'
-                    if (touches('Services/SmartShip.NotificationService/')) env.BUILD_NOTIFICATION = 'true'
-                    if (touches('Gateway/SmartShip.Gateway/'))              env.BUILD_GATEWAY = 'true'
+                    if (touches('Services/SmartShip.IdentityService/'))     BUILD_IDENTITY = true
+                    if (touches('Services/SmartShip.AdminService/'))        BUILD_ADMIN = true
+                    if (touches('Services/SmartShip.ShipmentService/'))     BUILD_SHIPMENT = true
+                    if (touches('Services/SmartShip.PaymentService/'))      BUILD_PAYMENT = true
+                    if (touches('Services/SmartShip.NotificationService/')) BUILD_NOTIFICATION = true
+                    if (touches('Gateway/SmartShip.Gateway/'))              BUILD_GATEWAY = true
 
-                    if (env.FULL_REBUILD == 'true') {
-                        env.BUILD_IDENTITY     = 'true'
-                        env.BUILD_ADMIN        = 'true'
-                        env.BUILD_SHIPMENT     = 'true'
-                        env.BUILD_PAYMENT      = 'true'
-                        env.BUILD_NOTIFICATION = 'true'
-                        env.BUILD_GATEWAY      = 'true'
+                    if (FULL_REBUILD) {
+                        BUILD_IDENTITY = true
+                        BUILD_ADMIN = true
+                        BUILD_SHIPMENT = true
+                        BUILD_PAYMENT = true
+                        BUILD_NOTIFICATION = true
+                        BUILD_GATEWAY = true
                     }
-                    files.each { f ->
-                        echo "FILE=>>${f}<<"
-                        echo "SHIPMENT_MATCH=${f.contains('Services/SmartShip.ShipmentService/')}"
-                        echo "GATEWAY_MATCH=${f.contains('Gateway/SmartShip.Gateway/')}"
-                        echo "JENKINS_MATCH=${f.contains('Jenkinsfile')}"
-                    }
+
                     echo """
-                        FULL_REBUILD=${env.FULL_REBUILD}
-                        BUILD_IDENTITY=${env.BUILD_IDENTITY}
-                        BUILD_ADMIN=${env.BUILD_ADMIN}
-                        BUILD_SHIPMENT=${env.BUILD_SHIPMENT}
-                        BUILD_PAYMENT=${env.BUILD_PAYMENT}
-                        BUILD_NOTIFICATION=${env.BUILD_NOTIFICATION}
-                        BUILD_GATEWAY=${env.BUILD_GATEWAY}
-                        """
+FULL_REBUILD=${FULL_REBUILD}
+BUILD_IDENTITY=${BUILD_IDENTITY}
+BUILD_ADMIN=${BUILD_ADMIN}
+BUILD_SHIPMENT=${BUILD_SHIPMENT}
+BUILD_PAYMENT=${BUILD_PAYMENT}
+BUILD_NOTIFICATION=${BUILD_NOTIFICATION}
+BUILD_GATEWAY=${BUILD_GATEWAY}
+"""
                 }
             }
         }
 
         stage('Restore') {
             when {
-                expression { env.FULL_REBUILD == 'true' }
+                expression { FULL_REBUILD }
             }
             steps {
                 bat 'dotnet restore "SmartShip Logistics Management System.slnx" --configfile nuget.config'
@@ -113,8 +109,7 @@ pipeline {
 
         stage('Build Identity') {
             when {
-                beforeAgent true
-                expression { env.BUILD_IDENTITY == 'true' }
+                expression { BUILD_IDENTITY }
             }
             steps {
                 bat 'docker compose build identity-service'
@@ -124,8 +119,7 @@ pipeline {
 
         stage('Build Admin') {
             when {
-                beforeAgent true
-                expression { env.BUILD_ADMIN == 'true' }
+                expression { BUILD_ADMIN }
             }
             steps {
                 bat 'docker compose build admin-service'
@@ -135,8 +129,7 @@ pipeline {
 
         stage('Build Shipment') {
             when {
-                beforeAgent true
-                expression { env.BUILD_SHIPMENT == 'true' }
+                expression { BUILD_SHIPMENT }
             }
             steps {
                 bat 'docker compose build shipment-service'
@@ -146,8 +139,7 @@ pipeline {
 
         stage('Build Payment') {
             when {
-                beforeAgent true
-                expression { env.BUILD_PAYMENT == 'true' }
+                expression { BUILD_PAYMENT }
             }
             steps {
                 bat 'docker compose build payment-service'
@@ -157,8 +149,7 @@ pipeline {
 
         stage('Build Notification') {
             when {
-                beforeAgent true
-                expression { env.BUILD_NOTIFICATION == 'true' }
+                expression { BUILD_NOTIFICATION }
             }
             steps {
                 bat 'docker compose build notification-service'
@@ -168,12 +159,11 @@ pipeline {
 
         stage('Build Gateway') {
             when {
-                beforeAgent true
-                expression { env.BUILD_GATEWAY == 'true' }
+                expression { BUILD_GATEWAY }
             }
             steps {
                 bat 'docker compose build api-gateway'
-                bat 'docker compose up -d --no-deps gateway'
+                bat 'docker compose up -d --no-deps api-gateway'
             }
         }
 
