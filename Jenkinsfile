@@ -176,7 +176,7 @@ BUILD_GATEWAY=${env.BUILD_GATEWAY}
 
     post {
         success {
-            echo 'SmartShip selective CI/CD complete'
+            echo 'SmartShip Selective CI/CD complete'
         }
         failure {
             bat 'docker compose logs --tail=100'
