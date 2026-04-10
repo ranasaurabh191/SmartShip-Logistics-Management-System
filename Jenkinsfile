@@ -60,7 +60,9 @@ pipeline {
 
                     if (
                         files.contains('FIRST_BUILD') ||
+                        touches('docker-compose.yml') ||
                         touches('nuget.config') ||
+                        touches('Jenkinsfile') ||
                         touches('BuildingBlocks/SmartShip.Shared/') ||
                         touches('localfeed/')
                     ) {
@@ -71,8 +73,10 @@ pipeline {
                     if (touches('Services/SmartShip.AdminService/'))        BUILD_ADMIN = true
                     if (touches('Services/SmartShip.ShipmentService/'))     BUILD_SHIPMENT = true
                     if (touches('Services/SmartShip.PaymentService/'))      BUILD_PAYMENT = true
+                    if (touches('Services/SmartShip.TrackingService/'))     BUILD_TRACKING = true
                     if (touches('Services/SmartShip.NotificationService/')) BUILD_NOTIFICATION = true
                     if (touches('Gateway/SmartShip.Gateway/'))              BUILD_GATEWAY = true
+
 
                     if (FULL_REBUILD) {
                         BUILD_IDENTITY = true
