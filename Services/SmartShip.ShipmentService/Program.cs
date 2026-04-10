@@ -29,7 +29,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information(" -->123 Starting ShipmentService...");
+    Log.Information(" -->1 Starting ShipmentService...");
 
     var builder = WebApplication.CreateBuilder(args);
     var isTesting = builder.Environment.IsEnvironment("Testing");
