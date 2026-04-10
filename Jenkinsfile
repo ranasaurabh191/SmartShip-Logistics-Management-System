@@ -5,6 +5,7 @@ def BUILD_SHIPMENT = false
 def BUILD_PAYMENT = false
 def BUILD_NOTIFICATION = false
 def BUILD_GATEWAY = false
+def BUILD_TRACKING = false
 
 pipeline {
     agent any
@@ -84,18 +85,20 @@ pipeline {
                         BUILD_SHIPMENT = true
                         BUILD_PAYMENT = true
                         BUILD_NOTIFICATION = true
+                        BUILD_TRACKING = true
                         BUILD_GATEWAY = true
                     }
 
                     echo """
-FULL_REBUILD=${FULL_REBUILD}
-BUILD_IDENTITY=${BUILD_IDENTITY}
-BUILD_ADMIN=${BUILD_ADMIN}
-BUILD_SHIPMENT=${BUILD_SHIPMENT}
-BUILD_PAYMENT=${BUILD_PAYMENT}
-BUILD_NOTIFICATION=${BUILD_NOTIFICATION}
-BUILD_GATEWAY=${BUILD_GATEWAY}
-"""
+                        FULL_REBUILD=${FULL_REBUILD}
+                        BUILD_IDENTITY=${BUILD_IDENTITY}
+                        BUILD_ADMIN=${BUILD_ADMIN}
+                        BUILD_SHIPMENT=${BUILD_SHIPMENT}
+                        BUILD_PAYMENT=${BUILD_PAYMENT}
+                        BUILD_NOTIFICATION=${BUILD_NOTIFICATION}
+                        BUILD_TRACKING=${BUILD_TRACKING}
+                        BUILD_GATEWAY=${BUILD_GATEWAY}
+                        """
                 }
             }
         }
