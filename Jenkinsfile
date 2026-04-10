@@ -121,6 +121,7 @@ BUILD_GATEWAY=${BUILD_GATEWAY}
                 expression { BUILD_IDENTITY }
             }
             steps {
+                bat 'docker rm -f smartship-identity 2>nul || exit /b 0'
                 bat 'docker compose build identity-service'
                 bat 'docker compose up -d --no-deps identity-service'
             }
@@ -131,6 +132,7 @@ BUILD_GATEWAY=${BUILD_GATEWAY}
                 expression { BUILD_ADMIN }
             }
             steps {
+                bat 'docker rm -f smartship-admin 2>nul || exit /b 0'
                 bat 'docker compose build admin-service'
                 bat 'docker compose up -d --no-deps admin-service'
             }
@@ -141,6 +143,7 @@ BUILD_GATEWAY=${BUILD_GATEWAY}
                 expression { BUILD_SHIPMENT }
             }
             steps {
+                bat 'docker rm -f smartship-shipment 2>nul || exit /b 0'
                 bat 'docker compose build shipment-service'
                 bat 'docker compose up -d --no-deps shipment-service'
             }
@@ -151,6 +154,7 @@ BUILD_GATEWAY=${BUILD_GATEWAY}
                 expression { BUILD_PAYMENT }
             }
             steps {
+                bat 'docker rm -f smartship-payment 2>nul || exit /b 0'
                 bat 'docker compose build payment-service'
                 bat 'docker compose up -d --no-deps payment-service'
             }
@@ -161,8 +165,20 @@ BUILD_GATEWAY=${BUILD_GATEWAY}
                 expression { BUILD_NOTIFICATION }
             }
             steps {
+                bat 'docker rm -f smartship-notification 2>nul || exit /b 0'
                 bat 'docker compose build notification-service'
                 bat 'docker compose up -d --no-deps notification-service'
+            }
+        }
+
+        stage('Build Tracking') {
+            when {
+                expression { BUILD_TRACKING }
+            }
+            steps {
+                bat 'docker rm -f smartship-tracking 2>nul || exit /b 0'
+                bat 'docker compose build tracking-service'
+                bat 'docker compose up -d --no-deps tracking-service'
             }
         }
 
@@ -171,6 +187,7 @@ BUILD_GATEWAY=${BUILD_GATEWAY}
                 expression { BUILD_GATEWAY }
             }
             steps {
+                bat 'docker rm -f smartship-gateway 2>nul || exit /b 0'
                 bat 'docker compose build api-gateway'
                 bat 'docker compose up -d --no-deps api-gateway'
             }
