@@ -176,24 +176,27 @@ try
     app.UseSerilogRequestLogging(opt =>
         opt.MessageTemplate =
             "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
-
+    if (!app.Environment.IsEnvironment("Testing") &&
+    !app.Environment.IsEnvironment("DockerJenkins") == false)
     {
-        var retries = 10;
-        while (retries > 0)
         {
-            try
+            var retries = 5;
+            while (retries > 0)
             {
-                using var scope = app.Services.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
-                db.Database.Migrate();
-                Log.Information("Payment database migrated successfully.");
-                break;
-            }
-            catch (Exception ex)
-            {
-                retries--;
-                Log.Warning("Migration failed ({Retries} left): {Message}", retries, ex.Message);
-                Thread.Sleep(5000);
+                try
+                {
+                    using var scope = app.Services.CreateScope();
+                    var db = scope.ServiceProvider.GetRequiredService<PaymentDbContext>();
+                    db.Database.Migrate();
+                    Log.Information("Payment database migrated successfully.");
+                    break;
+                }
+                catch (Exception ex)
+                {
+                    retries--;
+                    Log.Warning("Migration failed ({Retries} left): {Message}", retries, ex.Message);
+                    Thread.Sleep(5000);
+                }
             }
         }
     }
