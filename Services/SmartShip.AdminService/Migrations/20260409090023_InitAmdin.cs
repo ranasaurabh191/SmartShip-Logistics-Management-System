@@ -69,18 +69,18 @@ namespace SmartShip.AdminService.Migrations
                     table.PrimaryKey("PK_Reports", x => x.Id);
                 });
 
-            migrationBuilder.InsertData(
-                table: "DashboardMetrics",
-                columns: new[] { "Id", "ActiveShipments", "DeliveredToday", "Exceptions", "LastUpdatedAt", "TotalCustomers", "TotalShipments" },
-                values: new object[] { 1, 0, 0, 0, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), 0, 0 });
+                migrationBuilder.InsertData(
+                 table: "DashboardMetrics",
+                 columns: new[] { "Id", "ActiveShipments", "DeliveredToday", "Exceptions", "LastUpdatedAt", "TotalCustomers", "TotalShipments" },
+                 values: new object[] { 1, 0, 0, 0, new DateTime(2026, 1, 1, 0, 0, 0), 0, 0 });
 
-            migrationBuilder.InsertData(
-                table: "Hubs",
-                columns: new[] { "Id", "City", "ContactPhone", "Country", "CreatedAt", "IsActive", "Name", "State" },
-                values: new object[,]
-                {
-                    { 1, "Delhi", "9800000001", "India", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), true, "Delhi Hub", "Delhi" },
-                    { 2, "Mumbai", "9800000002", "India", new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), true, "Mumbai Hub", "Maharashtra" }
+                        migrationBuilder.InsertData(
+                            table: "Hubs",
+                            columns: new[] { "Id", "City", "ContactPhone", "Country", "CreatedAt", "IsActive", "Name", "State" },
+                            values: new object[,]
+                            {
+                    { 1, "Delhi", "9800000001", "India", new DateTime(2026, 1, 1, 0, 0, 0), true, "Delhi Hub", "Delhi" },
+                    { 2, "Mumbai", "9800000002", "India", new DateTime(2026, 1, 1, 0, 0, 0), true, "Mumbai Hub", "Maharashtra" }
                 });
         }
 

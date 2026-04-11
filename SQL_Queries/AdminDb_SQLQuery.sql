@@ -1,4 +1,3 @@
-USE SmartShip_AdminDB;
 
 --DELETE FROM Hubs;
 --DBCC CHECKIDENT ('Hubs', RESEED, 0);

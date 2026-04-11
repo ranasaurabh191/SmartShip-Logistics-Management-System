@@ -9,7 +9,7 @@ public class Shipment
     public ShipmentType ShipmentType { get; set; }
     public ShipmentStatus Status { get; set; } = ShipmentStatus.Draft;
     public decimal ShippingRate { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }
     public DateTime? PickupScheduledAt { get; set; }
     public DateTime? DeliveredAt { get; set; }

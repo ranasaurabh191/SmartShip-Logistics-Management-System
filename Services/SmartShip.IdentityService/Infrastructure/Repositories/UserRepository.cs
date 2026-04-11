@@ -10,10 +10,8 @@ public class UserRepository : IUserRepository
 {
     private readonly IdentityDbContext _context;
 
-    public UserRepository(IdentityDbContext context)
-    {
-        _context = context;
-    }
+    public UserRepository(IdentityDbContext context) => _context = context;
+
 
     public async Task<bool> ExistsByEmailAsync(string email)
     {

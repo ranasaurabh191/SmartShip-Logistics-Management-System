@@ -37,7 +37,7 @@ public class NotificationService : INotificationService
             Type = type,
             Subject = subject,
             Body = body,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.Now
         };
 
         await _notificationRepository.AddAsync(notification);
@@ -47,7 +47,7 @@ public class NotificationService : INotificationService
         {
             await _emailService.SendEmailAsync(email, subject, body);
             notification.IsEmailSent = true;
-            notification.SentAt = DateTime.UtcNow;
+            notification.SentAt = DateTime.Now;
 
             _logger.LogInformation("Email sent successfully | Type: {Type} | User: {UserId}",
                 type, userId);
@@ -98,9 +98,7 @@ public class NotificationService : INotificationService
         n.Subject,
         n.IsEmailSent,
         n.ErrorMessage,
-        DateTime.SpecifyKind(n.CreatedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
-        n.SentAt.HasValue
-            ? DateTime.SpecifyKind(n.SentAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
-            : null
+        n.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
+        n.SentAt?.ToString("dd-MMM-yyyy hh:mm tt")
     );
 }

@@ -36,8 +36,8 @@ public class PaymentServiceTests_GetStatus
             PaymentMethod = method,
             PaymentStatus = status,
             RazorpayOrderId = "order_MOCK_123",
-            CreatedAt = DateTime.UtcNow,
-            PaidAt = status == PaymentStatus.Paid ? DateTime.UtcNow : null
+            CreatedAt = DateTime.Now,
+            PaidAt = status == PaymentStatus.Paid ? DateTime.Now : null
         };
 
     [Fact]

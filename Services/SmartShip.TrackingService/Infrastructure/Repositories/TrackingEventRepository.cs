@@ -35,13 +35,13 @@ public class TrackingEventRepository : ITrackingEventRepository
             PageSize = req.PageSize
         };
     }
-    public async Task<TrackingEvent?> GetRecentDuplicateAsync(string trackingNumber, string status, string location, DateTime sinceUtc)
+    public async Task<TrackingEvent?> GetRecentDuplicateAsync(string trackingNumber, string status, string location, DateTime sinceTime)
     {
         return await _context.TrackingEvents.FirstOrDefaultAsync(t =>
             t.TrackingNumber == trackingNumber &&
             t.Status == status &&
             t.Location == location &&
-            t.EventTime >= sinceUtc);
+            t.EventTime >= sinceTime);
     }
 
     public async Task AddAsync(TrackingEvent trackingEvent)

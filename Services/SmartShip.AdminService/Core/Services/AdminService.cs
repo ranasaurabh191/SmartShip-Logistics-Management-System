@@ -83,7 +83,7 @@ public class AdminService : IAdminService
                 DeliveredToday = 0,
                 Exceptions = 0,
                 TotalCustomers = 0,
-                LastUpdatedAt = DateTime.UtcNow
+                LastUpdatedAt = DateTime.Now
             };
 
             await _dashboardMetricsRepository.AddAsync(metrics);
@@ -97,7 +97,7 @@ public class AdminService : IAdminService
             metrics.TotalShipments, metrics.ActiveShipments,
             metrics.DeliveredToday, metrics.Exceptions, metrics.TotalCustomers);
 
-        metrics.LastUpdatedAt = DateTime.UtcNow;
+        metrics.LastUpdatedAt = DateTime.Now;
         await _dashboardMetricsRepository.UpdateAsync(metrics);
         await _unitOfWork.SaveChangesAsync();
 
@@ -109,8 +109,7 @@ public class AdminService : IAdminService
             Exceptions = metrics.Exceptions,
             TotalCustomers = metrics.TotalCustomers,
             LastUpdatedAt = metrics.LastUpdatedAt.HasValue
-                ? DateTime.SpecifyKind(metrics.LastUpdatedAt.Value, DateTimeKind.Utc)
-                    .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
+                ? DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt")
                 : null
         };
     }

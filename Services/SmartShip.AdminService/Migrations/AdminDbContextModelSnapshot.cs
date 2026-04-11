@@ -59,7 +59,7 @@ namespace SmartShip.AdminService.Migrations
                             ActiveShipments = 0,
                             DeliveredToday = 0,
                             Exceptions = 0,
-                            LastUpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            LastUpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0),
                             TotalCustomers = 0,
                             TotalShipments = 0
                         });
@@ -110,7 +110,7 @@ namespace SmartShip.AdminService.Migrations
                             City = "Delhi",
                             ContactPhone = "9800000001",
                             Country = "India",
-                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0),
                             IsActive = true,
                             Name = "Delhi Hub",
                             State = "Delhi"
@@ -121,7 +121,7 @@ namespace SmartShip.AdminService.Migrations
                             City = "Mumbai",
                             ContactPhone = "9800000002",
                             Country = "India",
-                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0),
                             IsActive = true,
                             Name = "Mumbai Hub",
                             State = "Maharashtra"

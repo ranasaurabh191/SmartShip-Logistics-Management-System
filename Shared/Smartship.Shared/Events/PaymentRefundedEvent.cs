@@ -6,5 +6,5 @@ public class PaymentRefundedEvent
     public string TrackingNumber { get; set; } = string.Empty;
     public int CustomerId { get; set; }
     public decimal Amount { get; set; }
-    public DateTime RefundedAt { get; set; } = DateTime.UtcNow;
+    public DateTime RefundedAt { get; set; } = DateTime.Now;
 }

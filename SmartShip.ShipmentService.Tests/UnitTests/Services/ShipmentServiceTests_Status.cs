@@ -83,8 +83,7 @@ public class ShipmentServiceTests_Status : ShipmentServiceTestBase
 
         var act = async () => await svc.UpdateStatusAsync(1, new UpdateStatusRequest { Status = "Cancelled" });
 
-        await act.Should().ThrowAsync<InvalidOperationException>()
-            .WithMessage("*cannot cancel a delivered*");
+        await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("*cannot cancel a delivered*");
     }
 
     [Fact]
@@ -106,7 +105,7 @@ public class ShipmentServiceTests_Status : ShipmentServiceTestBase
     [Fact]
     public async Task UpdateStatusAsync_Cancelled_PublishesCancelledEvent()
     {
-        var shipment = MakeShipment(status: ShipmentStatus.Booked, pickupAt: DateTime.UtcNow.AddDays(1));
+        var shipment = MakeShipment(status: ShipmentStatus.Booked, pickupAt: DateTime.Now.AddDays(1));
         ShipmentRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(shipment);
         UnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
         var svc = BuildService();

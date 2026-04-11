@@ -45,7 +45,7 @@ public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderSt
                     ctx.Saga.ShipmentIdKey = ctx.Message.ShipmentId.ToString();
                     ctx.Saga.CustomerId = ctx.Message.CustomerId;
                     ctx.Saga.TrackingNumber = ctx.Message.TrackingNumber;
-                    ctx.Saga.CreatedAt = DateTime.UtcNow;
+                    ctx.Saga.CreatedAt = DateTime.Now;
                     ctx.Saga.Amount = ctx.Message.Amount;
                 })
                 .TransitionTo(PaymentPending)
@@ -53,11 +53,11 @@ public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderSt
 
         During(PaymentPending,
             When(PaymentCompleted)
-                .Then(ctx => ctx.Saga.UpdatedAt = DateTime.UtcNow)
+                .Then(ctx => ctx.Saga.UpdatedAt = DateTime.Now)
                 .TransitionTo(Confirmed),
 
             When(PaymentFailed)
-                .Then(ctx => ctx.Saga.UpdatedAt = DateTime.UtcNow)
+                .Then(ctx => ctx.Saga.UpdatedAt = DateTime.Now)
                 .Publish(ctx => new CancelShipmentCommand
                 {
                     CorrelationId = ctx.Saga.CorrelationId,

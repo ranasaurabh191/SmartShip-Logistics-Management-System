@@ -8,6 +8,6 @@ public class ShipmentCancelledByCustomerEvent
     public int CustomerId { get; set; }
     public decimal Amount { get; set; }
     public bool WasPaid { get; set; }       
-    public DateTime CancelledAt { get; set; } = DateTime.UtcNow;
+    public DateTime CancelledAt { get; set; } = DateTime.Now;
     public string Reason { get; set; } = string.Empty;
 }

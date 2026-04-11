@@ -10,7 +10,7 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
 {
     private static SchedulePickupRequest MakePickupRequest(int daysFromNow = 1) => new()
     {
-        PickupTime = DateTime.UtcNow.AddDays(daysFromNow)
+        PickupTime = DateTime.Now.AddDays(daysFromNow)
     };
 
     [Fact]

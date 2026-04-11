@@ -43,7 +43,7 @@ public class TrackingService : ITrackingService
                 req.TrackingNumber,
                 req.Status,
                 req.Location,
-                DateTime.UtcNow.AddMinutes(-1));
+                DateTime.Now.AddMinutes(-1));
 
             if (recentDuplicate != null)
             {
@@ -73,7 +73,7 @@ public class TrackingService : ITrackingService
                 ev.Status,
                 ev.Location,
                 ev.Description,
-                DateTime.SpecifyKind(ev.EventTime, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
+                ev.EventTime.ToString("dd-MMM-yyyy hh:mm tt"),
                 ev.UpdatedBy);
         }
         catch (Exception ex)
@@ -98,9 +98,7 @@ public class TrackingService : ITrackingService
                 t.Status,
                 t.Location,
                 t.Description,
-                DateTime.SpecifyKind(t.EventTime, DateTimeKind.Utc)
-                    .ToLocalTime()
-                    .ToString("dd-MMM-yyyy hh:mm tt"),
+                t.EventTime.ToString("dd-MMM-yyyy hh:mm tt"),
                 t.UpdatedBy)).ToList();
 
             return new PagedResponse<TrackingEventDto>
@@ -133,7 +131,7 @@ public class TrackingService : ITrackingService
                 t.Status,
                 t.Location,
                 t.Description,
-                DateTime.SpecifyKind(t.EventTime, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
+                t.EventTime.ToString("dd-MMM-yyyy hh:mm tt"),
                 t.UpdatedBy)).ToList();
 
             _logger.LogInformation("Fetched {Count} of {Total} events for {TrackingNumber}",
@@ -176,7 +174,7 @@ public class TrackingService : ITrackingService
             p.SignatureImagePath,
             p.PhotoPath,
             p.Notes,
-            DateTime.SpecifyKind(p.DeliveredAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
+            p.DeliveredAt.ToString("dd-MMM-yyyy hh:mm tt"),
             p.DeliveredBy);
     }
 
@@ -221,7 +219,7 @@ public class TrackingService : ITrackingService
                 proof.SignatureImagePath,
                 proof.PhotoPath,
                 proof.Notes,
-                DateTime.SpecifyKind(proof.DeliveredAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
+                proof.DeliveredAt.ToString("dd-MMM-yyyy hh:mm tt"),
                 proof.DeliveredBy);
         }
         catch (Exception ex)
@@ -283,7 +281,7 @@ public class TrackingService : ITrackingService
                 doc.FileName,
                 doc.DocumentType.ToString(),
                 doc.FileSizeBytes,
-                DateTime.SpecifyKind(doc.UploadedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"));
+                doc.UploadedAt.ToString("dd-MMM-yyyy hh:mm tt"));
         }
         catch (Exception ex)
         {
@@ -307,7 +305,7 @@ public class TrackingService : ITrackingService
                 d.FileName,
                 d.DocumentType.ToString(),
                 d.FileSizeBytes,
-                DateTime.SpecifyKind(d.UploadedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"))).ToList();
+                d.UploadedAt.ToString("dd-MMM-yyyy hh:mm tt"))).ToList();
 
             _logger.LogInformation("Fetched {Count} of {Total} documents for Shipment {ShipmentId}",
                 items.Count, result.TotalCount, shipmentId);

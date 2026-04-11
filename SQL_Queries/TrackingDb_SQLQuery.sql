@@ -1,4 +1,3 @@
-use SmartShip_TrackingDB;
 --DELETE FROM DeliveryProofs;
 --dELETE FROM TrackingEvents;
 --delete from Documents;

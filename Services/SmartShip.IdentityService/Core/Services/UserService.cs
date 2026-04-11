@@ -112,7 +112,7 @@ public class UserService : IUserService
             UserId = userId,
             Email = user.Email,
             Role = user.Role,
-            DeletedAt = DateTime.UtcNow
+            DeletedAt = DateTime.Now
         });
 
         _logger.LogInformation("Delete Event published successfully: {UserId}", userId);

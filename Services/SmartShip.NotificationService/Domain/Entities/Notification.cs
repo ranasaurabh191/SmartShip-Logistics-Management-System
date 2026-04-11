@@ -10,6 +10,6 @@ public class Notification
     public string Body { get; set; } = string.Empty;
     public bool IsEmailSent { get; set; } = false;
     public string? ErrorMessage { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? SentAt { get; set; }
 }

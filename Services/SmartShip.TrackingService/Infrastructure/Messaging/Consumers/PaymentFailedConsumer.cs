@@ -25,7 +25,7 @@ namespace SmartShip.TrackingService.Infrastructure.Messaging.Consumers
                 Status = "PaymentFailed",
                 Location = "Payment Gateway",
                 Description = msg.Reason,
-                EventTime = DateTime.UtcNow,
+                EventTime = DateTime.Now,
                 UpdatedBy = "payment-service"
             });
 

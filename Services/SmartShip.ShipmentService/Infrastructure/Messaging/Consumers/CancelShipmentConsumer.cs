@@ -55,7 +55,7 @@ public class CancelShipmentConsumer : IConsumer<CancelShipmentCommand>
             ShipmentId = shipment.Id,
             TrackingNumber = shipment.TrackingNumber,
             CustomerId = shipment.CustomerId,
-            CancelledAt = DateTime.UtcNow
+            CancelledAt = DateTime.Now
         });
     }
 }

@@ -19,5 +19,5 @@ public class IdentityDbContext : DbContext
             e.Property(u => u.Role).HasDefaultValue("CUSTOMER");
         });
 
-        }
+    }
 }

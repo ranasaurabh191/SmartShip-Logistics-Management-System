@@ -12,8 +12,11 @@ public class ShipmentStatusUpdatedConsumer : IConsumer<ShipmentStatusUpdatedEven
     private readonly ILogger<ShipmentStatusUpdatedConsumer> _logger;
     private readonly IConfiguration _config;
 
-    public ShipmentStatusUpdatedConsumer(INotificationService notification,
-        IHttpClientFactory httpClientFactory, ILogger<ShipmentStatusUpdatedConsumer> logger, IConfiguration config)
+    public ShipmentStatusUpdatedConsumer(
+        INotificationService notification,
+        IHttpClientFactory httpClientFactory,
+        ILogger<ShipmentStatusUpdatedConsumer> logger,
+        IConfiguration config)
     {
         _notification = notification;
         _httpClientFactory = httpClientFactory;
@@ -24,19 +27,24 @@ public class ShipmentStatusUpdatedConsumer : IConsumer<ShipmentStatusUpdatedEven
     public async Task Consume(ConsumeContext<ShipmentStatusUpdatedEvent> context)
     {
         var msg = context.Message;
-        _logger.LogInformation("ShipmentStatusUpdatedEvent received | Tracking: {TrackingNumber}", msg.TrackingNumber);
+
+        _logger.LogInformation(
+            "ShipmentStatusUpdatedEvent received | Tracking: {TrackingNumber}",
+            msg.TrackingNumber);
 
         var customerId = msg.CustomerId;
 
-        var email = await ConsumerHelper.GetUserEmailAsync(_httpClientFactory, _logger, customerId, _config);
+        var email = await ConsumerHelper.GetUserEmailAsync(
+            _httpClientFactory,
+            _logger,
+            customerId,
+            _config);
+
         if (email == null) return;
 
-        var ist = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-        var updatedAtIst = TimeZoneInfo.ConvertTimeFromUtc(
-            DateTime.SpecifyKind(msg.UpdatedAt, DateTimeKind.Utc), ist);
-
         await _notification.SendAndSaveAsync(
-            customerId, email,
+            customerId,
+            email,
             type: "StatusUpdated",
             subject: $"Shipment Update — {msg.TrackingNumber}",
             body: $"""
@@ -44,10 +52,9 @@ public class ShipmentStatusUpdatedConsumer : IConsumer<ShipmentStatusUpdatedEven
             <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
             <p><b>Status:</b> {msg.OldStatus} -> <b>{msg.NewStatus}</b></p>
             <p><b>Location:</b> {msg.Location}</p>
-            <p><b>Updated At:</b> {updatedAtIst:dd-MMM-yyyy hh:mm tt}</p>
+            <p><b>Updated At:</b> {msg.UpdatedAt:dd-MMM-yyyy hh:mm tt}</p>
             <p>— SmartShip Team</p>
-        """
+            """
         );
     }
 }
-

@@ -7,5 +7,5 @@ public class PaymentCreatedEvent
     public int CustomerId { get; set; }
     public string PaymentMethod { get; set; } = string.Empty;
     public decimal Amount { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 }

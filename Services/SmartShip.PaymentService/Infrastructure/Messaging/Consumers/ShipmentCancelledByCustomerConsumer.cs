@@ -45,7 +45,7 @@ public class ShipmentCancelledByCustomerConsumer : IConsumer<ShipmentCancelledBy
         }
 
         payment.PaymentStatus = PaymentStatus.Refunded;
-        payment.RefundedAt = DateTime.UtcNow;   
+        payment.RefundedAt = DateTime.Now;   
         await _context.SaveChangesAsync();
 
         _logger.LogInformation("Payment refunded for ShipmentId {ShipmentId} | Amount: {Amount}",
@@ -57,7 +57,7 @@ public class ShipmentCancelledByCustomerConsumer : IConsumer<ShipmentCancelledBy
             TrackingNumber = msg.TrackingNumber,
             CustomerId = msg.CustomerId,
             Amount = msg.Amount,
-            RefundedAt = DateTime.UtcNow
+            RefundedAt = DateTime.Now
         });
 
         _logger.LogInformation("PaymentRefundedEvent published for ShipmentId {ShipmentId}", msg.ShipmentId);

@@ -8,5 +8,5 @@ public class OtpVerification
     public string OtpHash { get; set; } = string.Empty;
     public DateTime ExpiresAt { get; set; }
     public bool IsUsed { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 }

@@ -25,7 +25,7 @@ namespace SmartShip.TrackingService.Infrastructure.Messaging.Consumers
                 Status = "PaymentSuccessful",
                 Location = "Payment Gateway",
                 Description = $"{msg.PaymentMethod} payment successful",
-                EventTime = DateTime.UtcNow,
+                EventTime = DateTime.Now,
                 UpdatedBy = "payment-service"
             });
 

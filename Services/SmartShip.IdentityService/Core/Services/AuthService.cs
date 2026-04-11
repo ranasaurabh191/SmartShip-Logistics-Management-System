@@ -107,7 +107,7 @@ public class AuthService : IAuthService
     private static string HashOtp(string otp) => BCrypt.Net.BCrypt.HashPassword(otp);
     private static bool VerifyOtp(string enteredOtp, string storedHash) => BCrypt.Net.BCrypt.Verify(enteredOtp, storedHash);
 
-    public async Task<OtpResponse> RequestSignupOtpAsync(SignupOtpRequest request)
+    public async Task<object> RequestSignupOtpAsync(SignupOtpRequest request)
     {
         if (string.IsNullOrWhiteSpace(request.Email))
             throw new ArgumentException("Email is required");
@@ -121,7 +121,7 @@ public class AuthService : IAuthService
 
         var otp = GenerateOtp();
         var otpHash = HashOtp(otp);
-        var expiresAt = DateTime.UtcNow.AddMinutes(5);
+        var expiresAt = DateTime.Now.AddMinutes(5);
 
         if (existingOtp != null)
         {
@@ -147,7 +147,7 @@ public class AuthService : IAuthService
 
         await _emailService.SendOtpEmailAsync(request.Email, otp);
 
-        return new OtpResponse("Verify the OTP sent to your email. It expires in 5 minutes.", true);
+        return new { message = "Verify the OTP sent to your email. It expires in 5 minutes." };
     }
 
     public async Task<OtpResponse> VerifySignupOtpAsync(VerifyOtpRequest request)
@@ -162,7 +162,7 @@ public class AuthService : IAuthService
         if (otpRecord.IsUsed)
             throw new InvalidOperationException("OTP already used. Please request a new one.");
 
-        if (DateTime.UtcNow > otpRecord.ExpiresAt)
+        if (DateTime.Now > otpRecord.ExpiresAt)
         {
             _otpRepository.Delete(otpRecord);
             await _unitOfWork.SaveChangesAsync();
@@ -253,7 +253,7 @@ public class AuthService : IAuthService
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
                 Role = "ADMIN",
                 IsActive = true,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.Now
             };
 
             await _userRepository.AddAsync(admin);

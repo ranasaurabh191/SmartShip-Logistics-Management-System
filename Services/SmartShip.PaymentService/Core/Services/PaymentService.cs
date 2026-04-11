@@ -107,7 +107,7 @@ public class PaymentService : IPaymentService
             Amount = shipment.ShippingRate,
             PaymentMethod = request.PaymentMethod,
             PaymentStatus = PaymentStatus.Pending,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.Now
         };
 
         var correlation = await _sagaCorrelationRepository.GetByShipmentIdAsync(request.ShipmentId);
@@ -226,7 +226,7 @@ public class PaymentService : IPaymentService
                 TrackingNumber = existingPayment?.TrackingNumber ?? string.Empty,
                 CustomerId = authenticatedUserId,
                 Reason = $"Invalid Order ID: {request.RazorpayOrderId}",
-                FailedAt = DateTime.UtcNow
+                FailedAt = DateTime.Now
             });
 
             _logger.LogInformation("PaymentFailedEvent published for ShipmentId {ShipmentId} | CorrelationId: {CorrelationId}",
@@ -248,7 +248,7 @@ public class PaymentService : IPaymentService
         payment.PaymentStatus = PaymentStatus.Paid;
         payment.RazorpayPaymentId = request.RazorpayPaymentId;
         payment.RazorpaySignature = request.Signature;
-        payment.PaidAt = DateTime.UtcNow;
+        payment.PaidAt = DateTime.Now;
 
         _paymentRepository.Update(payment);
         await _unitOfWork.SaveChangesAsync();
@@ -318,12 +318,8 @@ public class PaymentService : IPaymentService
             PaymentStatus = payment.PaymentStatus.ToString(),
             RazorpayOrderId = payment.RazorpayOrderId,
             RazorpayPaymentId = payment.RazorpayPaymentId,
-            CreatedAt = DateTime.SpecifyKind(payment.CreatedAt, DateTimeKind.Utc)
-                .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
-            PaidAt = payment.PaidAt.HasValue
-                ? DateTime.SpecifyKind(payment.PaidAt.Value, DateTimeKind.Utc)
-                    .ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
-                : null,
+            CreatedAt = payment.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
+            PaidAt = payment.PaidAt?.ToString("dd-MMM-yyyy hh:mm tt"),
             Message = message
         };
     }
@@ -362,14 +358,8 @@ public class PaymentService : IPaymentService
         PaymentStatus = p.PaymentStatus.ToString(),
         RazorpayOrderId = p.RazorpayOrderId,
         RazorpayPaymentId = p.RazorpayPaymentId,
-        CreatedAt = DateTime.SpecifyKind(p.CreatedAt, DateTimeKind.Utc)
-            .ToLocalTime()
-            .ToString("dd-MMM-yyyy hh:mm tt"),
-        PaidAt = p.PaidAt.HasValue
-            ? DateTime.SpecifyKind(p.PaidAt.Value, DateTimeKind.Utc)
-                .ToLocalTime()
-                .ToString("dd-MMM-yyyy hh:mm tt")
-            : null,
+        CreatedAt = p.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
+        PaidAt = p.PaidAt?.ToString("dd-MMM-yyyy hh:mm tt"),
         Message = message
     };
 }

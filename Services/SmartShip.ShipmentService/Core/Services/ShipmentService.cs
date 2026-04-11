@@ -195,7 +195,7 @@ public class ShipmentService : IShipmentService
 
         shipment.Status = ShipmentStatus.Cancelled;
         shipment.Notes = $"Cancelled by customer: {reason}";
-        shipment.UpdatedAt = DateTime.UtcNow;
+        shipment.UpdatedAt = DateTime.Now;
 
         _shipmentRepository.Update(shipment);
         await _unitOfWork.SaveChangesAsync();
@@ -211,7 +211,7 @@ public class ShipmentService : IShipmentService
             CustomerId = customerId,
             Amount = shipment.ShippingRate,
             WasPaid = wasPaid,
-            CancelledAt = DateTime.UtcNow,
+            CancelledAt = DateTime.Now,
             Reason = reason
         });
 
@@ -220,7 +220,7 @@ public class ShipmentService : IShipmentService
             ShipmentId = shipment.Id,
             TrackingNumber = shipment.TrackingNumber,
             CustomerId = customerId,
-            CancelledAt = DateTime.UtcNow
+            CancelledAt = DateTime.Now
         });
 
         _logger.LogInformation("ShipmentCancelledByCustomerEvent published for {TrackingNumber}", shipment.TrackingNumber);
@@ -280,7 +280,7 @@ public class ShipmentService : IShipmentService
             s.Status = st;
 
             if (st == ShipmentStatus.Delivered)
-                s.DeliveredAt = DateTime.UtcNow;
+                s.DeliveredAt = DateTime.Now;
 
             _shipmentRepository.Update(s);
             await _unitOfWork.SaveChangesAsync();
@@ -297,8 +297,8 @@ public class ShipmentService : IShipmentService
                     OldStatus = oldStatus.ToString(),
                     NewStatus = s.Status.ToString(),
                     Location = request.Location ?? "Unknown Hub",
-                    UpdatedBy = "Agent-" + DateTime.UtcNow.ToString("hhmm"),
-                    UpdatedAt = DateTime.UtcNow,
+                    UpdatedBy = "Agent-" + DateTime.Now.ToString("hhmm"),
+                    UpdatedAt = DateTime.Now,
                     CustomerId = s.CustomerId
                 });
             }
@@ -313,7 +313,7 @@ public class ShipmentService : IShipmentService
                     TrackingNumber = s.TrackingNumber,
                     Location = request.Location ?? "Customer Address",
                     CustomerId = s.CustomerId,
-                    DeliveredAt = DateTime.UtcNow
+                    DeliveredAt = DateTime.Now
                 });
             }
 
@@ -325,7 +325,7 @@ public class ShipmentService : IShipmentService
                 {
                     ShipmentId = s.Id,
                     TrackingNumber = s.TrackingNumber,
-                    CancelledAt = DateTime.UtcNow,
+                    CancelledAt = DateTime.Now,
                     CustomerId = s.CustomerId
                 });
             }
@@ -367,9 +367,7 @@ public class ShipmentService : IShipmentService
                 throw new InvalidOperationException("Online payment not completed. Please pay before scheduling pickup.");
             }
 
-            s.PickupScheduledAt = request.PickupTime.Kind == DateTimeKind.Utc
-                ? request.PickupTime
-                : request.PickupTime.ToUniversalTime();
+            s.PickupScheduledAt = request.PickupTime;
 
             s.Status = ShipmentStatus.Booked;
 
@@ -384,7 +382,7 @@ public class ShipmentService : IShipmentService
                 NewStatus = "Booked",
                 Location = s.SenderAddress?.City ?? "Warehouse",
                 UpdatedBy = "system",
-                UpdatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.Now,
                 CustomerId = s.CustomerId
             });
 
@@ -484,13 +482,9 @@ public class ShipmentService : IShipmentService
         s.ShipmentType.ToString(),
         s.Status.ToString(),
         s.ShippingRate,
-        DateTime.SpecifyKind(s.CreatedAt, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
-        s.PickupScheduledAt.HasValue
-            ? DateTime.SpecifyKind(s.PickupScheduledAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
-            : null,
-        s.DeliveredAt.HasValue
-            ? DateTime.SpecifyKind(s.DeliveredAt.Value, DateTimeKind.Utc).ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")
-            : null,
+        s.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
+        s.PickupScheduledAt?.ToString("dd-MMM-yyyy hh:mm tt"),
+        s.DeliveredAt?.ToString("dd-MMM-yyyy hh:mm tt"),
         new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country),
         new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country),
         new PackageDto(pkg.WeightKg, pkg.LengthCm, pkg.WidthCm, pkg.HeightCm, pkg.Description, pkg.DeclaredValue),

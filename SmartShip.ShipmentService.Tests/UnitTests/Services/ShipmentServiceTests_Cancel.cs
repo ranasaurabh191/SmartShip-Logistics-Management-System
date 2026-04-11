@@ -26,7 +26,7 @@ public class ShipmentServiceTests_Cancel : ShipmentServiceTestBase
     [Fact]
     public async Task CancelByCustomerAsync_BookedShipment_SetsWasPaidTrue()
     {
-        var shipment = MakeShipment(status: ShipmentStatus.Booked, pickupAt: DateTime.UtcNow.AddDays(1));
+        var shipment = MakeShipment(status: ShipmentStatus.Booked, pickupAt: DateTime.Now.AddDays(1));
         ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(1, 1)).ReturnsAsync(shipment);
         SagaRepo.Setup(r => r.GetByShipmentIdAsync(1)).ReturnsAsync((ShipmentOrderState?)null);
         UnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);

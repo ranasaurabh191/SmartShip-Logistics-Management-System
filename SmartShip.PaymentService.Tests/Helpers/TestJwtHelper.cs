@@ -25,7 +25,7 @@ public static class TestJwtHelper
             issuer: "SmartShipGateway",
             audience: "SmartShipClients",
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(1),
+            expires: DateTime.Now.AddHours(1),
             signingCredentials: creds);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

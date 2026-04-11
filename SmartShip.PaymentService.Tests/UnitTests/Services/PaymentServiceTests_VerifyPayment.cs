@@ -41,7 +41,7 @@ public class PaymentServiceTests_VerifyPayment
         PaymentMethod = PaymentMethod.Online,
         PaymentStatus = PaymentStatus.Pending,
         RazorpayOrderId = OrderId,
-        CreatedAt = DateTime.UtcNow
+        CreatedAt = DateTime.Now
     };
 
     private VerifyPaymentRequest ValidRequest() => new()
