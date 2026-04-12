@@ -23,7 +23,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information(" --> Starting TrackingService...");
+    Log.Information(" --> 12Starting TrackingService...");
 
     var builder = WebApplication.CreateBuilder(args);
 
