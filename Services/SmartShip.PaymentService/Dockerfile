@@ -4,8 +4,7 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY nuget.config .
-COPY localfeed/ localfeed/
+
 COPY ["Shared/Smartship.Shared/SmartShip.Shared.csproj", "Shared/Smartship.Shared/"]
 COPY ["Services/SmartShip.PaymentService/SmartShip.PaymentService.csproj", "Services/SmartShip.PaymentService/"]
 RUN dotnet restore "Services/SmartShip.PaymentService/SmartShip.PaymentService.csproj"
