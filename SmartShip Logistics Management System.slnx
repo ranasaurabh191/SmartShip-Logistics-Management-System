@@ -16,6 +16,7 @@
   <Folder Name="/Solution Items/">
     <File Path=".dockerignore" />
     <File Path="docker-compose.yml" />
+    <File Path="Jenkinsfile" />
     <File Path="nuget.config" />
   </Folder>
   <Folder Name="/Tests/">
