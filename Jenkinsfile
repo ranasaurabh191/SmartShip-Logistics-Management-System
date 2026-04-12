@@ -213,8 +213,10 @@ pipeline {
 
         stage('Status') {
             steps {
+                dir(PROJECT_DIR){
                 bat 'docker compose ps'
                 bat 'docker image prune -f'
+                }
             }
         }
 
@@ -223,9 +225,14 @@ pipeline {
     post {
         success {
             echo 'SmartShip selective CI/CD completed Successfully'
+            dir(PROJECT_DIR) {                    
+                bat 'docker image prune -f'
+            }
         }
-        failure {
-            bat 'docker compose logs --tail=100'
+        steps {
+                dir(PROJECT_DIR){
+                bat 'docker compose logs --tail=100'
+            }
         }
     }
 
