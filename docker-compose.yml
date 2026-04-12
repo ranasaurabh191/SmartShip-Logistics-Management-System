@@ -1,7 +1,5 @@
 services:
 
-  # INFRASTRUCTURE 
-
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: smartship-sqlserver
@@ -9,13 +7,13 @@ services:
       - "1434:1433"
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=${DOCKER_SA_PASSWORD}
+      - SA_PASSWORD=SmartShip@123!
       - MSSQL_PID=Express
       - TZ=Asia/Kolkata
     volumes:
       - sqlserver-data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '${DOCKER_SA_PASSWORD}' -Q 'SELECT 1' -No -C"]
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'SmartShip@123!' -Q 'SELECT 1' -No -C"]
       interval: 15s
       timeout: 10s
       retries: 10
@@ -28,8 +26,8 @@ services:
       - "5672:5672"
       - "15672:15672"
     environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
       - TZ=Asia/Kolkata
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
@@ -39,8 +37,6 @@ services:
       timeout: 10s
       retries: 10
       start_period: 20s
-
-  # MICROSERVICES
 
   identity-service:
     build:
@@ -55,27 +51,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Asia/Kolkata
-      # Database
-      - ConnectionStrings__DefaultConnection=${DOCKER_CS_IDENTITY}
-      # JWT
-      - JwtSettings__Key=${JWT_KEY}
-      - JwtSettings__Issuer=${JWT_ISSUER}
-      - JwtSettings__Audience=${JWT_AUDIENCE}
-      - JwtSettings__ExpiryMinutes=${JWT_EXPIRY_MINUTES}
-      # RabbitMQ
-      - RabbitMQ__Host=${RABBITMQ_DOCKER_HOST}
-      - RabbitMQ__Username=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      # Internal API
-      - InternalApi__ApiKey=${INTERNAL_API_KEY}
-      # Email
-      - EmailSettings__Host=${EMAIL_HOST}
-      - EmailSettings__Port=${EMAIL_PORT}
-      - EmailSettings__SenderEmail=${EMAIL_SENDER_EMAIL}
-      - EmailSettings__SenderName=${EMAIL_SENDER_NAME}
-      - EmailSettings__Password=${EMAIL_PASSWORD}
-      # Serilog
-      - Serilog__WriteTo__1__Args__path=${DOCKER_LOG_IDENTITY}
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -96,23 +71,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Asia/Kolkata
-      # Database
-      - ConnectionStrings__DefaultConnection=${DOCKER_CS_SHIPMENT}
-      # JWT
-      - JwtSettings__Key=${JWT_KEY}
-      - JwtSettings__Issuer=${JWT_ISSUER}
-      - JwtSettings__Audience=${JWT_AUDIENCE}
-      # RabbitMQ
-      - RabbitMQ__Host=${RABBITMQ_DOCKER_HOST}
-      - RabbitMQ__Username=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      # Internal API
-      - InternalApi__ApiKey=${INTERNAL_API_KEY}
-      # Service URLs
-      - Services__IdentityService=${DOCKER_IDENTITY_URL}
-      - Services__PaymentService=${DOCKER_PAYMENT_URL}
-      # Serilog
-      - Serilog__WriteTo__1__Args__path=${DOCKER_LOG_SHIPMENT}
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -133,18 +91,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Asia/Kolkata
-      # Database
-      - ConnectionStrings__DefaultConnection=${DOCKER_CS_TRACKING}
-      # JWT
-      - JwtSettings__Key=${JWT_KEY}
-      - JwtSettings__Issuer=${JWT_ISSUER}
-      - JwtSettings__Audience=${JWT_AUDIENCE}
-      # RabbitMQ
-      - RabbitMQ__Host=${RABBITMQ_DOCKER_HOST}
-      - RabbitMQ__Username=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      # Serilog
-      - Serilog__WriteTo__1__Args__path=${DOCKER_LOG_TRACKING}
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -165,18 +111,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Asia/Kolkata
-      # Database
-      - ConnectionStrings__DefaultConnection=${DOCKER_CS_ADMIN}
-      # JWT
-      - JwtSettings__Key=${JWT_KEY}
-      - JwtSettings__Issuer=${JWT_ISSUER}
-      - JwtSettings__Audience=${JWT_AUDIENCE}
-      # RabbitMQ
-      - RabbitMQ__Host=${RABBITMQ_DOCKER_HOST}
-      - RabbitMQ__Username=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      # Serilog
-      - Serilog__WriteTo__1__Args__path=${DOCKER_LOG_ADMIN}
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -197,25 +131,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Asia/Kolkata
-      # Database
-      - ConnectionStrings__DefaultConnection=${DOCKER_CS_PAYMENT}
-      # JWT
-      - JwtSettings__Key=${JWT_KEY}
-      - JwtSettings__Issuer=${JWT_ISSUER}
-      - JwtSettings__Audience=${JWT_AUDIENCE}
-      # RabbitMQ
-      - RabbitMQ__Host=${RABBITMQ_DOCKER_HOST}
-      - RabbitMQ__Username=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      # Internal API
-      - InternalApi__ApiKey=${INTERNAL_API_KEY}
-      # Razorpay
-      - Razorpay__KeyId=${RAZORPAY_KEY_ID}
-      - Razorpay__KeySecret=${RAZORPAY_KEY_SECRET}
-      # Service URLs
-      - Services__ShipmentService=${DOCKER_SHIPMENT_URL}
-      # Serilog
-      - Serilog__WriteTo__1__Args__path=${DOCKER_LOG_PAYMENT}
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -236,29 +151,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Asia/Kolkata
-      # Database
-      - ConnectionStrings__DefaultConnection=${DOCKER_CS_NOTIFICATION}
-      # JWT
-      - JwtSettings__Key=${JWT_KEY}
-      - JwtSettings__Issuer=${JWT_ISSUER}
-      - JwtSettings__Audience=${JWT_AUDIENCE}
-      # RabbitMQ
-      - RabbitMQ__Host=${RABBITMQ_DOCKER_HOST}
-      - RabbitMQ__Username=${RABBITMQ_USERNAME}
-      - RabbitMQ__Password=${RABBITMQ_PASSWORD}
-      # Internal API
-      - InternalApi__ApiKey=${INTERNAL_API_KEY}
-      # Email
-      - EmailSettings__Host=${EMAIL_HOST}
-      - EmailSettings__Port=${EMAIL_PORT}
-      - EmailSettings__SenderEmail=${EMAIL_SENDER_EMAIL}
-      - EmailSettings__SenderName=${EMAIL_SENDER_NAME}
-      - EmailSettings__Password=${EMAIL_PASSWORD}
-      # Service URLs
-      - ServiceUrls__IdentityService=${DOCKER_IDENTITY_URL}
-      - ServiceUrls__ShipmentService=${DOCKER_SHIPMENT_URL}
-      # Serilog
-      - Serilog__WriteTo__1__Args__path=${DOCKER_LOG_NOTIFICATION}
     depends_on:
       sqlserver:
         condition: service_healthy
@@ -279,19 +171,6 @@ services:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Asia/Kolkata
-      # JWT
-      - JwtSettings__Key=${JWT_KEY}
-      - JwtSettings__Issuer=${JWT_ISSUER}
-      - JwtSettings__Audience=${JWT_AUDIENCE}
-      # Health check URLs
-      - ServiceHealthChecks__Identity=${DOCKER_HEALTH_IDENTITY}
-      - ServiceHealthChecks__Shipment=${DOCKER_HEALTH_SHIPMENT}
-      - ServiceHealthChecks__Tracking=${DOCKER_HEALTH_TRACKING}
-      - ServiceHealthChecks__Admin=${DOCKER_HEALTH_ADMIN}
-      - ServiceHealthChecks__Payment=${DOCKER_HEALTH_PAYMENT}
-      - ServiceHealthChecks__Notification=${DOCKER_HEALTH_NOTIFICATION}
-      # Serilog
-      - Serilog__WriteTo__1__Args__path=${DOCKER_LOG_GATEWAY}
     depends_on:
       - identity-service
       - shipment-service
@@ -300,8 +179,6 @@ services:
       - payment-service
       - notification-service
     restart: on-failure
-
-# VOLUMES
 
 volumes:
   gateway-logs:
