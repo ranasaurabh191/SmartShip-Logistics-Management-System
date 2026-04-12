@@ -37,7 +37,7 @@ pipeline {
                     def changedFiles = ''
                     try {
                         changedFiles = bat(
-                            script: '@echo off\r\ngit diff --name-only HEAD~1 HEAD',
+                            script: "@echo off\r\ncd /d \"${PROJECT_DIR}\" && git diff --name-only HEAD~1 HEAD",
                             returnStdout: true
                         ).trim()
                     } catch (Exception ex) {
