@@ -10,5 +10,4 @@
 **/.git
 **/.github
 README.md
-Jenkinsfile
 docker-compose*.yml

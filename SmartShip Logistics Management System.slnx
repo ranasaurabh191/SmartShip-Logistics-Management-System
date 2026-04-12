@@ -14,6 +14,7 @@
     <Project Path="Shared/SmartShip.Shared/SmartShip.Shared.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
+    <File Path="../../../AppData/Local/Temp/Rar$DRa15260.2834.rartemp/.env" />
     <File Path=".dockerignore" />
     <File Path="docker-compose.yml" />
     <File Path="nuget.config" />

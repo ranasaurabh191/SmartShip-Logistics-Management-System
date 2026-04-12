@@ -13,9 +13,6 @@ localfeed/
 # VS Code
 .vscode/
 
-# Docker overrides
-docker-compose.override.yml
-
 # Test outputs
 TestResults/
 coverage/

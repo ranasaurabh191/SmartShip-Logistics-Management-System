@@ -1,13 +1,13 @@
 
---DELETE FROM Hubs;
+DELETE FROM Hubs;
 --DBCC CHECKIDENT ('Hubs', RESEED, 0);
 
 SELECT * FROM Hubs;
 
---delete from DashboardMetrics;
+delete from DashboardMetrics;
 SELECT * FROM DashboardMetrics;
 
---delete from reports
+delete from reports
 select * from reports;
 
 
