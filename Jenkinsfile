@@ -27,7 +27,8 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                bat 'echo Using local workspace, no checkout needed'            }
+                checkout scm 
+                }
         }
 
         stage('Detect Changes') {
