@@ -62,7 +62,6 @@ pipeline {
                         files.contains('FIRST_BUILD')           ||
                         touches('docker-compose.yml')           ||
                         touches('nuget.config')                 ||
-                        touches('Jenkinsfile')                  ||
                         touches('Shared/SmartShip.Shared/')     ||
                         touches('BuildingBlocks/SmartShip.Shared/')
                     ) {
