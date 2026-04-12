@@ -22,6 +22,8 @@ public class AuthService : IAuthService
     private readonly ILogger<AuthService> _logger;
     private readonly IPublishEndpoint _publisher;
     private readonly IEmailService _emailService;
+    private readonly IConfiguration _configuration;
+
 
     public AuthService(
         IUserRepository userRepository,
@@ -30,12 +32,14 @@ public class AuthService : IAuthService
         IConfiguration config,
         ILogger<AuthService> logger,
         IPublishEndpoint publisher,
-        IEmailService emailService)
+        IEmailService emailService,
+        IConfiguration configuration)
     {
         _userRepository = userRepository;
         _otpRepository = otpRepository;
         _unitOfWork = unitOfWork;
         _config = config;
+        _configuration = configuration;
         _logger = logger;
         _publisher = publisher;
         _emailService = emailService;
@@ -237,20 +241,21 @@ public class AuthService : IAuthService
 
     public async Task<object> FixAdminAsync()
     {
+
         _logger.LogInformation("FixAdmin operation started");
 
         var admin = await _userRepository.GetByEmailForAdminAsync("admin@smartship.com");
+        var defaultPassword = _configuration["AdminSettings:DefaultPassword"];
 
         if (admin == null)
         {
             _logger.LogWarning("Admin not found. Creating new admin user.");
-
             admin = new User
             {
                 Name = "Super Admin",
                 Email = "admin@smartship.com",
                 Phone = "9999999999",
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(defaultPassword),
                 Role = "ADMIN",
                 IsActive = true,
                 CreatedAt = DateTime.Now
@@ -262,7 +267,7 @@ public class AuthService : IAuthService
         {
             _logger.LogWarning("Admin already exists. Resetting password.");
 
-            admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123");
+            admin.PasswordHash = BCrypt.Net.BCrypt.HashPassword(defaultPassword);
             _userRepository.Update(admin);
         }
 
@@ -270,11 +275,7 @@ public class AuthService : IAuthService
 
         _logger.LogInformation("FixAdmin operation completed successfully.");
 
-        return new
-        {
-            message = "Admin fixed!",
-            email = "admin@smartship.com",
-            password = "Admin@123"
-        };
+        return new { message = "Admin fixed successfully." };
+
     }
 }
