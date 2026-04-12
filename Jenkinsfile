@@ -222,15 +222,15 @@ pipeline {
 
     }
 
-    post {
+        post {
         success {
-            echo 'SmartShip selective CI/CD completed Successfully'
-            dir(PROJECT_DIR) {                    
+            echo 'SmartShip selective CI/CD complete'
+            dir(PROJECT_DIR) {                   
                 bat 'docker image prune -f'
             }
         }
-        steps {
-                dir(PROJECT_DIR){
+        failure {
+            dir(PROJECT_DIR) {                   
                 bat 'docker compose logs --tail=100'
             }
         }
