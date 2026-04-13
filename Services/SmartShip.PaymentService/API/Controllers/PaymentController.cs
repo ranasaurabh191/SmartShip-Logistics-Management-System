@@ -6,7 +6,7 @@ using SmartShip.PaymentService.Core.Interfaces.Services;
 namespace SmartShip.PaymentService.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/payment")]
 [Authorize]
 public class PaymentController : ControllerBase
 {

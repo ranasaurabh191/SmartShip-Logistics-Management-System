@@ -203,8 +203,7 @@ try
     app.UseSerilogRequestLogging(opt =>
         opt.MessageTemplate = "HTTP {RequestMethod} {RequestPath} → {StatusCode} in {Elapsed:0.0000}ms");
 
-    if (!app.Environment.IsEnvironment("Testing") &&
-    !app.Environment.IsEnvironment("DockerJenkins") == false)
+    if (!app.Environment.IsEnvironment("Testing"))
     {
         using var scope = app.Services.CreateScope();
         scope.ServiceProvider.GetRequiredService<NotificationDbContext>().Database.Migrate();

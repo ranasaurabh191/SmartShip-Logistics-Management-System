@@ -60,7 +60,11 @@ public class ShipmentRepository : IShipmentRepository
             PageSize = req.PageSize
         };
     }
-
+    public async Task<IEnumerable<Shipment>> GetByCustomerIdAsync(int customerId)
+    => await _context.Shipments
+        .Where(s => s.CustomerId == customerId)
+        .Select(s => new Shipment { Id = s.Id, TrackingNumber = s.TrackingNumber })
+        .ToListAsync();
     public async Task<PagedResponse<Shipment>> GetByCustomerPagedAsync(int customerId, PagedRequest req)
     {
         var query = _context.Shipments

@@ -422,7 +422,16 @@ public class ShipmentService : IShipmentService
             throw;
         }
     }
+    public async Task<IEnumerable<ShipmentSummaryDto>> GetShipmentSummaryByCustomerAsync(int customerId)
+    {
+        var shipments = await _shipmentRepository.GetByCustomerIdAsync(customerId);
 
+        return shipments.Select(s => new ShipmentSummaryDto
+        {
+            Id = s.Id,
+            TrackingNumber = s.TrackingNumber
+        });
+    }
     public Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type)
     {
         decimal rate = type switch

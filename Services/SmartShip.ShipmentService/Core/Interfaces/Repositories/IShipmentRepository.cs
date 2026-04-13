@@ -12,4 +12,5 @@ public interface IShipmentRepository
     Task<Shipment?> GetByIdAndCustomerAsync(int shipmentId, int customerId);
     Task AddAsync(Shipment shipment);
     void Update(Shipment shipment);
+    Task<IEnumerable<Shipment>> GetByCustomerIdAsync(int customerId);
 }

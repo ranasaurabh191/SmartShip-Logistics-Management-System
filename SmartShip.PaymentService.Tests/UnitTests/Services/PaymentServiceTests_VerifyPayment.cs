@@ -65,7 +65,7 @@ public class PaymentServiceTests_VerifyPayment
     [Fact]
     public async Task VerifyPaymentAsync_ValidRequest_ReturnsSuccessResponse()
     {
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(OrderId, ShipmentId)).ReturnsAsync(DefaultPayment());
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(OrderId)).ReturnsAsync(DefaultPayment()); 
         SetupSave(); SetupSaga();
 
         var result = await BuildService().VerifyPaymentAsync(ValidRequest());
@@ -78,7 +78,7 @@ public class PaymentServiceTests_VerifyPayment
     public async Task VerifyPaymentAsync_ValidRequest_MarksPaymentAsPaid()
     {
         var payment = DefaultPayment();
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(OrderId, ShipmentId)).ReturnsAsync(payment);
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(OrderId)).ReturnsAsync(payment); 
         SetupSave(); SetupSaga();
 
         await BuildService().VerifyPaymentAsync(ValidRequest());
@@ -92,7 +92,7 @@ public class PaymentServiceTests_VerifyPayment
     [Fact]
     public async Task VerifyPaymentAsync_ValidRequest_PublishesPaymentCompletedEvent()
     {
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(OrderId, ShipmentId)).ReturnsAsync(DefaultPayment());
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(OrderId)).ReturnsAsync(DefaultPayment()); 
         SetupSave(); SetupSaga();
 
         await BuildService().VerifyPaymentAsync(ValidRequest());
@@ -108,7 +108,8 @@ public class PaymentServiceTests_VerifyPayment
     [Fact]
     public async Task VerifyPaymentAsync_InvalidOrderId_ThrowsKeyNotFoundException()
     {
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(It.IsAny<string>(), It.IsAny<int?>())).ReturnsAsync((ShipmentPayment?)null);
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(It.IsAny<string>()))
+                    .ReturnsAsync((ShipmentPayment?)null); 
         _paymentRepo.Setup(r => r.GetByShipmentIdAsync(ShipmentId)).ReturnsAsync(DefaultPayment());
         SetupSave(); SetupSaga();
 
@@ -122,11 +123,16 @@ public class PaymentServiceTests_VerifyPayment
     public async Task VerifyPaymentAsync_InvalidOrderId_MarksPaymentAsFailed()
     {
         var existing = DefaultPayment();
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(It.IsAny<string>(), It.IsAny<int?>())).ReturnsAsync((ShipmentPayment?)null);
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(It.IsAny<string>()))
+                    .ReturnsAsync((ShipmentPayment?)null); 
         _paymentRepo.Setup(r => r.GetByShipmentIdAsync(ShipmentId)).ReturnsAsync(existing);
         SetupSave(); SetupSaga();
 
-        try { await BuildService().VerifyPaymentAsync(new VerifyPaymentRequest { RazorpayOrderId = "order_WRONG", ShipmentId = ShipmentId }); }
+        try
+        {
+            await BuildService().VerifyPaymentAsync(new VerifyPaymentRequest
+            { RazorpayOrderId = "order_WRONG", ShipmentId = ShipmentId });
+        }
         catch (KeyNotFoundException) { }
 
         existing.PaymentStatus.Should().Be(PaymentStatus.Failed);
@@ -136,11 +142,16 @@ public class PaymentServiceTests_VerifyPayment
     [Fact]
     public async Task VerifyPaymentAsync_InvalidOrderId_PublishesPaymentFailedEvent()
     {
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(It.IsAny<string>(), It.IsAny<int?>())).ReturnsAsync((ShipmentPayment?)null);
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(It.IsAny<string>()))
+                    .ReturnsAsync((ShipmentPayment?)null); 
         _paymentRepo.Setup(r => r.GetByShipmentIdAsync(ShipmentId)).ReturnsAsync(DefaultPayment());
         SetupSave(); SetupSaga();
 
-        try { await BuildService().VerifyPaymentAsync(new VerifyPaymentRequest { RazorpayOrderId = "order_WRONG", ShipmentId = ShipmentId }); }
+        try
+        {
+            await BuildService().VerifyPaymentAsync(new VerifyPaymentRequest
+            { RazorpayOrderId = "order_WRONG", ShipmentId = ShipmentId });
+        }
         catch (KeyNotFoundException) { }
 
         _publisher.WasPublished<PaymentFailedEvent>().Should().BeTrue();
@@ -153,13 +164,19 @@ public class PaymentServiceTests_VerifyPayment
     [Fact]
     public async Task VerifyPaymentAsync_InvalidOrderId_StillPublishesEvent_WhenNoSagaCorrelation()
     {
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(It.IsAny<string>(), It.IsAny<int?>())).ReturnsAsync((ShipmentPayment?)null);
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(It.IsAny<string>()))
+                    .ReturnsAsync((ShipmentPayment?)null); 
         _paymentRepo.Setup(r => r.GetByShipmentIdAsync(ShipmentId)).ReturnsAsync(DefaultPayment());
         _paymentRepo.Setup(r => r.Update(It.IsAny<ShipmentPayment>()));
         _uow.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
-        _sagaRepo.Setup(r => r.GetByShipmentIdAsync(It.IsAny<int>())).ReturnsAsync((ShipmentSagaCorrelation?)null);
+        _sagaRepo.Setup(r => r.GetByShipmentIdAsync(It.IsAny<int>()))
+                 .ReturnsAsync((ShipmentSagaCorrelation?)null);
 
-        try { await BuildService().VerifyPaymentAsync(new VerifyPaymentRequest { RazorpayOrderId = "order_WRONG", ShipmentId = ShipmentId }); }
+        try
+        {
+            await BuildService().VerifyPaymentAsync(new VerifyPaymentRequest
+            { RazorpayOrderId = "order_WRONG", ShipmentId = ShipmentId });
+        }
         catch (KeyNotFoundException) { }
 
         _publisher.WasPublished<PaymentFailedEvent>().Should().BeTrue();
@@ -171,7 +188,7 @@ public class PaymentServiceTests_VerifyPayment
     {
         var payment = DefaultPayment();
         payment.CustomerId = 99;
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(OrderId, ShipmentId)).ReturnsAsync(payment);
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(OrderId)).ReturnsAsync(payment); 
 
         var act = async () => await BuildService().VerifyPaymentAsync(ValidRequest());
         await act.Should().ThrowAsync<UnauthorizedAccessException>().WithMessage("*not authorized*");
@@ -182,7 +199,7 @@ public class PaymentServiceTests_VerifyPayment
     {
         var payment = DefaultPayment();
         payment.PaymentStatus = PaymentStatus.Paid;
-        _paymentRepo.Setup(r => r.GetByOrderAndShipmentAsync(OrderId, ShipmentId)).ReturnsAsync(payment);
+        _paymentRepo.Setup(r => r.GetByOrderIdAsync(OrderId)).ReturnsAsync(payment); 
 
         var act = async () => await BuildService().VerifyPaymentAsync(ValidRequest());
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("*already verified*");

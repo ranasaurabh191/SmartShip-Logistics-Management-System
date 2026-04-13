@@ -30,6 +30,7 @@ namespace SmartShip.AdminService.Infrastructure.Messaging.Consumers
                         metrics.LastUpdatedAt = DateTime.Now;
                         await _db.SaveChangesAsync();
                     }
+                    _logger.LogInformation("Processed UserDeletedEvent for UserId: {UserId}, Email: {Email}, Role: {Role}", msg.UserId, msg.Email, msg.Role);
                 }
             }
         }

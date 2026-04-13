@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SmartShip.ShipmentService.API.Filters;
 using SmartShip.ShipmentService.Core.DTOs;
 using SmartShip.ShipmentService.Core.Interfaces.Services;
+using SmartShip.ShipmentService.Core.Services;
 using SmartShip.ShipmentService.Domain.Enums;
 using SmartShip.ShipmentService.Infrastructure.Data;
 using System.Security.Claims;
@@ -67,7 +68,7 @@ public class ShipmentsController : ControllerBase
     public async Task<IActionResult> CancelShipment(int id, [FromBody] CancelShipmentRequest request)
     {
         var userIdClaim = User.FindFirst("userId")?.Value
-            ?? User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var customerId))
             return Unauthorized("Invalid token.");
@@ -76,9 +77,20 @@ public class ShipmentsController : ControllerBase
         return Ok(new { message = "Shipment cancelled successfully." });
 
     }
+
     [HttpGet("internal/{id}")]
     [InternalApiKey]  
     public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));
 
+    [HttpGet("by-customer/{customerId}")]
+    [ServiceFilter(typeof(InternalApiKeyAttribute))] 
+    public async Task<IActionResult> GetShipmentsByCustomer(int customerId)
+    {
+        _logger.LogInformation("Internal: Fetching shipments for CustomerId {CustomerId}", customerId);
+
+        var shipments = await _service.GetShipmentSummaryByCustomerAsync(customerId);
+
+        return Ok(shipments);
+    }
 }
     
