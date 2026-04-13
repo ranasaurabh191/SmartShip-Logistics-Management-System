@@ -30,6 +30,13 @@ try
         .Enrich.WithProperty("Environment", ctx.HostingEnvironment.EnvironmentName));
 
     var jwt = builder.Configuration.GetSection("JwtSettings");
+    var jwtKey = jwt["Key"];
+    var jwtIssuer = jwt["Issuer"];
+    var jwtAudience = jwt["Audience"];
+
+    if (string.IsNullOrWhiteSpace(jwtKey))
+        throw new InvalidOperationException("JwtSettings:Key is missing.");
+
     builder.Services.AddAuthentication("Bearer")
         .AddJwtBearer("Bearer", opt =>
         {
@@ -40,10 +47,10 @@ try
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwt["Issuer"],
-                ValidAudience = jwt["Audience"],
+                ValidIssuer = jwtIssuer,          
+                ValidAudience = jwtAudience,        
                 IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(jwt["Key"]!))
+                    Encoding.UTF8.GetBytes(jwtKey)) 
             };
         });
 

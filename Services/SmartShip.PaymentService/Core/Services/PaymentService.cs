@@ -195,12 +195,11 @@ public class PaymentService : IPaymentService
 
         _logger.LogInformation("Verifying payment for Order {OrderId}", request.RazorpayOrderId);
 
-        var payment = await _paymentRepository.GetByOrderAndShipmentAsync(request.RazorpayOrderId, request.ShipmentId);
+        var payment = await _paymentRepository.GetByOrderIdAsync(request.RazorpayOrderId);
 
         if (payment == null)
         {
-            _logger.LogWarning("Invalid OrderId {OrderId} for ShipmentId {ShipmentId} — publishing PaymentFailedEvent.",
-                request.RazorpayOrderId, request.ShipmentId);
+            _logger.LogWarning("Order {OrderId} not found — publishing PaymentFailedEvent.", request.RazorpayOrderId);
 
             ShipmentPayment? existingPayment = null;
             if (request.ShipmentId.HasValue)
@@ -211,7 +210,6 @@ public class PaymentService : IPaymentService
                     existingPayment.PaymentStatus = PaymentStatus.Failed;
                     _paymentRepository.Update(existingPayment);
                     await _unitOfWork.SaveChangesAsync();
-                    _logger.LogInformation("Payment marked as Failed for ShipmentId {ShipmentId}", request.ShipmentId);
                 }
             }
 
@@ -229,16 +227,15 @@ public class PaymentService : IPaymentService
                 FailedAt = DateTime.Now
             });
 
-            _logger.LogInformation("PaymentFailedEvent published for ShipmentId {ShipmentId} | CorrelationId: {CorrelationId}",
-                request.ShipmentId, failCorrelation?.CorrelationId ?? Guid.Empty);
-
             throw new KeyNotFoundException($"Invalid Order ID '{request.RazorpayOrderId}'. Payment failed.");
         }
 
         if (payment.CustomerId != authenticatedUserId)
         {
-            _logger.LogWarning("Ownership mismatch: Token userId={AuthUserId} but Payment belongs to CustomerId={Owner}",
-                authenticatedUserId, payment.CustomerId);
+            _logger.LogWarning(
+                "Unauthorized verify attempt: Token userId={AuthUserId} tried to verify Order {OrderId} belonging to CustomerId={Owner}",
+                authenticatedUserId, request.RazorpayOrderId, payment.CustomerId);
+
             throw new UnauthorizedAccessException("You are not authorized to verify this payment.");
         }
 
@@ -258,9 +255,6 @@ public class PaymentService : IPaymentService
 
         var correlation = await _sagaCorrelationRepository.GetByShipmentIdAsync(payment.ShipmentId);
 
-        _logger.LogInformation("Saga CorrelationId for Shipment {ShipmentId}: {CorrelationId}",
-            payment.ShipmentId, correlation?.CorrelationId);
-
         await _publisher.Publish(new PaymentCompletedEvent
         {
             CorrelationId = correlation?.CorrelationId ?? Guid.Empty,
@@ -271,7 +265,7 @@ public class PaymentService : IPaymentService
             CustomerId = payment.CustomerId
         });
 
-        _logger.LogInformation("Event published for Online Payment with ShipmentID: {ShipmentId}", request.ShipmentId);
+        _logger.LogInformation("PaymentCompletedEvent published for ShipmentID: {ShipmentId}", payment.ShipmentId);
 
         return MapToResponse(payment, "Payment successful!");
     }

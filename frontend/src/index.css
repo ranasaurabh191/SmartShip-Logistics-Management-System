@@ -1,0 +1,536 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;800;900&display=swap');
+@import "tailwindcss";
+
+/* ─── SmartShip Design System — Armoury Crate Language ─── */
+
+:root {
+  --color-bg: #0d0d0d;
+  --color-surface: #141414;
+  --color-surface-2: #1a1a1a;
+  --color-surface-3: #1f1f1f;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-red: rgba(224, 0, 26, 0.22);
+  --color-accent: #e0001a;
+  --color-accent-hover: #ff1a30;
+  --color-text: #d4d4d4;
+  --color-text-muted: #888888;
+  --color-text-dim: #555555;
+  --color-success: #00c48c;
+  --color-warning: #f5a623;
+  --color-error: #e0001a;
+  --font-heading: 'Orbitron', monospace;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ─── Reset & Base ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ─── Subtle background scanline overlay ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.013) 2px,
+      rgba(255, 255, 255, 0.013) 4px);
+}
+
+/* ─── Headings always Rajdhani ─── */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+}
+
+/* ─── Scrollbars ─── */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* ─── CARD ─── */
+.ss-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-red);
+  border-radius: 4px;
+  transition: box-shadow 0.2s ease;
+}
+
+.ss-card:hover {
+  box-shadow: 0 0 18px rgba(224, 0, 26, 0.14);
+}
+
+/* ─── STATUS BADGE ─── */
+.ss-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 2px;
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  background: transparent;
+  white-space: nowrap;
+}
+
+.ss-badge.success {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.ss-badge.warning {
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.ss-badge.muted {
+  border-color: var(--color-text-dim);
+  color: var(--color-text-muted);
+}
+
+.ss-badge.glow {
+  box-shadow: 0 0 6px rgba(224, 0, 26, 0.4);
+}
+
+.ss-badge.glow-success {
+  box-shadow: 0 0 6px rgba(0, 196, 140, 0.4);
+}
+
+/* ─── BUTTON ─── */
+.ss-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--color-accent);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.ss-btn:hover {
+  background: var(--color-accent-hover);
+}
+
+.ss-btn-outline {
+  background: transparent;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+}
+
+.ss-btn-outline:hover {
+  background: rgba(224, 0, 26, 0.1);
+}
+
+/* ─── KPI STRIP CARD ─── */
+.kpi-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-red);
+  border-radius: 4px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: box-shadow 0.2s;
+}
+
+.kpi-card:hover {
+  box-shadow: 0 0 12px rgba(224, 0, 26, 0.15);
+}
+
+.kpi-label {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.kpi-value {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.kpi-delta {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.kpi-delta.up {
+  color: var(--color-success);
+}
+
+.kpi-delta.down {
+  color: var(--color-accent);
+}
+
+/* ─── TABLE ─── */
+.ss-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.ss-table th {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.ss-table td {
+  padding: 11px 14px;
+  color: var(--color-text);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.ss-table tbody tr:hover {
+  background: rgba(224, 0, 26, 0.04);
+}
+
+.ss-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ─── SIDEBAR ITEM ─── */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: all 0.15s ease;
+  border-left: 2px solid transparent;
+}
+
+.sidebar-item:hover {
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-item.active {
+  color: var(--color-accent);
+  border-left-color: var(--color-accent);
+  background: rgba(224, 0, 26, 0.08);
+}
+
+/* ─── SERVICE HEALTH DOT ─── */
+.health-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.health-dot.online {
+  background: var(--color-success);
+  box-shadow: 0 0 5px rgba(0, 196, 140, 0.6);
+}
+
+.health-dot.offline {
+  background: var(--color-accent);
+  box-shadow: 0 0 5px rgba(224, 0, 26, 0.6);
+}
+
+/* ─── TOP SECTION LABEL ─── */
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.section-sub {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+}
+
+/* ─── SAGA NODE ─── */
+.saga-node {
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  padding: 14px 20px;
+  min-width: 140px;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: all 0.2s;
+}
+
+.saga-node.active {
+  border-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(224, 0, 26, 0.35);
+}
+
+.saga-node.success-node {
+  border-color: var(--color-success);
+  color: var(--color-success);
+  box-shadow: 0 0 12px rgba(0, 196, 140, 0.25);
+}
+
+.saga-node.error-node {
+  border-color: #555;
+  color: #555;
+}
+
+.saga-arrow {
+  font-family: var(--font-heading);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+/* ─── FORM INPUTS ─── */
+.ss-input {
+  background: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 13px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ss-input:focus {
+  border-color: var(--color-accent);
+}
+
+.ss-input::placeholder {
+  color: var(--color-text-dim);
+}
+
+/* ─── DIVIDER ─── */
+.ss-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ─── RED ACCENT LINE decoration ─── */
+.accent-line {
+  width: 32px;
+  height: 2px;
+  background: var(--color-accent);
+  margin-bottom: 12px;
+}
+
+/* ─── Tracking timeline ─── */
+.timeline-line {
+  width: 1px;
+  background: var(--color-border);
+  margin: 0 auto;
+}
+
+.timeline-node {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--color-text-dim);
+  background: var(--color-bg);
+  flex-shrink: 0;
+}
+
+.timeline-node.active {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  box-shadow: 0 0 8px rgba(224, 0, 26, 0.5);
+}
+
+.timeline-node.done {
+  border-color: var(--color-success);
+  background: var(--color-success);
+}
+
+/* MUI Override to match theme */
+.MuiPaper-root {
+  background-color: var(--color-surface) !important;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATIONS — Armoury Crate style
+═══════════════════════════════════════════════════════ */
+
+/* Pulsing glow for live indicator dots */
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0.7); }
+  50%  { box-shadow: 0 0 0 6px rgba(0, 196, 140, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0); }
+}
+
+/* Red pulse for alert/accent dots */
+@keyframes pulseRed {
+  0%   { box-shadow: 0 0 0 0 rgba(224, 0, 26, 0.7); }
+  50%  { box-shadow: 0 0 0 8px rgba(224, 0, 26, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(224, 0, 26, 0); }
+}
+
+/* Hero text fade + slide up */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Panel slide in from right */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Running progress dot across step connector line */
+@keyframes slideAcross {
+  0%   { left: 12.5%;  opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { left: calc(100% - 12.5% - 14px); opacity: 0; }
+}
+
+/* Shimmer scan line sweep */
+@keyframes scanSweep {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  20%  { opacity: 0.03; }
+  80%  { opacity: 0.03; }
+  100% { transform: translateY(100vh); opacity: 0; }
+}
+
+/* Page route transition */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Floating animation for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+/* Slow rotate for background mesh */
+@keyframes slowRotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Number counter roll (applied via JS) */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing cursor blink */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
+/* Glow border pulse on cards */
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(224,0,26,0); }
+  50%      { box-shadow: 0 0 20px rgba(224,0,26,0.25); }
+}
+
+/* Red accent line grow in */
+@keyframes growLine {
+  from { width: 0; }
+  to   { width: 48px; }
+}
+
+/* Staggered card entrance */
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Smooth page-entry (applied to route root) */
+.page-enter {
+  animation: pageFadeIn 0.45s ease both;
+}
+
+/* Hover glow on module items */
+.module-row:hover {
+  background: rgba(224, 0, 26, 0.04);
+  transition: background 0.2s ease;
+}

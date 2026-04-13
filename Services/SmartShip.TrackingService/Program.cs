@@ -207,9 +207,20 @@ try
 
     if(!app.Environment.IsEnvironment("Testing") &&
     !app.Environment.IsEnvironment("DockerJenkins") == false)
-{
-        using var scope = app.Services.CreateScope();
-        scope.ServiceProvider.GetRequiredService<TrackingDbContext>().Database.Migrate();
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            try
+            {
+                scope.ServiceProvider
+                    .GetRequiredService<TrackingDbContext>()
+                    .Database.Migrate();
+            }
+            catch (Exception ex)
+            {
+                Log.Warning("Migration failed: {Message}", ex.Message);
+            }
+        }
     }
     app.UseSwagger(); app.UseSwaggerUI();
     app.UseCors("AllowAll");
