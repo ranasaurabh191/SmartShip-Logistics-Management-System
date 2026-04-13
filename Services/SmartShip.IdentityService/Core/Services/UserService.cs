@@ -10,6 +10,7 @@ namespace SmartShip.IdentityService.Core.Services;
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IOtpVerificationRepository _otpRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<UserService> _logger;
     private readonly IPublishEndpoint _publisher;
@@ -18,12 +19,14 @@ public class UserService : IUserService
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
         ILogger<UserService> logger,
-        IPublishEndpoint publisher)
+        IPublishEndpoint publisher,
+        IOtpVerificationRepository otpRepository)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _publisher = publisher;
+        _otpRepository = otpRepository;
     }
 
     public async Task<PagedResponse<UserDto>> GetAllUsersPagedAsync(UserPagedRequest req)
@@ -95,12 +98,22 @@ public class UserService : IUserService
         _logger.LogInformation("Deleting user with ID: {UserId}", userId);
 
         var user = await _userRepository.GetByIdAsync(userId);
-
         if (user == null)
         {
             _logger.LogWarning("Delete failed - user not found: {UserId}", userId);
             throw new KeyNotFoundException($"User {userId} not found.");
         }
+
+        var otpEntries = await _otpRepository.GetByUserIdAsync(userId);
+        if (otpEntries.Any())
+        {
+            _logger.LogInformation("Deleting {OtpCount} OTP entries for UserId: {UserId}", otpEntries.Count(), userId);
+            foreach (var otp in otpEntries)
+            {
+                _otpRepository.Delete(otp);
+            }
+        }
+
 
         _userRepository.Delete(user);
         await _unitOfWork.SaveChangesAsync();

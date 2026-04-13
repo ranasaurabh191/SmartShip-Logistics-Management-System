@@ -19,4 +19,9 @@ public class OtpVerificationRepository : IOtpVerificationRepository
     public void Update(OtpVerification otp) => _context.OtpVerifications.Update(otp);
 
     public void Delete(OtpVerification otp) => _context.OtpVerifications.Remove(otp);
+
+    public async Task<IEnumerable<OtpVerification>> GetByUserIdAsync(int userId)
+       => await _context.OtpVerifications
+           .Where(o => o.CustomerId == userId)
+           .ToListAsync();
 }

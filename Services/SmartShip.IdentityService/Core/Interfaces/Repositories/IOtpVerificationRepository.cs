@@ -8,4 +8,5 @@ public interface IOtpVerificationRepository
     Task AddAsync(OtpVerification otpVerification);
     void Update(OtpVerification otpVerification);
     void Delete(OtpVerification otpVerification);
+    Task<IEnumerable<OtpVerification>> GetByUserIdAsync(int userId);
 }
