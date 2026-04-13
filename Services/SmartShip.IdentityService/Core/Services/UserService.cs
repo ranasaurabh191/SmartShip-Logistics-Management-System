@@ -106,32 +106,6 @@ public class UserService : IUserService
             throw new KeyNotFoundException($"User {userId} not found.");
         }
 
-        var shipmentIds = new List<int>();
-        var trackingNumbers = new List<string>();
-
-        try
-        {
-            var httpClient = _httpClientFactory.CreateClient("ShipmentService");
-            var response = await httpClient.GetAsync($"api/shipments/by-customer/{userId}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var shipments = await response.Content
-                    .ReadFromJsonAsync<List<ShipmentSummaryDto>>();
-
-                if (shipments != null)
-                {
-                    shipmentIds = shipments.Select(s => s.Id).ToList();
-                    trackingNumbers = shipments.Select(s => s.TrackingNumber).ToList();
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning("Could not fetch shipments for UserId {UserId}: {Message}",
-                userId, ex.Message);
-        }
-
         var otpEntries = await _otpRepository.GetByUserIdAsync(userId);
         if (otpEntries.Any())
         {
@@ -154,8 +128,6 @@ public class UserService : IUserService
             Email = user.Email,
             Role = user.Role,
             DeletedAt = DateTime.Now,
-            ShipmentIds = shipmentIds,
-            TrackingNumbers = trackingNumbers
         });
 
         _logger.LogInformation("Delete Event published successfully for User Id : {UserId}", userId);

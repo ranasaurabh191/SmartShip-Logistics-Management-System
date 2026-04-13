@@ -6,6 +6,5 @@ public class UserDeletedEvent
     public string Email { get; set; } = string.Empty;
     public DateTime DeletedAt { get; set; }
     public string Role { get; set; } = string.Empty;
-    public List<int> ShipmentIds { get; set; } = new();        
-    public List<string> TrackingNumbers { get; set; } = new();
+
 }

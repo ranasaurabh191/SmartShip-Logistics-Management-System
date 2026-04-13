@@ -99,7 +99,6 @@ try
         x.AddConsumer<PaymentFailedTrackingConsumer>();
         x.AddConsumer<PaymentRefundedTrackingConsumer>();
         x.AddConsumer<ShipmentDeliveredConsumer>();
-        x.AddConsumer<UserDeletedConsumer>();   
 
         x.UsingRabbitMq((ctx, cfg) =>
         {
@@ -122,8 +121,7 @@ try
                 e.ConfigureConsumer<PaymentRefundedTrackingConsumer>(ctx));
             cfg.ReceiveEndpoint("tracking-shipment-delivered", e =>
                 e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx));
-            cfg.ReceiveEndpoint("tracking-user-deleted", e =>
-                e.ConfigureConsumer<UserDeletedConsumer>(ctx));
+          
         });
     });
 
