@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SmartShip.PaymentService.Migrations
 {
     /// <inheritdoc />
-    public partial class InitPayment : Migration
+    public partial class initPayment : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,7 @@ namespace SmartShip.PaymentService.Migrations
                 columns: table => new
                 {
                     ShipmentId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<int>(type: "int", nullable: false),
                     CorrelationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

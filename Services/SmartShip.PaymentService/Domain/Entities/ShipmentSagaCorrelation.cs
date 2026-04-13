@@ -6,5 +6,6 @@ public class ShipmentSagaCorrelation
 {
     [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int ShipmentId { get; set; }
+    public int CustomerId { get; set; }
     public Guid CorrelationId { get; set; }
 }

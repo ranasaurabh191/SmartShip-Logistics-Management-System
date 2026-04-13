@@ -91,6 +91,9 @@ namespace SmartShip.PaymentService.Migrations
                     b.Property<Guid>("CorrelationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
                     b.HasKey("ShipmentId");
 
                     b.ToTable("SagaCorrelations");

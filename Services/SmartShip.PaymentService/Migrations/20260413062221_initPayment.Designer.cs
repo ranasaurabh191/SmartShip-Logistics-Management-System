@@ -12,8 +12,8 @@ using SmartShip.PaymentService.Infrastructure.Data;
 namespace SmartShip.PaymentService.Migrations
 {
     [DbContext(typeof(PaymentDbContext))]
-    [Migration("20260409090257_InitPayment")]
-    partial class InitPayment
+    [Migration("20260413062221_initPayment")]
+    partial class initPayment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,6 +93,9 @@ namespace SmartShip.PaymentService.Migrations
 
                     b.Property<Guid>("CorrelationId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.HasKey("ShipmentId");
 

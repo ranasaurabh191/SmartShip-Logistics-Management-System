@@ -34,6 +34,7 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
         _context.SagaCorrelations.Add(new ShipmentSagaCorrelation
         {
             ShipmentId = msg.ShipmentId,
+            CustomerId = msg.CustomerId,
             CorrelationId = msg.CorrelationId  
         });
 

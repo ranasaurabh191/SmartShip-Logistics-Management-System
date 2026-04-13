@@ -23,7 +23,11 @@ public class UserDeletedConsumer : IConsumer<UserDeletedEvent>
 
         var shipments = await _db.Shipments
             .Where(s => s.CustomerId == userId)
-            .ToListAsync(); 
+            .ToListAsync();
+
+        var sagaShipments = await _db.ShipmentOrderSagas
+            .Where(s => s.CustomerId == userId)
+            .ToListAsync();
 
         var count = shipments.Count;
         _logger.LogInformation("Found {Count} shipments for deleted user {UserId}", count, userId);
@@ -37,6 +41,20 @@ public class UserDeletedConsumer : IConsumer<UserDeletedEvent>
         else
         {
             _logger.LogInformation("No shipments found for deleted user {UserId}", userId);
+        }
+
+        var sagaCount = sagaShipments.Count;
+        _logger.LogInformation("Found {Count} saga shipments for deleted user {UserId}", sagaCount, userId);
+
+        if (sagaCount > 0)
+        {
+            _db.ShipmentOrderSagas.RemoveRange(sagaShipments);
+            await _db.SaveChangesAsync();
+            _logger.LogInformation("Cleaned up {Count} saga shipments for deleted user {UserId}", sagaCount, userId);
+        }
+        else
+        {
+            _logger.LogInformation("No saga shipments found for deleted user {UserId}", userId);
         }
     }
 }
