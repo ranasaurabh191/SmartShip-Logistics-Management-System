@@ -138,7 +138,7 @@ public class AuthService : IAuthService
         {
             existingOtp = new OtpVerification
             {
-                CustomerId = request.Id,
+                CustomerId = 0,
                 Email = request.Email,
                 Purpose = "Signup",
                 OtpHash = otpHash,
@@ -195,6 +195,13 @@ public class AuthService : IAuthService
         await _unitOfWork.SaveChangesAsync();
 
         _logger.LogInformation("User created via OTP | Email: {Email}", request.Email);
+
+        otpRecord.CustomerId = user.Id;
+        _otpRepository.Update(otpRecord);
+        await _unitOfWork.SaveChangesAsync();
+
+        _logger.LogInformation("OtpVerification table updated for customer id {CustomerId}", user.Id);
+
 
         await _publisher.Publish(new UserCreatedEvent
         {
