@@ -12,8 +12,8 @@ using SmartShip.IdentityService.Infrastructure.Data;
 namespace SmartShip.IdentityService.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20260409093953_InitIdentity")]
-    partial class InitIdentity
+    [Migration("20260413064929_initIdentiy")]
+    partial class initIdentiy
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,6 +35,9 @@ namespace SmartShip.IdentityService.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()

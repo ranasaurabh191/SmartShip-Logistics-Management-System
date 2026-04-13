@@ -3,6 +3,7 @@
 public class OtpVerification
 {
     public int Id { get; set; }
+    public int CustomerId { get; set; }
     public string Email { get; set; } = string.Empty;
     public string Purpose { get; set; } = "Signup";  
     public string OtpHash { get; set; } = string.Empty;
