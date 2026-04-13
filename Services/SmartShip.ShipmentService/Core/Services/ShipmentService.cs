@@ -337,14 +337,20 @@ public class ShipmentService : IShipmentService
         }
     }
 
-    public async Task SchedulePickupAsync(int id, SchedulePickupRequest request)
+    public async Task SchedulePickupAsync(int id, int customerId, SchedulePickupRequest request)
     {
-        _logger.LogInformation("Scheduling pickup for Shipment {ShipmentId} at {PickupTime}", id, request.PickupTime);
+        _logger.LogInformation("Scheduling pickup for Shipment {ShipmentId} | Customer {CustomerId}", id, customerId);
 
         try
         {
-            var s = await _shipmentRepository.GetByIdAsync(id)
-                ?? throw new KeyNotFoundException($"Shipment {id} not found.");
+            var s = await _shipmentRepository.GetByIdAndCustomerAsync(id, customerId);
+
+            if (s == null)
+            {
+                _logger.LogWarning("Shipment {ShipmentId} not found or does not belong to Customer {CustomerId}",
+                    id, customerId);
+                throw new KeyNotFoundException("Shipment not found or you are not authorized to schedule pickup for it.");
+            }
 
             if (s.Status != ShipmentStatus.Draft)
                 throw new InvalidOperationException(
@@ -368,9 +374,7 @@ public class ShipmentService : IShipmentService
             }
 
             s.PickupScheduledAt = request.PickupTime;
-
             s.Status = ShipmentStatus.Booked;
-
             s.UpdatedAt = request.PickupTime;
 
             _shipmentRepository.Update(s);
@@ -388,8 +392,8 @@ public class ShipmentService : IShipmentService
                 CustomerId = s.CustomerId
             });
 
-            _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime}",
-                s.TrackingNumber, request.PickupTime);
+            _logger.LogInformation("Pickup scheduled for {TrackingNumber} at {PickupTime} | Customer {CustomerId}",
+                s.TrackingNumber, request.PickupTime, customerId);
         }
         catch (Exception ex)
         {

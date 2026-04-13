@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SmartShip.ShipmentService.API.Filters;
 using SmartShip.ShipmentService.Core.DTOs;
 using SmartShip.ShipmentService.Core.Interfaces.Services;
@@ -48,15 +47,25 @@ public class ShipmentsController : ControllerBase
     [Authorize]
     public async Task<IActionResult> GetById(int id) =>  Ok(await _service.GetByIdAsync(id));
 
-    [HttpPatch("pickup/{id}")]
-    [Authorize(Roles = "CUSTOMER")]
+    [HttpPost("{id}/schedule-pickup")]
+    [Authorize(Roles = "CUSTOMER")]  
     public async Task<IActionResult> SchedulePickup(int id, [FromBody] SchedulePickupRequest request)
     {
-        await _service.SchedulePickupAsync(id, request);        
+        var customerIdClaim = User.FindFirst("userId")?.Value
+            ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(customerIdClaim) || !int.TryParse(customerIdClaim, out var customerId))
+        {
+            _logger.LogWarning("JWT userId claim missing or invalid on SchedulePickup.");
+            return Unauthorized(new { message = "Invalid or missing user token." });
+        }
+
+        await _service.SchedulePickupAsync(id, customerId, request);  
         return Ok(new { message = "Pickup scheduled successfully." });
     }
 
     [HttpGet("rate")]
+    [Authorize(Roles = "CUSTOMER")]
     public async Task<IActionResult> GetRate([FromQuery] double weight, [FromQuery] string type)
     {
         if (!Enum.TryParse<ShipmentType>(type, true, out var shipType)) return BadRequest("Invalid type");
