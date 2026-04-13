@@ -126,6 +126,7 @@ try
     {
         x.AddConsumer<ShipmentCreatedConsumer>();
         x.AddConsumer<ShipmentCancelledByCustomerConsumer>();
+        x.AddConsumer<UserDeletedConsumer>();
 
         x.UsingRabbitMq((context, cfg) =>
         {
@@ -141,6 +142,10 @@ try
             cfg.ReceiveEndpoint("payment-shipment-cancelled-by-customer", e =>
             {
                 e.ConfigureConsumer<ShipmentCancelledByCustomerConsumer>(context);
+            });
+            cfg.ReceiveEndpoint("payment-user-deleted", e =>
+            {
+                e.ConfigureConsumer<UserDeletedConsumer>(context);
             });
         });
     });

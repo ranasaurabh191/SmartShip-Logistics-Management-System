@@ -115,7 +115,7 @@ public class UserService : IUserService
             DeletedAt = DateTime.Now
         });
 
-        _logger.LogInformation("Delete Event published successfully: {UserId}", userId);
+        _logger.LogInformation("Delete Event published successfully for User Id : {UserId}", userId);
     }
 
     public async Task<string> GetUserEmailAsync(int userId)
