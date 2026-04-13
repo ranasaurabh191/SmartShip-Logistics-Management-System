@@ -288,8 +288,8 @@ public class ShipmentService : IShipmentService
             _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}",
                 s.TrackingNumber, oldStatus, st);
 
-            if (st is not (ShipmentStatus.Booked or ShipmentStatus.Delivered or ShipmentStatus.Cancelled))
-{
+            if (st is not (ShipmentStatus.Booked or ShipmentStatus.Delivered))
+            {
                 await _publisher.Publish(new ShipmentStatusUpdatedEvent
                 {
                     ShipmentId = s.Id,
