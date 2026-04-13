@@ -27,7 +27,7 @@ public class UserDeletedConsumer : IConsumer<UserDeletedEvent>
 
         var saga = await _db.SagaCorrelations
             .Where(s => s.CustomerId == userId)
-            .ToListAsync();
+            .ToListAsync(); 
 
         var count = payments.Count;
         _logger.LogInformation("Found {Count} payments for deleted user {UserId}", count, userId);

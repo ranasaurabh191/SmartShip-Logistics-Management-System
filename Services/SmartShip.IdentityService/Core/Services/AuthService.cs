@@ -138,6 +138,7 @@ public class AuthService : IAuthService
         {
             existingOtp = new OtpVerification
             {
+                CustomerId = request.Id,
                 Email = request.Email,
                 Purpose = "Signup",
                 OtpHash = otpHash,
