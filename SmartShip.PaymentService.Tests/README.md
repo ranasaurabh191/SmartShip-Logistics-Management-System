@@ -162,3 +162,133 @@ SmartShip.PaymentService.Tests/
 └── TestJwtHelper.cs
 
 
+
+SmartShip.PaymentService — Unit Test Suite
+Overview
+The SmartShip.PaymentService.Tests project is a pure unit test library for the PaymentService business logic layer. It uses xUnit, Moq, and FluentAssertions to test the PaymentService class in complete isolation — no database, no RabbitMQ, no HTTP calls. All external dependencies are mocked via purpose-built helper classes. This suite covers three service operations split into three focused test classes, with 30+ individual test cases covering happy paths, edge cases, authorization failures, and event publishing behavior.
+
+Project Structure
+text
+SmartShip.PaymentService.Tests/
+├── Helpers/
+│   ├── MockHttpContext.cs          # Fakes IHttpContextAccessor with JWT claims
+│   ├── MockHttpClientFactory.cs    # Fakes IHttpClientFactory (success/404 responses)
+│   └── TestJwtHelper.cs            # Generates real signed JWT tokens for integration use
+├── Mocks/
+│   └── MockPublishEndpoint.cs      # In-memory IPublishEndpoint — captures published events
+└── UnitTests/
+    └── Services/
+        ├── PaymentServiceTests_CreateOrder.cs
+        ├── PaymentServiceTests_VerifyPayment.cs
+        └── PaymentServiceTests_GetStatus.cs
+Test Infrastructure — Helpers & Mocks
+MockHttpContext.cs
+Fakes IHttpContextAccessor — the mechanism by which PaymentService reads the authenticated user's userId claim from the JWT.
+
+csharp
+MockHttpContext.WithUserId(29)       // authenticated user, userId claim = 29
+MockHttpContext.Unauthenticated()    // no claims — triggers UnauthorizedAccessException
+Why needed: PaymentService extracts userId from HttpContext.User claims on every operation. Without this mock, tests would require a full ASP.NET pipeline.
+
+MockHttpClientFactory.cs
+Fakes IHttpClientFactory — used by PaymentService to call ShipmentService's GET /api/shipments/{id} endpoint during order creation.
+
+csharp
+MockHttpClientFactory.WithResponse(shipmentDto)   // returns 200 OK with serialized DTO
+MockHttpClientFactory.WithNotFound()              // returns 404 — triggers KeyNotFoundException
+Why needed: CreateOrderAsync calls ShipmentService over HTTP to validate the shipment exists and verify ownership. This mock eliminates that network dependency entirely.
+
+MockPublishEndpoint.cs
+A full in-memory implementation of MassTransit's IPublishEndpoint. Captures all published messages in a typed list for assertion.
+
+csharp
+_publisher.WasPublished<PaymentCompletedEvent>()   // bool — was this event published?
+_publisher.GetPublished<PaymentCompletedEvent>()   // T? — get the published instance
+_publisher.Reset()                                 // clear between tests
+_publisher.PublishedMessages                       // full list of all published events
+Why a real implementation, not a Mock<IPublishEndpoint>?
+MassTransit's IPublishEndpoint has 10+ overloads of Publish. Using Mock<T> would require setting up each overload individually. A concrete implementation captures all published messages regardless of which overload is called.
+
+TestJwtHelper.cs
+Generates real HMAC-SHA256 signed JWT tokens for integration test scenarios (not used in unit tests — unit tests use MockHttpContext directly).
+
+csharp
+TestJwtHelper.GenerateToken(userId: 29, role: "Customer")
+Claim	Value
+userId	provided int
+ClaimTypes.NameIdentifier	same int
+ClaimTypes.Role	provided role string
+Test Classes
+PaymentServiceTests_CreateOrder — 9 tests
+Tests CreateOrderAsync — the entry point for both COD and Online payment order creation. Requires ShipmentService HTTP validation and saga correlation.
+
+Test	What it verifies
+Online_ReturnsSuccessResponse	Returns Pending status + mock Razorpay order ID
+Online_PublishesOnlyPaymentCreatedEvent	Online does NOT publish PaymentCompletedEvent
+Online_SavesCorrectPaymentEntity	Correct entity fields saved to repo (amount, customerId, sagaId)
+COD_PublishesBothEvents	COD publishes both PaymentCreatedEvent + PaymentCompletedEvent
+ShipmentNotFound_ThrowsKeyNotFoundException	404 from ShipmentService → exception
+WrongOwner_ThrowsUnauthorizedAccessException	Shipment belongs to different customer
+AlreadyPaid_ThrowsInvalidOperationException	Duplicate payment attempt on paid shipment
+CODAlreadyRegistered_ThrowsInvalidOperationException	COD already registered → blocks retry
+OnlineAlreadyInitiated_ThrowsInvalidOperationException	Online payment already pending
+NoToken_ThrowsUnauthorizedAccessException	Missing/empty JWT claims
+Key design — COD vs Online split:
+COD publishes PaymentCompletedEvent immediately (no user action needed to "complete" payment). Online only publishes PaymentCreatedEvent — PaymentCompletedEvent comes later via VerifyPaymentAsync. Tests explicitly assert this asymmetry.
+
+PaymentServiceTests_VerifyPayment — 10 tests
+Tests VerifyPaymentAsync — the Razorpay callback handler that marks a payment as Paid and advances the Saga.
+
+Test	What it verifies
+ValidRequest_ReturnsSuccessResponse	Returns "Paid" status + success message
+ValidRequest_MarksPaymentAsPaid	Mutates entity: status=Paid, paymentId, signature, PaidAt
+ValidRequest_PublishesPaymentCompletedEvent	Correct CorrelationId, ShipmentId, PaymentMethod in event
+InvalidOrderId_ThrowsKeyNotFoundException	Unknown order ID → exception
+InvalidOrderId_MarksPaymentAsFailed	Payment entity updated to Failed before exception throws
+InvalidOrderId_PublishesPaymentFailedEvent	PaymentFailedEvent published with correct Reason
+InvalidOrderId_StillPublishesEvent_WhenNoSagaCorrelation	Publishes with CorrelationId = Guid.Empty if saga missing
+WrongOwner_ThrowsUnauthorizedAccessException	Token userId ≠ payment.CustomerId
+AlreadyPaid_ThrowsInvalidOperationException	Duplicate verify attempt blocked
+NoToken_ThrowsUnauthorizedAccessException	No JWT claims
+Critical path — failure sequence:
+When an invalid order ID is submitted, the service does three things before throwing: (1) marks existing payment as Failed, (2) saves to DB, (3) publishes PaymentFailedEvent. Tests _MarksPaymentAsFailed, _PublishesPaymentFailedEvent, and _StillPublishesEvent_WhenNoSagaCorrelation verify each of these independently.
+
+PaymentServiceTests_GetStatus — 8 tests
+Tests PaymentStatusAsync and GetByShipmentIdAsync — read-only query methods with no auth check, no HTTP calls, and no event publishing.
+
+Test	What it verifies
+GetByShipmentIdAsync_Found_ReturnsMappedResponse	Full response mapping including Message
+GetByShipmentIdAsync_PendingOnline_ReturnsInitiatedMessage	Correct message for pending online
+GetByShipmentIdAsync_PendingCOD_ReturnsCODMessage	Correct message for COD
+GetByShipmentIdAsync_Failed_ReturnsFailedMessage	Correct message for failed payment
+GetByShipmentIdAsync_NotFound_ThrowsKeyNotFoundException	Missing record → exception
+PaymentStatusAsync_ByOrderId_ReturnsCorrectPayment	Lookup by Razorpay order ID
+PaymentStatusAsync_ByShipmentId_ReturnsCorrectPayment	Lookup by shipment ID
+PaymentStatusAsync_ByTrackingNumber_ReturnsCorrectPayment	Lookup by tracking number
+PaymentStatusAsync_NotFound_ThrowsKeyNotFoundException	All three lookups fail → exception
+Lookup priority in PaymentStatusAsync: OrderId → ShipmentId → TrackingNumber. If all three are null, payment stays null → KeyNotFoundException. Tests verify each lookup independently.
+
+Event Publishing Matrix
+Method	COD	Online
+CreateOrderAsync	PaymentCreatedEvent ✅ PaymentCompletedEvent ✅	PaymentCreatedEvent ✅ PaymentCompletedEvent ❌
+VerifyPaymentAsync (success)	N/A	PaymentCompletedEvent ✅
+VerifyPaymentAsync (failure)	N/A	PaymentFailedEvent ✅
+Technologies Used
+Library	Purpose
+Library	Purpose
+xUnit	Test framework — [Fact] based test discovery
+Moq	Mocking IPaymentRepository, ISagaCorrelationRepository, IUnitOfWork
+FluentAssertions	Readable assertions — .Should().Be(), .ThrowAsync<T>()
+Microsoft.Extensions.Logging.Abstractions	NullLogger<T> — discards all log output in tests
+Interview-Ready Insights
+"Why split tests into three files?"
+Each file maps to one public method group with a distinct setup profile. CreateOrder needs MockHttpClientFactory; VerifyPayment needs saga + payment repo; GetStatus is read-only. Mixing them would bloat setup methods and make failures harder to diagnose.
+
+"Why MockPublishEndpoint instead of Mock<IPublishEndpoint>?"
+MassTransit's interface has 10+ Publish overloads. A concrete implementation captures all messages generically without per-overload setup — and supports typed retrieval via GetPublished<T>().
+
+"Why does BuildService() recreate the service per test?"
+MockPublishEndpoint retains state across calls. Recreating BuildService() per test (and calling _publisher.Reset() where needed) ensures no cross-test message contamination.
+
+"What's not tested here?"
+Saga state machine transitions, RabbitMQ consumer behavior, and HTTP integration — those belong in integration tests using MassTransit's InMemoryTestHarness and WebApplicationFactory.
