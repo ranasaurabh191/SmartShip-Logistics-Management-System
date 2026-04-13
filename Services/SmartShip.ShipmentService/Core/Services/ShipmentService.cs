@@ -278,7 +278,7 @@ public class ShipmentService : IShipmentService
 
             var oldStatus = s.Status;
             s.Status = st;
-
+            s.UpdatedAt = DateTime.Now;
             if (st == ShipmentStatus.Delivered)
                 s.DeliveredAt = DateTime.Now;
 
@@ -370,6 +370,8 @@ public class ShipmentService : IShipmentService
             s.PickupScheduledAt = request.PickupTime;
 
             s.Status = ShipmentStatus.Booked;
+
+            s.UpdatedAt = request.PickupTime;
 
             _shipmentRepository.Update(s);
             await _unitOfWork.SaveChangesAsync();
