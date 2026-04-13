@@ -53,7 +53,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--color-bg)' }}>
 
-      {/* â”€â”€â”€ SIDEBAR â”€â”€â”€ */}
       <aside style={{
         width: 240,
         flexShrink: 0,

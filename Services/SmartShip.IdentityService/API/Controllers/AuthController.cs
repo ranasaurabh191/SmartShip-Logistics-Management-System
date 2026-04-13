@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.IdentityService.Core.DTOs;
 using SmartShip.IdentityService.Core.Interfaces.Services;
@@ -46,10 +47,12 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("debug-login")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DebugLogin([FromBody] LoginRequest request) =>
         Ok(await _authService.DebugLoginAsync(request));
 
     [HttpGet("fix-admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> FixAdmin() =>
         Ok(await _authService.FixAdminAsync());
 }

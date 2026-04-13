@@ -95,6 +95,7 @@ try
     builder.Services.AddMassTransit(x =>
     {
         x.AddConsumer<UserCreatedConsumer>();
+        x.AddConsumer<UserDeletedConsumer>();
         x.AddConsumer<ShipmentCreatedConsumer>();
         x.AddConsumer<ShipmentStatusUpdatedConsumer>();
         x.AddConsumer<ShipmentDeliveredConsumer>();
@@ -111,6 +112,7 @@ try
                 h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
             });
             cfg.ReceiveEndpoint("notification-user-created", e => e.ConfigureConsumer<UserCreatedConsumer>(ctx));
+            cfg.ReceiveEndpoint("notification-user-deleted", e => e.ConfigureConsumer<UserDeletedConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-shipment-created", e => e.ConfigureConsumer<ShipmentCreatedConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-status-updated", e => e.ConfigureConsumer<ShipmentStatusUpdatedConsumer>(ctx));
             cfg.ReceiveEndpoint("notification-shipment-delivered", e => e.ConfigureConsumer<ShipmentDeliveredConsumer>(ctx));

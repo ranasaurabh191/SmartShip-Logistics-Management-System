@@ -8,6 +8,9 @@ namespace SmartShip.ShipmentService.Tests.UnitTests.Services;
 
 public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
 {
+    private const int ShipmentId = 1;
+    private const int CustomerId = 29;  
+
     private static SchedulePickupRequest MakePickupRequest(int daysFromNow = 1) => new()
     {
         PickupTime = DateTime.Now.AddDays(daysFromNow)
@@ -17,14 +20,14 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
     public async Task SchedulePickupAsync_CODPaid_SetsStatusToBooked()
     {
         var shipment = MakeShipment(status: ShipmentStatus.Draft);
-        ShipmentRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(shipment);
+        ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(ShipmentId, CustomerId)).ReturnsAsync(shipment);
         UnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
 
         var paymentResponse = new { PaymentStatus = "Paid", PaymentMethod = "COD" };
         var httpFactory = MockHttpClientFactory.WithResponse(paymentResponse);
         var svc = BuildService(httpFactory);
 
-        await svc.SchedulePickupAsync(1, MakePickupRequest());
+        await svc.SchedulePickupAsync(ShipmentId, CustomerId, MakePickupRequest());
 
         shipment.Status.Should().Be(ShipmentStatus.Booked);
         shipment.PickupScheduledAt.Should().NotBeNull();
@@ -34,14 +37,14 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
     public async Task SchedulePickupAsync_OnlinePaid_SetsStatusToBooked()
     {
         var shipment = MakeShipment(status: ShipmentStatus.Draft);
-        ShipmentRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(shipment);
+        ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(ShipmentId, CustomerId)).ReturnsAsync(shipment);
         UnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
 
         var paymentResponse = new { PaymentStatus = "Paid", PaymentMethod = "Online" };
         var httpFactory = MockHttpClientFactory.WithResponse(paymentResponse);
         var svc = BuildService(httpFactory);
 
-        await svc.SchedulePickupAsync(1, MakePickupRequest());
+        await svc.SchedulePickupAsync(ShipmentId, CustomerId, MakePickupRequest());
 
         shipment.Status.Should().Be(ShipmentStatus.Booked);
     }
@@ -50,13 +53,13 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
     public async Task SchedulePickupAsync_OnlinePending_ThrowsInvalidOperation()
     {
         var shipment = MakeShipment(status: ShipmentStatus.Draft);
-        ShipmentRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(shipment);
+        ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(ShipmentId, CustomerId)).ReturnsAsync(shipment);
 
         var paymentResponse = new { PaymentStatus = "Pending", PaymentMethod = "Online" };
         var httpFactory = MockHttpClientFactory.WithResponse(paymentResponse);
         var svc = BuildService(httpFactory);
 
-        var act = async () => await svc.SchedulePickupAsync(1, MakePickupRequest());
+        var act = async () => await svc.SchedulePickupAsync(ShipmentId, CustomerId, MakePickupRequest());
 
         await act.Should().ThrowAsync<InvalidOperationException>()
             .WithMessage("*Online payment not completed*");
@@ -66,11 +69,11 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
     public async Task SchedulePickupAsync_NoPaymentRecord_ThrowsInvalidOperation()
     {
         var shipment = MakeShipment(status: ShipmentStatus.Draft);
-        ShipmentRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(shipment);
+        ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(ShipmentId, CustomerId)).ReturnsAsync(shipment);
         var httpFactory = MockHttpClientFactory.WithNotFound();
         var svc = BuildService(httpFactory);
 
-        var act = async () => await svc.SchedulePickupAsync(1, MakePickupRequest());
+        var act = async () => await svc.SchedulePickupAsync(ShipmentId, CustomerId, MakePickupRequest());
 
         await act.Should().ThrowAsync<InvalidOperationException>()
             .WithMessage("*Payment not found*");
@@ -80,10 +83,10 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
     public async Task SchedulePickupAsync_NotDraftStatus_ThrowsInvalidOperation()
     {
         var shipment = MakeShipment(status: ShipmentStatus.Booked);
-        ShipmentRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(shipment);
+        ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(ShipmentId, CustomerId)).ReturnsAsync(shipment);
         var svc = BuildService();
 
-        var act = async () => await svc.SchedulePickupAsync(1, MakePickupRequest());
+        var act = async () => await svc.SchedulePickupAsync(ShipmentId, CustomerId, MakePickupRequest());
 
         await act.Should().ThrowAsync<InvalidOperationException>()
             .WithMessage("*Draft*");
@@ -93,14 +96,14 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
     public async Task SchedulePickupAsync_PublishesBookedStatusEvent()
     {
         var shipment = MakeShipment(status: ShipmentStatus.Draft);
-        ShipmentRepo.Setup(r => r.GetByIdAsync(1)).ReturnsAsync(shipment);
+        ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(ShipmentId, CustomerId)).ReturnsAsync(shipment);
         UnitOfWork.Setup(u => u.SaveChangesAsync()).ReturnsAsync(1);
 
         var paymentResponse = new { PaymentStatus = "Paid", PaymentMethod = "COD" };
         var httpFactory = MockHttpClientFactory.WithResponse(paymentResponse);
         var svc = BuildService(httpFactory);
 
-        await svc.SchedulePickupAsync(1, MakePickupRequest());
+        await svc.SchedulePickupAsync(ShipmentId, CustomerId, MakePickupRequest());
 
         Publisher.WasPublished<ShipmentStatusUpdatedEvent>().Should().BeTrue();
         var evt = Publisher.GetPublished<ShipmentStatusUpdatedEvent>();
@@ -111,11 +114,13 @@ public class ShipmentServiceTests_SchedulePickup : ShipmentServiceTestBase
     [Fact]
     public async Task SchedulePickupAsync_ShipmentNotFound_ThrowsKeyNotFoundException()
     {
-        ShipmentRepo.Setup(r => r.GetByIdAsync(999)).ReturnsAsync((Domain.Entities.Shipment?)null);
+        ShipmentRepo.Setup(r => r.GetByIdAndCustomerAsync(999, CustomerId))
+                    .ReturnsAsync((Domain.Entities.Shipment?)null);
         var svc = BuildService();
 
-        var act = async () => await svc.SchedulePickupAsync(999, MakePickupRequest());
+        var act = async () => await svc.SchedulePickupAsync(999, CustomerId, MakePickupRequest());
 
-        await act.Should().ThrowAsync<KeyNotFoundException>().WithMessage("*999*");
+        await act.Should().ThrowAsync<KeyNotFoundException>()
+            .WithMessage("*not found*");  
     }
 }

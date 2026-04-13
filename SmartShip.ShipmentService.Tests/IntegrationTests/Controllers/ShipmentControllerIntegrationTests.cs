@@ -60,10 +60,10 @@ public class ShipmentControllerIntegrationTests : IDisposable
     }
 
     [Fact]
-    public async Task PATCH_SchedulePickup_WithoutToken_Returns401()
+    public async Task POST_SchedulePickup_WithoutToken_Returns401()
     {
         var client = CreateClient();
-        var response = await client.PatchAsJsonAsync("/api/shipments/pickup/1", new { });
+        var response = await client.PostAsJsonAsync("/api/shipments/1/schedule-pickup", new { });
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
