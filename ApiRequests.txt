@@ -183,32 +183,3 @@ TRACKING CONTROLLER-------------------------------------------------------------
 | POST   | http://localhost:5000/gateway/admin/hubs                          | Bearer Token |
 | PUT    | http://localhost:5000/gateway/admin/hubs/1                        | Bearer Token |
 | DELETE | http://localhost:5000/gateway/admin/hubs/1                        | Bearer Token |
-
-
-POST /shipments/create
-    → Shipment saved (Status: Draft)
-    → ShipmentCreatedEvent published
-    → Saga starts | State: PaymentPending
-    → PaymentService stores CorrelationId
-
-POST /payment/create-order  →  POST /payment/verify
-    → PaymentCompletedEvent published (with CorrelationId)
-    → Saga receives it | State: Confirmed ✅
-    → ShipmentService PaymentCompletedConsumer sets Status: Booked
-
-IF payment fails (future):
-    → PaymentFailedEvent published (with CorrelationId)
-    → Saga receives it | State: Cancelled
-    → CancelShipmentCommand published
-    → CancelShipmentConsumer sets Shipment Status: Cancelled ✅
-    → ShipmentCancelledEvent → NotificationService sends email
-
-| Event Published By | Event Name            | Consumed By     | Action Taken                     |
-| ------------------ | --------------------- | --------------- | -------------------------------- |
-| IdentityService    | UserDeleted           | ShipmentService | Delete user's shipments          |
-| IdentityService    | UserDeleted           | TrackingService | Delete user's tracking events    |
-| ShipmentService    | ShipmentCreated       | TrackingService | Auto-create first tracking event |
-| ShipmentService    | ShipmentStatusUpdated | TrackingService | Add new tracking event           |
-| ShipmentService    | ShipmentDelivered     | AdminService    | Update dashboard metrics         |
-| TrackingService    | DeliveryConfirmed     | ShipmentService | Set DeliveredAt = now            |
-| AdminService       | HubDeactivated        | ShipmentService | Flag affected shipments          |

@@ -317,7 +317,33 @@ public class PaymentService : IPaymentService
             Message = message
         };
     }
+    public async Task<List<PaymentResponse>> GetMyPaymentsAsync()
+    {
+        var userIdClaim = _httpContextAccessor.HttpContext?.User
+            .FindFirst("userId")?.Value
+            ?? _httpContextAccessor.HttpContext?.User
+            .FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
+        if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out var customerId))
+            throw new UnauthorizedAccessException("Unauthorized.");
+        
+        var payments = await _paymentRepository.GetByCustomerIdAsync(customerId);
+
+        return payments
+            .OrderBy(x => x.CreatedAt)
+            .Select(x => MapToResponse(x))
+            .ToList();
+    }
+
+    public async Task<List<PaymentResponse>> GetAllPaymentsAsync()
+    {
+        var payments = await _paymentRepository.GetAllAsync();
+
+        return payments
+            .OrderBy(x => x.CreatedAt)
+            .Select(x => MapToResponse(x))
+            .ToList();
+    }
     public async Task<PaymentResponse> GetByShipmentIdAsync(int shipmentId)
     {
         _logger.LogInformation("Fetching payment for Shipment {ShipmentId}", shipmentId);

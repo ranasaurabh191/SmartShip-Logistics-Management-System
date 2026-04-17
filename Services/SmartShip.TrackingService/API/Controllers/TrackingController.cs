@@ -32,7 +32,7 @@ public class TrackingController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("delivery/{shipmentId}")]
+    [HttpGet("delivery-proof/{shipmentId}")]
     [Authorize(Roles = "ADMIN")]
     public async Task<IActionResult> GetDeliveryProof(int shipmentId) => Ok(await _service.GetDeliveryProofAsync(shipmentId));
 

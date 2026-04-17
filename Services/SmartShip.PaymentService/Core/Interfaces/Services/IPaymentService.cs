@@ -8,4 +8,6 @@ public interface IPaymentService
     Task<PaymentResponse> VerifyPaymentAsync(VerifyPaymentRequest request);
     Task<PaymentResponse> GetByShipmentIdAsync(int shipmentId);
     Task<PaymentResponse> PaymentStatusAsync(PaymentStatusRequest request);
+    Task<List<PaymentResponse>> GetMyPaymentsAsync();
+    Task<List<PaymentResponse>> GetAllPaymentsAsync();
 }

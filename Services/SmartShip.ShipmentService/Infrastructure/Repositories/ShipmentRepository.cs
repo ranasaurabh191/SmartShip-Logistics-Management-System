@@ -41,9 +41,9 @@ public class ShipmentRepository : IShipmentRepository
 
         query = req.SortBy?.ToLower() switch
         {
-            "status" => req.SortOrder == "asc" ? query.OrderBy(s => s.Status) : query.OrderByDescending(s => s.Status),
-            "rate" => req.SortOrder == "asc" ? query.OrderBy(s => s.ShippingRate) : query.OrderByDescending(s => s.ShippingRate),
-            _ => req.SortOrder == "asc" ? query.OrderBy(s => s.CreatedAt) : query.OrderByDescending(s => s.CreatedAt)
+            "status" => req.SortOrder == "asc" ? query.OrderBy(s => s.Status) : query.OrderBy(s => s.Status),
+            "rate" => req.SortOrder == "asc" ? query.OrderBy(s => s.ShippingRate) : query.OrderBy(s => s.ShippingRate),
+            _ => req.SortOrder == "asc" ? query.OrderBy(s => s.CreatedAt) : query.OrderBy(s => s.CreatedAt)
         };
 
         var totalCount = await query.CountAsync();
@@ -79,7 +79,7 @@ public class ShipmentRepository : IShipmentRepository
 
         var totalCount = await query.CountAsync();
         var items = await query
-            .OrderByDescending(s => s.CreatedAt)
+            .OrderBy(s => s.CreatedAt)
             .Skip((req.Page - 1) * req.PageSize)
             .Take(req.PageSize)
             .ToListAsync();
@@ -101,7 +101,14 @@ public class ShipmentRepository : IShipmentRepository
             .Include(s => s.Package)
             .FirstOrDefaultAsync(s => s.Id == id);
     }
-
+    public async Task<Shipment?> GetByTrackingNumberAsync(string trackingNumber)
+    {
+        return await _context.Shipments
+            .Include(s => s.SenderAddress)
+            .Include(s => s.ReceiverAddress)
+            .Include(s => s.Package)
+            .FirstOrDefaultAsync(s => s.TrackingNumber == trackingNumber);
+    }
     public async Task<Shipment?> GetByIdAsync(int id)
     {
         return await _context.Shipments.FindAsync(id);

@@ -52,7 +52,6 @@ public class AuthController : ControllerBase
         Ok(await _authService.DebugLoginAsync(request));
 
     [HttpGet("fix-admin")]
-    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> FixAdmin() =>
         Ok(await _authService.FixAdminAsync());
 }

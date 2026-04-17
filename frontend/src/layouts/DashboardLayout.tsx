@@ -1,15 +1,8 @@
+import { useEffect, useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useAuthStore } from '../store/useAuthStore';
 import { SmartShipLogo } from '../shared/components/Logo';
-
-const services = [
-  { name: 'Identity', status: 'online' },
-  { name: 'Shipment', status: 'online' },
-  { name: 'Tracking', status: 'online' },
-  { name: 'Payment', status: 'online' },
-  { name: 'Admin', status: 'online' },
-  { name: 'Notification', status: 'offline' },
-];
 
 interface NavItem {
   label: string;
@@ -18,24 +11,23 @@ interface NavItem {
 }
 
 const customerNav: NavItem[] = [
-  { label: 'Dashboard', path: '/customer/dashboard', icon: 'âŠž' },
-  { label: 'Shipments', path: '/customer/shipments', icon: 'â—ˆ' },
-  { label: 'Tracking', path: '/customer/tracking', icon: 'â—Ž' },
-  { label: 'Payments', path: '/customer/payments', icon: 'â—‡' },
-  { label: 'Saga Viewer', path: '/customer/saga', icon: 'â—ˆ' },
+  { label: 'Dashboard', path: '/customer/dashboard', icon: '⊞' },
+  { label: 'Shipments', path: '/customer/shipments', icon: '◈' },
+  { label: 'Payments', path: '/customer/payments', icon: '◇' },
+  { label: 'Tracking', path: '/customer/tracking', icon: '◎' },
 ];
 
 const adminNav: NavItem[] = [
-  { label: 'Dashboard', path: '/admin/dashboard', icon: 'âŠž' },
-  { label: 'Shipments', path: '/admin/shipments', icon: 'â—ˆ' },
-  { label: 'Tracking', path: '/admin/tracking', icon: 'â—Ž' },
-  { label: 'Payments', path: '/admin/payments', icon: 'â—‡' },
-  { label: 'Admin Panel', path: '/admin/panel', icon: 'â—§' },
-  { label: 'Saga Viewer', path: '/admin/saga', icon: 'â—ˆ' },
+  { label: 'Dashboard', path: '/admin/dashboard', icon: '⊞' },
+  { label: 'Shipments', path: '/admin/shipments', icon: '◈' },
+  { label: 'Tracking', path: '/admin/tracking', icon: '◎' },
+  { label: 'Payments', path: '/admin/payments', icon: '◇' },
+  { label: 'Hub Management', path: '/admin/hubs', icon: '◫' },
+  { label: 'Users', path: '/admin/users', icon: '◩' },
 ];
 
 interface DashboardLayoutProps {
-  role: 'Customer' | 'Admin';
+  role: 'CUSTOMER' | 'ADMIN';
 }
 
 export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
@@ -43,164 +35,119 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
 
-  if (!isAuthenticated) {
-    navigate('/auth/login');
-    return null;
-  }
+  const [services] = useState([
+    { name: 'Identity', status: 'online' },
+    { name: 'Shipment', status: 'online' },
+    { name: 'Tracking', status: 'online' },
+    { name: 'Payment', status: 'online' },
+    { name: 'Admin', status: 'online' },
+    { name: 'Notification', status: 'online' },
+  ]);
 
-  const navItems = role === 'Admin' ? adminNav : customerNav;
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/auth/login', { replace: true });
+      return;
+    }
+    if (user && user.role !== role) {
+      navigate(
+        user.role === 'ADMIN' ? '/admin/dashboard' : '/customer/dashboard',
+        { replace: true }
+      );
+    }
+  }, [isAuthenticated, user, role, navigate]);
+
+  if (!isAuthenticated || (user && user.role !== role)) return null;
+
+  const navItems = role === 'ADMIN' ? adminNav : customerNav;
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: 'var(--color-bg)' }}>
-
       <aside style={{
-        width: 240,
-        flexShrink: 0,
-        background: '#111111',
+        width: 257, flexShrink: 0, background: '#111111',
         borderRight: '1px solid rgba(255,255,255,0.06)',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
+        display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }}>
-
-        {/* Logo */}
-        <div style={{
-          padding: '20px 16px 16px',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-        }}>
-          <SmartShipLogo />
+        <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ marginBottom: 32, marginLeft: -40 }}>
+            <SmartShipLogo />
+          </div>
           <div style={{
-            marginTop: 6,
-            fontFamily: 'Rajdhani, sans-serif',
-            fontSize: 9,
-            fontWeight: 600,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
+            marginTop: 6, fontFamily: 'Rajdhani, sans-serif', fontSize: 18,
+            fontWeight: 900, letterSpacing: '0.1em', textTransform: 'uppercase',
             color: 'var(--color-text-dim)',
           }}>
-            LOGISTICS COMMAND CENTER
+            {role === 'ADMIN' ? 'Admin Command Center' : 'Logistics Dashboard'}
           </div>
         </div>
 
-        {/* Nav items */}
         <nav style={{ flex: 1, padding: '12px 8px', overflowY: 'auto' }}>
           <div style={{ marginBottom: 8, padding: '0 6px' }}>
             <span style={{
-              fontFamily: 'Rajdhani, sans-serif',
-              fontSize: 9,
-              fontWeight: 600,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              color: 'var(--color-text-dim)',
-            }}>Navigation</span>
+              fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 600,
+              letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--color-text-dim)',
+            }}>
+              Navigation
+            </span>
           </div>
-          {navItems.map((item) => {
+
+          {navItems.map(item => {
             const isActive = location.pathname === item.path;
             return (
-              <div
+              <motion.div
                 key={item.path}
+                whileHover={{ x: 3 }}
+                whileTap={{ scale: 0.1 }}
                 className={`sidebar-item ${isActive ? 'active' : ''}`}
                 onClick={() => navigate(item.path)}
               >
-                <span style={{ fontSize: 11, opacity: 0.7 }}>{item.icon}</span>
+                <span style={{ fontSize: 18, opacity: 0.7 }}>{item.icon}</span>
                 <span>{item.label}</span>
                 {isActive && (
-                  <span className="ss-badge glow" style={{ marginLeft: 'auto', fontSize: 8 }}>LIVE</span>
+                  <span className="ss-badge glow" style={{ marginLeft: 'auto', fontSize: 8 }}>
+                    LIVE
+                  </span>
                 )}
-              </div>
+              </motion.div>
             );
           })}
         </nav>
 
-        {/* Service Health Module */}
         <div style={{
-          padding: '14px 12px',
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-          background: '#0f0f0f',
-        }}>
-          <div style={{
-            fontFamily: 'Rajdhani, sans-serif',
-            fontSize: 9,
-            fontWeight: 600,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: 'var(--color-text-dim)',
-            marginBottom: 10,
-          }}>
-            Service Health
-          </div>
-          {services.map((svc) => (
-            <div key={svc.name} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '5px 0',
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <div className={`health-dot ${svc.status}`} />
-                <span style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 11,
-                  color: 'var(--color-text-muted)',
-                }}>
-                  {svc.name}
-                </span>
-              </div>
-              <span className={`ss-badge ${svc.status === 'online' ? 'success' : 'muted'}`}>
-                {svc.status === 'online' ? 'ACTIVE' : 'OFFLINE'}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* User panel */}
-        <div style={{
-          padding: '12px 14px',
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          padding: '12px 17px', borderTop: '1px solid rgba(255,255,255,0.06)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         }}>
           <div>
-            <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--color-text)' }}>
+            <div style={{ fontSize: 14, fontWeight: 900, color: 'var(--color-text)' }}>
               {user?.name || 'User'}
             </div>
-            <div style={{ fontSize: 10, color: 'var(--color-text-muted)', textTransform: 'uppercase', fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.08em' }}>
+            <div style={{
+              fontSize: 14, color: 'var(--color-text-muted)', textTransform: 'uppercase',
+              fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.08em', fontWeight: 900,
+            }}>
               {role}
             </div>
           </div>
           <button
             className="ss-btn ss-btn-outline"
-            style={{ fontSize: 10, padding: '4px 10px' }}
+            style={{ fontWeight: 600, fontSize: 14, padding: '4px 7px' }}
             onClick={() => { logout(); navigate('/auth/login'); }}
           >
-            Exit
+            LOGOUT
           </button>
         </div>
       </aside>
 
-      {/* â”€â”€â”€ MAIN AREA â”€â”€â”€ */}
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-
-        {/* Top Header */}
         <header style={{
-          height: 52,
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-          background: '#0f0f0f',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0 24px',
-          flexShrink: 0,
+          height: 69, borderBottom: '1px solid rgba(255,255,255,0.06)',
+          background: '#0f0f0f', display: 'flex', alignItems: 'center',
+          justifyContent: 'space-between', padding: '0 24px', flexShrink: 0,
         }}>
           <div style={{
-            fontFamily: 'Rajdhani, sans-serif',
-            fontSize: 11,
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            color: 'var(--color-text-muted)',
+            fontFamily: 'Rajdhani, sans-serif', fontSize: 17, fontWeight: 600,
+            letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-muted)',
           }}>
-            {/* Breadcrumb */}
             {location.pathname.split('/').filter(Boolean).map((seg, i, arr) => (
               <span key={i}>
                 <span style={{ color: i === arr.length - 1 ? 'var(--color-text)' : undefined }}>
@@ -210,26 +157,51 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
               </span>
             ))}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span style={{ fontSize: 16, cursor: 'pointer', color: 'var(--color-text-muted)' }}>ðŸ””</span>
-            <div style={{
-              width: 28, height: 28,
-              background: 'var(--color-accent)',
-              borderRadius: 2,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontFamily: 'Rajdhani, sans-serif',
-              fontSize: 13,
-              fontWeight: 700,
-              color: '#fff',
-            }}>
-              {(user?.name || 'U').charAt(0).toUpperCase()}
-            </div>
-          </div>
+
+
         </header>
 
-        {/* Content */}
-        <main style={{ flex: 1, overflow: 'auto', padding: 24 }}>
-          <Outlet />
+        <main
+          style={{
+            flex: 1,
+            overflow: 'hidden',
+            padding: 24,
+            position: 'relative',
+          }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{
+                opacity: 0,
+                x: 28,
+                scale: 0.85,
+                filter: 'blur(4px)',
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                scale: 1,
+                filter: 'blur(0px)',
+              }}
+              exit={{
+                opacity: 0,
+                x: -18,
+                scale: 0.99,
+                filter: 'blur(3px)',
+              }}
+              transition={{
+                duration: 0.26,
+                ease: [0.2, 1, 0.36, 1],
+              }}
+              style={{
+                height: '100%',
+                overflow: 'auto',
+              }}
+            >
+              <Outlet />
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>

@@ -15,7 +15,6 @@ import { LandingPage } from './features/public/LandingPage';
 // Customer Pages
 import { CustomerDashboard } from './features/customer/CustomerDashboard';
 import { PaymentsPage } from './features/customer/PaymentsPage';
-import { SagaViewer } from './features/customer/SagaViewer';
 
 // Shipment Pages
 import { CreateShipmentWizard } from './features/shipment/CreateShipmentWizard';
@@ -23,7 +22,7 @@ import { TrackShipment } from './features/shipment/TrackShipment';
 import { ShipmentsPage } from './features/shipment/ShipmentsPage';
 
 // Admin Pages
-import { AdminPanel } from './features/admin/AdminDashboard';
+import { AdminDashboard } from './features/admin/AdminDashboard';
 import { HubManagement } from './features/admin/HubManagement';
 import { UserManagement } from './features/admin/UserManagement';
 
@@ -43,7 +42,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'customer',
-        element: <DashboardLayout role="Customer" />,
+        element: <DashboardLayout role="CUSTOMER" />,
         children: [
           { path: 'dashboard', element: <CustomerDashboard /> },
           { path: 'shipments', element: <ShipmentsPage /> },
@@ -51,22 +50,20 @@ export const router = createBrowserRouter([
           { path: 'tracking', element: <TrackShipment /> },
           { path: 'track/:id', element: <TrackShipment /> },
           { path: 'payments', element: <PaymentsPage /> },
-          { path: 'saga', element: <SagaViewer /> },
         ],
       },
       {
         path: 'admin',
-        element: <DashboardLayout role="Admin" />,
+        element: <DashboardLayout role="ADMIN" />,
         children: [
-          { path: 'dashboard', element: <CustomerDashboard /> },
+          { path: 'dashboard', element: <AdminDashboard /> },
           { path: 'shipments', element: <ShipmentsPage /> },
           { path: 'tracking', element: <TrackShipment /> },
           { path: 'track/:id', element: <TrackShipment /> },
           { path: 'payments', element: <PaymentsPage /> },
-          { path: 'panel', element: <AdminPanel /> },
           { path: 'hubs', element: <HubManagement /> },
           { path: 'users', element: <UserManagement /> },
-          { path: 'saga', element: <SagaViewer /> },
+          { path: 'panel', element: <Navigate to="/admin/dashboard" replace /> },
         ],
       },
     ],

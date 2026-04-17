@@ -178,9 +178,9 @@ const Reveal = ({ children, delay = 0, style }: RevealProps) => {
 
 // ─── Section label ────────────────────────────────────────────────────────────
 const SectionLabel = ({ label }: { label: string }) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 14, padding: '4px 12px', border: '1px solid rgba(224,0,26,0.35)', borderRadius: 2 }}>
+  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 14, padding: '4px 12px', border: '1px solid rgba(224,0,26,0.35)', borderRadius: 4 }}>
     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#e0001a', boxShadow: '0 0 6px rgba(224,0,26,0.8)' }} />
-    <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>
+    <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#e4e4e4ff' }}>
       {label}
     </span>
   </div>
@@ -270,7 +270,7 @@ export const LandingPage = () => {
             transition: 'all 0.6s 0.1s ease',
           }}>
             <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#00c48c', boxShadow: '0 0 7px rgba(0,196,140,0.8)', animation: 'pulse 2s infinite' }} />
-            <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#888' }}>
+            <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#cacacaff' }}>
               India's Largest Pincode Network — 31,000+ Serviceable
             </span>
           </div>
@@ -287,7 +287,7 @@ export const LandingPage = () => {
           {/* Main heading */}
           <h1 style={{
             fontFamily: "'Orbitron', monospace",
-            fontSize: 'clamp(32px, 5.5vw, 76px)',
+            fontSize: 'clamp(32px, 5.5vw, 86px)',
             fontWeight: 900,
             lineHeight: 1.05,
             letterSpacing: '-0.01em',
@@ -303,7 +303,7 @@ export const LandingPage = () => {
           </h1>
 
           <p style={{
-            fontSize: 14, color: '#888', lineHeight: 1.8, maxWidth: 440, marginBottom: 36,
+            fontSize: 14, color: '#aeaeaeff', lineHeight: 1.8, maxWidth: 440, marginBottom: 36,
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? 'translateY(0)' : 'translateY(24px)',
             transition: 'all 0.7s 0.45s ease',
@@ -342,7 +342,7 @@ export const LandingPage = () => {
                 <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 22, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>
                   {stat.value}
                 </div>
-                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: '#555', marginTop: 3, letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, fontWeight: 800, color: '#d2d2d2ff', marginTop: 3, letterSpacing: '0.24em', textTransform: 'uppercase' }}>
                   {stat.label}
                 </div>
               </div>
@@ -350,68 +350,7 @@ export const LandingPage = () => {
           </div>
         </div>
 
-        {/* Right — Module panel (Armoury Crate style) */}
-        <div style={{
-          position: 'absolute', right: 72, top: '50%',
-          transform: heroVisible ? 'translateY(-50%) translateX(0)' : 'translateY(-50%) translateX(60px)',
-          opacity: heroVisible ? 1 : 0,
-          transition: 'all 0.8s 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-          width: 400,
-          // Armoury Crate clipped-corner panel
-          clipPath: 'polygon(0 20px, 20px 0, calc(100% - 20px) 0, 100% 20px, 100% calc(100% - 20px), calc(100% - 20px) 100%, 20px 100%, 0 calc(100% - 20px))',
-          background: 'rgba(6,6,6,0.94)',
-          border: '1px solid rgba(224,0,26,0.2)',
-          boxShadow: '0 0 60px rgba(224,0,26,0.08), inset 0 0 40px rgba(0,0,0,0.5)',
-        }}>
-          {/* Panel inner */}
-          <div style={{ padding: '22px 24px' }}>
-            {/* Panel header */}
-            <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              marginBottom: 18, paddingBottom: 14,
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
-            }}>
-              <div>
-                <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, fontWeight: 700, color: '#e0001a', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
-                  System Modules
-                </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#00c48c', boxShadow: '0 0 8px rgba(0,196,140,0.9)' }} />
-                <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: '0.16em', color: '#00c48c', textTransform: 'uppercase' }}>ONLINE</span>
-              </div>
-            </div>
 
-            {/* Service rows */}
-            {SERVICES.map((svc, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '13px 0',
-                borderBottom: i < SERVICES.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
-                transition: 'background 0.2s',
-              }}>
-                <div>
-                  <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 11, fontWeight: 700, color: '#d4d4d4', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 3 }}>
-                    {svc.name}
-                  </div>
-                  <div style={{ fontSize: 11, color: '#555', fontFamily: 'Inter, sans-serif' }}>{svc.desc}</div>
-                </div>
-                <span style={{
-                  fontFamily: "'Orbitron', monospace",
-                  fontSize: 9, fontWeight: 700,
-                  letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: '#e0001a',
-                  border: '1px solid #e0001a',
-                  padding: '4px 10px',
-                  flexShrink: 0,
-                  boxShadow: '0 0 8px rgba(224,0,26,0.25)',
-                }}>
-                  {svc.tag}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
       </section>
 
       {/* ═══════════════════════════════════════════
@@ -424,13 +363,13 @@ export const LandingPage = () => {
           <h2 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(24px, 3.5vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', marginBottom: 12 }}>
             Why <span style={{ color: '#e0001a' }}>SmartShip?</span>
           </h2>
-          <p style={{ color: '#666', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 52 }}>
+          <p style={{ color: '#c3c3c3ff', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 82 }}>
             Trusted by thousands of Indian online sellers — an all-in-one shipping platform for eCommerce growth.
           </p>
         </Reveal>
 
         {/* 4×2 feature grid — Armoury Crate module grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'rgba(224,0,26,0.1)', border: '1px solid rgba(224,0,26,0.1)', borderRadius: 2, overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, background: 'rgba(224, 0, 26, 0)', border: '1px solid rgba(224, 0, 26, 0)', borderRadius: 2, overflow: 'hidden' }}>
           {WHY_FEATURES.map((f, i) => (
             <Reveal key={i} delay={i * 0.06}>
               <div
@@ -438,7 +377,7 @@ export const LandingPage = () => {
                   background: '#0d0d0d',
                   padding: '28px 24px',
                   height: '100%',
-                  borderRight: (i + 1) % 4 !== 0 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                  borderRight: (i + 1) % 4 !== 0 ? '1px solid rgba(255, 255, 255, 0)' : 'none',
                   borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.05)' : 'none',
                   transition: 'background 0.25s ease, box-shadow 0.25s ease',
                   cursor: 'default',
@@ -447,7 +386,7 @@ export const LandingPage = () => {
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.background = '#141414';
-                  e.currentTarget.style.boxShadow = 'inset 0 0 30px rgba(224,0,26,0.04)';
+                  e.currentTarget.style.boxShadow = 'inset 0 0 30px rgba(224, 0, 26, 0.38)';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.background = '#0d0d0d';
@@ -455,15 +394,15 @@ export const LandingPage = () => {
                 }}
               >
                 {/* Red corner accent */}
-                <div style={{ position: 'absolute', top: 0, right: 0, width: 0, height: 0, borderTop: '24px solid rgba(224,0,26,0.15)', borderLeft: '24px solid transparent' }} />
+                <div style={{ position: 'absolute', top: 0, right: 0, width: 0, height: 0, borderTop: '28px solid rgba(224, 0, 26, 0.28)', borderLeft: '24px solid transparent' }} />
                 {/* Step number */}
-                <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 11, fontWeight: 700, color: 'rgba(224,0,26,0.35)', letterSpacing: '0.08em', marginBottom: 14 }}>
+                <div style={{ fontFamily: "'Orbitron', monospace", fontSize: 18, fontWeight: 700, color: 'rgba(255, 0, 30, 0.78)', letterSpacing: '0.08em', marginBottom: 14 }}>
                   {String(i + 1).padStart(2, '0')}
                 </div>
-                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 15, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#fff', marginBottom: 10 }}>
+                <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 18, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.10em', color: '#fff', marginBottom: 10 }}>
                   {f.title}
                 </div>
-                <div style={{ fontSize: 12, color: '#666', lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
+                <div style={{ fontSize: 12, color: '#a0a0a0ff', lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
                   {f.desc}
                 </div>
               </div>
@@ -482,7 +421,7 @@ export const LandingPage = () => {
           <h2 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(24px, 3.5vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', marginBottom: 12 }}>
             How It <span style={{ color: '#e0001a' }}>Works?</span>
           </h2>
-          <p style={{ color: '#666', fontSize: 14, maxWidth: 400, lineHeight: 1.7, marginBottom: 60 }}>
+          <p style={{ color: '#c3c3c3ff', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 82 }}>
             Four simple steps — from pickup request to customer delivery.
           </p>
         </Reveal>
@@ -495,9 +434,9 @@ export const LandingPage = () => {
           }} />
           {/* Animated glow dot running across */}
           <div style={{
-            position: 'absolute', top: 32, left: '12.5%', width: 14, height: 14, zIndex: 1, borderRadius: '50%',
+            position: 'absolute', top: 32, left: '12.5%', width: 12, height: 12, zIndex: 1, borderRadius: '50%',
             background: '#e0001a', boxShadow: '0 0 20px rgba(224,0,26,0.8)',
-            animation: 'slideAcross 4s ease-in-out infinite',
+            animation: 'slideAcross 3s ease-in-out infinite',
           }} />
 
           {HOW_STEPS.map((s, i) => (
@@ -517,7 +456,7 @@ export const LandingPage = () => {
                 <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 15, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#fff', marginBottom: 10 }}>
                   {s.title}
                 </div>
-                <div style={{ fontSize: 12, color: '#666', lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
+                <div style={{ fontSize: 14, color: '#b2afafff', lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
                   {s.desc}
                 </div>
               </div>
@@ -536,25 +475,25 @@ export const LandingPage = () => {
           <h2 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(24px, 3.5vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', marginBottom: 12 }}>
             Track Your <span style={{ color: '#e0001a' }}>Shipment</span>
           </h2>
-          <p style={{ color: '#666', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 32 }}>
+          <p style={{ color: '#c3c3c3ff', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 32 }}>
             Enter your AWB number to get real-time status of your order. Find the AWB in the confirmation Email or SMS.
           </p>
           <div style={{
             display: 'flex', maxWidth: 500,
             border: '1px solid rgba(224,0,26,0.3)', borderRadius: 2, overflow: 'hidden',
-            boxShadow: '0 0 30px rgba(224,0,26,0.06)',
+            boxShadow: '0 0 30px rgba(224, 0, 26, 0.53)',
           }}>
             <input
               type="text"
               placeholder="Enter AWB / Tracking Number"
               style={{
-                flex: 1, padding: '13px 16px',
-                background: '#0f0f0f', border: 'none', outline: 'none',
-                color: '#d4d4d4', fontSize: 13,
-                fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.06em',
+                flex: 1, padding: '14px 16px',
+                background: '#000000ff', border: 'none', outline: 'none',
+                color: '#ffffffff', fontSize: 14,
+                fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.16em',
               }}
             />
-            <button className="ss-btn" style={{ borderRadius: 0, padding: '13px 28px', fontSize: 11, letterSpacing: '0.12em' }}>
+            <button className="ss-btn" style={{ borderRadius: 0, padding: '14px 28px', fontSize: 11, letterSpacing: '0.12em' }}>
               TRACK
             </button>
           </div>
@@ -571,7 +510,7 @@ export const LandingPage = () => {
           <h2 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(22px, 3vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', marginBottom: 12 }}>
             Sell Anywhere,{' '}<span style={{ color: '#e0001a' }}>Ship with SmartShip</span>
           </h2>
-          <p style={{ color: '#666', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 40 }}>
+          <p style={{ color: '#c3c3c3ff', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 40 }}>
             Native API integrations with all major eCommerce platforms and marketplaces.
           </p>
         </Reveal>
@@ -584,14 +523,15 @@ export const LandingPage = () => {
                   border: '1px solid rgba(255,255,255,0.07)',
                   background: '#0f0f0f',
                   fontFamily: 'Rajdhani, sans-serif',
-                  fontSize: 12, fontWeight: 700,
+                  fontSize: 14, fontWeight: 700,
                   letterSpacing: '0.1em', textTransform: 'uppercase',
-                  color: '#666',
+                  color: '#c2c2c2ff',
                   transition: 'all 0.2s ease',
                   cursor: 'default',
+                  boxShadow: '0 0 30px rgba(224, 0, 26, 0.53)',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(224,0,26,0.5)'; e.currentTarget.style.color = '#fff'; e.currentTarget.style.boxShadow = '0 0 14px rgba(224,0,26,0.12)'; }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#666'; e.currentTarget.style.boxShadow = 'none'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.5)'; e.currentTarget.style.color = '#c2c2c2ff'; e.currentTarget.style.boxShadow = '0 0 30px rgba(224, 0, 26, 0.53)'; }}
               >
                 {name}
               </div>
@@ -616,7 +556,7 @@ export const LandingPage = () => {
               <h2 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(20px, 2.8vw, 40px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', margin: '0 0 10px' }}>
                 Ready to Optimise Your <span style={{ color: '#e0001a' }}>Shipping?</span>
               </h2>
-              <p style={{ color: '#666', fontSize: 14, margin: 0 }}>
+              <p style={{ color: '#b1b1b1ff', fontSize: 14, margin: 0 }}>
                 Join thousands of Indian eCommerce sellers. No commitment. Start for free today.
               </p>
             </div>
@@ -639,7 +579,7 @@ export const LandingPage = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 40 }}>
           <div>
             <SmartShipLogo />
-            <p style={{ color: '#555', fontSize: 12, marginTop: 14, maxWidth: 260, lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
+            <p style={{ color: '#a7a7a7ff', fontSize: 12, marginTop: 14, maxWidth: 260, lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
               One stop solution for all your shipping needs.<br />Easier. Faster. Cheaper.
             </p>
             <div style={{ marginTop: 18 }}>
@@ -655,20 +595,20 @@ export const LandingPage = () => {
 
           <div style={{ display: 'flex', gap: 60, flexWrap: 'wrap' }}>
             <div>
-              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#333', marginBottom: 16 }}>Quick Links</div>
+              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 12, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#9b9b9bff', marginBottom: 16 }}>Quick Links</div>
               {['Terms of Use', 'Privacy Policy', 'Track Shipment', 'Blog'].map(link => (
-                <div key={link} style={{ fontSize: 12, color: '#555', marginBottom: 10, cursor: 'pointer', fontFamily: 'Inter, sans-serif', transition: 'color 0.15s' }}
+                <div key={link} style={{ fontSize: 12, color: '#bababaff', marginBottom: 10, cursor: 'pointer', fontFamily: 'Inter, sans-serif', transition: 'color 0.15s' }}
                   onMouseEnter={e => e.currentTarget.style.color = '#e0001a'}
-                  onMouseLeave={e => e.currentTarget.style.color = '#555'}
+                  onMouseLeave={e => e.currentTarget.style.color = '#bababaff'}
                 >{link}</div>
               ))}
             </div>
             <div>
-              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#333', marginBottom: 16 }}>Contact</div>
+              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 12, fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#9b9b9bff', marginBottom: 16 }}>Contact</div>
               {['contact@smartship.in', 'info@smartship.in'].map(email => (
-                <div key={email} style={{ fontSize: 12, color: '#555', marginBottom: 10, fontFamily: 'Inter, sans-serif' }}>{email}</div>
+                <div key={email} style={{ fontSize: 12, color: '#bababaff', marginBottom: 10, fontFamily: 'Inter, sans-serif' }}>{email}</div>
               ))}
-              <div style={{ fontSize: 11, color: '#333', marginTop: 14, lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
+              <div style={{ fontSize: 12, color: '#aaaaaaff', marginTop: 14, lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
                 Unit No. 901–903, Tower C<br />
                 Unitech Cyber Park, Sector 39<br />
                 Gurugram, Haryana – 122003
@@ -678,13 +618,8 @@ export const LandingPage = () => {
         </div>
 
         <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, color: '#333', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            © {new Date().getFullYear()} SmartShip — All Rights Reserved
-          </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#00c48c', boxShadow: '0 0 6px rgba(0,196,140,0.8)' }} />
-            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 9, color: '#444', letterSpacing: '0.14em', textTransform: 'uppercase' }}>All Systems Operational</span>
-          </div>
+
+
         </div>
       </footer>
     </div>

@@ -454,7 +454,23 @@ public class ShipmentService : IShipmentService
 
         return Task.FromResult(finalRate);
     }
+    public async Task<ShipmentResponse?> GetByTrackingNumberAsync(string trackingNumber)
+    {
+        if (string.IsNullOrWhiteSpace(trackingNumber))
+            return null;
 
+        var shipment = await _shipmentRepository.GetByTrackingNumberAsync(trackingNumber);
+
+        if (shipment == null)
+            return null;
+
+        return MapToResponse(
+            shipment,
+            shipment.SenderAddress!,
+            shipment.ReceiverAddress!,
+            shipment.Package!
+        );
+    }
     private HttpClient CreateInternalClient(string clientName)
     {
         var httpClient = _httpClientFactory.CreateClient(clientName);

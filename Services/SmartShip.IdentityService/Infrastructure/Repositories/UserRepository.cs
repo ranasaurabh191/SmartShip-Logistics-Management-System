@@ -71,7 +71,7 @@ public class UserRepository : IUserRepository
         var totalCount = await query.CountAsync();
 
         var items = await query
-            .OrderByDescending(u => u.CreatedAt)
+            .OrderBy(u => u.CreatedAt)
             .Skip((req.Page - 1) * req.PageSize)
             .Take(req.PageSize)
             .ToListAsync();

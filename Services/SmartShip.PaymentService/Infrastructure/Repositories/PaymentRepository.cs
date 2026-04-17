@@ -49,4 +49,18 @@ public class PaymentRepository : IPaymentRepository
     {
         _context.Payments.Update(payment);
     }
+    public async Task<List<ShipmentPayment>> GetByCustomerIdAsync(int customerId)
+    {
+        return await _context.Payments
+            .Where(x => x.CustomerId == customerId)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<List<ShipmentPayment>> GetAllAsync()
+    {
+        return await _context.Payments
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync();
+    }
 }

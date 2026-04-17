@@ -1,139 +1,258 @@
-import { useState } from 'react';
-const HUBS = [
-  { id: 1, name: 'Delhi Main Hub', city: 'Delhi', state: 'Delhi', active: true, shipments: 89, capacity: 120, phone: '9800000001' },
-  { id: 2, name: 'Mumbai Central Hub', city: 'Mumbai', state: 'Maharashtra', active: true, shipments: 67, capacity: 100, phone: '9800000002' },
-  { id: 3, name: 'Chennai Hub', city: 'Chennai', state: 'Tamil Nadu', active: true, shipments: 54, capacity: 80, phone: '9800000003' },
-  { id: 4, name: 'Hyderabad Hub', city: 'Hyderabad', state: 'Telangana', active: true, shipments: 41, capacity: 70, phone: '9800000004' },
-  { id: 5, name: 'Pune Hub', city: 'Pune', state: 'Maharashtra', active: false, shipments: 0, capacity: 60, phone: '9800000005' },
-  { id: 6, name: 'Kolkata Hub', city: 'Kolkata', state: 'West Bengal', active: true, shipments: 33, capacity: 70, phone: '9800000006' },
-];
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { apiClient } from '../../core/api/axios';
 
-const SYS_KPI = [
-  { label: 'Total Users', value: '3,241', delta: '+18 today' },
-  { label: 'Total Hubs', value: '6', delta: '5 online' },
-  { label: 'SLA Compliance', value: '94.2%', delta: '+1.3% vs last week' },
-  { label: 'Avg Delivery Time', value: '2.4 Days', delta: '-0.2 days improved' },
-  { label: 'Exception Rate', value: '1.8%', delta: 'Within threshold' },
-  { label: 'System Uptime', value: '99.97%', delta: 'Last 30 days' },
-];
+interface Shipment {
+  id: number;
+  trackingNumber: string;
+  shipmentType: string;
+  status: string;
+  shippingRate: number;
+  createdAt: string;
+  customerId?: number;
+  customerName?: string;
+}
 
-export const AdminPanel = () => {
-  const [tab, setTab] = useState<'hubs' | 'kpi'>('hubs');
+interface SystemKpi {
+  label: string;
+  value: string | number;
+  delta: string;
+  up?: boolean;
+}
+
+interface Hub {
+  id: number;
+  name: string;
+  city: string;
+  state: string;
+  isActive: boolean;
+}
+
+export const AdminDashboard = () => {
+  const navigate = useNavigate();
+
+  const [shipments, setShipments]     = useState<Shipment[]>([]);
+  const [kpis, setKpis]               = useState<SystemKpi[]>([]);
+  const [hubs, setHubs]               = useState<Hub[]>([]);
+  const [loading, setLoading]         = useState(true);
+  const [kpiError, setKpiError]       = useState(false);
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      setLoading(true);
+
+      try {
+        const res = await apiClient.get('/admin/shipments', {
+          params: { page: 1, pageSize: 10 },
+        });
+        const items = Array.isArray(res.data)
+          ? res.data
+          : res.data?.data ?? res.data?.items ?? res.data?.Items ?? [];
+        setShipments(items);
+
+        if (kpis.length === 0) {
+          setKpis([
+            { label: 'Total Shipments', value: items.length,
+              delta: 'Last 10 records', up: true },
+            { label: 'In Transit',
+              value: items.filter((s: Shipment) =>
+                ['InTransit','Booked','PickedUp','OutForDelivery'].includes(s.status)).length,
+              delta: 'Active', up: true },
+            { label: 'Delivered',
+              value: items.filter((s: Shipment) => s.status === 'Delivered').length,
+              delta: 'Completed', up: true },
+            { label: 'Cancelled',
+              value: items.filter((s: Shipment) => s.status === 'Cancelled').length,
+              delta: 'Failed', up: false },
+          ]);
+        }
+      } catch (err: any) {
+        console.error('Shipments fetch failed:', err?.response?.status, err?.response?.data);
+        setShipments([]);
+      }
+
+      // --- Hubs summary ---
+      try {
+        const res = await apiClient.get('/admin/hubs');
+        const raw = Array.isArray(res.data) ? res.data
+          : res.data?.data ?? res.data?.items ?? res.data?.Items ?? [];
+        setHubs(raw);
+      } catch {
+        setHubs([]);
+      }
+
+      setLoading(false);
+    };
+
+    fetchAll();
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 14 }}>
+        {[...Array(6)].map((_, i) => (
+          <div key={i} className="kpi-card" style={{ height: 90, background: 'var(--color-surface-2)' }} />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 1100 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+
       {/* Header */}
       <div>
         <div className="accent-line" style={{ marginBottom: 8 }} />
-        <h1 className="section-title">Admin Control Panel</h1>
-        <p className="section-sub">Manage logistics infrastructure and system performance</p>
+        <h1 className="section-title">Admin Dashboard</h1>
+        <p className="section-sub">System-wide overview — shipments, hubs, and platform health</p>
       </div>
 
-      {/* Tabs */}
-      <div style={{
-        display: 'flex',
-        borderBottom: '1px solid var(--color-border)',
-        gap: 0,
+      {/* KPI Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+        {kpis.length > 0 ? kpis.map(kpi => (
+          <div key={kpi.label} className="kpi-card" style={{ padding: '20px 18px' }}>
+            <div className="kpi-label">{kpi.label}</div>
+            <div className="kpi-value" style={{ fontSize: 28, marginTop: 6 }}>{kpi.value}</div>
+            <div className={`kpi-delta ${kpi.up !== false ? 'up' : 'down'}`} style={{ marginTop: 4,fontSize:14 }}>
+              {kpi.delta}
+            </div>
+          </div>
+        )) : (
+          <div className="ss-card" style={{
+            gridColumn: '1 / -1', padding: 32, textAlign: 'center',
+            color: 'var(--color-text-muted)', fontFamily: 'Rajdhani, sans-serif',
+            fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.1em',
+          }}>
+            {kpiError
+              ? '— /admin/dashboard endpoint not found. Add it to your AdminService. —'
+              : '— No KPI data —'}
+          </div>
+        )}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="ss-card" style={{
+        padding: 20, display: 'flex',
+        justifyContent: 'space-between', alignItems: 'center', gap: 16,
       }}>
-        {[
-          { key: 'hubs', label: 'Logistics Hubs' },
-          { key: 'kpi', label: 'System KPIs' },
-        ].map(t => (
-          <div
-            key={t.key}
-            onClick={() => setTab(t.key as 'hubs' | 'kpi')}
-            style={{
-              fontFamily: 'Rajdhani, sans-serif',
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              padding: '10px 20px',
-              cursor: 'pointer',
-              color: tab === t.key ? '#fff' : 'var(--color-text-muted)',
-              borderBottom: `2px solid ${tab === t.key ? 'var(--color-accent)' : 'transparent'}`,
-              transition: 'all 0.15s',
-              marginBottom: -1,
-            }}
-          >
-            {t.label}
-          </div>
-        ))}
+        <div>
+          <div className="section-title" style={{ fontSize: 14 }}>Quick Actions</div>
+          <div className="section-sub">Manage hubs, users, and shipments</div>
+        </div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <button className="ss-btn" onClick={() => navigate('/admin/hubs')}>
+            Manage Hubs
+          </button>
+          <button className="ss-btn ss-btn-outline" onClick={() => navigate('/admin/users')}>
+            Manage Users
+          </button>
+          <button className="ss-btn ss-btn-outline" onClick={() => navigate('/admin/shipments')}>
+            All Shipments
+          </button>
+        </div>
       </div>
 
-      {/* Hubs tab */}
-      {tab === 'hubs' && (
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 16 }}>
-            <button className="ss-btn">â–· Add Hub</button>
+      {/* Hubs Summary */}
+      <div className="ss-card" style={{ padding: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+          <div>
+            <div className="section-title" style={{ fontSize: 14 }}>Logistics Hubs</div>
+            <div className="section-sub">
+              {hubs.length} registered — {hubs.filter(h => h.isActive).length} active
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
-            {HUBS.map(hub => {
-              const utilPct = Math.round((hub.shipments / hub.capacity) * 100);
-              return (
-                <div key={hub.id} className="ss-card" style={{ padding: 20 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
-                    <div>
-                      <div style={{
-                        fontFamily: 'Rajdhani, sans-serif',
-                        fontSize: 15,
-                        fontWeight: 700,
-                        letterSpacing: '0.04em',
-                        color: '#fff',
-                        marginBottom: 2,
-                      }}>{hub.name}</div>
-                      <div style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{hub.city}, {hub.state}</div>
-                    </div>
-                    <span className={`ss-badge ${hub.active ? 'success glow-success' : 'muted'}`}>
-                      {hub.active ? 'ACTIVE' : 'OFFLINE'}
-                    </span>
-                  </div>
+          <button className="ss-btn ss-btn-outline" style={{ fontSize: 11 }}
+            onClick={() => navigate('/admin/hubs')}>
+            Full Hub Manager
+          </button>
+        </div>
 
-                  {/* Utilization bar */}
-                  <div style={{ marginBottom: 14 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                      <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 10, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>Utilization</span>
-                      <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 12, fontWeight: 700, color: utilPct > 80 ? 'var(--color-warning)' : '#fff' }}>{hub.shipments}/{hub.capacity}</span>
-                    </div>
-                    <div style={{ height: 4, background: 'var(--color-surface-2)', borderRadius: 2, overflow: 'hidden' }}>
-                      <div style={{
-                        height: '100%',
-                        width: `${utilPct}%`,
-                        background: utilPct > 80 ? 'var(--color-warning)' : 'var(--color-accent)',
-                        borderRadius: 2,
-                        transition: 'width 0.4s ease',
-                      }} />
-                    </div>
+        {hubs.length === 0 ? (
+          <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>No hubs found.</div>
+        ) : (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            {hubs.map(hub => (
+              <div key={hub.id} style={{
+                padding: '8px 14px',
+                background: 'var(--color-surface-2)',
+                border: '1px solid var(--color-border)',
+                borderRadius: 2,
+                display: 'flex', alignItems: 'center', gap: 10,
+              }}>
+                <div style={{
+                  width: 7, height: 7, borderRadius: '50%',
+                  background: hub.isActive ? 'var(--color-success)' : '#555',
+                  flexShrink: 0,
+                }} />
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-text)' }}>
+                    {hub.name}
                   </div>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{hub.phone}</span>
-                    <div style={{ display: 'flex', gap: 8 }}>
-                      <button className="ss-btn ss-btn-outline" style={{ fontSize: 10, padding: '4px 10px' }}>Edit</button>
-                      <button className="ss-btn" style={{ fontSize: 10, padding: '4px 10px', background: hub.active ? 'rgba(224,0,26,0.3)' : 'var(--color-accent)' }}>
-                        {hub.active ? 'Deactivate' : 'Activate'}
-                      </button>
-                    </div>
+                  <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                    {hub.city}, {hub.state}
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* KPIs tab */}
-      {tab === 'kpi' && (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
-          {SYS_KPI.map(kpi => (
-            <div key={kpi.label} className="kpi-card" style={{ padding: '24px 22px' }}>
-              <div className="kpi-label">{kpi.label}</div>
-              <div className="kpi-value" style={{ fontSize: 32, marginTop: 8 }}>{kpi.value}</div>
-              <div className="kpi-delta up" style={{ marginTop: 6 }}>{kpi.delta}</div>
-            </div>
-          ))}
+      {/* Recent Shipments */}
+      <div className="ss-card" style={{ padding: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 }}>
+          <div>
+            <div className="section-title" style={{ fontSize: 14 }}>Recent Shipments</div>
+            <div className="section-sub">Latest platform-wide shipment activity</div>
+          </div>
+          <button className="ss-btn" onClick={() => navigate('/admin/shipments')}>
+            Open Registry
+          </button>
         </div>
-      )}
+
+        {shipments.length === 0 ? (
+          <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
+            No shipments found. Make sure <code style={{ color: 'var(--color-accent)' }}>GET /shipments</code> returns all shipments for Admin role.
+          </div>
+        ) : (
+          <table className="ss-table">
+            <thead>
+              <tr>
+                <th>Tracking</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Rate</th>
+                <th>Created</th>
+              </tr>
+            </thead>
+            <tbody>
+              {shipments.map(s => (
+                <tr
+                  key={s.id}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => navigate(`/admin/track/${s.id}`)}
+                >
+                  <td>{s.trackingNumber}</td>
+                  <td>{s.customerName}</td>
+                  <td>{s.shipmentType}</td>
+                  <td>
+                    <span className={`ss-badge ${
+                      s.status === 'Delivered' ? 'success' :
+                      s.status === 'Cancelled' ? '' : 'glow'
+                    }`}>
+                      {s.status}
+                    </span>
+                  </td>
+                  <td>₹{Number(s.shippingRate || 0).toLocaleString('en-IN')}</td>
+                  <td>{new Date(s.createdAt).toLocaleDateString('en-IN')}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+
     </div>
   );
 };

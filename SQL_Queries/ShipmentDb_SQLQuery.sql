@@ -13,7 +13,6 @@ SELECT * FROM ShipmentOrderSagas;
 
 --SELECT * FROM Packages;
 
-
 SELECT * FROM Shipments;
 
 

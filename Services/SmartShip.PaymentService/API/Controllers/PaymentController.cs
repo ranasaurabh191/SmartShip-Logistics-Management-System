@@ -62,4 +62,20 @@ public class PaymentController : ControllerBase
         var result = await _paymentService.GetByShipmentIdAsync(shipmentId);
         return Ok(result);
     }
+
+    [HttpGet("my")]
+    [Authorize(Roles = "CUSTOMER")]
+    public async Task<IActionResult> GetMyPayments()
+    {
+        var result = await _paymentService.GetMyPaymentsAsync();
+        return Ok(result);
+    }
+
+    [HttpGet("all")]
+    [Authorize(Roles = "ADMIN")]
+    public async Task<IActionResult> GetAllPayments()
+    {
+        var result = await _paymentService.GetAllPaymentsAsync();
+        return Ok(result);
+    }
 }

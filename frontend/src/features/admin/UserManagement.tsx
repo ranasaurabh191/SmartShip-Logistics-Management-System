@@ -10,61 +10,114 @@ interface User {
   role: string;
 }
 
-const MOCK_USERS: User[] = [
-  { id: 1, name: "Administrator", email: "admin@smartship.com", phone: "9999900099", isActive: true, role: "Admin" },
-  { id: 2, name: "Rahul Singh", email: "rahul@gmail.com", phone: "2345679442", isActive: true, role: "Customer" },
-  { id: 3, name: "John Doe", email: "john@example.com", phone: "1234567890", isActive: false, role: "Customer" },
-  { id: 4, name: "Priya Verma", email: "priya@smartship.com", phone: "9876543210", isActive: true, role: "Customer" },
-];
+// Normalise whatever shape the API returns into our interface
+const normaliseUser = (u: any): User => ({
+  id: u.id,
+  name: u.name ?? u.fullName ?? '—',
+  email: u.email ?? '—',
+  phone: u.phone ?? u.phoneNumber ?? u.phoneNo ?? '—',
+  isActive: u.isActive ?? u.active ?? false,
+  role: Array.isArray(u.roles) ? u.roles[0] : (u.role ?? u.userRole ?? '—'),
+});
 
 export const UserManagement = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
+  const deleteUser = async (id: number) => {
+    if (!confirm(`Remove user ${id}?`)) return;
+    try {
+      await apiClient.delete(`/admin/users/${id}`);
+      setUsers(prev => prev.filter(u => u.id !== id));
+    } catch {
+      alert('Failed to remove user.');
+    }
+  };
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.get('/admin/users');
+      const raw = Array.isArray(res.data)
+        ? res.data
+        : res.data?.Data ?? res.data?.data ?? res.data?.items ?? [];
+      setTotal(res.data?.TotalCount ?? res.data?.totalCount ?? raw.length);
+      setUsers(raw.map(normaliseUser));
+    } catch (err: any) {
+      console.error('Failed to fetch users:', err?.response?.data ?? err);
+      setUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await apiClient.get('/admin/users');
-        if (Array.isArray(res.data)) setUsers(res.data);
-        else if (res.data?.items) setUsers(res.data.items);
-        else throw new Error("not array");
-      } catch {
-        setUsers(MOCK_USERS);
-      }
-    };
-    fetchUsers();
-  }, []);
+  const toggleActive = async (id: number, current: boolean) => {
+    try {
+      const res = await apiClient.get(`/admin/users/${id}`);
+      const u = res.data;
+      await apiClient.put(`/admin/users/${id}`, {
+        name: u.Name ?? u.name,
+        phone: u.Phone ?? u.phone ?? u.phoneNumber,
+        isActive: !current,
+        role: u.Role ?? u.role,
+      });
+      fetchUsers();
+    } catch (err: any) {
+      const msg =
+        err?.response?.data?.message ||
+        err?.response?.data?.title ||
+        'Failed to update user.';
+      alert(msg);
+    }
+  };
+
+  useEffect(() => { fetchUsers(); }, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 1100 }}>
       <div>
         <div className="accent-line" style={{ marginBottom: 8 }} />
         <h1 className="section-title">User Directory</h1>
-        <p className="section-sub">Manage system access and operator roles</p>
+        <p className="section-sub">
+          {loading ? 'Loading...' : `${total} users · ${users.filter(u => u.isActive).length} active`}
+        </p>
       </div>
 
       <div className="ss-card" style={{ padding: 0, overflow: 'hidden' }}>
         <table className="ss-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th align="right">Options</th>
+              <th>#</th><th>Name</th><th>Email</th>
+              <th>Phone</th><th>Role</th><th>Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user.id}>
-                <td style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, color: '#fff', fontSize: 13 }}>{user.name}</td>
-                <td style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{user.email}</td>
-                <td style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{user.phone}</td>
-                <td><span className={`ss-badge ${user.role === 'Admin' ? 'glow' : 'muted'}`}>{user.role.toUpperCase()}</span></td>
-                <td><span className={`ss-badge ${user.isActive ? 'success' : 'muted'}`}>{user.isActive ? 'ACTIVE' : 'INACTIVE'}</span></td>
-                <td style={{ textAlign: 'right' }}>
-                  <button className="ss-btn ss-btn-outline" style={{ fontSize: 10, padding: '3px 10px', marginRight: 8 }}>Edit</button>
-                  <button className="ss-btn" style={{ fontSize: 10, padding: '3px 10px', background: 'rgba(224,0,26,0.3)' }}>Remove</button>
+            {loading ? (
+              <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'var(--color-text-muted)', fontFamily: 'Rajdhani', textTransform: 'uppercase', fontSize: 12 }}>
+                LOADING...
+              </td></tr>
+            ) : users.length === 0 ? (
+              <tr><td colSpan={7} style={{ textAlign: 'center', padding: 40, color: 'var(--color-text-muted)', fontFamily: 'Rajdhani', textTransform: 'uppercase', fontSize: 12 }}>
+                — No users found —
+              </td></tr>
+            ) : users.map(u => (
+              <tr key={u.id}>
+                <td style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>{u.id}</td>
+                <td style={{ fontFamily: 'Rajdhani, sans-serif', fontWeight: 700, color: '#fff' }}>{u.name}</td>
+                <td style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>{u.email}</td>
+                <td style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>{u.phone}</td>
+                <td><span className="ss-badge">{u.role}</span></td>
+                <td><span className={`ss-badge ${u.isActive ? 'success glow-success' : 'muted'}`}>
+                  {u.isActive ? 'ACTIVE' : 'INACTIVE'}
+                </span></td>
+                <td style={{ display: 'flex', gap: 6 }}>
+                  <button className="ss-btn ss-btn-outline" style={{ fontSize: 10, padding: '3px 10px' }}
+                    onClick={() => toggleActive(u.id, u.isActive)}>
+                    {u.isActive ? 'Deactivate' : 'Activate'}
+                  </button>
+                  <button className="ss-btn" style={{ fontSize: 10, padding: '3px 10px', background: 'transparent', border: '1px solid #555', color: '#888' }}
+                    onClick={() => deleteUser(u.id)}>
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}

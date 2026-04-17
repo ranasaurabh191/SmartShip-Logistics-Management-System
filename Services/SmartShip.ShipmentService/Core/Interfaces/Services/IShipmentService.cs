@@ -15,5 +15,7 @@ namespace SmartShip.ShipmentService.Core.Interfaces.Services
         Task<PagedResponse<ShipmentResponse>> GetMyShipmentsPagedAsync(int customerId, PagedRequest request);
         Task CancelByCustomerAsync(int shipmentId, int customerId, string reason);
         Task<IEnumerable<ShipmentSummaryDto>> GetShipmentSummaryByCustomerAsync(int customerId);
+        Task<ShipmentResponse?> GetByTrackingNumberAsync(string trackingNumber);
+
     }
 }

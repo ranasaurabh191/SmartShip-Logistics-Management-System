@@ -14,7 +14,7 @@
   --color-accent-hover: #ff1a30;
   --color-text: #d4d4d4;
   --color-text-muted: #888888;
-  --color-text-dim: #555555;
+  --color-text-dim: #9f9292;
   --color-success: #00c48c;
   --color-warning: #f5a623;
   --color-error: #e0001a;
@@ -108,7 +108,7 @@ h6 {
   align-items: center;
   padding: 2px 8px;
   border-radius: 2px;
-  font-family: var(--font-heading);
+  
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -147,16 +147,17 @@ h6 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
+  text-align: center;
+  padding: 5px 10px;
   background: var(--color-accent);
   color: #fff;
   font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   border: none;
-  border-radius: 2px;
+  border-radius: 6px;
   cursor: pointer;
   transition: background 0.15s ease;
 }
@@ -169,6 +170,7 @@ h6 {
   background: transparent;
   border: 1px solid var(--color-accent);
   color: var(--color-accent);
+  
 }
 
 .ss-btn-outline:hover {
@@ -238,13 +240,13 @@ h6 {
   text-transform: uppercase;
   color: var(--color-text-muted);
   text-align: left;
-  padding: 10px 14px;
+  padding: 19px 12px;
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
 }
 
 .ss-table td {
-  padding: 11px 14px;
+  padding: 12px 13px;
   color: var(--color-text);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   vertical-align: middle;
@@ -308,60 +310,20 @@ h6 {
 /* ─── TOP SECTION LABEL ─── */
 .section-title {
   font-family: var(--font-heading);
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #ffffff;
-  margin-bottom: 2px;
+  margin-bottom: 10px;
 }
 
 .section-sub {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-text-muted);
   font-family: var(--font-body);
 }
 
-/* ─── SAGA NODE ─── */
-.saga-node {
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  background: var(--color-surface);
-  padding: 14px 20px;
-  min-width: 140px;
-  text-align: center;
-  font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  transition: all 0.2s;
-}
-
-.saga-node.active {
-  border-color: var(--color-accent);
-  color: #fff;
-  box-shadow: 0 0 16px rgba(224, 0, 26, 0.35);
-}
-
-.saga-node.success-node {
-  border-color: var(--color-success);
-  color: var(--color-success);
-  box-shadow: 0 0 12px rgba(0, 196, 140, 0.25);
-}
-
-.saga-node.error-node {
-  border-color: #555;
-  color: #555;
-}
-
-.saga-arrow {
-  font-family: var(--font-heading);
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: var(--color-text-muted);
-}
 
 /* ─── FORM INPUTS ─── */
 .ss-input {
@@ -381,7 +343,7 @@ h6 {
 }
 
 .ss-input::placeholder {
-  color: var(--color-text-dim);
+  color: #e1e1e19d;
 }
 
 /* ─── DIVIDER ─── */

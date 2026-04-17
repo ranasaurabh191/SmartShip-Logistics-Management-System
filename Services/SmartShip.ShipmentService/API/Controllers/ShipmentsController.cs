@@ -86,7 +86,14 @@ public class ShipmentsController : ControllerBase
         return Ok(new { message = "Shipment cancelled successfully." });
 
     }
-
+    [HttpGet("by-tracking/{trackingNumber}")]
+    [Authorize]
+    public async Task<IActionResult> GetByTrackingNumber(string trackingNumber)
+    {
+        var shipment = await _service.GetByTrackingNumberAsync(trackingNumber);
+        if (shipment == null) return NotFound();
+        return Ok(shipment);
+    }
     [HttpGet("internal/{id}")]
     [InternalApiKey]  
     public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));

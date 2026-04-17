@@ -10,4 +10,6 @@ public interface IPaymentRepository
     Task<ShipmentPayment?> GetByTrackingNumberAsync(string trackingNumber);
     Task AddAsync(ShipmentPayment payment);
     void Update(ShipmentPayment payment);
+    Task<List<ShipmentPayment>> GetByCustomerIdAsync(int customerId);
+    Task<List<ShipmentPayment>> GetAllAsync();
 }
