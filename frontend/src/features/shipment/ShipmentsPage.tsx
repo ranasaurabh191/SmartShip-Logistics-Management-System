@@ -536,7 +536,7 @@ export const ShipmentsPage = () => {
               <th>Created At</th>
               <th>Pickup Time</th>
               <th>Delivered At</th>
-              
+
               <th>Notes</th>
               <th>Actions</th>
             </tr>
@@ -558,27 +558,27 @@ export const ShipmentsPage = () => {
                     <td>{s.receiverFullName}</td>
                     <td>{s.originCity}</td>
                     <td>{s.destinationCity}</td>
-                    <td><span className={`ss-badge ${statusStyle[s.status] ?? ''}`} style={{padding: '3px 5px'}}>{s.status}</span></td>
-                    <td><span className="ss-badge" style={{padding: '3px 5px'}}>{getPaymentLabel(payment)}</span></td>
+                    <td><span className={`ss-badge ${statusStyle[s.status] ?? ''}`} style={{ padding: '3px 5px' }}>{s.status}</span></td>
+                    <td><span className="ss-badge" style={{ padding: '3px 5px' }}>{getPaymentLabel(payment)}</span></td>
                     <td>₹{s.shippingRate.toLocaleString('en-IN')}</td>
                     <td>
-                      {new Date(s.createdAt).toLocaleString('en-IN', {day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })}
+                      {new Date(s.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })}
                     </td>
                     <td>
                       {s.pickupScheduledAt ? new Date(s.pickupScheduledAt).toLocaleString('en-IN') : '—'}
                     </td>
                     <td>
                       {s.deliveredAt
-                        ? new Date(s.deliveredAt).toLocaleString('en-IN', {day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : '—'}
-                    </td>                
+                        ? new Date(s.deliveredAt).toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : '—'}
+                    </td>
                     <td
                       title={s.notes ?? '—'}
-                      style={{maxWidth: 180, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',}}>
+                      style={{ maxWidth: 180, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', }}>
                       {s.notes ?? '—'}
                     </td>
-                    <td style={{ minWidth: 220 }}>
+                    <td style={{ minWidth: 230 }}>
                       <div
-                        style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(10px, 1fr))', gap: 8, width: '100%', alignItems: 'stretch',}}>
+                        style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(10px, 1fr))', gap: 8, width: '100%', alignItems: 'stretch', }}>
                         <button
                           className="ss-btn ss-btn-outline"
                           onClick={(e) => {
@@ -603,7 +603,7 @@ export const ShipmentsPage = () => {
                               className="ss-btn"
                               style={{
                                 gridColumn: '1 / -1',
-                                padding: '6px 29px',
+                                padding: '6px 28px',
                                 textAlign: 'center',
                               }}
                               disabled={busyShipmentId === s.id}
@@ -633,19 +633,6 @@ export const ShipmentsPage = () => {
                                 </button>
                               </>
                             )}
-
-                            {payment?.paymentMethod === 'Online' &&
-                              payment?.paymentStatus !== 'Paid' &&
-                              s.status === 'Draft' && (
-                                <button
-                                  className="ss-btn"
-                                  style={{ gridColumn: '1 / -1' }}
-                                  onClick={(e) => openRetryVerifyModal(e, s)}
-                                >
-                                  Retry
-                                </button>
-                              )}
-
                             {(s.status === 'Draft' || s.status === 'Booked') && (
                               <button
                                 className="ss-btn ss-btn-outline"
@@ -655,13 +642,30 @@ export const ShipmentsPage = () => {
                                 Cancel
                               </button>
                             )}
+                            {payment?.paymentMethod === 'Online' &&
+                              payment?.paymentStatus !== 'Paid' &&
+                              s.status === 'Draft' && (
+                                <button
+                                  className="ss-btn"
+                                  style={{
+                                    gridColumn: '1 / -1',
+                                    padding: '6px 70px',
+                                    textAlign: 'center',
+                                  }}
+                                  onClick={(e) => openRetryVerifyModal(e, s)}
+                                >
+                                  Retry
+                                </button>
+                              )}
+
+
 
                             {scheduleAllowed && (
                               <button
                                 className="ss-btn"
                                 style={{
                                   gridColumn: '1 / -1',
-                                  padding: '6px 29px',
+                                  padding: '6px 20px',
                                   textAlign: 'center',
                                 }}
                                 disabled={busyShipmentId === s.id}

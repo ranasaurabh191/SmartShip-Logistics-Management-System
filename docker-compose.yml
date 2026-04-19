@@ -180,6 +180,17 @@ services:
       - notification-service
     restart: on-failure
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: smartship-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api-gateway
+    restart: on-failure
+
 volumes:
   gateway-logs:
   admin-logs:

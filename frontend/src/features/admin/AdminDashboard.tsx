@@ -10,7 +10,6 @@ interface Shipment {
   shippingRate: number;
   createdAt: string;
   customerId?: number;
-  customerName?: string;
 }
 
 interface SystemKpi {
@@ -219,7 +218,6 @@ export const AdminDashboard = () => {
             <thead>
               <tr>
                 <th>Tracking</th>
-                <th>Customer</th>
                 <th>Type</th>
                 <th>Status</th>
                 <th>Rate</th>
@@ -234,7 +232,6 @@ export const AdminDashboard = () => {
                   onClick={() => navigate(`/admin/track/${s.id}`)}
                 >
                   <td>{s.trackingNumber}</td>
-                  <td>{s.customerName}</td>
                   <td>{s.shipmentType}</td>
                   <td>
                     <span className={`ss-badge ${

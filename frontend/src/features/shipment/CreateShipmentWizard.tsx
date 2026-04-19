@@ -389,11 +389,11 @@ export const CreateShipmentWizard = () => {
                 style={{
                   display: 'block',
                   fontFamily: 'Rajdhani, sans-serif',
-                  fontSize: 12,
-                  fontWeight: 1200,
+                  fontSize: 13,
+                  fontWeight: 900,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  color: '#ef0000de',
+                  color: '#ef0000ff',
                   marginBottom: 6,
                 }}
               >

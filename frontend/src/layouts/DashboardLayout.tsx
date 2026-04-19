@@ -94,21 +94,15 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
           {navItems.map(item => {
             const isActive = location.pathname === item.path;
             return (
-              <motion.div
-                key={item.path}
-                whileHover={{ x: 3 }}
-                whileTap={{ scale: 0.1 }}
+              <div
+                
                 className={`sidebar-item ${isActive ? 'active' : ''}`}
                 onClick={() => navigate(item.path)}
               >
                 <span style={{ fontSize: 18, opacity: 0.7 }}>{item.icon}</span>
                 <span>{item.label}</span>
-                {isActive && (
-                  <span className="ss-badge glow" style={{ marginLeft: 'auto', fontSize: 8 }}>
-                    LIVE
-                  </span>
-                )}
-              </motion.div>
+                
+              </div>
             );
           })}
         </nav>
