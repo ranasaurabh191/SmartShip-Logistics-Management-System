@@ -289,7 +289,7 @@ const LogisticsAnimation = () => {
       { x: 550, y: 350, r: 8,  label: 'HYD', pulse: 1.7, isMain: false },
       { x: 500, y: 490, r: 7,  label: 'CHN', pulse: 0.9, isMain: false },
       { x: 280, y: 550, r: 7,  label: 'KOL', pulse: 1.4, isMain: false },
-      { x: 260, y: 80,  r: 6,  label: 'PNQ', pulse: 2.5, isMain: false },
+      { x: 260, y: 80,  r: 6,  label: 'PB', pulse: 2.5, isMain: false },
       { x: 150, y: 300, r: 6,  label: 'AHM', pulse: 0.3, isMain: false },
       { x: 470, y: 250, r: 6,  label: 'LKW', pulse: 1.9, isMain: false },
     ];
