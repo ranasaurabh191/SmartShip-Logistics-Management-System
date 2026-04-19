@@ -19,14 +19,13 @@ const FEATURES = [
 export const AuthLayout = () => {
   const location = useLocation();
   const isLogin = location.pathname.includes('login');
+
   const [visible, setVisible] = useState(true);
-  const [displayPath, setDisplayPath] = useState(location.pathname);
 
   useEffect(() => {
     setVisible(false);
 
     const timer = setTimeout(() => {
-      setDisplayPath(location.pathname);
       setVisible(true);
     }, 180);
 

@@ -51,6 +51,7 @@ type ShipmentRow = {
   destinationCity: string;
   status: string;
   createdAt: string;
+  pickupScheduledAt?: string | null;
   deliveredAt?: string | null;
   notes?: string | null;
   shippingRate: number;
@@ -240,7 +241,6 @@ export const ShipmentsPage = () => {
       setBusyShipmentId(null);
     }
   };
-  const [pickupDrafts, setPickupDrafts] = useState<Record<number, string>>({});
   const openPickupModal = (
     e: React.MouseEvent,
     shipment: ShipmentRow

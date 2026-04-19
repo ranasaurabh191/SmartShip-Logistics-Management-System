@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuthStore } from '../store/useAuthStore';
@@ -35,14 +35,6 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
 
-  const [services] = useState([
-    { name: 'Identity', status: 'online' },
-    { name: 'Shipment', status: 'online' },
-    { name: 'Tracking', status: 'online' },
-    { name: 'Payment', status: 'online' },
-    { name: 'Admin', status: 'online' },
-    { name: 'Notification', status: 'online' },
-  ]);
 
   useEffect(() => {
     if (!isAuthenticated) {

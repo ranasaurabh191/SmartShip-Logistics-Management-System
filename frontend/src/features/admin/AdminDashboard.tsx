@@ -34,7 +34,7 @@ export const AdminDashboard = () => {
   const [kpis, setKpis]               = useState<SystemKpi[]>([]);
   const [hubs, setHubs]               = useState<Hub[]>([]);
   const [loading, setLoading]         = useState(true);
-  const [kpiError, setKpiError]       = useState(false);
+  const [kpiError]                    = useState(false);
 
   useEffect(() => {
     const fetchAll = async () => {

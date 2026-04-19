@@ -6,6 +6,7 @@ def BUILD_PAYMENT      = false
 def BUILD_NOTIFICATION = false
 def BUILD_TRACKING     = false
 def BUILD_GATEWAY      = false
+def BUILD_FRONTEND     = false
 def PROJECT_DIR = 'C:\\Users\\ASUS\\OneDrive\\Desktop\\SmartShip Logistics Management System'
 
 pipeline {
@@ -77,11 +78,11 @@ pipeline {
                     if (touches('Services/SmartShip.NotificationService/')) BUILD_NOTIFICATION = true
                     if (touches('Services/SmartShip.TrackingService/'))     BUILD_TRACKING     = true
                     if (touches('Gateway/SmartShip.Gateway/'))              BUILD_GATEWAY      = true
+                    if (touches('frontend/'))                               BUILD_FRONTEND     = true
 
                     if (FULL_REBUILD) {
                         BUILD_IDENTITY = BUILD_ADMIN = BUILD_SHIPMENT = true
-                        BUILD_PAYMENT  = BUILD_NOTIFICATION = BUILD_TRACKING = BUILD_GATEWAY = true
-                    }
+                        BUILD_PAYMENT  = BUILD_NOTIFICATION = BUILD_TRACKING = BUILD_GATEWAY = BUILD_FRONTEND = true                    }
 
                     echo """
                     ── Build Matrix ──────────────────
@@ -93,6 +94,7 @@ pipeline {
                     BUILD_NOTIFICATION = ${BUILD_NOTIFICATION}
                     BUILD_TRACKING  = ${BUILD_TRACKING}
                     BUILD_GATEWAY   = ${BUILD_GATEWAY}
+                    BUILD_FRONTEND  = ${BUILD_FRONTEND}
                     ──────────────────────────────────
                     """
                 }
@@ -190,6 +192,17 @@ pipeline {
                     bat 'docker compose rm -f api-gateway'
                     bat 'docker compose build --no-cache api-gateway'
                     bat 'docker compose up -d --no-deps api-gateway'
+                }
+            }
+        }
+        stage('Build Frontend') {
+            when { expression { !FULL_REBUILD && BUILD_FRONTEND } }
+            steps {
+                dir(PROJECT_DIR) {
+                    bat 'docker compose stop frontend'
+                    bat 'docker compose rm -f frontend'
+                    bat 'docker compose build --no-cache frontend'
+                    bat 'docker compose up -d --no-deps frontend'
                 }
             }
         }

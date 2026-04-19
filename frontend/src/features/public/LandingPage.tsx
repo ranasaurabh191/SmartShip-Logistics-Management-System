@@ -279,7 +279,6 @@ const LogisticsAnimation = () => {
 
     // ── Hub nodes (logistics network) ──
     const HUB_COLOR = '#e0001a';
-    const HUB_DIM = 'rgba(224, 0, 26, 0.72)';
     const LINE_COLOR = 'rgba(224, 0, 26,0.51)';
 
     const hubs = [
@@ -316,8 +315,7 @@ const LogisticsAnimation = () => {
       trail: [],
     })).map((p, i) => ({ ...p, edgeIdx: i }));
 
-    const ORBIT_R = 32;
-    const ORBIT_DOTS = 6;
+  
 
     const gridDots: { x: number; y: number; alpha: number; phase: number }[] = [];
     for (let r = 0; r < 14; r++) {
