@@ -357,24 +357,24 @@ export const CreateShipmentWizard = () => {
   };
 
   const addressFields = (_section: 'sender' | 'receiver') => [
-    { field: 'fullName', label: 'Full Name', placeholder: 'name' },
-    { field: 'phone', label: 'Phone Number', placeholder: 'phone' },
+    { field: 'fullName', label: 'Full Name', placeholder: 'Enter name' },
+    { field: 'phone', label: 'Phone Number', placeholder: 'Enter phone' },
     {
       field: 'street',
       label: 'Street Address',
-      placeholder: 'address',
+      placeholder: 'Enter address',
       wide: true,
     },
-    { field: 'city', label: 'City', placeholder: 'city' },
-    { field: 'state', label: 'State', placeholder: 'state' },
-    { field: 'postalCode', label: 'Postal Code', placeholder: 'postal code' },
+    { field: 'city', label: 'City', placeholder: 'Enter city' },
+    { field: 'state', label: 'State', placeholder: 'Enter state' },
+    { field: 'postalCode', label: 'Postal Code', placeholder: 'Enter postal code' },
   ];
 
   const formatRate = () => {
     if (rateLoading) return 'CALCULATING...';
     if (rateError) return rateError.toUpperCase();
     if (estimatedRate != null) return `Rs. ${estimatedRate.toLocaleString('en-IN')}`;
-    return 'ENTER WEIGHT AND SHIPMENT TYPE';
+    return 'Rs. 0';
   };
 
   const renderStep = () => {
@@ -414,8 +414,8 @@ export const CreateShipmentWizard = () => {
 
     if (activeStep === 2) {
       const pkgFields = [
-        { field: 'weightKg', label: 'Weight (kg)', placeholder: '4.5' },
-        { field: 'description', label: 'Description', placeholder: 'Electronics' },
+        { field: 'weightKg', label: 'Weight (kg)', placeholder: 'Enter weight' },
+        { field: 'description', label: 'Description', placeholder: 'Enter type of item' },
         { field: 'lengthCm', label: 'Length (cm)', placeholder: '30' },
         { field: 'widthCm', label: 'Width (cm)', placeholder: '20' },
         { field: 'heightCm', label: 'Height (cm)', placeholder: '15' },
@@ -425,17 +425,17 @@ export const CreateShipmentWizard = () => {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
           <div style={{ gridColumn: '1 / -1' }}>
             <label
-              style={{
-                display: 'block',
-                fontFamily: 'Rajdhani, sans-serif',
-                fontSize: 12,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--color-text-muted)',
-                marginBottom: 6,
-              }}
-            >
+                style={{
+                  display: 'block',
+                  fontFamily: 'Rajdhani, sans-serif',
+                  fontSize: 13,
+                  fontWeight: 900,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: '#ef0000ff',
+                  marginBottom: 6,
+                }}
+              >
               Shipment Type
             </label>
             <select
@@ -455,11 +455,11 @@ export const CreateShipmentWizard = () => {
                 style={{
                   display: 'block',
                   fontFamily: 'Rajdhani, sans-serif',
-                  fontSize: 10,
+                  fontSize: 13,
                   fontWeight: 900,
                   letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  color: 'var(--color-text-muted)',
+                  color: '#ef0000ff',
                   marginBottom: 6,
                 }}
               >
@@ -474,21 +474,21 @@ export const CreateShipmentWizard = () => {
                 type={f.field === 'description' ? 'text' : 'number'}
               />
             </div>
+            
           ))}
-
           <div style={{ gridColumn: '1 / -1' }}>
             <label
-              style={{
-                display: 'block',
-                fontFamily: 'Rajdhani, sans-serif',
-                fontSize: 10,
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--color-text-muted)',
-                marginBottom: 6,
-              }}
-            >
+                style={{
+                  display: 'block',
+                  fontFamily: 'Rajdhani, sans-serif',
+                  fontSize: 13,
+                  fontWeight: 900,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: '#ef0000ff',
+                  marginBottom: 6,
+                }}
+              >
               Notes
             </label>
             <textarea
@@ -501,20 +501,21 @@ export const CreateShipmentWizard = () => {
               }
             />
           </div>
+          
 
           <div style={{ gridColumn: '1 / -1' }}>
             <label
-              style={{
-                display: 'block',
-                fontFamily: 'Rajdhani, sans-serif',
-                fontSize: 12,
-                fontWeight: 900,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: 'var(--color-text-muted)',
-                marginBottom: 6,
-              }}
-            >
+                style={{
+                  display: 'block',
+                  fontFamily: 'Rajdhani, sans-serif',
+                  fontSize: 13,
+                  fontWeight: 900,
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: '#ef0000ff',
+                  marginBottom: 6,
+                }}
+              >
               Estimated Rate (Rs.)
             </label>
 
@@ -717,7 +718,7 @@ export const CreateShipmentWizard = () => {
                   style={{
                     width: 28,
                     height: 28,
-                    borderRadius: 9,
+                    borderRadius: 10,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -726,7 +727,7 @@ export const CreateShipmentWizard = () => {
                     border: `1px solid ${i <= activeStep ? 'var(--color-accent)' : 'var(--color-border)'
                       }`,
                     fontFamily: 'Rajdhani, sans-serif',
-                    fontSize: 17,
+                    fontSize: 15,
                     fontWeight: 700,
                     color: i <= activeStep ? '#fff' : '#555',
                     zIndex: 1,
@@ -734,13 +735,13 @@ export const CreateShipmentWizard = () => {
                       i === activeStep ? '0 0 10px rgba(224,0,26,0.4)' : 'none',
                   }}
                 >
-                  {i < activeStep ? 'OK' : i + 1}
+                  {i < activeStep ? '✓' : i + 1}
                 </div>
 
                 <div
                   style={{
                     fontFamily: 'Rajdhani, sans-serif',
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: 900,
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
