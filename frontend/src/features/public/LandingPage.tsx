@@ -588,7 +588,7 @@ export const LandingPage = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#0a0a0a', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', padding: '1px 20px', display: 'flex', flexDirection: 'column', background: '#0a0a0a', position: 'relative', overflowX: 'hidden' }}>
 
       {/* ── Animated network mesh background ── */}
       <ParticleCanvas />
@@ -604,12 +604,12 @@ export const LandingPage = () => {
       ═══════════════════════════════════════════ */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
-        padding: '16px 48px',
+        padding: '16px 100px',
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         background: navSolid ? 'rgba(8,8,8,0.97)' : 'rgba(8,8,8,0.6)',
         backdropFilter: 'blur(16px)',
         borderBottom: `1px solid ${navSolid ? 'rgba(224,0,26,0.18)' : 'rgba(255,255,255,0.04)'}`,
-        transition: 'background 0.4s ease, border-color 0.4s ease',
+        transition: 'all 0.6s 0.1s ease',
         opacity: heroVisible ? 1 : 0,
         transform: heroVisible ? 'translateY(0)' : 'translateY(-20px)',
       }}>
@@ -654,7 +654,7 @@ export const LandingPage = () => {
             transform: heroVisible ? 'none' : 'translateY(16px)',
             transition: 'all 0.6s 0.1s ease',
           }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#00c48c', boxShadow: '0 0 7px rgba(0,196,140,0.8)', animation: 'blink 0.5s infinite' }} />
+            <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#00c48c', boxShadow: '0 0 7px rgba(0,196,140,0.8)', animation: 'blink 0.8s infinite' }} />
             <span style={{ fontFamily: "'Orbitron', monospace", fontSize: 10, fontWeight: 900, letterSpacing: '0.16em', textTransform: 'uppercase', color: '#cacacaff' }}>
               India's Largest Pincode Network — 31,000+ Serviceable
             </span>
@@ -683,7 +683,8 @@ export const LandingPage = () => {
             Solution
           </h1>
           <div style={{
-            width: 380, height: 2, background: '#e0001a', marginBottom: 20,
+            width: 381, height: 4, background: '#e0001a', marginBottom: 20,
+            borderRadius: 5,
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? 'scaleX(1)' : 'scaleX(0)',
             transformOrigin: 'left',
@@ -986,8 +987,10 @@ export const LandingPage = () => {
       ═══════════════════════════════════════════ */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '48px 80px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 40 }}>
-          <div>
-            <SmartShipLogo />
+          <div> 
+            <div style={{ marginTop: 18}}>
+                <SmartShipLogo /> 
+              </div>
             <p style={{ color: '#a7a7a7ff', fontSize: 12, marginTop: 14, maxWidth: 260, lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
               One stop solution for all your shipping needs.<br />Easier. Faster. Cheaper.
             </p>
@@ -999,7 +1002,9 @@ export const LandingPage = () => {
               }}>
                 Toll Free: 1800-309-1122
               </span>
+              
             </div>
+            
           </div>
 
           <div style={{ display: 'flex', gap: 60, flexWrap: 'wrap' }}>
@@ -1026,7 +1031,7 @@ export const LandingPage = () => {
           </div>
         </div>
 
-        <div style={{ marginTop: 40, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.04)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
 
 
         </div>

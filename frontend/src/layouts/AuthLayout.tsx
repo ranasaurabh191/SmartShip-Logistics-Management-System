@@ -87,13 +87,12 @@ export const AuthLayout = () => {
         /* Logo */
         .auth-logo-area { 
           margin-bottom: 32px;
-          margin-left: -40px;
+          margin-left: -2px;
          }
         .auth-logo-sub {
           margin-top: 5px;
           font-family: 'Rajdhani', sans-serif;
           font-size: 12px;
-          margin-left: 40px;
           font-weight: 600;
           letter-spacing: 0.2em;
           text-transform: uppercase;
@@ -331,7 +330,7 @@ export const AuthLayout = () => {
         /* Tabs */
         .auth-tabs {
           display: flex;
-          margin-bottom: 58px;
+          margin-bottom: 30px;
           border-bottom: 1px solid var(--color-border);
             
         }

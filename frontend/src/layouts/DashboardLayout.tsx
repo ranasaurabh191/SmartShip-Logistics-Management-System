@@ -61,7 +61,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
         display: 'flex', flexDirection: 'column', overflow: 'hidden',
       }}>
         <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-          <div style={{ marginBottom: 32, marginLeft: -40 }}>
+          <div style={{ marginBottom: 32 }}>
             <SmartShipLogo />
           </div>
           <div style={{

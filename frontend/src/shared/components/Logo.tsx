@@ -1,6 +1,6 @@
 export const SmartShipLogo = () => (
   <svg
-    width="340"
+    width="240"
     height="48"
     viewBox="0 0 260 48"
     fill="none"
@@ -17,7 +17,7 @@ export const SmartShipLogo = () => (
       y="30"
       fontFamily="'Orbitron', monospace"
       fontWeight="600"
-      fontSize="24"
+      fontSize="27"
       fill="#ffffff"
       style={{ fontStyle: 'italic' }}
     >

@@ -56,13 +56,14 @@ export const LoginPage = () => {
 
   return (
     <div>
-      <div className="accent-line" />
+      
       <h1 style={{
         fontFamily: 'Rajdhani, sans-serif', fontSize: 28, fontWeight: 700,
-        letterSpacing: '0.04em', textTransform: 'uppercase', color: '#fff', marginBottom: 4,
+        letterSpacing: '0.04em', textTransform: 'uppercase', color: '#fff', marginBottom: 1,
       }}>
         Login
       </h1>
+      <div className="accent-line" />
       <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginBottom: 28 }}>
         Authenticate to enter SmartShip
       </p>
@@ -71,7 +72,7 @@ export const LoginPage = () => {
         <div style={{
           padding: '10px 14px', background: 'rgba(224,0,26,0.08)',
           border: '1px solid rgba(224,0,26,0.3)', borderRadius: 2, marginBottom: 16,
-          fontFamily: 'Rajdhani, sans-serif', fontSize: 12, fontWeight: 600,
+          fontFamily: 'Rajdhani, sans-serif', fontSize: 14, fontWeight: 900,
           letterSpacing: '0.08em', color: '#e0001a',
         }}>
           {error}
@@ -123,8 +124,8 @@ export const LoginPage = () => {
       }}>
         <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
         <span style={{
-          fontFamily: 'Rajdhani, sans-serif', fontSize: 11, fontWeight: 600,
-          letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
+          fontFamily: 'Rajdhani, sans-serif', fontSize: 12, fontWeight: 600,
+          letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.63)',
         }}>
           OR CONTINUE WITH
         </span>
@@ -152,7 +153,7 @@ export const LoginPage = () => {
             background: 'rgba(255,255,255,0.04)',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 2, cursor: 'pointer',
-            fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 600,
+            fontFamily: 'Orbitron, sans-serif', fontSize: 10, fontWeight: 600,
             letterSpacing: '0.1em', textTransform: 'uppercase', color: '#ffffffcc',
             transition: 'background 0.2s, border-color 0.2s',
           }}
@@ -179,7 +180,7 @@ export const LoginPage = () => {
             background: 'rgba(255,255,255,0.04)',
             border: '1px solid rgba(255,255,255,0.1)',
             borderRadius: 2, cursor: 'pointer',
-            fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 600,
+            fontFamily: 'Orbitron, sans-serif', fontSize: 10, fontWeight: 600,
             letterSpacing: '0.1em', textTransform: 'uppercase', color: '#ffffffcc',
             transition: 'background 0.2s, border-color 0.2s',
           }}

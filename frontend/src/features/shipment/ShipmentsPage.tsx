@@ -411,8 +411,7 @@ export const ShipmentsPage = () => {
         return;
       }
 
-      const paymentId = window.prompt(
-        `Mock Razorpay Order Created:\n${payment.razorpayOrderId}\n\nEnter dummy Razorpay Payment ID`
+      const paymentId = window.prompt(`Mock Razorpay Order Created:\n${payment.razorpayOrderId}\n\nEnter dummy Razorpay Payment ID`
       );
       if (!paymentId) return;
 
@@ -578,7 +577,7 @@ export const ShipmentsPage = () => {
                     </td>
                     <td style={{ minWidth: 230 }}>
                       <div
-                        style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(10px, 1fr))', gap: 8, width: '100%', alignItems: 'stretch', }}>
+                        style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(10px, 1fr))', gap: 8, width: '100%', alignItems: 'center', }}>
                         <button
                           className="ss-btn ss-btn-outline"
                           onClick={(e) => {
