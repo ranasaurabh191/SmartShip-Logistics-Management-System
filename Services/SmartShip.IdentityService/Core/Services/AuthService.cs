@@ -286,4 +286,51 @@ public class AuthService : IAuthService
         return new { message = "Admin fixed successfully." };
 
     }
+    public async Task<(string token, int userId, string role)> FindOrCreateOAuthUserAsync(
+    string email, string name, string provider)
+    {
+        _logger.LogInformation("OAuth login via {Provider} for email: {Email}", provider, email);
+
+        var user = await _userRepository.GetByEmailAsync(email);
+
+        if (user == null)
+        {
+            _logger.LogInformation("Creating new user via {Provider} OAuth: {Email}", provider, email);
+
+            user = new User
+            {
+                Name = name,
+                Email = email,
+                Phone = "",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
+                Role = "CUSTOMER",
+                IsActive = true,
+                CreatedAt = DateTime.Now
+            };
+
+            await _userRepository.AddAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            await _publisher.Publish(new UserCreatedEvent
+            {
+                UserId = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                Role = user.Role,
+                CreatedAt = user.CreatedAt
+            });
+
+            _logger.LogInformation("UserCreatedEvent published for OAuth user: {Email}", email);
+        }
+        else
+        {
+            if (!user.IsActive)
+                throw new UnauthorizedAccessException("User account is inactive.");
+
+            _logger.LogInformation("Existing user logged in via {Provider} OAuth: {Email}", provider, email);
+        }
+
+        var token = GenerateToken(user);
+        return (token, user.Id, user.Role);
+    }
 }

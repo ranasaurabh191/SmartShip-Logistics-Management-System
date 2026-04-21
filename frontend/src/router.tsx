@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { OAuthCallbackPage } from './features/auth/OAuthCallbackPage';
 
 // Layouts
 import { RootLayout } from './layouts/RootLayout';
@@ -38,6 +39,8 @@ export const router = createBrowserRouter([
         children: [
           { path: 'login', element: <LoginPage /> },
           { path: 'signup', element: <SignupPage /> },
+          { path: 'callback', element: <OAuthCallbackPage /> },
+
         ],
       },
       {

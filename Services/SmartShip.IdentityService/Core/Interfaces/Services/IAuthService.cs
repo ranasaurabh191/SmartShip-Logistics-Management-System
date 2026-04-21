@@ -9,4 +9,5 @@ public interface IAuthService
     Task<object> FixAdminAsync();
     Task<object> RequestSignupOtpAsync(SignupOtpRequest request);  
     Task<OtpResponse> VerifySignupOtpAsync(VerifyOtpRequest request);
+    Task<(string token, int userId, string role)> FindOrCreateOAuthUserAsync(string email, string name, string provider);
 }

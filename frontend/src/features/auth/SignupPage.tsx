@@ -207,8 +207,8 @@ export const SignupPage = () => {
       )}
 
       <div style={{ marginTop: 20, textAlign: 'center' }}>
-        <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>Already registered ? </span>
-        <Link to="/auth/login" style={{ fontSize: 12, color: 'var(--color-accent)', fontFamily: 'Rajdhani, sans-serif', fontWeight: 600, letterSpacing: '0.08em', textDecoration: 'none' }}>
+        <span style={{ fontSize: 14, color: 'var(--color-text-muted)' }}>Already registered ? </span>
+        <Link to="/auth/login" style={{ fontSize: 14, color: 'var(--color-accent)', fontFamily: 'Rajdhani, sans-serif', fontWeight: 900, letterSpacing: '0.08em', textDecoration: 'none' }}>
           SIGN IN
         </Link>
       </div>

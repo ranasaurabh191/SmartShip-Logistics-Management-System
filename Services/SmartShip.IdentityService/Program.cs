@@ -135,7 +135,31 @@ try
             ValidIssuer = jwt["Issuer"],
             ValidAudience = jwt["Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]!))
-        }); 
+        })
+
+    .AddCookie("ExternalCookie", options =>
+    {
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+    })
+    .AddGoogle("Google", options =>
+    {
+        options.SignInScheme = "ExternalCookie";
+        options.ClientId = builder.Configuration["OAuth:Google:ClientId"]!;
+        options.ClientSecret = builder.Configuration["OAuth:Google:ClientSecret"]!;
+        options.CallbackPath = "/signin-google";
+        options.SaveTokens = true;
+    })
+    .AddGitHub("GitHub", options =>
+    {
+        options.SignInScheme = "ExternalCookie";
+        options.ClientId = builder.Configuration["OAuth:GitHub:ClientId"]!;
+        options.ClientSecret = builder.Configuration["OAuth:GitHub:ClientSecret"]!;
+        options.CallbackPath = "/signin-github";
+        options.Scope.Add("user:email");
+        options.SaveTokens = true;
+    }); 
 
     builder.Services.AddAuthorization();
 
