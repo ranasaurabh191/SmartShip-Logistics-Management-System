@@ -21,7 +21,7 @@ public class DownstreamServicesHealthCheck : IHealthCheck
     public async Task<HealthCheckResult> CheckHealthAsync(
         HealthCheckContext context,
         CancellationToken cancellationToken = default)
-    {
+        {
         var services = _configuration
             .GetSection("ServiceHealthChecks")
             .GetChildren()

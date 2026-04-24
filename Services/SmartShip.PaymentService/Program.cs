@@ -16,6 +16,7 @@ using SmartShip.PaymentService.Infrastructure.Repositories;
 using System.Text;
 using RabbitMQ.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using SmartShip.PaymentService.Domain.Entities;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -26,6 +27,7 @@ try
     Log.Information(" --> Starting PaymentService...");
 
     var builder = WebApplication.CreateBuilder(args);
+    builder.Services.Configure<RazorpaySettings>(builder.Configuration.GetSection("Razorpay"));
 
     builder.Host.UseSerilog((ctx, lc) => lc
         .ReadFrom.Configuration(ctx.Configuration)

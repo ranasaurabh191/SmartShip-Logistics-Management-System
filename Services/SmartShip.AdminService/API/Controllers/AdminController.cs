@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace SmartShip.AdminService.API.Controllers;
 
-[ApiController]
+[ApiController]//tells that this class is an API controller and enables features like automatic model validation and binding source inference.
 [Route("api/admin")]
 [Authorize(Roles = "ADMIN")]
 public class AdminController : ControllerBase

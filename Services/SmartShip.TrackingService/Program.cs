@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using RabbitMQ.Client;
 using Serilog;
@@ -222,6 +223,12 @@ try
             }
         }
     }
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "Uploads")),
+        RequestPath = "/uploads"
+    });
     app.UseSwagger(); app.UseSwaggerUI();
     app.UseCors("AllowAll");
     app.UseAuthentication(); 

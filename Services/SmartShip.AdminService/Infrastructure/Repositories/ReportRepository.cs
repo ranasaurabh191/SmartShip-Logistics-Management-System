@@ -13,7 +13,7 @@ public class ReportRepository : IReportRepository
 
     public ReportRepository(AdminDbContext context)
     {
-        _context = context;
+        _context = context;// Store injected DbContext into private field for later DB operations
     }
 
     public async Task<Report> AddAsync(Report report)

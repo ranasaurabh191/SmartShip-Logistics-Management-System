@@ -19,7 +19,7 @@ public class HubRepository : IHubRepository
     {
         var query = _context.Hubs.AsQueryable();
 
-        if (req.IsActive.HasValue)
+        if (req.IsActive.HasValue)//bool?
             query = query.Where(h => h.IsActive == req.IsActive.Value);
 
         if (!string.IsNullOrWhiteSpace(req.City))
@@ -68,7 +68,7 @@ public class HubRepository : IHubRepository
     public Task UpdateAsync(Hub hub)
     {
         _context.Hubs.Update(hub);
-        return Task.CompletedTask;
+        return Task.CompletedTask;//marks
     }
 
     public Task DeleteAsync(Hub hub)

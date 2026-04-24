@@ -104,7 +104,7 @@ try
         });
     });
 
-    builder.Services.AddOcelot(builder.Configuration);
+    builder.Services.AddOcelot(builder.Configuration);//registers
     builder.Services.AddSwaggerForOcelot(builder.Configuration);
 
     var app = builder.Build();
@@ -177,7 +177,7 @@ try
 
     app.UseWhen(
         ctx => ctx.Request.Path.StartsWithSegments("/gateway"),
-        ocelotBranch => ocelotBranch.UseOcelot().Wait()
+        ocelotBranch => ocelotBranch.UseOcelot().Wait()//runs 
     );
 
     app.Run();

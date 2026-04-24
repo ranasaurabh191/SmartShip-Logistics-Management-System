@@ -60,4 +60,8 @@ public class DocumentRepository : IDocumentRepository
             PageSize = req.PageSize
         };
     }
+    public async Task<Document?> GetByIdAsync(int id)
+    {
+        return await _context.Documents.FindAsync(id);
+    }
 }

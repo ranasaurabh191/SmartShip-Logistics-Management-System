@@ -324,4 +324,10 @@ public class TrackingService : ITrackingService
             throw;
         }
     }
+    public async Task<Document?> GetDocumentByIdAsync(int documentId)
+    {
+        return await _documentRepository.GetByIdAsync(documentId);
+    }
+    public async Task<DeliveryProof?> GetDeliveryProofEntityAsync(int shipmentId)
+    => await _deliveryProofRepository.GetByShipmentIdAsync(shipmentId);
 }

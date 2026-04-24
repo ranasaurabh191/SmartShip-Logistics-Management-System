@@ -33,9 +33,33 @@ public class TrackingController : ControllerBase
     }
 
     [HttpGet("delivery-proof/{shipmentId}")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize]
     public async Task<IActionResult> GetDeliveryProof(int shipmentId) => Ok(await _service.GetDeliveryProofAsync(shipmentId));
+    [HttpGet("delivery-proof/{shipmentId}/signature")]
+    [Authorize]
+    public async Task<IActionResult> GetSignatureImage(int shipmentId)
+    {
+        var proof = await _service.GetDeliveryProofEntityAsync(shipmentId);
+        if (proof == null || proof.SignatureImagePath == null) return NotFound();
+        if (!System.IO.File.Exists(proof.SignatureImagePath)) return NotFound();
 
+        var ext = Path.GetExtension(proof.SignatureImagePath).ToLower();
+        var mime = ext == ".png" ? "image/png" : "image/jpeg";
+        return File(await System.IO.File.ReadAllBytesAsync(proof.SignatureImagePath), mime);
+    }
+
+    [HttpGet("delivery-proof/{shipmentId}/photo")]
+    [Authorize]
+    public async Task<IActionResult> GetDeliveryPhoto(int shipmentId)
+    {
+        var proof = await _service.GetDeliveryProofEntityAsync(shipmentId);
+        if (proof == null || proof.PhotoPath == null) return NotFound();
+        if (!System.IO.File.Exists(proof.PhotoPath)) return NotFound();
+
+        var ext = Path.GetExtension(proof.PhotoPath).ToLower();
+        var mime = ext == ".png" ? "image/png" : "image/jpeg";
+        return File(await System.IO.File.ReadAllBytesAsync(proof.PhotoPath), mime);
+    }
 
     [HttpPost("delivery-proof")]
     [Authorize(Roles = "ADMIN")]
@@ -83,7 +107,31 @@ public class TrackingController : ControllerBase
         }
 
     [HttpGet("documents/{shipmentId}")]
-    [Authorize(Roles = "ADMIN")]
+    [Authorize]
     public async Task<IActionResult> GetDocuments(
         int shipmentId, [FromQuery] DocumentPagedRequest request) => Ok(await _service.GetDocumentsPagedAsync(shipmentId, request));
+
+    [HttpGet("document/file/{documentId}")]
+    public async Task<IActionResult> DownloadDocument(int documentId)
+    {
+        var doc = await _service.GetDocumentByIdAsync(documentId);
+        if (doc == null) return NotFound("Document not found.");
+
+        if (!System.IO.File.Exists(doc.FilePath))
+            return NotFound("File not found on disk.");
+
+        var ext = Path.GetExtension(doc.FileName).ToLower();
+        var contentType = ext switch
+        {
+            ".pdf" => "application/pdf",
+            ".png" => "image/png",
+            ".jpg" => "image/jpeg",
+            ".jpeg" => "image/jpeg",
+            _ => "application/octet-stream"
+        };
+
+        var fileBytes = await System.IO.File.ReadAllBytesAsync(doc.FilePath);
+        return File(fileBytes, contentType, doc.FileName);
+    }
 }
+
