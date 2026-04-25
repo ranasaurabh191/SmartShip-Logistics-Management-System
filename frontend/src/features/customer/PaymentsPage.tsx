@@ -114,11 +114,6 @@ export const PaymentsPage = () => {
     rzp.open();
   };
 
-  const openVerifyModal = (payment: Payment) => {
-    setSelectedPayment(payment);
-    setVerifyForm({ razorpayPaymentId: '', signature: '' });
-    setVerifyModalOpen(true);
-  };
 
   const closeVerifyModal = () => {
     setVerifyModalOpen(false);
@@ -207,14 +202,6 @@ export const PaymentsPage = () => {
                             Pay Now
                           </button>
 
-                          {/* Fallback — manual verify if checkout already done */}
-                          <button
-                            className="ss-btn"
-                            style={{ background: 'transparent', border: '1px solid #ccc', color: '#555' }}
-                            onClick={() => openVerifyModal(p)}
-                          >
-                            Retry Verify
-                          </button>
                         </div>
                       ) : (
                         '—'

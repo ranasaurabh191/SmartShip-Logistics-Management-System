@@ -224,7 +224,7 @@ export const ShipmentsPage = () => {
             shipmentId,
             paymentMethod: 'Online',
           });
-          alert('✅ Payment verified successfully!');
+          alert(' Payment verified successfully!');
           await fetchShipments();
         } catch (err: any) {
           alert(
@@ -281,16 +281,6 @@ export const ShipmentsPage = () => {
       setBusyShipmentId(null);
     }
   };
-
-  // For already-created pending orders (retry from table)
-  const openRetryVerifyModal = async (e: React.MouseEvent, shipment: ShipmentRow) => {
-    e.stopPropagation();
-    const payment = paymentsByShipment[shipment.id];
-    if (!payment?.razorpayOrderId) { alert('No pending online payment found.'); return; }
-    setVerifyPayment(payment); setSelectedShipment(shipment);
-    setVerifyForm({ razorpayPaymentId: '', signature: '' }); setVerifyModalOpen(true);
-  };
-
   // For already-created pending orders — re-open Razorpay checkout
   const handlePayExisting = (e: React.MouseEvent, shipment: ShipmentRow) => {
     e.stopPropagation();
@@ -467,16 +457,11 @@ export const ShipmentsPage = () => {
                       {/* Existing unpaid online order → Pay Now (re-open checkout) + Retry Verify */}
                       {!isAdmin && hasUnpaidOnline && s.status === 'Draft' && (
                         <>
-                          <button className="ss-btn"
-                            style={{ gridColumn: '1 / -1', padding: '6px 0', textAlign: 'center' }}
+                          <button className="ss-btn "
+                            style={{ padding: '5px 6px', textAlign: 'center' }}
                             disabled={busyShipmentId === s.id}
                             onClick={e => handlePayExisting(e, s)}>
                             Pay Now
-                          </button>
-                          <button className="ss-btn ss-btn-outline"
-                            style={{ gridColumn: '1 / -1', padding: '5px 0', textAlign: 'center', fontSize: 11 }}
-                            onClick={e => openRetryVerifyModal(e, s)}>
-                            Retry Verify
                           </button>
                         </>
                       )}

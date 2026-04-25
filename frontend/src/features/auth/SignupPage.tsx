@@ -122,7 +122,7 @@ export const SignupPage = () => {
               border: `1px solid ${step === s ? 'var(--color-accent)' : step === 'otp' && s === 'register' ? 'var(--color-success)' : 'var(--color-border)'}`,
               color: step === s || (step === 'otp' && s === 'register') ? '#fff' : 'var(--color-text-dim)',
             }}>{step === 'otp' && s === 'register' ? '✓' : i + 1}</div>
-            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: step === s ? 'var(--color-accent)' : 'var(--color-text-dim)' }}>
+            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 900, letterSpacing: '0.1em', textTransform: 'uppercase', color: step === s ? 'var(--color-accent)' : 'var(--color-text-dim)' }}>
               {s === 'register' ? 'Details' : 'Verify'}
             </span>
             {i === 0 && <span style={{ color: 'var(--color-border)', margin: '0 4px' }}>—</span>}
@@ -160,7 +160,7 @@ export const SignupPage = () => {
         <form onSubmit={handleRequestOtp} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {registerFields.map(f => (
             <div key={f.name}>
-              <label style={{ display: 'block', fontFamily: 'Rajdhani, sans-serif', fontSize: 10, fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-muted)', marginBottom: 6 }}>
+              <label style={{ display: 'block', fontFamily: 'Rajdhani, sans-serif', fontSize: 10, fontWeight: 900, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#ffffffbf', marginBottom: 6 }}>
                 {f.label}
               </label>
               <input

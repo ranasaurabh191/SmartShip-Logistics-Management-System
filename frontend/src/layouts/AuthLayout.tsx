@@ -164,7 +164,7 @@ export const AuthLayout = () => {
         }
         .auth-stat-label {
           font-family: 'Rajdhani', sans-serif;
-          font-size: 9px;
+          font-size: 10px;
           font-weight: 600;
           letter-spacing: 0.15em;
           text-transform: uppercase;
