@@ -222,6 +222,7 @@ pipeline {
             echo 'SmartShip selective CI/CD completed Successfully...'
             dir(PROJECT_DIR) {
                 bat 'docker image prune -f'
+                bat 'docker builder prune -f'
             }
         }
         failure {
