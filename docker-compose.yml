@@ -87,6 +87,7 @@ services:
       - "5003:8080"
     volumes:
       - tracking-logs:/app/logs/tracking
+      - tracking-uploads:/app/Uploads
     environment:
       - ASPNETCORE_ENVIRONMENT=DockerJenkins
       - ASPNETCORE_URLS=http://+:8080
@@ -95,7 +96,7 @@ services:
       sqlserver:
         condition: service_healthy
       rabbitmq:
-        condition: service_healthy
+        condition: service_healthy      
     restart: on-failure
 
   admin-service:
@@ -201,3 +202,4 @@ volumes:
   tracking-logs:
   sqlserver-data:
   rabbitmq-data:
+  tracking-uploads: 
