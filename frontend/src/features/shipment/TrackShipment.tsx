@@ -183,7 +183,7 @@ export const TrackShipment = () => {
             ].map(item => (
               <div key={item.label} className="ss-card" style={{ padding: '14px 16px' }}>
                 <div className="kpi-label" style={{ marginBottom: 4 }}>{item.label}</div>
-                <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 18, fontWeight: 700, color: '#fff' }}>{item.value}</div>
+                <div style={{ fontFamily: 'Roboto, sans-serif', fontSize: 18, fontWeight: 700, color: '#fff' }}>{item.value}</div>
               </div>
             ))}
           </div>
@@ -194,7 +194,7 @@ export const TrackShipment = () => {
               {shipment.senderName && (
                 <div className="ss-card" style={{ padding: '16px 20px' }}>
                   <div className="kpi-label" style={{ marginBottom: 8 }}>Sender</div>
-                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{shipment.senderName}</div>
+                  <div style={{ fontFamily: 'Roboto, sans-serif', fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{shipment.senderName}</div>
                   {shipment.senderPhone && <div style={{ fontSize: 12, color: '#888' }}>📞 {shipment.senderPhone}</div>}
                   {shipment.senderAddress && <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>{shipment.senderAddress}</div>}
                 </div>
@@ -202,7 +202,7 @@ export const TrackShipment = () => {
               {shipment.receiverName && (
                 <div className="ss-card" style={{ padding: '16px 20px' }}>
                   <div className="kpi-label" style={{ marginBottom: 8 }}>Receiver</div>
-                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{shipment.receiverName}</div>
+                  <div style={{ fontFamily: 'Roboto, sans-serif', fontSize: 14, fontWeight: 700, color: '#fff', marginBottom: 4 }}>{shipment.receiverName}</div>
                   {shipment.receiverPhone && <div style={{ fontSize: 12, color: '#888' }}>📞 {shipment.receiverPhone}</div>}
                   {shipment.receiverAddress && <div style={{ fontSize: 12, color: '#666', marginTop: 4 }}>{shipment.receiverAddress}</div>}
                 </div>
@@ -240,7 +240,7 @@ export const TrackShipment = () => {
                     >
                       <div>
                         <div style={{
-                          fontFamily: 'Orbitron, monospace', fontSize: 11,
+                          fontFamily: 'Roboto, sans-serif', fontSize: 11,
                           fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
                           color: 'var(--color-success)'
                         }}>
@@ -253,11 +253,11 @@ export const TrackShipment = () => {
                     </div>
                   )}
                   <div>
-                    <h2 style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>
+                    <h2 style={{ fontFamily: 'Roboto, sans-serif', fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#fff', marginBottom: 24 }}>
                       Hub Transition Timeline
                     </h2>
                     {events.length === 0 ? (
-                      <div style={{ color: 'var(--color-text-muted)', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', fontSize: 11, padding: '20px 0', textAlign: 'center' }}>
+                      <div style={{ color: 'var(--color-text-muted)', fontFamily: 'Roboto, sans-serif', textTransform: 'uppercase', fontSize: 11, padding: '20px 0', textAlign: 'center' }}>
                         No tracking events yet.
                       </div>
                     ) : (
@@ -276,13 +276,13 @@ export const TrackShipment = () => {
                               }} />
                               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
                                 <div>
-                                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 14, fontWeight: 700, color: '#fff', letterSpacing: '0.04em', marginBottom: 2 }}>
+                                  <div style={{ fontFamily: 'Roboto, sans-serif', fontSize: 14, fontWeight: 700, color: '#fff', letterSpacing: '0.04em', marginBottom: 2 }}>
                                     {evt.hubName}
                                   </div>
                                   <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{evt.description}</div>
                                 </div>
                                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                                  <div style={{ fontSize: 12, color: '#d6d6d6', fontFamily: 'Orbitron, monospace', letterSpacing: '0.08em' }}>
+                                  <div style={{ fontSize: 12, color: '#d6d6d6', fontFamily: 'Roboto, sans-serif', letterSpacing: '0.08em' }}>
                                     {evt.timestamp ? new Date(evt.timestamp).toLocaleString('en-IN') : ''}
                                   </div>
                                   <span className={`ss-badge ${isActive ? 'glow' : isDone ? 'success' : 'muted'}`} style={{ marginTop: 4, display: 'inline-block' }}>

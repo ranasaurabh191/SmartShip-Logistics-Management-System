@@ -1,30 +1,13 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SmartShip.PaymentService.Core.DTOs;
-using SmartShip.PaymentService.Core.Interfaces.Persistence;
-using SmartShip.PaymentService.Core.Interfaces.Repositories;
 using SmartShip.PaymentService.Domain.Entities;
 using SmartShip.PaymentService.Domain.Entities.Enums;
 using SmartShip.PaymentService.Tests.Helpers;
-using SmartShip.PaymentService.Tests.Mocks;
-using PaymentSvc = SmartShip.PaymentService.Core.Services.PaymentService;
 namespace SmartShip.PaymentService.Tests.UnitTests.Services;
 
-public class PaymentServiceTests_GetStatus
-{
-    private readonly Mock<IPaymentRepository> _paymentRepo = new();
-    private readonly Mock<ISagaCorrelationRepository> _sagaRepo = new();
-    private readonly Mock<IUnitOfWork> _uow = new();
-    private readonly MockPublishEndpoint _publisher = new();
-
-    private PaymentSvc BuildService() =>
-        new(_paymentRepo.Object, _sagaRepo.Object, _uow.Object, _publisher,
-            NullLogger<PaymentSvc>.Instance,
-            MockHttpClientFactory.WithNotFound(),
-            MockHttpContext.WithUserId(29));
-
-    private ShipmentPayment MakePayment(
+public class PaymentServiceTests_GetStatus : PaymentServiceTestBase
+{    private ShipmentPayment MakePayment(
         PaymentStatus status = PaymentStatus.Paid,
         PaymentMethod method = PaymentMethod.Online) => new()
         {

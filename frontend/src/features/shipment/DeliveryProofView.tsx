@@ -113,7 +113,7 @@ export const DeliveryProofView = ({ shipmentId }: Props) => {
           <div key={item.label} className="kpi-card" style={{ padding: '14px 16px' }}>
             <div style={labelStyle}>{item.label}</div>
             <div style={{ fontSize: 14, fontWeight: 700, color: '#fff',
-              fontFamily: 'Orbitron, monospace' }}>{item.value}</div>
+              fontFamily: 'Roboto, sans-serif' }}>{item.value}</div>
           </div>
         ))}
 

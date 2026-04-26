@@ -2,35 +2,21 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SmartShip.PaymentService.Core.DTOs;
-using SmartShip.PaymentService.Core.Interfaces.Persistence;
-using SmartShip.PaymentService.Core.Interfaces.Repositories;
 using SmartShip.PaymentService.Domain.Entities;
 using SmartShip.PaymentService.Domain.Entities.Enums;
 using SmartShip.PaymentService.Tests.Helpers;
-using SmartShip.PaymentService.Tests.Mocks;
 using SmartShip.Shared.Events;
 using PaymentSvc = SmartShip.PaymentService.Core.Services.PaymentService;
 
 namespace SmartShip.PaymentService.Tests.UnitTests.Services;
 
-public class PaymentServiceTests_VerifyPayment
+public class PaymentServiceTests_VerifyPayment : PaymentServiceTestBase
 {
-    private readonly Mock<IPaymentRepository> _paymentRepo = new();
-    private readonly Mock<ISagaCorrelationRepository> _sagaRepo = new();
-    private readonly Mock<IUnitOfWork> _uow = new();
-    private readonly MockPublishEndpoint _publisher = new();
-
-    private const int UserId = 29;
     private const int ShipmentId = 26;
     private const string OrderId = "order_MOCK_123456";
     private readonly Guid _correlationId = Guid.NewGuid();
 
-    private PaymentSvc BuildService() =>
-        new(_paymentRepo.Object, _sagaRepo.Object, _uow.Object, _publisher,
-            NullLogger<PaymentSvc>.Instance,
-            MockHttpClientFactory.WithNotFound(),
-            MockHttpContext.WithUserId(UserId));
-
+  
     private ShipmentPayment DefaultPayment() => new()
     {
         Id = 1,
@@ -208,11 +194,7 @@ public class PaymentServiceTests_VerifyPayment
     [Fact]
     public async Task VerifyPaymentAsync_NoToken_ThrowsUnauthorizedAccessException()
     {
-        var service = new PaymentSvc(
-            _paymentRepo.Object, _sagaRepo.Object, _uow.Object, _publisher,
-            NullLogger<PaymentSvc>.Instance,
-            MockHttpClientFactory.WithNotFound(),
-            MockHttpContext.Unauthenticated());
+        var service = BuildUnauthenticatedService();
 
         var act = async () => await service.VerifyPaymentAsync(ValidRequest());
         await act.Should().ThrowAsync<UnauthorizedAccessException>();

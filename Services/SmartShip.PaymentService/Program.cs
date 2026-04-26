@@ -2,21 +2,22 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+using RabbitMQ.Client;
 using Serilog;
 using SmartShip.PaymentService.API.Middleware;
-using SmartShip.PaymentService.Core.Interfaces.Services;
-using SmartShip.PaymentService.Core.Services;
-using SmartShip.PaymentService.Infrastructure.Data;
-using SmartShip.PaymentService.Infrastructure.Messaging.Consumers;
 using SmartShip.PaymentService.Core.Interfaces.Persistence;
 using SmartShip.PaymentService.Core.Interfaces.Repositories;
+using SmartShip.PaymentService.Core.Interfaces.Services;
+using SmartShip.PaymentService.Core.Services;
+using SmartShip.PaymentService.Domain.Entities;
+using SmartShip.PaymentService.Infrastructure.Data;
+using SmartShip.PaymentService.Infrastructure.Messaging.Consumers;
 using SmartShip.PaymentService.Infrastructure.Persistence;
 using SmartShip.PaymentService.Infrastructure.Repositories;
+using SmartShip.PaymentService.Infrastructure.Services;
 using System.Text;
-using RabbitMQ.Client;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using SmartShip.PaymentService.Domain.Entities;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -53,7 +54,7 @@ try
                 });
             };
         });
-
+    builder.Services.AddScoped<IRazorpayClient, RazorpayClientWrapper>();
     builder.Services.AddEndpointsApiExplorer();
 
     builder.Services.AddSwaggerGen(options =>

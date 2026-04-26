@@ -352,17 +352,17 @@ export const CreateShipmentWizard = () => {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border)', borderRadius: 4, padding: 24 }}>
-          <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', marginBottom: 16 }}>
+          <div style={{ fontFamily: 'Roboto, sans-serif', fontSize: 13, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', marginBottom: 16 }}>
             Shipment Summary
           </div>
           {items.map(item => (
             <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 0', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-              <span style={{ fontSize: 12, color: 'var(--color-text-muted)', fontFamily: 'Orbitron, monospace', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{item.label}</span>
-              <span style={{ fontSize: 13, color: '#fff', fontFamily: 'Orbitron, monospace', fontWeight: 600 }}>{item.value}</span>
+              <span style={{ fontSize: 12, color: 'var(--color-text-muted)', fontFamily: 'Roboto, sans-serif', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{item.label}</span>
+              <span style={{ fontSize: 13, color: '#fff', fontFamily: 'Roboto, sans-serif', fontWeight: 600 }}>{item.value}</span>
             </div>
           ))}
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 0', marginTop: 4 }}>
-            <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff' }}>Estimated Cost</span>
+            <span style={{ fontFamily: 'Roboto, sans-serif', fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff' }}>Estimated Cost</span>
             <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 18, fontWeight: 700, color: rateError ? 'var(--color-warning)' : 'var(--color-accent)' }}>
               {rateLoading ? 'CALCULATING...' : estimatedRate !== null ? `₹${estimatedRate.toLocaleString('en-IN')}` : '—'}
             </span>
@@ -493,7 +493,7 @@ export const CreateShipmentWizard = () => {
                 {paymentResponse.razorpayOrderId && (
                   <div style={{ gridColumn: '1 / -1' }}>
                     <div className="kpi-label">Razorpay Order ID</div>
-                    <div style={{ fontFamily: 'monospace', color: 'var(--color-text-muted)', wordBreak: 'break-all', fontSize: 12 }}>
+                    <div style={{ fontFamily: 'Orbitron, monospace', color: 'var(--color-text-muted)', wordBreak: 'break-all', fontSize: 12 }}>
                       {paymentResponse.razorpayOrderId}
                     </div>
                   </div>
@@ -501,7 +501,7 @@ export const CreateShipmentWizard = () => {
                 {paymentResponse.razorpayPaymentId && (
                   <div style={{ gridColumn: '1 / -1' }}>
                     <div className="kpi-label">Razorpay Payment ID</div>
-                    <div style={{ fontFamily: 'monospace', color: 'var(--color-success)', wordBreak: 'break-all', fontSize: 12 }}>
+                    <div style={{ fontFamily: 'Roboto, sans-serif', color: 'var(--color-success)', wordBreak: 'break-all', fontSize: 12 }}>
                       {paymentResponse.razorpayPaymentId}
                     </div>
                   </div>

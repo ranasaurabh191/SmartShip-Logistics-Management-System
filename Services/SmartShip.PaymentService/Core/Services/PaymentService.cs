@@ -1,6 +1,4 @@
 ﻿using MassTransit;
-using Microsoft.Extensions.Options;
-using Razorpay.Api;
 using SmartShip.PaymentService.Core.DTOs;
 using SmartShip.PaymentService.Core.Interfaces.Persistence;
 using SmartShip.PaymentService.Core.Interfaces.Repositories;
@@ -8,8 +6,6 @@ using SmartShip.PaymentService.Core.Interfaces.Services;
 using SmartShip.PaymentService.Domain.Entities;
 using SmartShip.PaymentService.Domain.Entities.Enums;
 using SmartShip.Shared.Events;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace SmartShip.PaymentService.Core.Services;
 
@@ -22,7 +18,7 @@ public class PaymentService : IPaymentService
     private readonly ILogger<PaymentService> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly RazorpaySettings _razorpay;
+    private readonly IRazorpayClient _razorpayClient;
 
     public PaymentService(
         IPaymentRepository paymentRepository,
@@ -32,7 +28,7 @@ public class PaymentService : IPaymentService
         ILogger<PaymentService> logger,
         IHttpClientFactory httpClientFactory,
         IHttpContextAccessor httpContextAccessor,
-        IOptions<RazorpaySettings> razorpayOptions)
+        IRazorpayClient razorpayClient)
     {
         _paymentRepository = paymentRepository;
         _sagaCorrelationRepository = sagaCorrelationRepository;
@@ -41,7 +37,7 @@ public class PaymentService : IPaymentService
         _logger = logger;
         _httpClientFactory = httpClientFactory;
         _httpContextAccessor = httpContextAccessor;
-        _razorpay = razorpayOptions.Value;
+        _razorpayClient = razorpayClient;
     }
     private HttpClient CreateInternalClient(string clientName)
     {
@@ -52,14 +48,6 @@ public class PaymentService : IPaymentService
             httpClient.DefaultRequestHeaders.Add("Authorization", token);
 
         return httpClient;
-    }
-    private bool VerifyRazorpaySignature(string orderId, string paymentId, string signature)
-    {
-        var payload = $"{orderId}|{paymentId}";
-        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(_razorpay.KeySecret));
-        var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(payload));
-        var generated = BitConverter.ToString(hash).Replace("-", "").ToLower();
-        return generated == signature;
     }
 
 
@@ -172,30 +160,16 @@ public class PaymentService : IPaymentService
         {
             try
             {
-                var client = new RazorpayClient(_razorpay.KeyId, _razorpay.KeySecret);
-
-                var amountInPaise = (int)(shipment.ShippingRate * 100);
-
-                var options = new Dictionary<string, object>
-                {
-                    { "amount", amountInPaise },
-                    { "currency", "INR" },
-                    { "receipt", $"receipt_shipment_{request.ShipmentId}" },
-                    { "payment_capture", 1 }
-                };
-
-                var order = client.Order.Create(options);
-                string razorpayOrderId = (string)order["id"].ToString();
-
-                _logger.LogInformation("Razorpay order created: {OrderId} for Shipment {ShipmentId}", razorpayOrderId, request.ShipmentId);
-
+                var razorpayOrderId = _razorpayClient.CreateOrder(shipment.ShippingRate, request.ShipmentId);
                 payment.RazorpayOrderId = razorpayOrderId;
+                _logger.LogInformation("Razorpay order created: {OrderId}", razorpayOrderId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to create Razorpay order for Shipment {ShipmentId}", request.ShipmentId);
                 throw new InvalidOperationException("Failed to initiate payment. Please try again.");
             }
+
 
             await _paymentRepository.AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
@@ -279,11 +253,7 @@ public class PaymentService : IPaymentService
         if (payment.PaymentStatus == PaymentStatus.Paid)
             throw new InvalidOperationException("Payment already verified and completed.");
 
-        var isSignatureValid = VerifyRazorpaySignature(
-            request.RazorpayOrderId,
-            request.RazorpayPaymentId,
-            request.Signature
-        );
+        var isSignatureValid = _razorpayClient.VerifySignature(request.RazorpayOrderId, request.RazorpayPaymentId, request.Signature);
 
         if (!isSignatureValid)
         {

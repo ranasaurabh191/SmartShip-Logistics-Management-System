@@ -227,13 +227,13 @@ export const DocumentUpload = ({ shipmentId, trackingNumber }: Props) => {
       <div>
         <div style={sectionLabel}>Uploaded Documents</div>
         {loadingDocs ? (
-          <div style={{ color: '#555', fontSize: 12, fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '16px 0' }}>
+          <div style={{ color: '#555', fontSize: 12, fontFamily: 'Roboto, sans-serif', textTransform: 'uppercase', letterSpacing: '0.1em', padding: '16px 0' }}>
             LOADING...
           </div>
         ) : docs.length === 0 ? (
           <div style={{ padding: '20px 0', textAlign: 'center', color: '#555' }}>
             <div style={{ fontSize: 20, marginBottom: 6 }}>📂</div>
-            <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+            <div style={{ fontFamily: 'Roboto, sans-serif', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
               No documents uploaded yet
             </div>
           </div>

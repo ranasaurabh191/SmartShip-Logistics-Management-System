@@ -1,33 +1,17 @@
 ﻿using FluentAssertions;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using SmartShip.PaymentService.Core.DTOs;
-using SmartShip.PaymentService.Core.Interfaces.Persistence;
-using SmartShip.PaymentService.Core.Interfaces.Repositories;
 using SmartShip.PaymentService.Domain.Entities;
 using SmartShip.PaymentService.Domain.Entities.Enums;
 using SmartShip.PaymentService.Tests.Helpers;
-using SmartShip.PaymentService.Tests.Mocks;
 using SmartShip.Shared.Events;
-using PaymentSvc = SmartShip.PaymentService.Core.Services.PaymentService;
 namespace SmartShip.PaymentService.Tests.UnitTests.Services;
 
-public class PaymentServiceTests_CreateOrder
+public class PaymentServiceTests_CreateOrder : PaymentServiceTestBase
 {
-    private readonly Mock<IPaymentRepository> _paymentRepo = new();
-    private readonly Mock<ISagaCorrelationRepository> _sagaRepo = new();
-    private readonly Mock<IUnitOfWork> _uow = new();
-    private readonly MockPublishEndpoint _publisher = new();
-
-    private const int UserId = 29;
     private const int ShipmentId = 26;
     private readonly Guid _correlationId = Guid.NewGuid();
 
-    private PaymentSvc BuildService(IHttpClientFactory httpClientFactory) =>
-        new(_paymentRepo.Object, _sagaRepo.Object, _uow.Object, _publisher,
-            NullLogger<PaymentSvc>.Instance,
-            httpClientFactory,
-            MockHttpContext.WithUserId(UserId));
 
     private ShipmentDTOs DefaultShipment() => new()
     {
@@ -178,11 +162,7 @@ public class PaymentServiceTests_CreateOrder
     [Fact]
     public async Task CreateOrderAsync_NoToken_ThrowsUnauthorizedAccessException()
     {
-        var service = new PaymentSvc(
-            _paymentRepo.Object, _sagaRepo.Object, _uow.Object, _publisher,
-            NullLogger<PaymentSvc>.Instance,
-            MockHttpClientFactory.WithResponse(DefaultShipment()),
-            MockHttpContext.Unauthenticated());
+        var service = BuildUnauthenticatedService(MockHttpClientFactory.WithResponse(DefaultShipment()));
 
         var act = async () => await service.CreateOrderAsync(new CreateOrderRequest(ShipmentId, PaymentMethod.Online));
 
