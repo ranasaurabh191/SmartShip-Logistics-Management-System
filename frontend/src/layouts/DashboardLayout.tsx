@@ -1,4 +1,4 @@
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useAuthStore } from '../store/useAuthStore';
@@ -87,13 +87,12 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
             const isActive = location.pathname === item.path;
             return (
               <div
-                
+                key={item.path}
                 className={`sidebar-item ${isActive ? 'active' : ''}`}
                 onClick={() => navigate(item.path)}
               >
                 <span style={{ fontSize: 18, opacity: 0.7 }}>{item.icon}</span>
                 <span>{item.label}</span>
-                
               </div>
             );
           })}
@@ -135,7 +134,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
             letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-muted)',
           }}>
             {location.pathname.split('/').filter(Boolean).map((seg, i, arr) => (
-              <span key={i}>
+              <span key={seg}>
                 <span style={{ color: i === arr.length - 1 ? 'var(--color-text)' : undefined }}>
                   {seg.toUpperCase()}
                 </span>

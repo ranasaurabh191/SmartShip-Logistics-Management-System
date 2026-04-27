@@ -170,6 +170,18 @@ try
             name: "rabbitmq",
             failureStatus: HealthStatus.Unhealthy,
             tags: new[] { "messaging" });
+    builder.Services.AddHttpClient("Ollama", client =>
+    {
+        client.Timeout = TimeSpan.FromSeconds(60); 
+    });
+    builder.Services.AddScoped<IChatService, ChatService>();
+    builder.Services.AddHttpClient<IShipmentClient, ShipmentClient>(client =>
+    {
+        client.BaseAddress = new Uri(
+            builder.Configuration["ServiceUrls:ShipmentService"]
+            ?? "http://localhost:5002/");
+    });
+    builder.Services.AddHttpContextAccessor();
 
     var app = builder.Build();
  

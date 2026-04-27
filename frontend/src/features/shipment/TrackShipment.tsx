@@ -1,4 +1,3 @@
-// features/shipment/TrackShipment.tsx
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiClient } from '../../core/api/axios';
@@ -6,6 +5,7 @@ import { DocumentUpload } from './DocumentUpload';
 import { DeliveryProofView } from './DeliveryProofView';
 import { DocumentsReadOnly } from './DocumentsReadOnly';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useChatStore } from '../../store/useChatStore';
 
 interface TrackingEvent {
   hubName: string;
@@ -73,6 +73,12 @@ export const TrackShipment = () => {
       description: e.description ?? '',
     })),
   });
+  
+  const setShipmentId = useChatStore(state => state.setShipmentId);
+  useEffect(() => {
+    if (shipment?.numericId) setShipmentId(shipment.numericId);
+    return () => setShipmentId(undefined); 
+  }, [shipment?.numericId]);
 
   const normalizeTrackingItems = (data: any): any[] => {
     if (Array.isArray(data)) return data;
@@ -314,6 +320,7 @@ export const TrackShipment = () => {
           </div>
         </>
       )}
+      {/* <ChatWidget shipmentId={shipment?.numericId} /> */}
     </div>
   );
 };
