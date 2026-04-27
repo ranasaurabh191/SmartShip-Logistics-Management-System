@@ -48,8 +48,28 @@ public class ShipmentSummary
     public string ShipmentType { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
     public string PaymentStatus { get; set; } = string.Empty;
-    public decimal WeightKg { get; set; }
-    public string OriginCity { get; set; } = string.Empty;
-    public string DestinationCity { get; set; } = string.Empty;
+    public decimal ShippingRate { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? PickupScheduledAt { get; set; }
+    public DateTime? DeliveredAt { get; set; }
+
+    public AddressDto? SenderAddress { get; set; }
+    public AddressDto? ReceiverAddress { get; set; }
+    public PackageDto? Package { get; set; }
+
+    public string OriginCity => SenderAddress?.City ?? "Unknown";
+    public string DestinationCity => ReceiverAddress?.City ?? "Unknown";
+    public decimal WeightKg => (decimal)(Package?.WeightKg ?? 0);
+}
+
+public class AddressDto
+{
+    public string FullName { get; set; } = string.Empty;
+    public string City { get; set; } = string.Empty;
+    public string State { get; set; } = string.Empty;
+}
+
+public class PackageDto
+{
+    public double WeightKg { get; set; }
 }

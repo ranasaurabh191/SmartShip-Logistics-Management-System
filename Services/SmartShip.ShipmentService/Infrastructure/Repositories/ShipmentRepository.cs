@@ -111,7 +111,11 @@ public class ShipmentRepository : IShipmentRepository
     }
     public async Task<Shipment?> GetByIdAsync(int id)
     {
-        return await _context.Shipments.FindAsync(id);
+        return await _context.Shipments
+            .Include(s => s.SenderAddress)
+            .Include(s => s.ReceiverAddress)
+            .Include(s => s.Package)
+            .FirstOrDefaultAsync(s => s.Id == id);
     }
 
     public async Task<Shipment?> GetByIdAndCustomerAsync(int shipmentId, int customerId)

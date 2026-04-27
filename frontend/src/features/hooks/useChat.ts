@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { apiClient } from '../../core/api/axios';
 
 
@@ -19,20 +19,29 @@ export interface Message {
 
 
 export const useChat = (shipmentId?: number) => {
-    const [messages, setMessages] = useState<Message[]>([{
-        role: 'bot',
-        text: '👋 Hi! I\'m your SmartShip assistant. Ask me about tracking, documents, or delivery. Type **help** for options.',
-        timestamp: new Date(),
-    }]);
-    const [loading, setLoading] = useState(false);
+    const [messages, setMessages] = useState<Message[]>([
+        {
+            role: 'bot',
+            text: '👋 Hi! I\'m your SmartShip assistant. Ask me about tracking, documents, or delivery. Type **help** for options.',
+            timestamp: new Date()
+        }
+    ]);
 
+    const [loading, setLoading] = useState(false);
+    const [activeShipmentId, setActiveShipmentId] = useState<number | undefined>(shipmentId);
 
     const sendMessage = async (
         text: string,
-        activeShipmentId?: number,
-        selectedShipmentId?: number
+        overrideShipmentId?: number,
+        selectedShipmentId?: number,
+        reset?: boolean
     ) => {
         if (!text.trim()) return;
+
+        if (selectedShipmentId) setActiveShipmentId(selectedShipmentId);
+        if (reset) setActiveShipmentId(shipmentId);
+
+        const effectiveShipmentId = selectedShipmentId ?? overrideShipmentId ?? activeShipmentId ?? shipmentId;
 
         const userMsg: Message = { role: 'user', text, timestamp: new Date() };
         setMessages(prev => [...prev, userMsg]);
@@ -41,7 +50,7 @@ export const useChat = (shipmentId?: number) => {
         try {
             const res = await apiClient.post('/chat', {
                 message: text,
-                shipmentId: activeShipmentId ?? shipmentId ?? null,
+                shipmentId: effectiveShipmentId ?? null,
                 selectedShipmentId: selectedShipmentId ?? null,
                 history: messages.slice(-6).map(m => ({ role: m.role, text: m.text })),
             });
@@ -64,13 +73,14 @@ export const useChat = (shipmentId?: number) => {
         }
     };
 
+    const clearChat = useCallback(() => {
+        setMessages([{
+            role: 'bot',
+            text: '👋 Hi! I\'m your SmartShip assistant. Ask me about tracking, documents, or delivery. Type **help** for options.',
+            timestamp: new Date()
+        }]);
+        setActiveShipmentId(null);
+    }, []);
 
-    const clearChat = () => setMessages([{
-        role: 'bot',
-        text: '👋 Chat cleared! How can I help you?',
-        timestamp: new Date(),
-    }]);
-
-
-    return { messages, loading, sendMessage, clearChat };
+    return { messages, loading, sendMessage, clearChat, activeShipmentId };
 };

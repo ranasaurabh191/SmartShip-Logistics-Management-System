@@ -1,12 +1,13 @@
 ﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using SmartShip.Shared.Events;
-using SmartShip.ShipmentService.Domain.Entities;
 using SmartShip.ShipmentService.Core.DTOs;
-using SmartShip.ShipmentService.Infrastructure.Helpers;
-using SmartShip.ShipmentService.Core.Interfaces.Services;
-using SmartShip.ShipmentService.Core.Interfaces.Repositories;
 using SmartShip.ShipmentService.Core.Interfaces.Persistence;
+using SmartShip.ShipmentService.Core.Interfaces.Repositories;
+using SmartShip.ShipmentService.Core.Interfaces.Services;
+using SmartShip.ShipmentService.Domain.Entities;
 using SmartShip.ShipmentService.Domain.Enums;
+using SmartShip.ShipmentService.Infrastructure.Helpers;
 
 namespace SmartShip.ShipmentService.Core.Services;
 
@@ -228,19 +229,27 @@ public class ShipmentService : IShipmentService
 
     public async Task<ShipmentResponse> GetByIdAsync(int id)
     {
-        _logger.LogInformation("Fetching shipment by ID: {ShipmentId}", id);
+        var shipment = await _shipmentRepository.GetByIdAsync(id)
+            ?? throw new KeyNotFoundException($"Shipment {id} not found.");
 
-        var s = await _shipmentRepository.GetByIdWithDetailsAsync(id);
+        var saga = await _shipmentOrderSagaRepository.GetByShipmentIdAsync(id);
 
-        if (s == null)
+        var paymentStatus = saga?.CurrentState switch
         {
-            _logger.LogWarning("Shipment not found: ID {ShipmentId}", id);
-            throw new KeyNotFoundException($"Shipment {id} not found.");
-        }
+            "Confirmed" => "Paid",
+            "Cancelled" => "Cancelled",
+            "PaymentFailed" => "Failed",
+            null => "Pending",
+            _ => "Pending"
+        };
 
-        _logger.LogInformation("Shipment found: {TrackingNumber} | Status: {Status}", s.TrackingNumber, s.Status);
-
-        return MapToResponse(s, s.SenderAddress!, s.ReceiverAddress!, s.Package!);
+        return MapToResponse(
+            shipment,
+            shipment.SenderAddress!,
+            shipment.ReceiverAddress!,
+            shipment.Package!,
+            paymentStatus
+        );
     }
 
     public async Task UpdateStatusAsync(int id, UpdateStatusRequest request)
@@ -506,12 +515,13 @@ public class ShipmentService : IShipmentService
         DeclaredValue = d.DeclaredValue
     };
 
-    private static ShipmentResponse MapToResponse(Shipment s, Address sender, Address receiver, Package pkg) => new(
+    private static ShipmentResponse MapToResponse(Shipment s, Address sender, Address receiver, Package pkg, string paymentStatus = "Unknown") => new(
         s.Id,
         s.TrackingNumber,
         s.CustomerId,
         s.ShipmentType.ToString(),
         s.Status.ToString(),
+         paymentStatus,
         s.ShippingRate,
         s.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
         s.PickupScheduledAt?.ToString("dd-MMM-yyyy hh:mm tt"),

@@ -1,77 +1,70 @@
 import { useRef, useEffect, useState } from 'react';
-import { useChat } from '../hooks/useChat';
+import { useChat, type ShipmentChip } from '../hooks/useChat';
 import { useAuthStore } from '../../store/useAuthStore';
 
 
 interface Props { shipmentId?: number; }
 
-interface ShipmentChip {
-    shipmentId: number;
-    trackingNumber: string;
-    label: string;
-    status: string;
-}
-
 
 const AI_LOGO = (
-  <svg width="36" height="36" viewBox="0 0 76 76" fill="none">
-    {/* Body */}
-    <rect x="0" y="0" width="76" height="76" rx="16" fill="#CC2222"/>
-    <rect x="10" y="10" width="56" height="56" rx="10" fill="#AA1A1A"/>
-    {/* Side arms */}
-    <rect x="8" y="30" width="4" height="16" rx="2" fill="#ffffffff"/>
-    <rect x="64" y="30" width="4" height="16" rx="2" fill="#ffffffff"/>
-    {/* Antennae */}
-    <rect x="28" y="5" width="6" height="8" rx="3" fill="#d78686ff"/>
-    <rect x="42" y="5" width="6" height="8" rx="3" fill="#d78686ff"/>
-    {/* Eyes (whites) */}
-    <rect x="18" y="20" width="15" height="15" rx="7" fill="white"/>
-    <rect x="44" y="20" width="14" height="14" rx="7" fill="white"/>
-    {/* Pupils */}
-    <circle cx="25" cy="27" r="5" fill="#CC2222"/>
-    <circle cx="51" cy="27" r="5" fill="#CC2222"/>
-    {/* Eye shine */}
-    <circle cx="25" cy="27" r="2" fill="white"/>
-    <circle cx="51" cy="27" r="2" fill="white"/>
-    {/* Mouth panel */}
-    <rect x="20" y="42" width="36" height="10" rx="5" fill="#CC2222"/>
-    {/* Mouth teeth */}
-    <rect x="24" y="45" width="5" height="4" rx="1" fill="white"/>
-    <rect x="31" y="45" width="5" height="4" rx="1" fill="white"/>
-    <rect x="38" y="45" width="5" height="4" rx="1" fill="white"/>
-    <rect x="45" y="45" width="5" height="4" rx="1" fill="white"/>
-  </svg>
+    <svg width="36" height="36" viewBox="0 0 76 76" fill="none">
+        {/* Body */}
+        <rect x="0" y="0" width="76" height="76" rx="16" fill="#CC2222" />
+        <rect x="10" y="10" width="56" height="56" rx="10" fill="#AA1A1A" />
+        {/* Side arms */}
+        <rect x="8" y="30" width="4" height="16" rx="2" fill="#ffffffff" />
+        <rect x="64" y="30" width="4" height="16" rx="2" fill="#ffffffff" />
+        {/* Antennae */}
+        <rect x="28" y="5" width="6" height="8" rx="3" fill="#d78686ff" />
+        <rect x="42" y="5" width="6" height="8" rx="3" fill="#d78686ff" />
+        {/* Eyes (whites) */}
+        <rect x="18" y="20" width="15" height="15" rx="7" fill="white" />
+        <rect x="44" y="20" width="14" height="14" rx="7" fill="white" />
+        {/* Pupils */}
+        <circle cx="25" cy="27" r="5" fill="#CC2222" />
+        <circle cx="51" cy="27" r="5" fill="#CC2222" />
+        {/* Eye shine */}
+        <circle cx="25" cy="27" r="2" fill="white" />
+        <circle cx="51" cy="27" r="2" fill="white" />
+        {/* Mouth panel */}
+        <rect x="20" y="42" width="36" height="10" rx="5" fill="#CC2222" />
+        {/* Mouth teeth */}
+        <rect x="24" y="45" width="5" height="4" rx="1" fill="white" />
+        <rect x="31" y="45" width="5" height="4" rx="1" fill="white" />
+        <rect x="38" y="45" width="5" height="4" rx="1" fill="white" />
+        <rect x="45" y="45" width="5" height="4" rx="1" fill="white" />
+    </svg>
 );
 
 
 const FAB_ICON = (
-  <svg width="30" height="30" viewBox="0 0 52 52" fill="none">
-    {/* Body */}
-    <rect x="0" y="0" width="50" height="50" rx="12" fill="#CC2222"/>
-    <rect x="7" y="7" width="38" height="38" rx="8" fill="#AA1A1A"/>
-    {/* Side arms */}
-    <rect x="4" y="18" width="3" height="12" rx="1.5" fill="#ffffffff"/>
-    <rect x="45" y="18" width="3" height="12" rx="1.5" fill="#ffffffff"/>
-    {/* Antennae */}
-    <rect x="16" y="3" width="4" height="6" rx="2" fill="#d2c6c6ff"/>
-    <rect x="32" y="3" width="4" height="6" rx="2" fill="#d2c6c6ff"/>
-    {/* Eyes (whites) */}
-    <rect x="11" y="13" width="12" height="12" rx="5" fill="white"/>
-    <rect x="31" y="13" width="12" height="12" rx="5" fill="white"/>
-    {/* Pupils */}
-    <circle cx="16" cy="18" r="3.5" fill="#CC2222"/>
-    <circle cx="36" cy="18" r="3.5" fill="#CC2222"/>
-    {/* Eye shine */}
-    <circle cx="16" cy="18" r="1.5" fill="white"/>
-    <circle cx="36" cy="18" r="1.5" fill="white"/>
-    {/* Mouth panel */}
-    <rect x="13" y="29" width="26" height="8" rx="4" fill="#CC2222"/>
-    {/* Mouth teeth */}
-    <rect x="16" y="32" width="4" height="3" rx="0.5" fill="white"/>
-    <rect x="22" y="32" width="4" height="3" rx="0.5" fill="white"/>
-    <rect x="28" y="32" width="4" height="3" rx="0.5" fill="white"/>
-    <rect x="34" y="32" width="4" height="3" rx="0.5" fill="white"/>
-  </svg>
+    <svg width="30" height="30" viewBox="0 0 52 52" fill="none">
+        {/* Body */}
+        <rect x="0" y="0" width="50" height="50" rx="12" fill="#CC2222" />
+        <rect x="7" y="7" width="38" height="38" rx="8" fill="#AA1A1A" />
+        {/* Side arms */}
+        <rect x="4" y="18" width="3" height="12" rx="1.5" fill="#ffffffff" />
+        <rect x="45" y="18" width="3" height="12" rx="1.5" fill="#ffffffff" />
+        {/* Antennae */}
+        <rect x="16" y="3" width="4" height="6" rx="2" fill="#d2c6c6ff" />
+        <rect x="32" y="3" width="4" height="6" rx="2" fill="#d2c6c6ff" />
+        {/* Eyes (whites) */}
+        <rect x="11" y="13" width="12" height="12" rx="5" fill="white" />
+        <rect x="31" y="13" width="12" height="12" rx="5" fill="white" />
+        {/* Pupils */}
+        <circle cx="16" cy="18" r="3.5" fill="#CC2222" />
+        <circle cx="36" cy="18" r="3.5" fill="#CC2222" />
+        {/* Eye shine */}
+        <circle cx="16" cy="18" r="1.5" fill="white" />
+        <circle cx="36" cy="18" r="1.5" fill="white" />
+        {/* Mouth panel */}
+        <rect x="13" y="29" width="26" height="8" rx="4" fill="#CC2222" />
+        {/* Mouth teeth */}
+        <rect x="16" y="32" width="4" height="3" rx="0.5" fill="white" />
+        <rect x="22" y="32" width="4" height="3" rx="0.5" fill="white" />
+        <rect x="28" y="32" width="4" height="3" rx="0.5" fill="white" />
+        <rect x="34" y="32" width="4" height="3" rx="0.5" fill="white" />
+    </svg>
 );
 
 
@@ -90,57 +83,60 @@ const CLOSE_ICON = (
 
 
 export const ChatWidget = ({ shipmentId }: Props) => {
-    const user = useAuthStore(state => state.user);
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState('');
-    const [fabHover, setFabHover] = useState(false);
-    const [activeShipmentId, setActiveShipmentId] = useState<number | undefined>(shipmentId);
-    const { messages, loading, sendMessage, clearChat } = useChat(shipmentId);
     const bottomRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const user = useAuthStore(state => state.user);
+    const { messages, loading, sendMessage, clearChat, activeShipmentId } = useChat(shipmentId);
+    const [hasGreeted, setHasGreeted] = useState(false);
 
+    const handleOpen = () => {
+        setOpen(true);
+        if (!hasGreeted) {
+            setHasGreeted(true);
+        }
+    };
+    const prevUserIdRef = useRef<number | null>(null);
 
+    useEffect(() => {
+        if (prevUserIdRef.current !== null && prevUserIdRef.current !== user?.id) {
+            clearChat();
+            setOpen(false);      
+            setHasGreeted(false);  
+        }
+        prevUserIdRef.current = user?.id ?? null;
+    }, [user?.id]);
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
-
     useEffect(() => {
-        if (open && !loading) {
-            inputRef.current?.focus();
-        }
+        if (open && !loading) inputRef.current?.focus();
     }, [open, loading]);
 
-
-    // Reset active shipment when chat is cleared
-    useEffect(() => {
-        setActiveShipmentId(shipmentId);
-    }, [shipmentId]);
-
-
     if (!user) return null;
-
 
     const handleSend = (overrideMsg?: string) => {
         const msg = overrideMsg ?? input.trim();
         if (!msg || loading) return;
-        sendMessage(msg, activeShipmentId);
+        sendMessage(msg);
         if (!overrideMsg) setInput('');
     };
 
-
-    // Called when user clicks a shipment chip
     const handleChipClick = (chip: ShipmentChip) => {
-        setActiveShipmentId(chip.shipmentId);
-        sendMessage(`Tell me about shipment ${chip.trackingNumber}`, chip.shipmentId, chip.shipmentId);
+        sendMessage(
+            `Tell me about shipment ${chip.trackingNumber}`,
+            undefined,
+            chip.shipmentId
+        );
     };
-
 
     const quickActions = [
         { label: '📍 Track shipment', msg: '📍 Track my shipment' },
-        { label: '📎 Documents',      msg: '📎 Show documents' },
+        { label: '📎 Documents', msg: '📎 Show documents' },
         { label: '✅ Delivery proof', msg: '✅ Delivery proof' },
-        { label: '❓ Help',           msg: '❓ Help' },
+        { label: '❓ Help', msg: '❓ Help' },
     ];
 
 
@@ -269,10 +265,8 @@ export const ChatWidget = ({ shipmentId }: Props) => {
                             {/* Reset context button — shown only when a shipment is active */}
                             {activeShipmentId && activeShipmentId !== shipmentId && (
                                 <button
-                                    onClick={() => {
-                                        setActiveShipmentId(shipmentId);
-                                        sendMessage('check another shipment', shipmentId);
-                                    }}
+                                    onClick={() => sendMessage('check another shipment', undefined, undefined, true)}
+
                                     title="Switch shipment"
                                     style={{
                                         background: 'none', border: '0.5px solid rgba(226,75,74,0.3)',
@@ -288,7 +282,8 @@ export const ChatWidget = ({ shipmentId }: Props) => {
                                 </button>
                             )}
                             <button
-                                onClick={() => { clearChat(); setActiveShipmentId(shipmentId); }}
+                                onClick={clearChat}
+                                title="Clear chat"
                                 style={{
                                     background: 'none', border: 'none',
                                     fontSize: 11, color: 'var(--color-text-muted, #888)',

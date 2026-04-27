@@ -16,7 +16,7 @@ public record CreateShipmentRequest(
 
 public record ShipmentResponse(
     int Id, string TrackingNumber, int CustomerId,
-    string ShipmentType, string Status, decimal ShippingRate,
+    string ShipmentType, string Status, string PaymentStatus, decimal ShippingRate,
     string CreatedAt, string? PickupScheduledAt, string? DeliveredAt,
     AddressDto SenderAddress, AddressDto ReceiverAddress, PackageDto Package, string? Notes
 );
