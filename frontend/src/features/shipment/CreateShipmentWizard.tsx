@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../core/api/axios';
+import { useNotificationStore } from '../../store/useNotificationStore';
 import {
   validateAddressSection, validatePackageSection, hasErrors,
   type AddressErrors, type PackageErrors,
@@ -49,6 +50,7 @@ const inputErrorStyle: React.CSSProperties = {
 
 export const CreateShipmentWizard = () => {
   const navigate = useNavigate();
+  const addNotification = useNotificationStore(state => state.addNotification);
   const [activeStep, setActiveStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState<FormDataType>({
@@ -140,7 +142,7 @@ export const CreateShipmentWizard = () => {
       setPaymentStageOpen(true);
       setPaymentError(''); setPaymentSuccess(''); setPaymentResponse(null);
     } catch (err: any) {
-      alert(err?.response?.data?.message || err?.response?.data || 'Failed to create shipment.');
+      addNotification(err?.response?.data?.message || err?.response?.data || 'Failed to create shipment.', 'error');
     } finally { setSubmitting(false); }
   };
 

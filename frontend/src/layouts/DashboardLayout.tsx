@@ -133,14 +133,17 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
             fontFamily: 'Rajdhani, sans-serif', fontSize: 17, fontWeight: 600,
             letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-muted)',
           }}>
-            {location.pathname.split('/').filter(Boolean).map((seg, i, arr) => (
-              <span key={seg}>
-                <span style={{ color: i === arr.length - 1 ? 'var(--color-text)' : undefined }}>
-                  {seg.toUpperCase()}
-                </span>
-                {i < arr.length - 1 && <span style={{ margin: '0 6px', opacity: 0.4 }}>/</span>}
-              </span>
-            ))}
+            {(() => {
+              const p = location.pathname;
+              if (p.includes('/dashboard')) return 'Dashboard';
+              if (p.includes('/shipments/create')) return 'New Shipment';
+              if (p.includes('/shipments')) return 'Shipment Registry';
+              if (p.includes('/payments')) return 'Payments';
+              if (p.includes('/track') || p.includes('/tracking')) return 'Tracking Details';
+              if (p.includes('/hubs')) return 'Hub Management';
+              if (p.includes('/users')) return 'User Directory';
+              return 'Overview';
+            })()}
           </div>
 
 

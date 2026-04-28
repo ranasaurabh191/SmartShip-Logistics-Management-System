@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using SmartShip.Shared.Events;
 using SmartShip.ShipmentService.Core.DTOs;
@@ -57,11 +57,26 @@ public class ShipmentService : IShipmentService
         {
             var result = await _shipmentRepository.GetAllPagedAsync(req);
 
+            var responses = new List<ShipmentResponse>();
+            foreach (var s in result.Data)
+            {
+                var saga = await _shipmentOrderSagaRepository.GetByShipmentIdAsync(s.Id);
+                var paymentStatus = saga?.CurrentState switch
+                {
+                    "Confirmed" => "Paid",
+                    "Cancelled" => "Cancelled",
+                    "PaymentFailed" => "Failed",
+                    null => "Pending",
+                    _ => "Pending"
+                };
+                responses.Add(MapToResponse(s, s.SenderAddress!, s.ReceiverAddress!, s.Package!, paymentStatus));
+            }
+
             _logger.LogInformation("Fetched {Count} of {Total} shipments", result.Data.Count(), result.TotalCount);
 
             return new PagedResponse<ShipmentResponse>
             {
-                Data = result.Data.Select(s => MapToResponse(s, s.SenderAddress!, s.ReceiverAddress!, s.Package!)),
+                Data = responses,
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 PageSize = result.PageSize
@@ -83,12 +98,27 @@ public class ShipmentService : IShipmentService
         {
             var result = await _shipmentRepository.GetByCustomerPagedAsync(customerId, req);
 
+            var responses = new List<ShipmentResponse>();
+            foreach (var s in result.Data)
+            {
+                var saga = await _shipmentOrderSagaRepository.GetByShipmentIdAsync(s.Id);
+                var paymentStatus = saga?.CurrentState switch
+                {
+                    "Confirmed" => "Paid",
+                    "Cancelled" => "Cancelled",
+                    "PaymentFailed" => "Failed",
+                    null => "Pending",
+                    _ => "Pending"
+                };
+                responses.Add(MapToResponse(s, s.SenderAddress!, s.ReceiverAddress!, s.Package!, paymentStatus));
+            }
+
             _logger.LogInformation("Fetched {Count} of {Total} shipments for Customer {CustomerId}",
                 result.Data.Count(), result.TotalCount, customerId);
 
             return new PagedResponse<ShipmentResponse>
             {
-                Data = result.Data.Select(s => MapToResponse(s, s.SenderAddress!, s.ReceiverAddress!, s.Package!)),
+                Data = responses,
                 TotalCount = result.TotalCount,
                 Page = result.Page,
                 PageSize = result.PageSize

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../../core/api/axios';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useNotificationStore } from '../../store/useNotificationStore';
 
 interface Payment {
   id: number;
@@ -18,6 +19,7 @@ const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as string;
 
 export const PaymentsPage = () => {
   const user = useAuthStore((state) => state.user);
+  const addNotification = useNotificationStore((state) => state.addNotification);
   const isAdmin = user?.role?.toLowerCase() === 'admin';
 
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -59,12 +61,12 @@ export const PaymentsPage = () => {
 
   const handlePayNow = (payment: Payment) => {
     if (!payment.razorpayOrderId) {
-      alert('No Razorpay order found. Please try creating the payment again.');
+      addNotification('No Razorpay order found. Please try creating the payment again.', 'error');
       return;
     }
 
     if (!window.Razorpay) {
-      alert('Razorpay SDK not loaded. Please refresh the page.');
+      addNotification('Razorpay SDK not loaded. Please refresh the page.', 'error');
       return;
     }
 
@@ -85,12 +87,13 @@ export const PaymentsPage = () => {
             shipmentId: payment.shipmentId,
             paymentMethod: 'Online',
           });
-          alert('Payment verified successfully!');
+          addNotification('Payment verified successfully!', 'success');
           await fetchPayments();
         } catch (err: any) {
-          alert(
+          addNotification(
             err?.response?.data?.message ||
-              'Payment was made but verification failed. Please use Retry Verify.'
+              'Payment was made but verification failed. Please use Retry Verify.',
+            'error'
           );
           await fetchPayments();
         }
@@ -135,7 +138,7 @@ export const PaymentsPage = () => {
       closeVerifyModal();
       await fetchPayments();
     } catch (err: any) {
-      alert(err?.response?.data?.message || 'Payment verification failed.');
+      addNotification(err?.response?.data?.message || 'Payment verification failed.', 'error');
     } finally {
       setVerifyLoading(false);
     }

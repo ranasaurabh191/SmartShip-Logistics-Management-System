@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../../core/api/axios';
+import { useNotificationStore } from '../../store/useNotificationStore';
 
 interface Hub {
   id: number;
@@ -29,12 +30,8 @@ export const HubManagement = () => {
   const [editingHub, setEditingHub] = useState<Hub | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
-
-  const showToast = (msg: string, type: 'success' | 'error' = 'success') => {
-    setToast({ msg, type });
-    setTimeout(() => setToast(null), 3000);
-  };
+  const addNotification = useNotificationStore(state => state.addNotification);
+  const [hubToDelete, setHubToDelete] = useState<Hub | null>(null);
 
   // ── Fetch ──────────────────────────────────────────────────────────────────
   const fetchHubs = async () => {
@@ -95,15 +92,15 @@ export const HubManagement = () => {
           ...form,
           isActive: editingHub.isActive,   // PUT requires isActive
         });
-        showToast(`"${form.name}" Updated successfully`);
+        addNotification(`"${form.name}" Updated successfully`, 'success');
       } else {
         await apiClient.post('/admin/hubs', form);
-        showToast(`"${form.name}" Created successfully`);
+        addNotification(`"${form.name}" Created successfully`, 'success');
       }
       closeForm();
       await fetchHubs();
     } catch (err: any) {
-      showToast(parseError(err), 'error');
+      addNotification(parseError(err), 'error');
     } finally {
       setSaving(false);
     }
@@ -120,44 +117,28 @@ export const HubManagement = () => {
         contactPhone: hub.contactPhone,
         isActive: !hub.isActive,
       });
-      showToast(`"${hub.name}" ${!hub.isActive ? 'activated' : 'deactivated'}`);
       await fetchHubs();
     } catch (err: any) {
-      showToast(parseError(err), 'error');
+      addNotification(parseError(err), 'error');
     }
   };
 
-  const deleteHub = async (hub: Hub) => {
-    if (!confirm(`Permanently delete "${hub.name}"? This cannot be undone.`)) return;
+  const confirmDelete = async () => {
+    if (!hubToDelete) return;
     try {
-      await apiClient.delete(`/admin/hubs/${hub.id}`);
-      showToast(`"${hub.name}" deleted`);
+      await apiClient.delete(`/admin/hubs/${hubToDelete.id}`);
+      addNotification(`Deleted "${hubToDelete.name}" successfully`, 'success');
       await fetchHubs();
     } catch (err: any) {
-      showToast(parseError(err), 'error');
+      addNotification(parseError(err), 'error');
+    } finally {
+      setHubToDelete(null);
     }
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20, maxWidth: 1100 }}>
-
-      {/* Toast */}
-      {toast && (
-        <div style={{
-          position: 'fixed', top: 24, right: 24, zIndex: 9999,
-          background: toast.type === 'success' ? 'rgba(0,196,140,0.12)' : 'rgba(224,0,26,0.12)',
-          border: `1px solid ${toast.type === 'success' ? 'var(--color-success)' : 'var(--color-accent)'}`,
-          borderRadius: 2, padding: '12px 20px',
-          fontFamily: 'Rajdhani, sans-serif', fontSize: 13, fontWeight: 600,
-          letterSpacing: '0.08em', textTransform: 'uppercase',
-          color: toast.type === 'success' ? 'var(--color-success)' : 'var(--color-accent)',
-          boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
-          animation: 'fadeSlideUp 0.3s ease both',
-        }}>
-          {toast.type === 'success' ? '✓' : '⚠'} {toast.msg}
-        </div>
-      )}
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
@@ -241,28 +222,103 @@ export const HubManagement = () => {
               </div>
 
               {/* Actions */}
-              <div style={{ display: 'flex', gap: 6 }}>
+              <div style={{ display: 'flex', gap: 6, marginTop: 4 }}>
+
+                {/* Status indicator button — green if active, red if inactive */}
+                <button
+                  onClick={() => toggleHub(hub)}
+                  style={{
+                    flex: 1,
+                    fontSize: 13,
+                    padding: '4px 0',
+                    fontFamily: 'Rajdhani, sans-serif',
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    border: `1px solid ${hub.isActive ? '#00c48c' : '#e0001a'}`,
+                    borderRadius: 7,
+                    background: hub.isActive
+                      ? 'rgba(0, 196, 140, 0.12)'
+                      : 'rgba(224, 0, 26, 0.12)',
+                    color: hub.isActive ? '#00c48c' : '#e0001a',
+                    cursor: 'pointer',
+                    transition: 'all 0.5s ease',
+                  }}
+                  onMouseEnter={e => {
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.background = hub.isActive
+                      ? 'rgba(224, 0, 26, 0.15)'
+                      : 'rgba(0, 196, 140, 0.15)';
+                    btn.style.borderColor = hub.isActive ? '#e0001a' : '#00c48c';
+                    btn.style.color = hub.isActive ? '#e0001a' : '#00c48c';
+                    btn.textContent = hub.isActive ? 'Click to Deactivate' : 'Click to Activate';
+                  }}
+                  onMouseLeave={e => {
+                    const btn = e.currentTarget as HTMLButtonElement;
+                    btn.style.background = hub.isActive
+                      ? 'rgba(0, 196, 140, 0.12)'
+                      : 'rgba(224, 0, 26, 0.12)';
+                    btn.style.borderColor = hub.isActive ? '#00c48c' : '#e0001a';
+                    btn.style.color = hub.isActive ? '#00c48c' : '#e0001a';
+                    btn.textContent = hub.isActive ? '● Active' : '● Offline';
+                  }}
+                >
+                  {hub.isActive ? '● Active' : '● Offline'}
+                </button>
+
+                {/* Edit */}
                 <button
                   className="ss-btn ss-btn-outline"
-                  style={{ fontSize: 12, padding: '3px 10px', flex: 1 }}
-                  onClick={() => openEdit(hub)}>
+                  style={{ fontSize: 11, padding: '4px 12px' }}
+                  onClick={() => openEdit(hub)}
+                >
                   Edit
                 </button>
+
+                {/* Delete */}
                 <button
-                  className="ss-btn ss-btn-outline"
-                  style={{ fontSize: 12, padding: '3px 10px', flex: 1 }}
-                  onClick={() => toggleHub(hub)}>
-                  {hub.isActive ? 'Deactivate' : 'Activate'}
-                </button>
-                <button
-                  className="ss-btn"
-                  style={{ fontSize: 12, padding: '3px 10px', background: 'transparent', border: '1px solid #444', color: '#666' }}
-                  onClick={() => deleteHub(hub)}>
+                  style={{
+                    fontSize: 11,
+                    padding: '4px 10px',
+                    background: 'transparent',
+                    border: '1px solid #333',
+                    borderRadius: 4,
+                    color: '#555',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = '#e0001a';
+                    (e.currentTarget as HTMLButtonElement).style.color = '#e0001a';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = '#333';
+                    (e.currentTarget as HTMLButtonElement).style.color = '#555';
+                  }}
+                  onClick={() => setHubToDelete(hub)}
+                >
                   ✕
                 </button>
+
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {hubToDelete && (
+        <div onClick={() => setHubToDelete(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, backdropFilter: 'blur(2px)' }}>
+          <div onClick={e => e.stopPropagation()} className="ss-card" style={{ width: 400, padding: 24, boxShadow: '0 0 40px rgba(0,0,0,0.45)' }}>
+            <h2 style={{ fontFamily: 'Orbitron, monospace', marginBottom: 16, color: '#fff', fontSize: 20, fontWeight: 700 }}>Confirm Deletion</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: 18, fontSize: 14 }}>
+              Permanently delete "{hubToDelete.name}"? This cannot be undone.
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <button className="ss-btn ss-btn-outline" onClick={() => setHubToDelete(null)}>Cancel</button>
+              <button className="ss-btn" style={{ background: '#e0001a', color: '#fff', border: '1px solid #e0001a' }} onClick={confirmDelete}>Yes, Delete</button>
+            </div>
+          </div>
         </div>
       )}
     </div>

@@ -49,10 +49,16 @@ export const AdminDashboard = () => {
           : res.data?.data ?? res.data?.items ?? res.data?.Items ?? [];
         setShipments(items);
 
+        const totalRevenue = items.reduce((sum: number, s: Shipment) => 
+            sum + (s.status !== 'Cancelled' ? Number(s.shippingRate || 0) : 0), 0);
+
         if (kpis.length === 0) {
           setKpis([
             { label: 'Total Shipments', value: items.length,
               delta: 'Last 10 records', up: true },
+            { label: 'Total Revenue',
+              value: `₹${totalRevenue.toLocaleString('en-IN')}`,
+              delta: 'Est. value', up: true },
             { label: 'In Transit',
               value: items.filter((s: Shipment) =>
                 ['InTransit','Booked','PickedUp','OutForDelivery'].includes(s.status)).length,
@@ -107,7 +113,7 @@ export const AdminDashboard = () => {
       </div>
 
       {/* KPI Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 14 }}>
         {kpis.length > 0 ? kpis.map(kpi => (
           <div key={kpi.label} className="kpi-card" style={{ padding: '20px 18px' }}>
             <div className="kpi-label">{kpi.label}</div>

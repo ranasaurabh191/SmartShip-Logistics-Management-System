@@ -87,6 +87,8 @@ export const ChatWidget = ({ shipmentId }: Props) => {
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const windowRef = useRef<HTMLDivElement>(null);
+    const fabRef = useRef<HTMLButtonElement>(null);
     const user = useAuthStore(state => state.user);
     const { messages, loading, sendMessage, clearChat, activeShipmentId } = useChat(shipmentId);
     const prevUserIdRef = useRef<number | null>(null);
@@ -105,6 +107,24 @@ export const ChatWidget = ({ shipmentId }: Props) => {
     useEffect(() => {
         if (open && !loading) inputRef.current?.focus();
     }, [open, loading]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                open &&
+                windowRef.current &&
+                !windowRef.current.contains(event.target as Node) &&
+                fabRef.current &&
+                !fabRef.current.contains(event.target as Node)
+            ) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [open]);
 
     if (!user) return null;
 
@@ -180,6 +200,7 @@ export const ChatWidget = ({ shipmentId }: Props) => {
                     }} />
                 )}
                 <button
+                    ref={fabRef}
                     className="ss-fab-btn"
                     onClick={() => setOpen(o => !o)}
                     aria-label="Toggle chat"
@@ -199,6 +220,7 @@ export const ChatWidget = ({ shipmentId }: Props) => {
             {/* Chat window */}
             {open && (
                 <div
+                    ref={windowRef}
                     className="ss-window"
                     style={{
                         position: 'fixed', bottom: 92, right: 28, zIndex: 9999,

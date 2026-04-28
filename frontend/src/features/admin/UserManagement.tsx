@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../../core/api/axios';
+import { useNotificationStore } from '../../store/useNotificationStore';
 
 interface User {
   id: number;
@@ -22,15 +23,21 @@ const normaliseUser = (u: any): User => ({
 
 export const UserManagement = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const addNotification = useNotificationStore((state) => state.addNotification);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
-  const deleteUser = async (id: number) => {
-    if (!confirm(`Remove user ${id}?`)) return;
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
+
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
     try {
-      await apiClient.delete(`/admin/users/${id}`);
-      setUsers(prev => prev.filter(u => u.id !== id));
+      await apiClient.delete(`/admin/users/${userToDelete}`);
+      setUsers(prev => prev.filter(u => u.id !== userToDelete));
+      addNotification('User deleted successfully.', 'success');
     } catch {
-      alert('Failed to remove user.');
+      addNotification('Failed to remove user.', 'error');
+    } finally {
+      setUserToDelete(null);
     }
   };
   const fetchUsers = async () => {
@@ -66,7 +73,7 @@ export const UserManagement = () => {
         err?.response?.data?.message ||
         err?.response?.data?.title ||
         'Failed to update user.';
-      alert(msg);
+      addNotification(msg, 'error');
     }
   };
 
@@ -115,7 +122,7 @@ export const UserManagement = () => {
                     {u.isActive ? 'Deactivate' : 'Activate'}
                   </button>
                   <button className="ss-btn" style={{ fontSize: 10, padding: '3px 10px', background: 'transparent', border: '1px solid #555', color: '#888' }}
-                    onClick={() => deleteUser(u.id)}>
+                    onClick={() => setUserToDelete(u.id)}>
                     Delete
                   </button>
                 </td>
@@ -124,6 +131,22 @@ export const UserManagement = () => {
           </tbody>
         </table>
       </div>
+      
+      {/* Delete Confirmation Modal */}
+      {userToDelete && (
+        <div onClick={() => setUserToDelete(null)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, backdropFilter: 'blur(2px)' }}>
+          <div onClick={e => e.stopPropagation()} className="ss-card" style={{ width: 400, padding: 24, boxShadow: '0 0 40px rgba(0,0,0,0.45)' }}>
+            <h2 style={{ fontFamily: 'Orbitron, monospace', marginBottom: 16, color: '#fff', fontSize: 20, fontWeight: 700 }}>Confirm Deletion</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: 18, fontSize: 14 }}>
+              Are you sure you want to delete this user?
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <button className="ss-btn ss-btn-outline" onClick={() => setUserToDelete(null)}>Cancel</button>
+              <button className="ss-btn" style={{ background: '#e0001a', color: '#fff', border: '1px solid #e0001a' }} onClick={confirmDelete}>Yes, Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

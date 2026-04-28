@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../../core/api/axios';
+import { useNotificationStore } from '../../store/useNotificationStore';
 
 interface DocumentDto {
     id: number;
@@ -23,6 +24,7 @@ function formatBytes(bytes: number): string {
 export const DocumentsReadOnly = ({ shipmentId }: Props) => {
     const [docs, setDocs] = useState<DocumentDto[]>([]);
     const [loading, setLoading] = useState(true);
+    const addNotification = useNotificationStore(state => state.addNotification);
 
     useEffect(() => {
         const fetch = async () => {
@@ -73,7 +75,7 @@ export const DocumentsReadOnly = ({ shipmentId }: Props) => {
                 link.click();
             }
         } catch (err: any) {
-            alert(err?.response?.data?.message || 'Failed to open document.');
+            addNotification(err?.response?.data?.message || 'Failed to open document.', 'error');
         }
     };
     return (

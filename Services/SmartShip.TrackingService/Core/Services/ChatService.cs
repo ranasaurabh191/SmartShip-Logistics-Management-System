@@ -1,4 +1,4 @@
-﻿using SmartShip.TrackingService.Core.DTOs;
+using SmartShip.TrackingService.Core.DTOs;
 using SmartShip.TrackingService.Core.Interfaces.Repositories;
 using SmartShip.TrackingService.Core.Interfaces.Services;
 using SmartShip.TrackingService.Domain.Entities;
@@ -68,6 +68,13 @@ public class ChatService : IChatService
                 return await AskOllama(req, userId, false,
                     "Document access is admin-only. Customer can check delivery proof. Tell the user politely.");
 
+            if (intent == "revenue_stats" && !isAdmin)
+                return await AskOllama(req, userId, false,
+                    "Revenue and earnings information is only available to admins. Tell the user politely.");
+
+            if (intent == "revenue_stats")
+                return await HandleRevenue(userId, req);
+
             if (intent is "track_shipment" or "delivery_eta"
                        or "shipment_status" or "delivery_proof" or "list_documents"
                        or "admin_stats")
@@ -92,7 +99,7 @@ public class ChatService : IChatService
             if (intent is "rate_calculate" or "rate_general" or "rate_compare")
                 return await HandleRateWithOllama(req);
 
-            return await AskOllama(req, userId, isAdmin, null);
+            return await AskOllama(req, userId, isAdmin, null, activeShipmentId);
         }
         catch (Exception ex)
         {
@@ -146,6 +153,11 @@ public class ChatService : IChatService
         if (Has(msg, "status", "my shipments", "show shipments",
                 "list shipments", "all shipments"))
             return "shipment_status";
+
+        if (Has(msg, "revenue", "earnings", "income", "total revenue",
+             "how much earned", "money collected", "amount collected",
+             "billed", "total billed", "pending revenue"))
+            return "revenue_stats";
 
         if (Has(msg, "total shipments", "pending count", "dashboard",
                 "summary", "how many", "stats", "analytics"))
@@ -254,7 +266,41 @@ public class ChatService : IChatService
         return new ChatResponseDto(reply, intent, null);
     }
 
+    private async Task<ChatResponseDto> HandleRevenue(
+    int userId, ChatMessageRequest req)
+    {
+        var shipments = await _shipmentClient.GetUserShipmentsAsync(userId, true);
 
+        var activeShipments = shipments.Where(s => !s.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase)).ToList();
+
+        var totalRevenue = activeShipments.Sum(s => s.ShippingRate);
+        var collectedRev = activeShipments
+            .Where(s => string.Equals(s.PaymentStatus, "Paid", StringComparison.OrdinalIgnoreCase))
+            .Sum(s => s.ShippingRate);
+        var pendingRev = totalRevenue - collectedRev;
+        var deliveredRev = activeShipments
+            .Where(s => s.Status.Equals("Delivered", StringComparison.OrdinalIgnoreCase))
+            .Sum(s => s.ShippingRate);
+
+        var systemPrompt = $"""
+        You are SmartShip AI, an admin financial assistant.
+        Answer the admin's revenue question using ONLY the data below.
+        Be direct and professional. Use markdown. Under 100 words.
+
+        === REVENUE SUMMARY (as of {DateTime.Now:dd-MMM-yyyy HH:mm}) ===
+        Total Billed     : Rs {totalRevenue:N0}
+        Collected (Paid) : Rs {collectedRev:N0}
+        Pending          : Rs {pendingRev:N0}
+        From Delivered   : Rs {deliveredRev:N0}
+        Total Shipments  : {activeShipments.Count} (excluding cancelled)
+        ================================================================
+
+        Do not invent any numbers. Only use the values above.
+        """;
+
+        var reply = await CallOllama(req.Message, systemPrompt, req.History);
+        return new ChatResponseDto(reply, "revenue_stats", null);
+    }
     private async Task<ChatResponseDto> HandleAdminStats(
         int userId, ChatMessageRequest req)
     {
@@ -268,7 +314,8 @@ public class ChatService : IChatService
         var delivered = shipments.Count(s => s.Status.Equals("Delivered", StringComparison.OrdinalIgnoreCase));
         var cancelled = shipments.Count(s => s.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase));
         var draft = shipments.Count(s => s.Status.Equals("Draft", StringComparison.OrdinalIgnoreCase));
-        var unpaid = shipments.Count(s => s.PaymentStatus is not "Paid");
+        var paid = shipments.Count(s => string.Equals(s.PaymentStatus, "Paid", StringComparison.OrdinalIgnoreCase));
+        var unpaid = total - cancelled - paid;
 
         var systemPrompt = $"""
             You are SmartShip AI, an admin assistant.
@@ -284,6 +331,7 @@ public class ChatService : IChatService
             In Transit      : {transit}
             Delivered       : {delivered}
             Cancelled       : {cancelled}
+            Paid            : {paid}
             Unpaid          : {unpaid}
             ===================================================================
 
@@ -371,33 +419,75 @@ public class ChatService : IChatService
 
 
     private async Task<ChatResponseDto> AskOllama(
-        ChatMessageRequest req, int userId, bool isAdmin, string? extraContext)
+    ChatMessageRequest req, int userId, bool isAdmin,
+    string? extraContext, int? activeShipmentId = null)   
     {
+        string shipmentContext = "";
+        if (activeShipmentId.HasValue)
+        {
+            var shipment = await _shipmentClient.GetShipmentByIdAsync(activeShipmentId.Value);
+            if (shipment != null)
+            {
+                var today = DateTime.Now;
+                var createdAt = shipment.CreatedAt != default ? shipment.CreatedAt : today;
+                var expectedDelivery = createdAt.AddDays(7);
+                var daysRemaining = Math.Max(0, (expectedDelivery - today).Days);
+                var isOverdue = today > expectedDelivery
+                                && shipment.Status is not "Delivered" and not "Cancelled";
+
+                shipmentContext = $"""
+
+                === ACTIVE SHIPMENT CONTEXT ===
+                Tracking Number  : {shipment.TrackingNumber}
+                Type             : {shipment.ShipmentType}
+                Status           : {shipment.Status}
+                Payment Status   : {(string.IsNullOrEmpty(shipment.PaymentStatus) ? "Unknown" : shipment.PaymentStatus)}
+                Shipping Rate    : Rs {shipment.ShippingRate:N0}
+                Weight           : {shipment.WeightKg} kg
+                Route            : {shipment.OriginCity} to {shipment.DestinationCity}
+                Created          : {createdAt:dd-MMM-yyyy HH:mm}
+                Expected Delivery: {expectedDelivery:dd-MMM-yyyy} ({(daysRemaining > 0 ? $"in {daysRemaining} days" : isOverdue ? "overdue" : "today")})
+                ================================
+                Use this data to answer follow-up questions about this shipment.
+                Do NOT invent any values not present above. Also when user asks about any private information
+                like shipment id or user id , you must not disclose it.
+                """;
+            }
+        }
+
         var systemPrompt = $"""
-            You are SmartShip AI, a logistics assistant for SmartShip courier service.
-            Help users with shipping, tracking, rates, delivery, and logistics questions.
+        You are SmartShip AI, a logistics assistant for SmartShip courier service.
+        Help users with shipping, tracking, rates, delivery, and logistics questions.
 
-            User role : {(isAdmin ? "Admin" : "Customer")}
-            User ID   : {userId}
+        User role : {(isAdmin ? "Admin" : "Customer")}
 
-            {(extraContext != null ? $"Context: {extraContext}" : "")}
+        {(extraContext != null ? $"Context: {extraContext}" : "")}
+        {shipmentContext}
 
-            SmartShip capabilities:
-            - Track shipments by tracking number (format: SS + date + 5 digits)
-            - Shipping types: Domestic, Express, International, Freight
-            - Rates: Domestic Rs80/kg, Express Rs150/kg, Freight Rs50/kg, International Rs300/kg
-            - Min charge: Rs99 for all types
-            - Customers can view delivery proof after delivery
-            - Admins can access documents and full dashboard
+        SmartShip capabilities:
+        - Track shipments by tracking number (format: SS + digits, e.g. SS2026041714261)
+        - Shipping types: Domestic, Express, International, Freight
+        - Rates: Domestic Rs80/kg, Express Rs150/kg, Freight Rs50/kg, International Rs300/kg
+        - Minimum charge: Rs99 for all types
+        - Customers can view delivery proof after delivery
+        - Admins can access documents and full dashboard
 
-            Rules:
-            - Be concise (under 100 words), conversational, use markdown
-            - Do not use excessive emojis — max 2 per reply
-            - Only answer logistics and shipping related questions
-            - If asked about unrelated topics (weather, news, etc.) politely redirect
-            - Never invent shipment data, tracking numbers, or delivery dates
-            - If you don't know something, say so and suggest using the dashboard
-            """;
+        Rules:
+        - Dont show user id to the user on answer.
+        - Be concise (under 100 words), conversational, use markdown
+        - Do not use excessive emojis — max 2 per reply
+        - Only answer logistics and shipping related questions
+        - If asked about unrelated topics politely redirect
+        - Never invent shipment data, tracking numbers, or delivery dates
+        - If the user asks about amount, cost, or rate — use Shipping Rate from context above
+        - If unsure, suggest using the SmartShip dashboard
+        """;
+
+        if (activeShipmentId.HasValue)
+        {
+            var reply = await CallOllama(req.Message, systemPrompt, req.History);
+            return new ChatResponseDto(reply, "ai", null);
+        }
 
         var cacheKey = $"general:{req.Message.ToLower().Trim()}";
         if (_cache.TryGetValue(cacheKey, out var cached)
@@ -407,9 +497,9 @@ public class ChatService : IChatService
             return new ChatResponseDto(cached.Response, "ai_cached", null);
         }
 
-        var reply = await CallOllama(req.Message, systemPrompt, req.History);
-        _cache[cacheKey] = (reply, DateTime.Now);
-        return new ChatResponseDto(reply, "ai", null);
+        var generalReply = await CallOllama(req.Message, systemPrompt, req.History);
+        _cache[cacheKey] = (generalReply, DateTime.Now);
+        return new ChatResponseDto(generalReply, "ai", null);
     }
 
 

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../core/api/axios';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useNotificationStore } from '../../store/useNotificationStore';
 import { DeliveryConfirmModal } from './DeliveryConfirmModal';
 
 type ShipmentApi = {
@@ -40,6 +41,7 @@ const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as string;
 
 export const ShipmentsPage = () => {
   const navigate = useNavigate();
+  const addNotification = useNotificationStore(state => state.addNotification);
   const user = useAuthStore(state => state.user);
   const isAdmin = user?.role === 'ADMIN';
   const basePath = isAdmin ? '/admin' : '/customer';
@@ -58,6 +60,8 @@ export const ShipmentsPage = () => {
   const [busyShipmentId, setBusyShipmentId] = useState<number | null>(null);
 
   const [selectedShipment, setSelectedShipment] = useState<ShipmentRow | null>(null);
+  const [cancelModalOpen, setCancelModalOpen] = useState(false);
+  const [shipmentToCancel, setShipmentToCancel] = useState<number | null>(null);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
   const [resolveModalOpen, setResolveModalOpen] = useState(false);
   const [pickupModalOpen, setPickupModalOpen] = useState(false);
@@ -120,17 +124,25 @@ export const ShipmentsPage = () => {
     [shipments, filter, search]
   );
 
-  const handleCancel = async (e: React.MouseEvent, id: number) => {
+  const openCancelModal = (e: React.MouseEvent, id: number) => {
     e.stopPropagation();
-    if (!window.confirm(`Cancel shipment ${id}?`)) return;
+    setShipmentToCancel(id);
+    setCancelModalOpen(true);
+  };
+
+  const confirmCancel = async () => {
+    if (!shipmentToCancel) return;
     try {
-      setBusyShipmentId(id);
-      await apiClient.patch(`/shipments/${id}/cancel`, {
+      setBusyShipmentId(shipmentToCancel);
+      await apiClient.patch(`/shipments/${shipmentToCancel}/cancel`, {
         reason: isAdmin ? 'Cancelled by admin' : 'Cancelled by customer',
       });
+      setCancelModalOpen(false);
+      setShipmentToCancel(null);
+      addNotification('Shipment cancelled successfully.', 'success');
       await fetchShipments();
     } catch (err: any) {
-      alert(err?.response?.data?.message || err?.response?.data || 'Failed to cancel shipment.');
+      addNotification(err?.response?.data?.message || err?.response?.data || 'Failed to cancel shipment.', 'error');
     } finally { setBusyShipmentId(null); }
   };
 
@@ -140,15 +152,15 @@ export const ShipmentsPage = () => {
 
   const confirmSchedulePickup = async () => {
     if (!selectedShipment) return;
-    if (!pickupDateTime) { alert('Please select pickup date and time.'); return; }
+    if (!pickupDateTime) { addNotification('Please select pickup date and time.', 'warning'); return; }
     try {
       setBusyShipmentId(selectedShipment.id);
       await apiClient.post(`/shipments/${selectedShipment.id}/schedule-pickup`, { pickupTime: pickupDateTime });
       setPickupModalOpen(false); setSelectedShipment(null); setPickupDateTime('');
-      alert('Pickup scheduled successfully.');
+      addNotification('Pickup scheduled successfully.', 'success');
       await fetchShipments();
     } catch (err: any) {
-      alert(err?.response?.data?.message || err?.response?.data || 'Unable to schedule pickup.');
+      addNotification(err?.response?.data?.message || err?.response?.data || 'Unable to schedule pickup.', 'error');
     } finally { setBusyShipmentId(null); }
   };
 
@@ -159,8 +171,8 @@ export const ShipmentsPage = () => {
   const confirmAdminStatusUpdate = async () => {
     if (!selectedShipment) return;
     const nextStatus = ADMIN_NEXT_STATUS[selectedShipment.status];
-    if (!nextStatus) { alert('No further status transition available.'); return; }
-    if (!adminLocation.trim()) { alert('Please enter hub location.'); return; }
+    if (!nextStatus) { addNotification('No further status transition available.', 'warning'); return; }
+    if (!adminLocation.trim()) { addNotification('Please enter hub location.', 'warning'); return; }
     try {
       setBusyShipmentId(selectedShipment.id);
       await apiClient.put(`/admin/shipments/status/${selectedShipment.id}`, {
@@ -169,7 +181,7 @@ export const ShipmentsPage = () => {
       setStatusModalOpen(false); setSelectedShipment(null); setAdminLocation('');
       await fetchShipments();
     } catch (err: any) {
-      alert(err?.response?.data?.message || 'Failed to update shipment status.');
+      addNotification(err?.response?.data?.message || 'Failed to update shipment status.', 'error');
     } finally { setBusyShipmentId(null); }
   };
 
@@ -180,8 +192,8 @@ export const ShipmentsPage = () => {
 
   const confirmResolve = async () => {
     if (!selectedShipment) return;
-    if (!resolutionText.trim()) { alert('Resolution text is required.'); return; }
-    if (!adminLocation.trim()) { alert('Please enter resolution hub.'); return; }
+    if (!resolutionText.trim()) { addNotification('Resolution text is required.', 'warning'); return; }
+    if (!adminLocation.trim()) { addNotification('Please enter resolution hub.', 'warning'); return; }
     try {
       setBusyShipmentId(selectedShipment.id);
       await apiClient.put(`/admin/shipments/resolve/${selectedShipment.id}`, {
@@ -191,18 +203,18 @@ export const ShipmentsPage = () => {
       setResolutionText(''); setAdminLocation('');
       await fetchShipments();
     } catch (err: any) {
-      alert(err?.response?.data?.message || 'Failed to resolve shipment.');
+      addNotification(err?.response?.data?.message || 'Failed to resolve shipment.', 'error');
     } finally { setBusyShipmentId(null); }
   };
 
   // ── Real Razorpay checkout ─────────────────────────────────────────────────
   const launchRazorpay = (payment: PaymentInfo, shipmentId: number) => {
     if (!window.Razorpay) {
-      alert('Razorpay SDK not loaded. Please refresh the page.');
+      addNotification('Razorpay SDK not loaded. Please refresh the page.', 'error');
       return;
     }
     if (!payment.razorpayOrderId) {
-      alert('No Razorpay Order ID found. Please re-initiate payment.');
+      addNotification('No Razorpay Order ID found. Please re-initiate payment.', 'error');
       return;
     }
 
@@ -224,12 +236,13 @@ export const ShipmentsPage = () => {
             shipmentId,
             paymentMethod: 'Online',
           });
-          alert(' Payment verified successfully!');
+          addNotification('Payment verified successfully!', 'success');
           await fetchShipments();
         } catch (err: any) {
-          alert(
+          addNotification(
             err?.response?.data?.message ||
-            'Payment made but verification failed. Use "Retry Verify" on the Payments page.'
+            'Payment made but verification failed. Use "Retry Verify" on the Payments page.',
+            'error'
           );
           await fetchShipments();
         } finally {
@@ -266,7 +279,7 @@ export const ShipmentsPage = () => {
       const payment = res.data as PaymentInfo;
 
       if (mode === 'COD') {
-        alert(payment.message || 'COD registered successfully. Schedule pickup when ready.');
+        addNotification(payment.message || 'COD registered successfully. Schedule pickup when ready.', 'success');
         await fetchShipments();
         setBusyShipmentId(null);
         return;
@@ -277,7 +290,7 @@ export const ShipmentsPage = () => {
       await fetchShipments();  // refresh so payment shows in table
       launchRazorpay(payment, shipment.id);
     } catch (err: any) {
-      alert(err?.response?.data?.message || err?.response?.data || 'Payment action failed.');
+      addNotification(err?.response?.data?.message || err?.response?.data || 'Payment action failed.', 'error');
       setBusyShipmentId(null);
     }
   };
@@ -302,7 +315,7 @@ export const ShipmentsPage = () => {
       setVerifyModalOpen(false); setVerifyPayment(null); setSelectedShipment(null);
       await fetchShipments();
     } catch (err: any) {
-      alert(err?.response?.data?.message || 'Payment verification failed.');
+      addNotification(err?.response?.data?.message || 'Payment verification failed.', 'error');
     } finally { setBusyShipmentId(null); }
   };
 
@@ -469,7 +482,7 @@ export const ShipmentsPage = () => {
                       {!(s.status === 'Draft' || s.status === 'Booked') && !isAdmin && (
                         <button className="ss-btn ss-btn-outline"
                           disabled={busyShipmentId === s.id}
-                          onClick={e => handleCancel(e, s.id)}>
+                          onClick={e => openCancelModal(e, s.id)}>
                           Cancel
                         </button>
                       )}
@@ -598,6 +611,25 @@ export const ShipmentsPage = () => {
             await fetchShipments();
           }}
         />
+      )}
+
+      {/* Cancel Confirmation Modal */}
+      {cancelModalOpen && shipmentToCancel && (
+        <div onClick={() => { setCancelModalOpen(false); setShipmentToCancel(null); }} style={modalBackdrop}>
+          <div onClick={e => e.stopPropagation()} className="ss-card"
+            style={{ ...modalCard, boxShadow: '0 0 40px rgba(0,0,0,0.45)' }}>
+            <h2 style={{ fontFamily: 'Orbitron, monospace', marginBottom: 16, color: '#fff', fontSize: 22, fontWeight: 700 }}>Confirm Cancellation</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: 18, fontSize: 14 }}>
+              Are you sure you want to cancel shipment <strong>#{shipmentToCancel}</strong>?
+            </p>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <button className="ss-btn ss-btn-outline" onClick={() => { setCancelModalOpen(false); setShipmentToCancel(null); }}>No, keep it</button>
+              <button className="ss-btn" style={{ background: '#e0001a', color: '#fff', border: '1px solid #e0001a' }}
+                disabled={busyShipmentId === shipmentToCancel}
+                onClick={confirmCancel}>Yes, Cancel</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
