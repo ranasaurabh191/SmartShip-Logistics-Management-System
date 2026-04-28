@@ -81,7 +81,7 @@ export const CustomerDashboard = () => {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div style={{ display: 'flex',marginRight: 20, flexDirection: 'column', gap: 10 }}>
       <div>
         <div className="accent-line" style={{ marginBottom: 8 }} />
         <h1 className="section-title">Customer Dashboard</h1>
@@ -90,7 +90,7 @@ export const CustomerDashboard = () => {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
         <div className="kpi-card">
           <div className="kpi-label">Total Shipments</div>
           <div className="kpi-value">{stats?.totalShipments ?? 0}</div>

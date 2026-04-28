@@ -1,6 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
 import { useChat, type ShipmentChip } from '../hooks/useChat';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useNotificationStore } from '../../store/useNotificationStore';
+import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 
 interface Props { shipmentId?: number; }
@@ -90,9 +92,37 @@ export const ChatWidget = ({ shipmentId }: Props) => {
     const windowRef = useRef<HTMLDivElement>(null);
     const fabRef = useRef<HTMLButtonElement>(null);
     const user = useAuthStore(state => state.user);
+    const addNotification = useNotificationStore(state => state.addNotification);
     const { messages, loading, sendMessage, clearChat, activeShipmentId } = useChat(shipmentId);
     const prevUserIdRef = useRef<number | null>(null);
+    const {
+        isSupported: voiceSupported,
+        speechState,
+        interimText,
+        toggle: toggleVoice,
+        isListening,
+        stop: stopVoice,
+    } = useSpeechRecognition({
+        lang: 'en-IN',
+        onResult: (transcript, isFinal) => {
+            setInput(transcript);
+            if (isFinal && transcript.trim()) {
+                setTimeout(() => {
+                    handleSend(transcript.trim());
+                    setInput('');
+                }, 300);
+            }
+        },
+        onError: (err) => {
+            addNotification(err, 'error');
+        },
+        onEnd: () => {
+        },
+    });
 
+    useEffect(() => {
+        if (!open) stopVoice();
+    }, [open]);
     useEffect(() => {
         if (prevUserIdRef.current !== null && prevUserIdRef.current !== user?.id) {
             clearChat();
@@ -184,6 +214,26 @@ export const ChatWidget = ({ shipmentId }: Props) => {
                 .ss-chip { transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease; }
                 .ss-chip:hover { background: rgba(226,75,74,0.08) !important; color: #E24B4A !important; border-color: rgba(226,75,74,0.5) !important; transform: translateY(-1px); }
                 .ss-chip:active { transform: scale(0.96); }
+                
+                @keyframes ss-voice-pulse {
+                0%, 100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(226,75,74,0.6); }
+                50%       { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(226,75,74,0); }
+                }
+                @keyframes ss-wave {
+                0%, 100% { height: 4px; }
+                25%       { height: 12px; }
+                50%       { height: 7px; }
+                75%       { height: 16px; }
+                }
+                .ss-mic-btn { transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease; }
+                .ss-mic-btn:hover:not(:disabled) { transform: scale(1.08); }
+                .ss-mic-btn:active:not(:disabled) { transform: scale(0.93); }
+                .ss-mic-listening { animation: ss-voice-pulse 1.1s ease infinite; }
+                .ss-voice-bar { display: inline-block; width: 3px; border-radius: 2px; background: #E24B4A; margin: 0 1px; animation: ss-wave 0.7s ease-in-out infinite; }
+                .ss-voice-bar:nth-child(2) { animation-delay: 0.1s; }
+                .ss-voice-bar:nth-child(3) { animation-delay: 0.22s; }
+                .ss-voice-bar:nth-child(4) { animation-delay: 0.12s; }
+
             `}</style>
 
 
@@ -270,7 +320,7 @@ export const ChatWidget = ({ shipmentId }: Props) => {
                                 </div>
                                 <div style={{ fontSize: 11, color: '#22c27a', display: 'flex', alignItems: 'center', gap: 5, marginTop: 2 }}>
                                     <span className="ss-dot" style={{ background: '#22c27a', animation: 'ss-blink 2s ease infinite' }} />
-                                    Online 
+                                    Online
                                 </div>
                             </div>
                         </div>
@@ -431,28 +481,74 @@ export const ChatWidget = ({ shipmentId }: Props) => {
                         <input
                             ref={inputRef}
                             className="ss-input"
-                            value={input}
-                            onChange={e => setInput(e.target.value)}
-                            onKeyDown={e => e.key === 'Enter' && handleSend()}
-                            placeholder="Ask me anything..."
+                            value={isListening && interimText ? interimText : input}
+                            onChange={e => { if (!isListening) setInput(e.target.value); }}
+                            onKeyDown={e => { if (e.key === 'Enter' && !isListening) handleSend(); }}
+                            placeholder={isListening ? '🎤 Listening...' : 'Ask me anything...'}
                             disabled={loading}
                             style={{
                                 flex: 1, fontSize: 12, padding: '8px 12px',
-                                border: '0.5px solid rgba(0,0,0,0.15)',
+                                border: `0.5px solid ${isListening ? 'rgba(226,75,74,0.6)' : 'rgba(0,0,0,0.15)'}`,
                                 borderRadius: 10, outline: 'none',
-                                background: 'var(--color-surface, #fff)',
-                                color: 'var(--color-text, #111)',
-                                transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+                                background: isListening ? 'rgba(226,75,74,0.04)' : 'var(--color-surface, #fff)',
+                                color: isListening ? '#E24B4A' : 'var(--color-text, #111)',
+                                transition: 'border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease',
+                                boxShadow: isListening ? '0 0 0 3px rgba(226,75,74,0.12)' : undefined,
                             }}
                         />
+
+                        {/* Mic button — only shown if browser supports it */}
+                        {voiceSupported && (
+                            <button
+                                className={`ss-mic-btn ${isListening ? 'ss-mic-listening' : ''}`}
+                                onClick={toggleVoice}
+                                disabled={loading}
+                                title={isListening ? 'Stop listening' : 'Speak your message'}
+                                aria-label={isListening ? 'Stop voice input' : 'Start voice input'}
+                                style={{
+                                    width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
+                                    background: isListening ? '#E24B4A' : speechState === 'error' ? '#f5a623' : 'rgba(226,75,74,0.1)',
+                                    border: `1px solid ${isListening ? '#E24B4A' : 'rgba(226,75,74,0.3)'}`,
+                                    cursor: loading ? 'not-allowed' : 'pointer',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
+                                    opacity: loading ? 0.5 : 1,
+                                }}
+                            >
+                                {isListening ? (
+                                    /* Animated waveform bars when listening */
+                                    <>
+                                        <span className="ss-voice-bar" />
+                                        <span className="ss-voice-bar" />
+                                        <span className="ss-voice-bar" />
+                                        <span className="ss-voice-bar" />
+                                    </>
+                                ) : speechState === 'error' ? (
+                                    /* Error icon */
+                                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                        <circle cx="7" cy="7" r="6" stroke="#f5a623" strokeWidth="1.5" />
+                                        <path d="M7 4v4M7 10v.5" stroke="#f5a623" strokeWidth="1.5" strokeLinecap="round" />
+                                    </svg>
+                                ) : (
+                                    /* Mic icon */
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                                        <rect x="9" y="2" width="6" height="12" rx="3" fill="#E24B4A" />
+                                        <path d="M5 10a7 7 0 0 0 14 0" stroke="#E24B4A" strokeWidth="2" strokeLinecap="round" />
+                                        <line x1="12" y1="20" x2="12" y2="22" stroke="#E24B4A" strokeWidth="2" strokeLinecap="round" />
+                                        <line x1="8" y1="22" x2="16" y2="22" stroke="#E24B4A" strokeWidth="2" strokeLinecap="round" />
+                                    </svg>
+                                )}
+                            </button>
+                        )}
+
+                        {/* Send button */}
                         <button
                             className="ss-send"
                             onClick={() => handleSend()}
-                            disabled={loading || !input.trim()}
+                            disabled={loading || (!input.trim() && !isListening)}
                             style={{
                                 width: 34, height: 34, borderRadius: '50%',
-                                background: loading || !input.trim() ? '#ccc' : '#E24B4A',
-                                border: 'none', cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
+                                background: loading || (!input.trim() && !isListening) ? '#ccc' : '#E24B4A',
+                                border: 'none', cursor: loading || (!input.trim() && !isListening) ? 'not-allowed' : 'pointer',
                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                                 flexShrink: 0,
                             }}
