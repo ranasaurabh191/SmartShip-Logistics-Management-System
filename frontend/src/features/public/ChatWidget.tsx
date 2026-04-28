@@ -89,21 +89,12 @@ export const ChatWidget = ({ shipmentId }: Props) => {
     const inputRef = useRef<HTMLInputElement>(null);
     const user = useAuthStore(state => state.user);
     const { messages, loading, sendMessage, clearChat, activeShipmentId } = useChat(shipmentId);
-    const [hasGreeted, setHasGreeted] = useState(false);
-
-    const handleOpen = () => {
-        setOpen(true);
-        if (!hasGreeted) {
-            setHasGreeted(true);
-        }
-    };
     const prevUserIdRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (prevUserIdRef.current !== null && prevUserIdRef.current !== user?.id) {
             clearChat();
-            setOpen(false);      
-            setHasGreeted(false);  
+            setOpen(false);
         }
         prevUserIdRef.current = user?.id ?? null;
     }, [user?.id]);

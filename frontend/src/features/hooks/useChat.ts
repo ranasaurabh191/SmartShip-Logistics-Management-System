@@ -79,7 +79,7 @@ export const useChat = (shipmentId?: number) => {
             text: '👋 Hi! I\'m your SmartShip assistant. Ask me about tracking, documents, or delivery. Type **help** for options.',
             timestamp: new Date()
         }]);
-        setActiveShipmentId(null);
+        setActiveShipmentId(undefined);
     }, []);
 
     return { messages, loading, sendMessage, clearChat, activeShipmentId };
