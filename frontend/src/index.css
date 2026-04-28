@@ -31,6 +31,12 @@
   padding: 0;
 }
 
+.ss-input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+  margin-left: 15px;
+}
+
 html {
   font-size: 14px;
   -webkit-font-smoothing: antialiased;

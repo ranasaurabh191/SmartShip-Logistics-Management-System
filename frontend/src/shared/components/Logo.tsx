@@ -14,10 +14,10 @@ export const SmartShipLogo = () => (
     {/* Brand text */}
     <text
       x="28"
-      y="30"
+      y="31"
       fontFamily="'Orbitron', monospace"
       fontWeight="600"
-      fontSize="27"
+      fontSize="26"
       fill="#ffffff"
       style={{ fontStyle: 'italic' }}
     >

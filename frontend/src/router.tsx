@@ -9,6 +9,8 @@ import { DashboardLayout } from './layouts/DashboardLayout';
 // Auth Pages
 import { LoginPage } from './features/auth/LoginPage';
 import { SignupPage } from './features/auth/SignupPage';
+import { ForgotPasswordPage } from './features/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './features/auth/ResetPasswordPage';
 
 // Public / Landing
 import { LandingPage } from './features/public/LandingPage';
@@ -39,6 +41,8 @@ export const router = createBrowserRouter([
         children: [
           { path: 'login', element: <LoginPage /> },
           { path: 'signup', element: <SignupPage /> },
+          { path: 'forgot-password', element: <ForgotPasswordPage /> },
+          { path: 'reset-password', element: <ResetPasswordPage /> },
           { path: 'callback', element: <OAuthCallbackPage /> },
 
         ],

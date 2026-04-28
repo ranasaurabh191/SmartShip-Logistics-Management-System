@@ -270,7 +270,7 @@ export const ChatWidget = ({ shipmentId }: Props) => {
                                 </div>
                                 <div style={{ fontSize: 11, color: '#22c27a', display: 'flex', alignItems: 'center', gap: 5, marginTop: 2 }}>
                                     <span className="ss-dot" style={{ background: '#22c27a', animation: 'ss-blink 2s ease infinite' }} />
-                                    Online · Instant replies
+                                    Online 
                                 </div>
                             </div>
                         </div>

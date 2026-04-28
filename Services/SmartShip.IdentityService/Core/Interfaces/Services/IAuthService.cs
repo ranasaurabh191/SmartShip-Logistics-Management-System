@@ -1,4 +1,4 @@
-﻿using SmartShip.IdentityService.Core.DTOs;
+using SmartShip.IdentityService.Core.DTOs;
 
 namespace SmartShip.IdentityService.Core.Interfaces.Services;
 
@@ -10,4 +10,6 @@ public interface IAuthService
     Task<object> RequestSignupOtpAsync(SignupOtpRequest request);  
     Task<OtpResponse> VerifySignupOtpAsync(VerifyOtpRequest request);
     Task<(string token, int userId, string role)> FindOrCreateOAuthUserAsync(string email, string name, string provider);
+    Task<object> ForgotPasswordAsync(ForgotPasswordRequest request);
+    Task<object> ResetPasswordAsync(ResetPasswordRequest request);
 }

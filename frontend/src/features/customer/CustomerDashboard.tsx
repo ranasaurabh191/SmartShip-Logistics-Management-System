@@ -138,12 +138,13 @@ export const CustomerDashboard = () => {
         </div>
 
         <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-          <button className="ss-btn" onClick={() => navigate('/customer/shipments/create')}>
+          <button className="ss-btn" style={{  marginTop: '10px' }} onClick={() => navigate('/customer/shipments/create')}>
             + New Shipment
           </button>
           <button
             className="ss-btn ss-btn-outline"
             onClick={() => navigate('/customer/shipments')}
+            style={{ marginTop: '10px' }}
           >
             View Shipments
           </button>

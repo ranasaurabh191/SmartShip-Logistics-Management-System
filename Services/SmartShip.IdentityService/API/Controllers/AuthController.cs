@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.IdentityService.Core.DTOs;
@@ -43,6 +43,20 @@ public class AuthController : ControllerBase
     {
         await _verifyOtpValidator.ValidateAndThrowAsync(request);
         var result = await _authService.VerifySignupOtpAsync(request);
+        return Ok(result);
+    }
+
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+    {
+        var result = await _authService.ForgotPasswordAsync(request);
+        return Ok(result);
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+    {
+        var result = await _authService.ResetPasswordAsync(request);
         return Ok(result);
     }
 

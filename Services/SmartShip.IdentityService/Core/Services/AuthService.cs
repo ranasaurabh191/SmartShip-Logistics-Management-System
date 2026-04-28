@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using Microsoft.IdentityModel.Tokens;
 using SmartShip.IdentityService.Core.DTOs;
 using SmartShip.IdentityService.Core.Interfaces.Persistence;
@@ -332,5 +332,88 @@ public class AuthService : IAuthService
 
         var token = GenerateToken(user);
         return (token, user.Id, user.Role);
+    }
+
+    public async Task<object> ForgotPasswordAsync(ForgotPasswordRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Email))
+            throw new ArgumentException("Email is required");
+
+        _logger.LogInformation("Forgot password request for: {Email}", request.Email);
+
+        var user = await _userRepository.GetByEmailAsync(request.Email);
+        if (user == null)
+            return new { message = "If an account exists with that email, a password reset link has been sent." };
+
+        var existingToken = await _otpRepository.GetByEmailAndPurposeAsync(request.Email, "PasswordReset");
+
+        var token = Guid.NewGuid().ToString("N");
+        var tokenHash = HashOtp(token);
+        var expiresAt = DateTime.Now.AddHours(1);
+
+        if (existingToken != null)
+        {
+            existingToken.OtpHash = tokenHash;
+            existingToken.ExpiresAt = expiresAt;
+            existingToken.IsUsed = false;
+            _otpRepository.Update(existingToken);
+        }
+        else
+        {
+            existingToken = new OtpVerification
+            {
+                CustomerId = user.Id,
+                Email = request.Email,
+                Purpose = "PasswordReset",
+                OtpHash = tokenHash,
+                ExpiresAt = expiresAt
+            };
+
+            await _otpRepository.AddAsync(existingToken);
+        }
+
+        await _unitOfWork.SaveChangesAsync();
+
+        var frontendUrl = _config["FrontendUrl"] ?? "http://localhost:5173";
+        var resetLink = $"{frontendUrl}/auth/reset-password?token={token}&email={Uri.EscapeDataString(request.Email)}";
+        var body = $"Please reset your password by clicking here: <a href='{resetLink}'>{resetLink}</a>. This link expires in 1 hour.";
+
+        await _emailService.SendEmailAsync(request.Email, "SmartShip - Password Reset", body);
+
+        return new { message = "If an account exists with that email, a password reset link has been sent." };
+    }
+
+    public async Task<object> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Token) || string.IsNullOrWhiteSpace(request.NewPassword))
+            throw new ArgumentException("Email, token, and new password are required");
+
+        _logger.LogInformation("Reset password attempt for: {Email}", request.Email);
+
+        var user = await _userRepository.GetByEmailAsync(request.Email);
+        if (user == null)
+            throw new InvalidOperationException("Invalid or expired token.");
+
+        var otpRecord = await _otpRepository.GetByEmailAndPurposeAsync(request.Email, "PasswordReset");
+
+        if (otpRecord == null || otpRecord.IsUsed || DateTime.Now > otpRecord.ExpiresAt)
+        {
+            throw new InvalidOperationException("Invalid or expired token.");
+        }
+
+        if (!VerifyOtp(request.Token, otpRecord.OtpHash))
+        {
+            throw new InvalidOperationException("Invalid or expired token.");
+        }
+
+        otpRecord.IsUsed = true;
+        _otpRepository.Update(otpRecord);
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        _userRepository.Update(user);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        return new { message = "Password reset successfully." };
     }
 }

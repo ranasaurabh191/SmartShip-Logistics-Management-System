@@ -577,13 +577,13 @@ export const ShipmentsPage = () => {
       {pickupModalOpen && (
         <div onClick={() => setPickupModalOpen(false)} style={modalBackdrop}>
           <div onClick={e => e.stopPropagation()} className="ss-card"
-            style={{ ...modalCard, boxShadow: '0 0 40px rgba(0,0,0,0.45)' }}>
+            style={{ ...modalCard, boxShadow: '0px 0px 50px rgba(195, 189, 189, 0.45)' }}>
             <h2 style={{ fontFamily: 'Orbitron, monospace', marginBottom: 16, color: '#fff', fontSize: 22, fontWeight: 700 }}>Schedule Pickup</h2>
             <p style={{ color: 'var(--color-text-muted)', marginBottom: 18, fontSize: 14 }}>
               Select pickup date and time for <strong>{selectedShipment?.trackingNumber}</strong>
             </p>
             <input type="datetime-local" className="ss-input" value={pickupDateTime}
-              onChange={e => setPickupDateTime(e.target.value)} style={{ width: '100%', marginBottom: 20 }} />
+              onChange={e => setPickupDateTime(e.target.value)} style={{ width: '100%', marginBottom: 20}} />
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
               <button className="ss-btn ss-btn-outline" onClick={() => setPickupModalOpen(false)}>Cancel</button>
               <button className="ss-btn" disabled={busyShipmentId === selectedShipment?.id}

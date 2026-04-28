@@ -1,4 +1,4 @@
-﻿namespace SmartShip.IdentityService.Core.DTOs;
+namespace SmartShip.IdentityService.Core.DTOs;
 
 public record SignupRequest( string Name, string Email, string Phone, string Password);
 public record LoginRequest(string Email, string Password);
@@ -11,3 +11,6 @@ public class UserPagedRequest : PagedRequest
     public string? Role { get; set; }
     public bool? IsActive { get; set; }
 }
+
+public record ForgotPasswordRequest(string Email);
+public record ResetPasswordRequest(string Email, string Token, string NewPassword);
