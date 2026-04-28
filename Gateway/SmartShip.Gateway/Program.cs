@@ -14,7 +14,7 @@ Log.Logger = new LoggerConfiguration()
 
 try
 {
-    Log.Information(" --> Starting SmartShip Gateway...");
+    Log.Information(" --> Starting SmartShip Gateway....");
 
     var builder = WebApplication.CreateBuilder(args);
 
