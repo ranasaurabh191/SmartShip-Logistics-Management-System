@@ -3,6 +3,7 @@ using SmartShip.TrackingService.Core.Interfaces.Repositories;
 using SmartShip.TrackingService.Core.Interfaces.Services;
 using SmartShip.TrackingService.Domain.Entities;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace SmartShip.TrackingService.Core.Services;
 
@@ -16,8 +17,7 @@ public class ChatService : IChatService
     private readonly HttpClient _httpClient;
     private readonly ILogger<ChatService> _logger;
 
-    private static readonly Dictionary<string, (string Response, DateTime CachedAt)>
-        _cache = new();
+    private static readonly Dictionary<string, (string Response, DateTime CachedAt)> _cache = new();
 
     public ChatService(
         IConfiguration config,
@@ -36,119 +36,91 @@ public class ChatService : IChatService
         _httpClient = httpClientFactory.CreateClient("Ollama");
         _logger = logger;
     }
-    private static string? ExtractTrackingNumber(string message)
-    {
-        var match = System.Text.RegularExpressions.Regex.Match(
-            message, @"SS\d{10,}", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        return match.Success ? match.Value.ToUpper() : null;
-    }
 
     public async Task<ChatResponseDto> ProcessAsync(
         ChatMessageRequest req, int userId, bool isAdmin)
     {
         _logger.LogInformation("Chat from User {UserId}: {Message}", userId, req.Message);
-        _logger.LogInformation("ChatService VERSION 2 loaded");
+
         var activeShipmentId = req.SelectedShipmentId ?? req.ShipmentId;
         var intent = DetectIntent(req.Message);
         _logger.LogInformation("Intent: {Intent}, ActiveShipment: {Id}", intent, activeShipmentId);
 
-        var extractedTrackingNumber = ExtractTrackingNumber(req.Message);
-        if (extractedTrackingNumber != null && activeShipmentId == null)
+        var extracted = ExtractTrackingNumber(req.Message);
+        if (extracted != null && activeShipmentId == null)
         {
-            var allShipments = await _shipmentClient.GetUserShipmentsAsync(userId, isAdmin);
-            var matched = allShipments.FirstOrDefault(s =>
-                s.TrackingNumber.Equals(extractedTrackingNumber,
-                    StringComparison.OrdinalIgnoreCase));
-            if (matched != null)
-                activeShipmentId = matched.Id;
+            var all = await _shipmentClient.GetUserShipmentsAsync(userId, isAdmin);
+            var match = all.FirstOrDefault(s =>
+                s.TrackingNumber.Equals(extracted, StringComparison.OrdinalIgnoreCase));
+            if (match != null) activeShipmentId = match.Id;
         }
+
         try
         {
-            if (intent == "greeting") return HandleGreeting();
-            if (intent == "help") return HandleHelp();
-            if (intent == "small_talk") return HandleSmallTalk();
-            if (intent == "reset_context") return HandleResetContext();
+            if (intent == "greeting") return StaticGreeting();
+            if (intent == "reset_context") return StaticResetContext();
 
-            if (intent == "rate_calculate") return HandleRateCalculation(req.Message);
-            if (intent == "rate_general") return HandleRateGeneral();
-            if (intent == "rate_compare") return await HandleRateComparison(req.Message);
+            if (intent == "admin_stats" && !isAdmin)
+                return await AskOllama(req, userId, false,
+                    "Dashboard stats are only available to admins. Tell the user politely.");
 
-            if (intent == "admin_stats")
-            {
-                if (!isAdmin)
-                    return new ChatResponseDto(
-                        "📊 Dashboard stats are available to **admins only**.",
-                        "unauthorized", null);
-                return await HandleAdminStats(userId);
-            }
-
-            if (intent == "list_documents")
-            {
-                if (!isAdmin)
-                    return new ChatResponseDto(
-                        "📎 Document access is available to **admins only**.\n\n" +
-                        "As a customer you can view your **delivery proof** once delivered.\n" +
-                        "Type **delivery proof** to check it.",
-                        "unauthorized", null);
-
-                if (activeShipmentId == null)
-                    return await ShowShipmentPicker(userId, isAdmin,
-                        "📎 Which shipment's documents do you want to see? Select one below:");
-
-                return await HandleDocuments(req, userId, isAdmin);
-            }
+            if (intent == "list_documents" && !isAdmin)
+                return await AskOllama(req, userId, false,
+                    "Document access is admin-only. Customer can check delivery proof. Tell the user politely.");
 
             if (intent is "track_shipment" or "delivery_eta"
-                       or "shipment_status" or "delivery_proof")
+                       or "shipment_status" or "delivery_proof" or "list_documents"
+                       or "admin_stats")
             {
+                if (intent == "admin_stats")
+                    return await HandleAdminStats(userId, req);
+
+                if (intent == "list_documents")
+                {
+                    if (activeShipmentId == null)
+                        return await ShowShipmentPicker(userId, isAdmin,
+                            "Which shipment's documents do you want to see?");
+                    return await HandleDocuments(req, userId);
+                }
+
                 if (activeShipmentId == null)
                     return await ShowShipmentPicker(userId, isAdmin,
                         GetPickerPrompt(intent));
 
-                return await HandleShipmentIntent(intent, req,
-                    activeShipmentId.Value, userId);
+                return await HandleShipmentIntent(intent, req, activeShipmentId.Value, userId);
             }
+            if (intent is "rate_calculate" or "rate_general" or "rate_compare")
+                return await HandleRateWithOllama(req);
 
-            return await AskOllama(req, userId, isAdmin, activeShipmentId);
+            return await AskOllama(req, userId, isAdmin, null);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Chat processing failed for User {UserId}", userId);
             return new ChatResponseDto(
-                "⚠️ Something went wrong. Please try again.",
-                "error", null);
+                "Something went wrong. Please try again.", "error", null);
         }
     }
+
+
     private static string DetectIntent(string message)
     {
         var msg = message.ToLower().Trim();
 
-        if (msg.Contains("tell me about shipment") ||
-            msg.Contains("about shipment") ||
-            msg.Contains("info about") ||
-            msg.Contains("details of shipment") ||
-            msg.Contains("shipment ss") ||
-            System.Text.RegularExpressions.Regex.IsMatch(msg, @"ss\d{10,}"))
-            return "track_shipment";
-
-        if (Has(msg, "how many hubs", "active hubs", "how many users", "total users",
-        "user count", "hub count"))
-            return "unknown";
-
         if (msg.Length < 3) return "small_talk";
+
+        if (Regex.IsMatch(msg, @"ss\d{10,}") ||
+            Has(msg, "tell me about shipment", "about shipment", "info about",
+                     "details of shipment", "shipment ss"))
+            return "track_shipment";
 
         if (msg is "hi" or "hello" or "hey" or "good morning" or "hii"
                or "good evening" or "namaste" or "helo" or "heyy")
             return "greeting";
 
-        if (Has(msg, "help", "what can you do", "commands", "options", "menu"))
-            return "help";
-
-        if (IsSmallTalk(msg)) return "small_talk";
-
         if (msg is "check another" or "reset" or "another shipment" or "change shipment"
                or "different shipment" or "clear context" or "switch shipment"
-               or "list my shipments" or "check another shipment" or "show another")
+               or "check another shipment" or "show another")
             return "reset_context";
 
         if (Has(msg, "rate", "price", "cost", "charge", "how much", "fee", "pricing"))
@@ -157,26 +129,22 @@ public class ChatService : IChatService
                 return "rate_compare";
             return HasNumber(msg) ? "rate_calculate" : "rate_general";
         }
+        if (Has(msg, "cheapest", "compare rates", "best rate")) return "rate_compare";
 
-        if (Has(msg, "cheapest", "compare rates", "which type", "best rate"))
-            return "rate_compare";
-
-        if (Has(msg, "document", "invoice", "label", "file", "attachment", "packing slip"))
+        if (Has(msg, "document", "invoice", "label", "file", "attachment"))
             return "list_documents";
 
-        if (Has(msg, "proof", "delivery proof", "signature", "confirm delivery", "received by"))
+        if (Has(msg, "proof", "delivery proof", "signature", "confirm delivery"))
             return "delivery_proof";
 
-        if (Has(msg, "when will", "how long", "eta", "delivery time",
-                "expected", "estimate", "how many days"))
+        if (Has(msg, "when will", "eta", "delivery time", "expected", "how many days"))
             return "delivery_eta";
 
-        if (Has(msg, "track", "where is", "where are", "location", "transit",
-                "where", "current status", "in transit"))
+        if (Has(msg, "track", "where is", "where are", "location", "transit", "in transit"))
             return "track_shipment";
 
         if (Has(msg, "status", "my shipments", "show shipments",
-                "list shipments", "all shipments", "shipment status"))
+                "list shipments", "all shipments"))
             return "shipment_status";
 
         if (Has(msg, "total shipments", "pending count", "dashboard",
@@ -191,61 +159,34 @@ public class ChatService : IChatService
 
     private static bool HasNumber(string msg) => msg.Any(char.IsDigit);
 
-    private static bool IsSmallTalk(string msg) =>
-        new[] { "how are you", "thanks", "thank you", "ok", "okay", "cool",
-                "nice", "good", "bye", "goodbye", "ok got it", "got it",
-                "sure", "alright", "great", "awesome", "perfect", "noted" }
-        .Any(s => msg.Contains(s, StringComparison.OrdinalIgnoreCase));
-
-    private async Task<ChatResponseDto> ShowShipmentPicker(
-        int userId, bool isAdmin, string prompt)
+    private static string? ExtractTrackingNumber(string message)
     {
-        var shipments = await _shipmentClient.GetUserShipmentsAsync(userId, isAdmin);
-
-        if (!shipments.Any())
-            return new ChatResponseDto(
-                "📭 You don't have any shipments yet. Create one to get started!",
-                "no_shipments", null);
-
-        var chips = shipments.Select(s => new ShipmentChip
-        {
-            ShipmentId = s.Id,
-            TrackingNumber = s.TrackingNumber,
-            Label = $"{s.TrackingNumber} · {s.ShipmentType} · {s.OriginCity}→{s.DestinationCity}",
-            Status = s.Status
-        }).ToList();
-
-        return new ChatResponseDto(prompt, "shipment_picker", null, chips);
+        var m = Regex.Match(message, @"SS\d{10,}", RegexOptions.IgnoreCase);
+        return m.Success ? m.Value.ToUpper() : null;
     }
 
-    private static string GetPickerPrompt(string intent) => intent switch
-    {
-        "track_shipment" => "📦 Which shipment would you like to track? Select one below:",
-        "delivery_eta" => "📅 Which shipment do you want the ETA for? Select one below:",
-        "shipment_status" => "📋 Which shipment's status do you want? Select one below:",
-        "list_documents" => "📎 Which shipment's documents? Select one below:",
-        "delivery_proof" => "✅ Which shipment's delivery proof? Select one below:",
-        _ => "📦 Please select a shipment to continue:"
-    };
 
-    
     private async Task<ChatResponseDto> HandleShipmentIntent(
         string intent, ChatMessageRequest req, int shipmentId, int userId)
     {
         var shipment = await _shipmentClient.GetShipmentByIdAsync(shipmentId);
         if (shipment == null)
             return new ChatResponseDto(
-                "❌ I couldn't find that shipment. Please try selecting again.",
-                "error", null);
+                "I couldn't find that shipment. Please try selecting again.", "error", null);
+
+        _logger.LogInformation("Shipment {Id} Status='{Status}' Payment='{Payment}'",
+            shipmentId, shipment.Status, shipment.PaymentStatus);
 
         var events = await _trackingRepo.GetByTrackingNumberPagedAsync(
             shipment.TrackingNumber,
             new TrackingEventPagedRequest { Page = 1, PageSize = 20 });
-        var latestEvent = events.Data.LastOrDefault();
 
-        var proof = shipment.Status.Equals("Delivered", StringComparison.OrdinalIgnoreCase)
-            ? await _deliveryProofRepo.GetByShipmentIdAsync(shipmentId)
-            : null;
+        var allEvents = events.Data.ToList();
+        var latestEvent = allEvents.LastOrDefault();
+
+        DeliveryProof? proof = null;
+        if (shipment.Status.Equals("Delivered", StringComparison.OrdinalIgnoreCase))
+            proof = await _deliveryProofRepo.GetByShipmentIdAsync(shipmentId);
 
         var today = DateTime.Now;
         if (!DateTime.TryParseExact(
@@ -259,253 +200,145 @@ public class ChatService : IChatService
         var expectedDelivery = createdAt.AddDays(7);
         var daysRemaining = Math.Max(0, (expectedDelivery - today).Days);
         var isOverdue = today > expectedDelivery
-                               && shipment.Status is not "Delivered" and not "Cancelled";
+                        && shipment.Status is not "Delivered" and not "Cancelled";
 
-        var status = shipment.Status?.Trim().ToLower() ?? "";
+        var trackingHistory = allEvents.Any()
+            ? string.Join("\n", allEvents.Select(e =>
+                $"  - {e.EventTime:dd-MMM-yyyy HH:mm} | {e.Status} | {e.Location} | {e.Description}"))
+            : "  No tracking events yet.";
 
-        var reply = status switch
-        {
-            "delivered" =>
-                BuildDeliveredReply(shipment, proof),
+        var proofSection = proof != null
+            ? $"Delivered at: {proof.DeliveredAt:dd-MMM-yyyy HH:mm}\n" +
+              $"Received by: {proof.ReceiverName}\n" +
+              $"Delivered by: {proof.DeliveredBy}\n" +
+              $"Notes: {proof.Notes ?? "None"}"
+            : "No delivery proof on record.";
 
-            "cancelled" =>
-                BuildCancelledReply(shipment),
+        var systemPrompt = $"""
+            You are SmartShip AI, a helpful logistics assistant.
+            Answer the user's question using ONLY the shipment data below.
+            Be conversational, concise (under 120 words), and use clean markdown.
+            Do NOT use excessive emojis — use at most 2 per response.
+            Do NOT invent any data, dates, or locations not present below.
 
-            "pendingpickup" or "pending_pickup" or "pending pickup" or "pending" =>
-                BuildPendingPickupReply(shipment, expectedDelivery, daysRemaining),
+            === SHIPMENT DATA ===
+            Tracking Number  : {shipment.TrackingNumber}
+            Type             : {shipment.ShipmentType}
+            Current Status   : {shipment.Status}
+            Payment Status   : {shipment.PaymentStatus ?? "Unknown"}
+            Weight           : {shipment.WeightKg} kg
+            Route            : {shipment.OriginCity} to {shipment.DestinationCity}
+            Created          : {createdAt:dd-MMM-yyyy HH:mm}
+            Expected Delivery: {expectedDelivery:dd-MMM-yyyy} ({(daysRemaining > 0 ? $"in {daysRemaining} days" : isOverdue ? "overdue" : "today")})
 
-            "intransit" or "in_transit" or "in transit" =>
-                BuildInTransitReply(shipment, latestEvent, expectedDelivery, daysRemaining),
+            === TRACKING HISTORY ===
+            {trackingHistory}
 
-            _ => BuildGenericReply(shipment, latestEvent, expectedDelivery, daysRemaining, isOverdue)
-        };
-        _logger.LogInformation("Shipment {Id} Status='{Status}' Payment='{Payment}'",
-            shipmentId, shipment.Status, shipment.PaymentStatus);
+            === LATEST EVENT ===
+            {(latestEvent == null ? "None" : $"{latestEvent.Status} at {latestEvent.Location} on {latestEvent.EventTime:dd-MMM-yyyy HH:mm} — {latestEvent.Description}")}
+
+            === DELIVERY PROOF ===
+            {proofSection}
+            =====================
+
+            RULES:
+            - If Status = Delivered: confirm delivery using proof details above
+            - If Status = Cancelled: say cancelled, give no delivery date
+            - If payment status is not Paid: mention payment is pending
+            - If no tracking events: say pickup has not been scheduled yet
+            - For ETA: use Expected Delivery date above only
+            - Do not say "in transit" if status says Delivered or Cancelled
+            """;
+
+        var reply = await CallOllama(req.Message, systemPrompt, req.History);
         return new ChatResponseDto(reply, intent, null);
     }
 
 
-    private static string BuildDeliveredReply(ShipmentSummary s, DeliveryProof? proof)
-    {
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"✅ **Shipment {s.TrackingNumber} — Delivered**\n");
-        sb.AppendLine($"📦 Type : {s.ShipmentType}");
-        sb.AppendLine($"🛣️ Route : {s.OriginCity} → {s.DestinationCity}");
-        sb.AppendLine($"💳 Payment : {s.PaymentStatus}");
-
-        if (proof != null)
-        {
-            sb.AppendLine($"\n**Delivery Confirmation:**");
-            sb.AppendLine($"🕒 Delivered on : {proof.DeliveredAt:dd-MMM-yyyy hh:mm tt}");
-            sb.AppendLine($"👤 Received by : {proof.ReceiverName}");
-            sb.AppendLine($"🚚 Delivered by : {proof.DeliveredBy}");
-            if (!string.IsNullOrWhiteSpace(proof.Notes))
-                sb.AppendLine($"📝 Notes         : {proof.Notes}");
-        }
-        else
-        {
-            sb.AppendLine("\n📋 Delivery proof not yet recorded.");
-        }
-
-        if (s.PaymentStatus is not "Paid")
-            sb.AppendLine("\n⚠️ Payment is still pending for this shipment.");
-
-        return sb.ToString().TrimEnd();
-    }
-
-    private static string BuildCancelledReply(ShipmentSummary s)
-    {
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"❌ **Shipment {s.TrackingNumber} — Cancelled**\n");
-        sb.AppendLine($"📦 Type : {s.ShipmentType}");
-        sb.AppendLine($"🛣️ Route : {s.OriginCity} → {s.DestinationCity}");
-        sb.AppendLine($"💳 Payment : {s.PaymentStatus}");
-        sb.AppendLine("\nThis shipment has been cancelled. No delivery will be made.");
-
-        if (s.PaymentStatus == "Paid")
-            sb.AppendLine("💡 Since payment was made, please contact support for a refund.");
-
-        return sb.ToString().TrimEnd();
-    }
-
-    private static string BuildPendingPickupReply(
-        ShipmentSummary s, DateTime expectedDelivery, int daysRemaining)
-    {
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"🕐 **Shipment {s.TrackingNumber} — Awaiting Pickup**\n");
-        sb.AppendLine($"📦 Type : {s.ShipmentType}");
-        sb.AppendLine($"🛣️ Route : {s.OriginCity} → {s.DestinationCity}");
-        sb.AppendLine($"💳 Payment : {s.PaymentStatus}");
-        sb.AppendLine($"📅 Expected Delivery : {expectedDelivery:dd-MMM-yyyy}" +
-                      $" ({(daysRemaining > 0 ? $"in {daysRemaining} days" : "today")})");
-        sb.AppendLine("\n⏳ Pickup has not been scheduled yet.");
-
-        if (s.PaymentStatus is not "Paid")
-            sb.AppendLine("⚠️ Payment is pending — please complete payment to proceed.");
-
-        return sb.ToString().TrimEnd();
-    }
-
-    private static string BuildInTransitReply(
-        ShipmentSummary s, TrackingEvent? latestEvent,
-        DateTime expectedDelivery, int daysRemaining)
-    {
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"🚚 **Shipment {s.TrackingNumber} — In Transit**\n");
-        sb.AppendLine($"📦 Type : {s.ShipmentType}");
-        sb.AppendLine($"🛣️ Route : {s.OriginCity} → {s.DestinationCity}");
-        sb.AppendLine($"💳 Payment : {s.PaymentStatus}");
-        sb.AppendLine($"📅 Expected Delivery : {expectedDelivery:dd-MMM-yyyy}" +
-                      $" ({(daysRemaining > 0 ? $"in {daysRemaining} days" : "today")})");
-
-        if (latestEvent != null)
-        {
-            sb.AppendLine("\n**Latest Update:**");
-            sb.AppendLine($"📍 Location : {latestEvent.Location}");
-            sb.AppendLine($"📋 Status : {latestEvent.Status}");
-            sb.AppendLine($"🕒 Time : {latestEvent.EventTime:dd-MMM-yyyy hh:mm tt}");
-            if (!string.IsNullOrWhiteSpace(latestEvent.Description))
-                sb.AppendLine($"📝 Notes : {latestEvent.Description}");
-        }
-        else
-        {
-            sb.AppendLine("\n📍 No location updates yet.");
-        }
-
-        if (s.PaymentStatus is not "Paid")
-            sb.AppendLine("\n⚠️ Payment is pending for this shipment.");
-
-        return sb.ToString().TrimEnd();
-    }
-
-    private static string BuildGenericReply(
-        ShipmentSummary s, TrackingEvent? latestEvent,
-        DateTime expectedDelivery, int daysRemaining, bool isOverdue)
-    {
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine($"📦 **Shipment {s.TrackingNumber}**\n");
-        sb.AppendLine($"📋 Status : {s.Status}");
-        sb.AppendLine($"📦 Type : {s.ShipmentType}");
-        sb.AppendLine($"🛣️ Route : {s.OriginCity} → {s.DestinationCity}");
-        sb.AppendLine($"💳 Payment : {s.PaymentStatus}");
-        sb.AppendLine($"📅 Expected Delivery : {expectedDelivery:dd-MMM-yyyy}" +
-                      $" ({(isOverdue ? "⚠️ overdue" : daysRemaining > 0 ? $"in {daysRemaining} days" : "today")})");
-
-        if (latestEvent != null)
-        {
-            sb.AppendLine("\n**Latest Update:**");
-            sb.AppendLine($"📍 {latestEvent.Status} at {latestEvent.Location}" +
-                          $" — {latestEvent.EventTime:dd-MMM-yyyy hh:mm tt}");
-        }
-
-        if (s.PaymentStatus is not "Paid")
-            sb.AppendLine("\n⚠️ Payment is pending for this shipment.");
-
-        return sb.ToString().TrimEnd();
-    }
-
-    private static ChatResponseDto HandleRateCalculation(string message)
-    {
-        var words = message.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        double weightKg = 0;
-        foreach (var w in words)
-        {
-            var clean = w.Replace("kg", "", StringComparison.OrdinalIgnoreCase).Trim();
-            if (double.TryParse(clean, out var parsed) && parsed > 0)
-            { weightKg = parsed; break; }
-        }
-
-        if (weightKg <= 0) return HandleRateGeneral();
-
-        decimal express = Math.Max((decimal)(weightKg * 150), 99);
-        decimal international = Math.Max((decimal)(weightKg * 300), 99);
-        decimal freight = Math.Max((decimal)(weightKg * 50), 99);
-        decimal domestic = Math.Max((decimal)(weightKg * 80), 99);
-
-        return new ChatResponseDto(
-            $"💰 **Rates for {weightKg} kg:**\n\n" +
-            $"🚀 Express →  ₹{express:N0}\n" +
-            $"🌍 International →  ₹{international:N0}\n" +
-            $"🚚 Freight →  ₹{freight:N0}\n" +
-            $"📦 Domestic →  ₹{domestic:N0}\n\n" +
-            $"*Minimum charge ₹99. Final rate confirmed at checkout.*",
-            "rate_calculate", null);
-    }
-
-    private static ChatResponseDto HandleRateGeneral() => new(
-        "💰 **SmartShip Shipping Rates:**\n\n" +
-        "🚀 Express →  ₹150/kg  (min ₹99)\n" +
-        "🌍 International →  ₹300/kg  (min ₹99)\n" +
-        "🚚 Freight →  ₹50/kg   (min ₹99)\n" +
-        "📦 Domestic →  ₹80/kg   (min ₹99)\n\n" +
-        "💡 Say **\"rate for 5kg\"** for an exact quote!",
-        "rate_general", null);
-
-    private async Task<ChatResponseDto> HandleRateComparison(string message)
-    {
-        double weightKg = 1;
-        foreach (var w in message.Split(' ', StringSplitOptions.RemoveEmptyEntries))
-        {
-            var clean = w.Replace("kg", "", StringComparison.OrdinalIgnoreCase).Trim();
-            if (double.TryParse(clean, out var p) && p > 0) { weightKg = p; break; }
-        }
-
-        decimal express = Math.Max((decimal)(weightKg * 150), 99);
-        decimal international = Math.Max((decimal)(weightKg * 300), 99);
-        decimal freight = Math.Max((decimal)(weightKg * 50), 99);
-        decimal domestic = Math.Max((decimal)(weightKg * 80), 99);
-        var cheapest = new[] { ("Express", express), ("International", international),
-                                        ("Freight", freight), ("Domestic", domestic) }
-                                .OrderBy(x => x.Item2).First();
-
-        var prompt = $"""
-            User asked: "{message}"
-            Weight: {weightKg}kg
-
-            Calculated rates:
-            Express ₹{express:N0}, International ₹{international:N0},
-            Freight ₹{freight:N0}, Domestic ₹{domestic:N0}
-            Cheapest: {cheapest.Item1} at ₹{cheapest.Item2:N0}
-
-            Answer the user's question. Recommend {cheapest.Item1} clearly.
-            Use markdown. Under 80 words. No made-up data.
-            """;
-
-        var reply = await CallOllama(message, prompt, null);
-        return new ChatResponseDto(reply, "rate_compare", null);
-    }
-
-
-    private async Task<ChatResponseDto> HandleAdminStats(int userId)
+    private async Task<ChatResponseDto> HandleAdminStats(
+        int userId, ChatMessageRequest req)
     {
         var shipments = await _shipmentClient.GetUserShipmentsAsync(userId, true);
         _logger.LogInformation("Admin stats: fetched {Count} shipments", shipments.Count);
 
         var total = shipments.Count;
-        var pending = shipments.Count(s => s.Status
-            .Contains("Pending", StringComparison.OrdinalIgnoreCase));
-        var transit = shipments.Count(s => s.Status
-            .Contains("Transit", StringComparison.OrdinalIgnoreCase));
-        var delivered = shipments.Count(s => s.Status
-            .Equals("Delivered", StringComparison.OrdinalIgnoreCase));
-        var cancelled = shipments.Count(s => s.Status
-            .Equals("Cancelled", StringComparison.OrdinalIgnoreCase));
+        var pending = shipments.Count(s => s.Status.Contains("Pending", StringComparison.OrdinalIgnoreCase));
+        var booked = shipments.Count(s => s.Status.Contains("Booked", StringComparison.OrdinalIgnoreCase));
+        var transit = shipments.Count(s => s.Status.Contains("Transit", StringComparison.OrdinalIgnoreCase));
+        var delivered = shipments.Count(s => s.Status.Equals("Delivered", StringComparison.OrdinalIgnoreCase));
+        var cancelled = shipments.Count(s => s.Status.Equals("Cancelled", StringComparison.OrdinalIgnoreCase));
+        var draft = shipments.Count(s => s.Status.Equals("Draft", StringComparison.OrdinalIgnoreCase));
         var unpaid = shipments.Count(s => s.PaymentStatus is not "Paid");
 
-        return new ChatResponseDto(
-            $"📊 **SmartShip Dashboard Summary:**\n\n" +
-            $"📦 Total Shipments →  {total}\n" +
-            $"🕐 Pending Pickup →  {pending}\n" +
-            $"🚚 In Transit →  {transit}\n" +
-            $"✅ Delivered →  {delivered}\n" +
-            $"❌ Cancelled →  {cancelled}\n" +
-            $"💳 Unpaid →  {unpaid}\n\n" +
-            $"🕒 *Live data as of {DateTime.Now:hh:mm tt, dd-MMM}*",
-            "admin_stats", null);
+        var systemPrompt = $"""
+            You are SmartShip AI, an admin assistant.
+            Answer the admin's question using ONLY the stats below.
+            Be direct and professional. Use markdown table if listing stats.
+            Do not use excessive emojis. Under 100 words.
+
+            === LIVE SHIPMENT STATS (as of {DateTime.Now:dd-MMM-yyyy HH:mm}) ===
+            Total Shipments : {total}
+            Draft           : {draft}
+            Pending Pickup  : {pending}
+            Booked          : {booked}
+            In Transit      : {transit}
+            Delivered       : {delivered}
+            Cancelled       : {cancelled}
+            Unpaid          : {unpaid}
+            ===================================================================
+
+            If the admin asks about hubs, users, or revenue — say those details
+            are available in the Admin Panel, not here.
+            """;
+
+        var reply = await CallOllama(req.Message, systemPrompt, req.History);
+        return new ChatResponseDto(reply, "admin_stats", null);
     }
 
+    private async Task<ChatResponseDto> HandleRateWithOllama(ChatMessageRequest req)
+    {
+        double weightKg = 0;
+        foreach (var w in req.Message.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+        {
+            var clean = w.Replace("kg", "", StringComparison.OrdinalIgnoreCase).Trim();
+            if (double.TryParse(clean, out var p) && p > 0) { weightKg = p; break; }
+        }
+
+        decimal express = weightKg > 0 ? Math.Max((decimal)(weightKg * 150), 99) : 99;
+        decimal international = weightKg > 0 ? Math.Max((decimal)(weightKg * 300), 99) : 99;
+        decimal freight = weightKg > 0 ? Math.Max((decimal)(weightKg * 50), 99) : 99;
+        decimal domestic = weightKg > 0 ? Math.Max((decimal)(weightKg * 80), 99) : 99;
+
+        var systemPrompt = $"""
+            You are SmartShip AI. Answer the user's shipping rate question.
+            Use ONLY the pre-calculated rates below. Do not invent or modify any numbers.
+            Be helpful and recommend the best option based on the user's need.
+            Use clean markdown. No excessive emojis. Under 100 words.
+
+            === SMARTSHIP RATE FORMULA ===
+            Express       : Rs 150/kg, minimum Rs 99
+            International : Rs 300/kg, minimum Rs 99
+            Freight       : Rs 50/kg,  minimum Rs 99
+            Domestic      : Rs 80/kg,  minimum Rs 99
+
+            {(weightKg > 0 ? $"""
+            === CALCULATED RATES FOR {weightKg} kg ===
+            Express       : Rs {express:N0}
+            International : Rs {international:N0}
+            Freight       : Rs {freight:N0}
+            Domestic      : Rs {domestic:N0}
+            Cheapest      : Freight at Rs {freight:N0}
+            """ : "No weight was specified — give general rate table.")}
+            ==============================
+            """;
+
+        var reply = await CallOllama(req.Message, systemPrompt, req.History);
+        return new ChatResponseDto(reply, "rate", null);
+    }
+
+
     private async Task<ChatResponseDto> HandleDocuments(
-        ChatMessageRequest req, int userId, bool isAdmin)
+        ChatMessageRequest req, int userId)
     {
         var shipmentId = req.SelectedShipmentId ?? req.ShipmentId!.Value;
 
@@ -514,46 +347,59 @@ public class ChatService : IChatService
 
         if (!docs.Data.Any())
             return new ChatResponseDto(
-                "📂 No documents uploaded for this shipment yet.",
+                "No documents have been uploaded for this shipment yet.",
                 "list_documents", null);
 
-        var list = string.Join("\n", docs.Data.Select((d, i) =>
-            $"{i + 1}. **{d.FileName}** — {d.DocumentType} — {d.UploadedAt:dd-MMM-yyyy}"));
+        var docList = string.Join("\n", docs.Data.Select((d, i) =>
+            $"  {i + 1}. {d.FileName} — {d.DocumentType} — uploaded {d.UploadedAt:dd-MMM-yyyy}"));
 
-        return new ChatResponseDto(
-            $"📎 **{docs.TotalCount} document(s)** for this shipment:\n\n{list}\n\n" +
-            "_To download, open the shipment details page._",
-            "list_documents", docs.Data);
+        var systemPrompt = $"""
+            You are SmartShip AI. The admin asked about shipment documents.
+            List the documents below clearly. Be brief and professional.
+            Mention they can download from the shipment details page.
+            No excessive emojis.
+
+            === DOCUMENTS ===
+            {docList}
+            Total: {docs.TotalCount} document(s)
+            =================
+            """;
+
+        var reply = await CallOllama(req.Message, systemPrompt, null);
+        return new ChatResponseDto(reply, "list_documents", docs.Data);
     }
 
+
     private async Task<ChatResponseDto> AskOllama(
-        ChatMessageRequest req, int userId, bool isAdmin, int? activeShipmentId)
+        ChatMessageRequest req, int userId, bool isAdmin, string? extraContext)
     {
-        if (req.Message.Length < 5 || IsSmallTalk(req.Message.ToLower()))
-            return FallbackResponse();
+        var systemPrompt = $"""
+            You are SmartShip AI, a logistics assistant for SmartShip courier service.
+            Help users with shipping, tracking, rates, delivery, and logistics questions.
 
-        var msg = req.Message.ToLower();
-        if (Has(msg, "where is", "track", "delivered", "eta", "delivery date",
-                "status", "location", "in transit", "tell me about",
-                "about shipment", "when will", "shipment ss", "proof",
-                "picked up", "out for delivery", "dispatched"))
-        {
-            if (activeShipmentId.HasValue)
-                return await HandleShipmentIntent(
-                    "track_shipment", req, activeShipmentId.Value, userId);
+            User role : {(isAdmin ? "Admin" : "Customer")}
+            User ID   : {userId}
 
-            return await ShowShipmentPicker(userId, isAdmin,
-                "📦 Which shipment would you like to check? Select one below:");
-        }
+            {(extraContext != null ? $"Context: {extraContext}" : "")}
 
-        var systemPrompt =
-            $"You are SmartShip's AI logistics assistant. Help with shipping questions.\n" +
-            $"Current user: {(isAdmin ? "Admin" : "Customer")} (ID: {userId})\n" +
-            $"Rules: Be concise. Use markdown. Only answer logistics/shipping questions.\n" +
-            $"If asked about weather, news, or anything unrelated to shipping, say:\n" +
-            $"\"I can only help with SmartShip logistics. Type *help for options.\"";
+            SmartShip capabilities:
+            - Track shipments by tracking number (format: SS + date + 5 digits)
+            - Shipping types: Domestic, Express, International, Freight
+            - Rates: Domestic Rs80/kg, Express Rs150/kg, Freight Rs50/kg, International Rs300/kg
+            - Min charge: Rs99 for all types
+            - Customers can view delivery proof after delivery
+            - Admins can access documents and full dashboard
 
-        var cacheKey = req.Message.ToLower().Trim();
+            Rules:
+            - Be concise (under 100 words), conversational, use markdown
+            - Do not use excessive emojis — max 2 per reply
+            - Only answer logistics and shipping related questions
+            - If asked about unrelated topics (weather, news, etc.) politely redirect
+            - Never invent shipment data, tracking numbers, or delivery dates
+            - If you don't know something, say so and suggest using the dashboard
+            """;
+
+        var cacheKey = $"general:{req.Message.ToLower().Trim()}";
         if (_cache.TryGetValue(cacheKey, out var cached)
             && DateTime.Now - cached.CachedAt < TimeSpan.FromMinutes(30))
         {
@@ -565,6 +411,7 @@ public class ChatService : IChatService
         _cache[cacheKey] = (reply, DateTime.Now);
         return new ChatResponseDto(reply, "ai", null);
     }
+
 
     private async Task<string> CallOllama(
         string userMessage, string systemPrompt,
@@ -598,56 +445,62 @@ public class ChatService : IChatService
             if (!response.IsSuccessStatusCode)
             {
                 _logger.LogWarning("Ollama returned {Status}", response.StatusCode);
-                return FallbackResponse().Reply;
+                return "I'm having trouble connecting to the AI service. Please try again.";
             }
 
             var json = await response.Content.ReadFromJsonAsync<JsonElement>();
             return json.GetProperty("message")
                        .GetProperty("content")
                        .GetString()
-                ?? "Sorry, I couldn't generate a response.";
+                   ?? "Sorry, I couldn't generate a response.";
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Ollama call failed");
-            return FallbackResponse().Reply;
+            return "I'm unable to respond right now. Please try again shortly.";
         }
     }
 
-    private static ChatResponseDto HandleGreeting() => new(
-        "👋 Hello! I'm your **SmartShip AI** assistant.\n\n" +
-        "I can help you with tracking, rates, delivery proof, and more.\n" +
-        "Type **help** to see everything I can do!",
+
+    private async Task<ChatResponseDto> ShowShipmentPicker(
+        int userId, bool isAdmin, string prompt)
+    {
+        var shipments = await _shipmentClient.GetUserShipmentsAsync(userId, isAdmin);
+
+        if (!shipments.Any())
+            return new ChatResponseDto(
+                "You don't have any shipments yet. Create one to get started!",
+                "no_shipments", null);
+
+        var chips = shipments.Select(s => new ShipmentChip
+        {
+            ShipmentId = s.Id,
+            TrackingNumber = s.TrackingNumber,
+            Label = $"{s.TrackingNumber} · {s.ShipmentType} · {s.OriginCity} → {s.DestinationCity}",
+            Status = s.Status
+        }).ToList();
+
+        return new ChatResponseDto(prompt, "shipment_picker", null, chips);
+    }
+
+    private static string GetPickerPrompt(string intent) => intent switch
+    {
+        "track_shipment" => "Which shipment would you like to track?",
+        "delivery_eta" => "Which shipment do you want the ETA for?",
+        "shipment_status" => "Which shipment's status do you want to check?",
+        "delivery_proof" => "Which shipment's delivery proof do you want?",
+        _ => "Please select a shipment to continue:"
+    };
+
+
+    private static ChatResponseDto StaticGreeting() => new(
+        "Hello! I'm your SmartShip AI assistant.\n\n" +
+        "I can help with tracking, rates, delivery proof, and more.\n" +
+        "Type **help** to see everything I can do.",
         "greeting", null);
 
-    private static ChatResponseDto HandleHelp() => new(
-        "📋 **SmartShip AI — What I Can Do:**\n\n" +
-        "1️⃣  **Track shipment** — \"where is my package?\"\n" +
-        "2️⃣  **Shipment status** — \"show my shipments\"\n" +
-        "3️⃣  **Delivery ETA** — \"when will my order be delivered?\"\n" +
-        "4️⃣  **Delivery proof** — \"was my order delivered?\"\n" +
-        "5️⃣  **Rate calculator** — \"rate for 5kg\"\n" +
-        "6️⃣  **Rate comparison** — \"which type is cheapest for 3kg?\"\n" +
-        "7️⃣  **Documents** — admin only\n" +
-        "8️⃣  **Dashboard stats** — \"show summary\" (admin only)\n\n" +
-        "Select a shipment when prompted to get live data! 📦",
-        "help", null);
-
-    private static ChatResponseDto HandleSmallTalk() => new(
-        "😊 I'm here to help with your SmartShip shipments!\n\n" +
-        "Ask me about **tracking**, **rates**, **delivery status**, or **proof**.\n" +
-        "Type **help** for the full list.",
-        "small_talk", null);
-
-    private static ChatResponseDto HandleResetContext() => new(
-        "🔄 Context cleared!\n\n" +
-        "Which shipment would you like to check next?\n" +
-        "Type **track**, **status**, or **delivery proof** to select one.",
+    private static ChatResponseDto StaticResetContext() => new(
+        "Context cleared. Which shipment would you like to check next?\n\n" +
+        "Type **track**, **status**, or **delivery proof** to get started.",
         "reset", null);
-
-    private static ChatResponseDto FallbackResponse() => new(
-        "🤔 I'm not sure about that.\n\n" +
-        "I can help with: 📦 Track · 💰 Rates · 📅 ETA · ✅ Delivery Proof\n\n" +
-        "Type **help** for the full list.",
-        "fallback", null);
 }

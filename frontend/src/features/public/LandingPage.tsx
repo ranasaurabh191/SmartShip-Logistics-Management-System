@@ -283,20 +283,20 @@ const LogisticsAnimation = () => {
 
     const hubs = [
       { x: 320, y: 280, r: 18, label: 'HUB', pulse: 0, isMain: true },
-      { x: 100, y: 140, r: 8,  label: 'DEL', pulse: 1.2, isMain: false },
-      { x: 490, y: 100, r: 8,  label: 'MUM', pulse: 0.6, isMain: false },
-      { x: 110, y: 480, r: 8,  label: 'BLR', pulse: 2.1, isMain: false },
-      { x: 550, y: 350, r: 8,  label: 'HYD', pulse: 1.7, isMain: false },
-      { x: 500, y: 490, r: 7,  label: 'CHN', pulse: 0.9, isMain: false },
-      { x: 280, y: 550, r: 7,  label: 'KOL', pulse: 1.4, isMain: false },
-      { x: 260, y: 80,  r: 6,  label: 'PB', pulse: 2.5, isMain: false },
-      { x: 150, y: 300, r: 6,  label: 'AHM', pulse: 0.3, isMain: false },
-      { x: 470, y: 250, r: 6,  label: 'LKW', pulse: 1.9, isMain: false },
+      { x: 100, y: 140, r: 8, label: 'DEL', pulse: 1.2, isMain: false },
+      { x: 490, y: 100, r: 8, label: 'MUM', pulse: 0.6, isMain: false },
+      { x: 110, y: 480, r: 8, label: 'BLR', pulse: 2.1, isMain: false },
+      { x: 550, y: 350, r: 8, label: 'HYD', pulse: 1.7, isMain: false },
+      { x: 500, y: 490, r: 7, label: 'CHN', pulse: 0.9, isMain: false },
+      { x: 280, y: 550, r: 7, label: 'KOL', pulse: 1.4, isMain: false },
+      { x: 260, y: 80, r: 6, label: 'PB', pulse: 2.5, isMain: false },
+      { x: 150, y: 300, r: 6, label: 'AHM', pulse: 0.3, isMain: false },
+      { x: 470, y: 250, r: 6, label: 'LKW', pulse: 1.9, isMain: false },
     ];
 
     const edges = [
-      [0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],
-      [1,7],[1,8],[2,9],[2,7],[3,8],[3,5],[4,9],[4,6],[9,0],[8,0]
+      [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [0, 7],
+      [1, 7], [1, 8], [2, 9], [2, 7], [3, 8], [3, 5], [4, 9], [4, 6], [9, 0], [8, 0]
     ];
 
     interface Parcel {
@@ -315,7 +315,7 @@ const LogisticsAnimation = () => {
       trail: [],
     })).map((p, i) => ({ ...p, edgeIdx: i }));
 
-  
+
 
     const gridDots: { x: number; y: number; alpha: number; phase: number }[] = [];
     for (let r = 0; r < 14; r++) {
@@ -421,7 +421,7 @@ const LogisticsAnimation = () => {
 
         const [ai, bi] = edges[p.edgeIdx];
         const from = p.reverse ? hubs[bi] : hubs[ai];
-        const to   = p.reverse ? hubs[ai] : hubs[bi];
+        const to = p.reverse ? hubs[ai] : hubs[bi];
         const px = from.x + (to.x - from.x) * p.progress;
         const py = from.y + (to.y - from.y) * p.progress;
 
@@ -458,7 +458,7 @@ const LogisticsAnimation = () => {
           ctx.lineWidth = 1;
           ctx.stroke();
 
-        
+
         } else {
           // Subtle halo
           ctx.beginPath();
@@ -491,10 +491,10 @@ const LogisticsAnimation = () => {
         ctx.fillText(h.label, h.x, h.y + (h.isMain ? 3 : h.r + 12));
       }
 
-   
-  
+
+
       // ── Bottom status bar ──
-      const barY = H ;
+      const barY = H;
       ctx.font = `900 13px 'Orbitron', monospace`;
       ctx.fillStyle = 'rgb(252, 0, 29)';
       ctx.textAlign = 'left';
@@ -660,8 +660,8 @@ export const LandingPage = () => {
             </span>
           </div>
 
-         
-         
+
+
 
           {/* Main heading */}
           <h1 style={{
@@ -689,7 +689,7 @@ export const LandingPage = () => {
             transform: heroVisible ? 'scaleX(1)' : 'scaleX(0)',
             transformOrigin: 'left',
             transition: 'all 1.5s .5s ease',
-          }} /> 
+          }} />
 
           <p style={{
             fontSize: 14, color: '#aeaeaeff', lineHeight: 1.8, maxWidth: 440, marginBottom: 36,
@@ -879,35 +879,24 @@ export const LandingPage = () => {
           SECTION 4 — TRACK SHIPMENT
       ═══════════════════════════════════════════ */}
       <section style={{ position: 'relative', zIndex: 10, padding: '96px 80px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
-        <Reveal>
-          <SectionLabel label="Live Tracking" />
-          <div style={{ width: 48, height: 2, background: '#e0001a', marginBottom: 18 }} />
-          <h2 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(24px, 3.5vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', marginBottom: 12 }}>
-            Track Your <span style={{ color: '#e0001a' }}>Shipment</span>
-          </h2>
-          <p style={{ color: '#c3c3c3ff', fontSize: 14, maxWidth: 480, lineHeight: 1.7, marginBottom: 32 }}>
-            Enter your AWB number to get real-time status of your order. Find the AWB in the confirmation Email or SMS.
-          </p>
-          <div style={{
-            display: 'flex', maxWidth: 500,
-            border: '1px solid rgba(224,0,26,0.3)', borderRadius: 2, overflow: 'hidden',
-            boxShadow: '0 0 30px rgba(224, 0, 26, 0.53)',
-          }}>
-            <input
-              type="text"
-              placeholder="Enter AWB / Tracking Number"
-              style={{
-                flex: 1, padding: '14px 16px',
-                background: '#000000ff', border: 'none', outline: 'none',
-                color: '#ffffffff', fontSize: 14,
-                fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.16em',
-              }}
-            />
-            <button className="ss-btn" style={{ borderRadius: 0, padding: '14px 28px', fontSize: 11, letterSpacing: '0.12em' }}>
-              TRACK
-            </button>
-          </div>
-        </Reveal>
+        <SectionLabel label="Live Tracking" />
+        <div style={{ width: 48, height: 2, background: '#e0001a', marginBottom: 18 }} />
+        <h2 style={{ fontFamily: "'Orbitron', monospace", fontSize: 'clamp(24px, 3.5vw, 52px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.01em', marginBottom: 12 }}>
+          Track Your <span style={{ color: '#e0001a' }}>Shipment</span>
+        </h2>
+        <button
+          className="ss-btn"
+          style={{
+            padding: '14px 32px',
+            fontSize: 14,
+            letterSpacing: '0.12em',
+            cursor: 'pointer',
+            boxShadow: '0 0 20px rgba(224,0,26,0.8)', 
+          }}
+          onClick={() => navigate('/auth/login')}
+        >
+          TRACK SHIPMENT
+        </button>
       </section>
 
       {/* ═══════════════════════════════════════════
@@ -987,10 +976,10 @@ export const LandingPage = () => {
       ═══════════════════════════════════════════ */}
       <footer style={{ position: 'relative', zIndex: 10, padding: '48px 80px', borderTop: '1px solid rgba(255,255,255,0.04)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 40 }}>
-          <div> 
-            <div style={{ marginTop: 18}}>
-                <SmartShipLogo /> 
-              </div>
+          <div>
+            <div style={{ marginTop: 18 }}>
+              <SmartShipLogo />
+            </div>
             <p style={{ color: '#a7a7a7ff', fontSize: 12, marginTop: 14, maxWidth: 260, lineHeight: 1.7, fontFamily: 'Inter, sans-serif' }}>
               One stop solution for all your shipping needs.<br />Easier. Faster. Cheaper.
             </p>
@@ -1002,9 +991,9 @@ export const LandingPage = () => {
               }}>
                 Toll Free: 1800-309-1122
               </span>
-              
+
             </div>
-            
+
           </div>
 
           <div style={{ display: 'flex', gap: 60, flexWrap: 'wrap' }}>
