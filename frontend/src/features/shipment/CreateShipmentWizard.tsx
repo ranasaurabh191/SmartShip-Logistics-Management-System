@@ -8,6 +8,7 @@ import {
 } from '../../utils/shipmentValidation';
 import { calculateCosts, fmtINR, type CostBreakdown } from '../../utils/costCalculator';
 import { InvoicePrintView, type InvoiceData } from './InvoicePrintView';
+import { MapLocationPicker, type PickedLocation } from '../../components/MapLocationPicker';
 
 type AddressSection = {
   fullName: string; phone: string; street: string;
@@ -82,6 +83,8 @@ export const CreateShipmentWizard = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
+  const [showSenderMap, setShowSenderMap] = useState(false);
+  const [showReceiverMap, setShowReceiverMap] = useState(false);
 
   const [formData, setFormData] = useState<FormDataType>({
     sender: { fullName: '', phone: '', street: '', city: '', state: '', postalCode: '', country: 'India' },
@@ -371,19 +374,75 @@ export const CreateShipmentWizard = () => {
     );
   };
 
+  const handleMapPick = (section: 'sender' | 'receiver', loc: PickedLocation) => {
+    setFormData(prev => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        street: loc.street || prev[section].street,
+        city: loc.city || prev[section].city,
+        state: loc.state || prev[section].state,
+        postalCode: loc.postalCode || prev[section].postalCode,
+        country: loc.country || prev[section].country,
+      },
+    }));
+    if (section === 'sender') setSenderErrors({});
+    if (section === 'receiver') setReceiverErrors({});
+  };
+
   const renderStep = () => {
     if (activeStep === 0 || activeStep === 1) {
       const sec = activeStep === 0 ? 'sender' : 'receiver';
       const errors = activeStep === 0 ? senderErrors : receiverErrors;
+      const showMap = activeStep === 0 ? showSenderMap : showReceiverMap;
+      const setShowMap = activeStep === 0 ? setShowSenderMap : setShowReceiverMap;
       return (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          {renderAddressField(sec, 'fullName', 'Full Name', 'Enter full name', errors)}
-          {renderAddressField(sec, 'phone', 'Phone Number', 'Enter phone number', errors)}
-          {renderAddressField(sec, 'street', 'Street Address', 'House no., building, street name', errors, true)}
-          {renderAddressField(sec, 'city', 'City', 'Enter city', errors)}
-          {renderAddressField(sec, 'state', 'State', 'Enter state', errors)}
-          {renderAddressField(sec, 'postalCode', 'Postal Code', '6-digit PIN code', errors)}
-          {renderAddressField(sec, 'country', 'Country', '', errors, false, true)}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Map toggle button */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 11, color: '#888', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              {activeStep === 0 ? 'Sender' : 'Receiver'} Address
+            </span>
+            <button
+              type="button"
+              onClick={() => setShowMap(p => !p)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px',
+                background: showMap ? 'rgba(224,0,26,0.15)' : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${showMap ? 'rgba(224,0,26,0.5)' : 'rgba(255,255,255,0.1)'}`,
+                borderRadius: 6, cursor: 'pointer', color: showMap ? '#e0001a' : '#aaa',
+                fontFamily: 'Orbitron, monospace', fontSize: 10, fontWeight: 700,
+                letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.2s',
+              }}
+            >
+              <span style={{ fontSize: 14 }}>📍</span>
+              {showMap ? 'Hide Map' : 'Pin on Map'}
+            </button>
+          </div>
+
+          {/* Google Maps picker */}
+          {showMap && (
+            <div style={{ gridColumn: '1 / -1', padding: 16, background: 'rgba(224,0,26,0.03)', border: '1px solid rgba(224,0,26,0.15)', borderRadius: 8 }}>
+              <MapLocationPicker
+                label={activeStep === 0 ? 'Sender Location' : 'Receiver Location'}
+                onPick={loc => handleMapPick(sec, loc)}
+              />
+              <div style={{ marginTop: 10, fontSize: 12, color: '#b1afafff', fontFamily: 'Inter, sans-serif' }}>
+                 Tip: Picking from map auto-fills the address fields below. You can still edit them manually.
+              </div>
+            </div>
+          )}
+
+          {/* Manual form fields */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            {renderAddressField(sec, 'fullName', 'Full Name', 'Enter full name', errors)}
+            {renderAddressField(sec, 'phone', 'Phone Number', 'Enter phone number', errors)}
+            {renderAddressField(sec, 'street', 'Street Address', 'House no., building, street name', errors, true)}
+            {renderAddressField(sec, 'city', 'City', 'Enter city', errors)}
+            {renderAddressField(sec, 'state', 'State', 'Enter state', errors)}
+            {renderAddressField(sec, 'postalCode', 'Postal Code', '6-digit PIN code', errors)}
+            {renderAddressField(sec, 'country', 'Country', '', errors, false, true)}
+          </div>
         </div>
       );
     }

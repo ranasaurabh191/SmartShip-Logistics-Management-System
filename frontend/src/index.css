@@ -409,6 +409,12 @@ h6 {
   100% { box-shadow: 0 0 0 0 rgba(0, 196, 140, 0); }
 }
 
+/* Spinner rotation */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 /* Red pulse for alert/accent dots */
 @keyframes pulseRed {
   0%   { box-shadow: 0 0 0 0 rgba(224, 0, 26, 0.7); }
@@ -501,4 +507,40 @@ h6 {
 .module-row:hover {
   background: rgba(224, 0, 26, 0.04);
   transition: background 0.2s ease;
+}
+
+/* ─── Leaflet overrides ─── */
+.leaflet-popup-content-wrapper {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border: 1px solid rgba(224, 0, 26, 0.25);
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+}
+
+.leaflet-popup-tip {
+  background: #1e1e1e;
+}
+
+.leaflet-popup-close-button {
+  color: #888 !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: #e0001a !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(0,0,0,0.55) !important;
+  color: #555 !important;
+  font-size: 10px !important;
+}
+
+.leaflet-control-attribution a {
+  color: #777 !important;
+}
+
+/* Ensure the search dropdown sits above the map */
+.leaflet-container {
+  z-index: 1;
 }

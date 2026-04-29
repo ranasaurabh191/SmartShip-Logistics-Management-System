@@ -6,6 +6,7 @@ import { DeliveryProofView } from './DeliveryProofView';
 import { DocumentsReadOnly } from './DocumentsReadOnly';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useChatStore } from '../../store/useChatStore';
+import { ShipmentRouteMap } from '../../components/ShipmentRouteMap';
 
 interface TrackingEvent {
   hubName: string;
@@ -38,7 +39,7 @@ export const TrackShipment = () => {
   const [loading, setLoading] = useState(true);
   const [trackInput, setTrackInput] = useState('');
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'timeline' | 'documents' | 'delivery'>('timeline');
+  const [activeTab, setActiveTab] = useState<'timeline' | 'map' | 'documents' | 'delivery'>('timeline');
   const user = useAuthStore(state => state.user);
   const isAdmin = user?.role === 'ADMIN';
   const buildShipmentViewModel = (shipmentData: any, trackingItems: any[]): ShipmentDetail => ({
@@ -221,6 +222,7 @@ export const TrackShipment = () => {
             {/* Tab Bar */}
             <div style={{ display: 'flex', borderBottom: '1px solid rgba(255,255,255,0.08)', padding: '0 20px' }}>
               <button style={tabStyle('timeline')} onClick={() => setActiveTab('timeline')}> Timeline</button>
+              <button style={tabStyle('map')} onClick={() => setActiveTab('map')}> Route Map</button>
               <button style={tabStyle('documents')} onClick={() => setActiveTab('documents')}> Documents</button>
               {isDelivered && (
                 <button style={tabStyle('delivery')} onClick={() => setActiveTab('delivery')}> Delivery Proof</button>
@@ -303,6 +305,21 @@ export const TrackShipment = () => {
                     )}
                   </div>
                 </>
+              )}
+
+              {/* MAP TAB */}
+              {activeTab === 'map' && shipment && (
+                <ShipmentRouteMap
+                  originCity={shipment.originCity}
+                  destinationCity={shipment.destinationCity}
+                  stops={shipment.trackingEvents.map((evt, i) => ({
+                    label: evt.hubName,
+                    timestamp: evt.timestamp,
+                    status: evt.status,
+                    isActive: i === shipment.trackingEvents.length - 1,
+                    isDone: i < shipment.trackingEvents.length - 1,
+                  }))}
+                />
               )}
 
               {/* DOCUMENTS TAB */}
