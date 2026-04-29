@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartShip.ShipmentService.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using SmartShip.ShipmentService.Infrastructure.Data;
 namespace SmartShip.ShipmentService.Migrations
 {
     [DbContext(typeof(ShipmentDbContext))]
-    partial class ShipmentDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260429153234_AddShipmentRoute")]
+    partial class AddShipmentRoute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,12 +44,6 @@ namespace SmartShip.ShipmentService.Migrations
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("float");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -230,7 +227,7 @@ namespace SmartShip.ShipmentService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HubId")
+                    b.Property<int>("HubId")
                         .HasColumnType("int");
 
                     b.Property<string>("HubName")

@@ -13,6 +13,7 @@ import { MapLocationPicker, type PickedLocation } from '../../components/MapLoca
 type AddressSection = {
   fullName: string; phone: string; street: string;
   city: string; state: string; postalCode: string; country: string;
+  latitude?: number; longitude?: number;
 };
 type PackageSection = {
   weightKg: string; lengthCm: string; widthCm: string;
@@ -87,8 +88,8 @@ export const CreateShipmentWizard = () => {
   const [showReceiverMap, setShowReceiverMap] = useState(false);
 
   const [formData, setFormData] = useState<FormDataType>({
-    sender: { fullName: '', phone: '', street: '', city: '', state: '', postalCode: '', country: 'India' },
-    receiver: { fullName: '', phone: '', street: '', city: '', state: '', postalCode: '', country: 'India' },
+    sender: { fullName: '', phone: '', street: '', city: '', state: '', postalCode: '', country: 'India', latitude: 0, longitude: 0 },
+    receiver: { fullName: '', phone: '', street: '', city: '', state: '', postalCode: '', country: 'India', latitude: 0, longitude: 0 },
     package: { weightKg: '', lengthCm: '', widthCm: '', heightCm: '', description: '' },
     shipmentType: 'Domestic', notes: '',
   });
@@ -384,6 +385,8 @@ export const CreateShipmentWizard = () => {
         state: loc.state || prev[section].state,
         postalCode: loc.postalCode || prev[section].postalCode,
         country: loc.country || prev[section].country,
+        latitude: loc.lat,
+        longitude: loc.lng,
       },
     }));
     if (section === 'sender') setSenderErrors({});

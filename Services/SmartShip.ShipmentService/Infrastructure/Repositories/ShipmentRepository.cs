@@ -48,6 +48,7 @@ public class ShipmentRepository : IShipmentRepository
 
         var totalCount = await query.CountAsync();
         var items = await query
+            .OrderByDescending(s => s.CreatedAt)
             .Skip((req.Page - 1) * req.PageSize)
             .Take(req.PageSize)
             .ToListAsync();
@@ -63,8 +64,10 @@ public class ShipmentRepository : IShipmentRepository
     public async Task<IEnumerable<Shipment>> GetByCustomerIdAsync(int customerId)
     => await _context.Shipments
         .Where(s => s.CustomerId == customerId)
+        .OrderByDescending(s => s.CreatedAt)
         .Select(s => new Shipment { Id = s.Id, TrackingNumber = s.TrackingNumber })
         .ToListAsync();
+
     public async Task<PagedResponse<Shipment>> GetByCustomerPagedAsync(int customerId, PagedRequest req)
     {
         var query = _context.Shipments
@@ -79,7 +82,7 @@ public class ShipmentRepository : IShipmentRepository
 
         var totalCount = await query.CountAsync();
         var items = await query
-            .OrderBy(s => s.CreatedAt)
+            .OrderByDescending(s => s.CreatedAt)
             .Skip((req.Page - 1) * req.PageSize)
             .Take(req.PageSize)
             .ToListAsync();

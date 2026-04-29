@@ -1,8 +1,8 @@
-﻿namespace SmartShip.AdminService.Core.DTOs;
+namespace SmartShip.AdminService.Core.DTOs;
 
-public record HubDto(int Id, string Name, string City, string State, string Country, string ContactPhone, bool IsActive);
-public record CreateHubRequest(string Name, string City, string State, string Country, string ContactPhone);
-public record UpdateHubRequest(string Name, string City, string State, string Country, string ContactPhone, bool IsActive);
+public record HubDto(int Id, string Name, string City, string State, string Country, double Latitude, double Longitude, string ContactPhone, bool IsActive);
+public record CreateHubRequest(string Name, string City, string State, string Country, double Latitude, double Longitude, string ContactPhone);
+public record UpdateHubRequest(string Name, string City, string State, string Country, double Latitude, double Longitude, string ContactPhone, bool IsActive);
 public class DashboardMetricsDto
 {
     public int TotalShipments { get; set; }

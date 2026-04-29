@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Helpers;
 using SmartShip.Shared.Events;
@@ -45,16 +45,11 @@ public class PaymentFailedConsumer : IConsumer<PaymentFailedEvent>
         await _notification.SendAndSaveAsync(
             customerId,
             email,
-            type: "Payment Failed",
+            type: "PaymentFailed",
             subject: $"Payment Failed — {msg.TrackingNumber}",
-            body: $"""
-            <h2>Your payment failed</h2>
-            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>Failed At:</b> {msg.FailedAt:dd-MMM-yyyy hh:mm tt}</p>
-            <br/>
-            <p>Your shipment order is cancelled.</p>
-            <p>— SmartShip Team</p>
-            """
+            body: EmailTemplates.PaymentFailed(
+                msg.TrackingNumber,
+                msg.FailedAt.ToString("dd-MMM-yyyy hh:mm tt"))
         );
     }
 }

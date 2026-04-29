@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Helpers;
 using SmartShip.Shared.Events;
@@ -44,14 +44,9 @@ public class ShipmentCancelledConsumer : IConsumer<ShipmentCancelledEvent>
             email,
             type: "ShipmentCancelled",
             subject: $"Shipment Cancelled — {msg.TrackingNumber}",
-            body: $"""
-            <h2>Your Shipment Has Been Cancelled</h2>
-            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>Cancelled At:</b> {msg.CancelledAt:dd-MMM-yyyy hh:mm tt}</p>
-            <br/>
-            <p>If this was a mistake, please contact support.</p>
-            <p>— SmartShip Team</p>
-            """
+            body: EmailTemplates.ShipmentCancelled(
+                msg.TrackingNumber,
+                msg.CancelledAt.ToString("dd-MMM-yyyy hh:mm tt"))
         );
     }
 }

@@ -197,6 +197,10 @@ public class ShipmentService : IShipmentService
                 CorrelationId = correlationId
             });
             _logger.LogInformation("Shipment created Event Published.");
+
+            // Auto-generate route plan from sender → hubs → receiver
+            await GenerateRouteForShipmentAsync(shipment, sender, receiver);
+
             return MapToResponse(shipment, sender, receiver, package);
         }
         catch (Exception ex)
@@ -300,17 +304,21 @@ public class ShipmentService : IShipmentService
             if (st == ShipmentStatus.Cancelled && s.Status == ShipmentStatus.Delivered)
                 throw new InvalidOperationException("Cannot cancel a delivered shipment.");
 
-            if (st == ShipmentStatus.PickedUp && s.Status != ShipmentStatus.Booked)
-                throw new InvalidOperationException("Shipment must be Booked before PickedUp.");
+            if (st == s.Status && st != ShipmentStatus.InTransit)
+                return; // No change needed unless it's InTransit (to record new hub)
 
-            if (st == ShipmentStatus.InTransit && s.Status != ShipmentStatus.PickedUp)
-                throw new InvalidOperationException("Shipment must be PickedUp before InTransit.");
+            // Allow same status or forward progression
+            if (st == ShipmentStatus.PickedUp && s.Status != ShipmentStatus.Booked && s.Status != ShipmentStatus.PickedUp)
+                throw new InvalidOperationException($"Shipment must be Booked before PickedUp. Current: {s.Status}");
 
-            if (st == ShipmentStatus.OutForDelivery && s.Status != ShipmentStatus.InTransit)
-                throw new InvalidOperationException("Shipment must be InTransit before OutForDelivery.");
+            if (st == ShipmentStatus.InTransit && s.Status != ShipmentStatus.PickedUp && s.Status != ShipmentStatus.InTransit)
+                throw new InvalidOperationException($"Shipment must be PickedUp before InTransit. Current: {s.Status}");
 
-            if (st == ShipmentStatus.Delivered && s.Status != ShipmentStatus.OutForDelivery)
-                throw new InvalidOperationException("Shipment must be OutForDelivery before Delivered.");
+            if (st == ShipmentStatus.OutForDelivery && s.Status != ShipmentStatus.InTransit && s.Status != ShipmentStatus.PickedUp && s.Status != ShipmentStatus.OutForDelivery)
+                throw new InvalidOperationException($"Shipment must be InTransit/PickedUp before OutForDelivery. Current: {s.Status}");
+
+            if (st == ShipmentStatus.Delivered && s.Status != ShipmentStatus.OutForDelivery && s.Status != ShipmentStatus.Delivered)
+                throw new InvalidOperationException($"Shipment must be OutForDelivery before Delivered. Current: {s.Status}");
 
             if (st == ShipmentStatus.Booked && s.PickupScheduledAt == null)
                 throw new InvalidOperationException("Cannot book shipment without scheduling pickup first.");
@@ -510,6 +518,213 @@ public class ShipmentService : IShipmentService
             shipment.Package!
         );
     }
+
+    // ── Route Planning ─────────────────────────────────────────────────────
+    public async Task<IEnumerable<RouteStopDto>> GetRouteAsync(int shipmentId)
+    {
+        var ctx = _unitOfWork.GetDbContext<Infrastructure.Data.ShipmentDbContext>();
+        var routes = await ctx.Set<ShipmentRoute>()
+            .Where(r => r.ShipmentId == shipmentId)
+            .OrderBy(r => r.SequenceOrder)
+            .ToListAsync();
+
+        if (routes.Count == 0)
+        {
+            var shipment = await _shipmentRepository.GetByIdAsync(shipmentId);
+            if (shipment != null && shipment.SenderAddress != null && shipment.ReceiverAddress != null)
+            {
+                await GenerateRouteForShipmentAsync(shipment, shipment.SenderAddress, shipment.ReceiverAddress);
+                routes = await ctx.Set<ShipmentRoute>()
+                    .Where(r => r.ShipmentId == shipmentId)
+                    .OrderBy(r => r.SequenceOrder)
+                    .ToListAsync();
+            }
+        }
+
+        return routes.Select(r => new RouteStopDto(
+            r.Id, r.ShipmentId, r.HubId, r.HubName, r.HubCity,
+            r.Latitude, r.Longitude, r.SequenceOrder, r.IsCompleted, r.ReachedAt));
+    }
+
+    public async Task<RouteStopDto> AdvanceToNextHubAsync(int shipmentId)
+    {
+        var shipment = await _shipmentRepository.GetByIdAsync(shipmentId)
+            ?? throw new KeyNotFoundException($"Shipment {shipmentId} not found.");
+
+        var ctx = _unitOfWork.GetDbContext<Infrastructure.Data.ShipmentDbContext>();
+        var routes = await ctx.Set<ShipmentRoute>()
+            .Where(r => r.ShipmentId == shipmentId)
+            .OrderBy(r => r.SequenceOrder)
+            .ToListAsync();
+
+        if (routes.Count == 0)
+            throw new InvalidOperationException("No route plan exists for this shipment.");
+
+        var nextStop = routes.FirstOrDefault(r => !r.IsCompleted);
+        if (nextStop == null)
+            throw new InvalidOperationException("All hubs in the route have been completed.");
+
+        nextStop.IsCompleted = true;
+        nextStop.ReachedAt = DateTime.Now;
+        await _unitOfWork.SaveChangesAsync();
+
+        _logger.LogInformation("Shipment {TrackingNumber} advanced to hub: {Hub} (seq {Seq})",
+            shipment.TrackingNumber, nextStop.HubName, nextStop.SequenceOrder);
+
+        return new RouteStopDto(
+            nextStop.Id, nextStop.ShipmentId, nextStop.HubId, nextStop.HubName, nextStop.HubCity,
+            nextStop.Latitude, nextStop.Longitude, nextStop.SequenceOrder, nextStop.IsCompleted, nextStop.ReachedAt);
+    }
+
+    /// <summary>
+    /// Generates a route plan for a shipment using nearest-hub algorithm.
+    /// Called automatically on shipment creation.
+    /// </summary>
+    private async Task GenerateRouteForShipmentAsync(Shipment shipment, Address sender, Address receiver)
+    {
+        try
+        {
+            var client = CreateInternalClient("AdminService");
+            var response = await client.GetAsync("api/admin/hubs/all-active");
+            if (!response.IsSuccessStatusCode) return;
+
+            var hubs = await response.Content.ReadFromJsonAsync<List<HubInfo>>();
+            if (hubs == null || hubs.Count == 0) return;
+
+            // 1. Get the actual road path from OSRM
+            var roadPoints = new List<double[]>();
+            try
+            {
+                var osrmUrl = $"https://router.project-osrm.org/route/v1/driving/{sender.Longitude.ToString().Replace(',','.')},{sender.Latitude.ToString().Replace(',','.')};{receiver.Longitude.ToString().Replace(',','.')},{receiver.Latitude.ToString().Replace(',','.')}?overview=full&geometries=geojson";
+                var osrmRes = await new HttpClient().GetAsync(osrmUrl);
+                if (osrmRes.IsSuccessStatusCode)
+                {
+                    var osrmJson = await osrmRes.Content.ReadAsStringAsync();
+                    var osrmData = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(osrmJson);
+                    
+                    if (osrmData.GetProperty("code").GetString() == "Ok")
+                    {
+                        var routes = osrmData.GetProperty("routes");
+                        if (routes.GetArrayLength() > 0)
+                        {
+                            var coords = routes[0].GetProperty("geometry").GetProperty("coordinates");
+                            foreach (var c in coords.EnumerateArray())
+                            {
+                                roadPoints.Add(new double[] { c[1].GetDouble(), c[0].GetDouble() });
+                            }
+                        }
+                    }
+                }
+            }
+            catch { /* Fallback */ }
+
+            var routeStops = new List<ShipmentRoute>();
+            var sequence = 0;
+
+            if (roadPoints.Count > 10)
+            {
+                // Divide road into segments (max 4 internal points)
+                var indices = new int[] { 
+                    (int)(roadPoints.Count * 0.2), 
+                    (int)(roadPoints.Count * 0.4), 
+                    (int)(roadPoints.Count * 0.6), 
+                    (int)(roadPoints.Count * 0.8) 
+                };
+
+                foreach (var idx in indices)
+                {
+                    var p = roadPoints[idx];
+                    var lat = p[0]; var lon = p[1];
+
+                    // Find if any real hub is within 150km of this road point
+                    var nearbyHub = hubs
+                        .Where(h => Haversine(lat, lon, h.Latitude, h.Longitude) < 150)
+                        .OrderBy(h => Haversine(lat, lon, h.Latitude, h.Longitude))
+                        .FirstOrDefault();
+
+                    if (nearbyHub != null)
+                    {
+                        if (routeStops.Count > 0 && routeStops.Last().HubId == nearbyHub.Id) continue;
+                        
+                        routeStops.Add(new ShipmentRoute {
+                            ShipmentId = shipment.Id, HubId = nearbyHub.Id, HubName = nearbyHub.Name,
+                            HubCity = nearbyHub.City, Latitude = nearbyHub.Latitude, Longitude = nearbyHub.Longitude,
+                            SequenceOrder = sequence++, IsCompleted = false
+                        });
+                    }
+                    else
+                    {
+                        routeStops.Add(new ShipmentRoute {
+                            ShipmentId = shipment.Id, HubId = null, HubName = $"Transit Node {sequence + 1}",
+                            HubCity = "Highway Transit", Latitude = lat, Longitude = lon,
+                            SequenceOrder = sequence++, IsCompleted = false
+                        });
+                    }
+                }
+            }
+            else
+            {
+                var sHub = FindNearestHub(hubs, sender.City, sender.State, sender.Latitude, sender.Longitude);
+                var rHub = FindNearestHub(hubs, receiver.City, receiver.State, receiver.Latitude, receiver.Longitude);
+                if (sHub != null) routeStops.Add(new ShipmentRoute { ShipmentId = shipment.Id, HubId = sHub.Id, HubName = sHub.Name, HubCity = sHub.City, Latitude = sHub.Latitude, Longitude = sHub.Longitude, SequenceOrder = sequence++, IsCompleted = false });
+                if (rHub != null && rHub.Id != sHub?.Id) routeStops.Add(new ShipmentRoute { ShipmentId = shipment.Id, HubId = rHub.Id, HubName = rHub.Name, HubCity = rHub.City, Latitude = rHub.Latitude, Longitude = rHub.Longitude, SequenceOrder = sequence++, IsCompleted = false });
+            }
+
+            var ctx = _unitOfWork.GetDbContext<Infrastructure.Data.ShipmentDbContext>();
+            foreach (var stop in routeStops) ctx.Set<ShipmentRoute>().Add(stop);
+            await _unitOfWork.SaveChangesAsync();
+
+            _logger.LogInformation("Route generated for {Tracking} with {Count} road-optimized stops.",
+                shipment.TrackingNumber, routeStops.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to generate road-optimized route for shipment {Tracking}", shipment.TrackingNumber);
+        }
+    }
+
+    private static HubInfo? FindNearestHub(List<HubInfo> hubs, string city, string state, double lat = 0, double lon = 0)
+    {
+        var cleanCity = (city ?? "").Trim();
+        var cleanState = (state ?? "").Trim();
+
+        // 1. Try exact city match
+        var cityMatch = hubs.FirstOrDefault(h =>
+            h.City.Equals(cleanCity, StringComparison.OrdinalIgnoreCase) ||
+            cleanCity.Contains(h.City, StringComparison.OrdinalIgnoreCase) ||
+            h.City.Contains(cleanCity, StringComparison.OrdinalIgnoreCase));
+        if (cityMatch != null) return cityMatch;
+
+        // 2. Try geographic distance if we have coordinates (MOST ACCURATE)
+        if (lat != 0 && lon != 0)
+        {
+            return hubs
+                .OrderBy(h => Haversine(lat, lon, h.Latitude, h.Longitude))
+                .FirstOrDefault();
+        }
+
+        // 3. Try state match as fallback
+        var stateMatch = hubs.FirstOrDefault(h =>
+            h.State.Equals(cleanState, StringComparison.OrdinalIgnoreCase) ||
+            cleanState.Contains(h.State, StringComparison.OrdinalIgnoreCase));
+        if (stateMatch != null) return stateMatch;
+
+        // Final Fallback: pick a central hub
+        return hubs.FirstOrDefault(h => h.City.Equals("Bhopal", StringComparison.OrdinalIgnoreCase)) 
+               ?? hubs.FirstOrDefault();
+    }
+
+    /// <summary>Haversine formula — returns distance in km between two lat/lng points.</summary>
+    private static double Haversine(double lat1, double lon1, double lat2, double lon2)
+    {
+        const double R = 6371; // Earth radius in km
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(lat1 * Math.PI / 180) * Math.Cos(lat2 * Math.PI / 180) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        return R * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+    }
     private HttpClient CreateInternalClient(string clientName)
     {
         var httpClient = _httpClientFactory.CreateClient(clientName);
@@ -532,7 +747,9 @@ public class ShipmentService : IShipmentService
         City = d.City,
         State = d.State,
         PostalCode = d.PostalCode,
-        Country = d.Country
+        Country = d.Country,
+        Latitude = d.Latitude ?? 0,
+        Longitude = d.Longitude ?? 0
     };
 
     private static Package MapPackage(PackageDto d) => new()
@@ -556,8 +773,8 @@ public class ShipmentService : IShipmentService
         s.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
         s.PickupScheduledAt?.ToString("dd-MMM-yyyy hh:mm tt"),
         s.DeliveredAt?.ToString("dd-MMM-yyyy hh:mm tt"),
-        new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country),
-        new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country),
+        new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country, sender.Latitude, sender.Longitude),
+        new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country, receiver.Latitude, receiver.Longitude),
         new PackageDto(pkg.WeightKg, pkg.LengthCm, pkg.WidthCm, pkg.HeightCm, pkg.Description, pkg.DeclaredValue),
         s.Notes
     );

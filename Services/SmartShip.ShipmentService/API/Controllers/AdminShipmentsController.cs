@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.ShipmentService.Core.DTOs;
 using SmartShip.ShipmentService.Core.Interfaces.Services;
@@ -31,4 +31,10 @@ public class AdminShipmentsController : ControllerBase
         await _service.ResolveExceptionAsync(id, req.Resolution);
         return Ok(new { message = "Exception resolved successfully." });
     }
+
+    [HttpGet("route/{id}")]
+    public async Task<IActionResult> GetRoute(int id) => Ok(await _service.GetRouteAsync(id));
+
+    [HttpPut("advance-hub/{id}")]
+    public async Task<IActionResult> AdvanceToNextHub(int id) => Ok(await _service.AdvanceToNextHubAsync(id));
 }

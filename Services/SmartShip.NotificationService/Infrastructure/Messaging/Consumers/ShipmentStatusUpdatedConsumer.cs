@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Helpers;
 using SmartShip.Shared.Events;
@@ -47,14 +47,12 @@ public class ShipmentStatusUpdatedConsumer : IConsumer<ShipmentStatusUpdatedEven
             email,
             type: "StatusUpdated",
             subject: $"Shipment Update — {msg.TrackingNumber}",
-            body: $"""
-            <h2>Your Shipment Status Has Updated!</h2>
-            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>Status:</b> {msg.OldStatus} -> <b>{msg.NewStatus}</b></p>
-            <p><b>Location:</b> {msg.Location}</p>
-            <p><b>Updated At:</b> {msg.UpdatedAt:dd-MMM-yyyy hh:mm tt}</p>
-            <p>— SmartShip Team</p>
-            """
+            body: EmailTemplates.ShipmentStatusUpdated(
+                msg.TrackingNumber,
+                msg.OldStatus,
+                msg.NewStatus,
+                msg.Location,
+                msg.UpdatedAt.ToString("dd-MMM-yyyy hh:mm tt"))
         );
     }
 }

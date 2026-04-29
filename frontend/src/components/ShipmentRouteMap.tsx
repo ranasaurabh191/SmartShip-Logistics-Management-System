@@ -1,7 +1,7 @@
 /**
  * ShipmentRouteMap — Leaflet + OpenStreetMap (100% free, no API key)
- * Geocoding : Nominatim reverse geocode for city → lat/lng
- * Tiles     : OpenStreetMap  (dark-mode via CSS filter)
+ * Now supports pre-computed route coordinates from the backend.
+ * Falls back to Nominatim geocoding for origin/destination cities if no route data.
  */
 import { useEffect, useRef, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
@@ -37,6 +37,7 @@ const ORIGIN_ICON  = makeIcon('#00c48c', 'O');
 const DEST_ICON    = makeIcon('#e0001a', 'D');
 const ACTIVE_ICON  = makeIcon('#f5a623', '▶');
 const DONE_ICON    = makeIcon('#555555', '✓');
+const PLANNED_ICON = makeIcon('#3a3a5c', '•');
 
 export interface RouteStop {
   label: string;
@@ -46,16 +47,30 @@ export interface RouteStop {
   isDone?: boolean;
 }
 
+export interface RouteHubData {
+  hubName: string;
+  hubCity: string;
+  latitude: number;
+  longitude: number;
+  isCompleted: boolean;
+  sequenceOrder: number;
+}
+
 interface Props {
   originCity: string;
   destinationCity: string;
+  originCoords?: { lat: number; lng: number };
+  destCoords?: { lat: number; lng: number };
   stops?: RouteStop[];
+  routeData?: RouteHubData[];
+  shipmentStatus?: string;
 }
 
 interface GeoPoint {
   lat: number; lng: number;
   label: string; status?: string;
   isActive?: boolean; isDone?: boolean;
+  isPlanned?: boolean;
   timestamp?: string;
   isOrigin?: boolean; isDest?: boolean;
 }
@@ -63,82 +78,202 @@ interface GeoPoint {
 const NOM_HEADERS = { 'Accept-Language': 'en', 'User-Agent': 'SmartShip-App/1.0' };
 
 async function geocodeCity(city: string): Promise<{ lat: number; lng: number } | null> {
+  const q = city.includes(',') ? city : city + ', India';
+  
+  // Try Provider 1: Photon
   try {
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(city + ', India')}&format=json&limit=1`;
-    const res  = await fetch(url, { headers: NOM_HEADERS });
-    const data = await res.json();
-    if (!data?.[0]) return null;
-    return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
-  } catch { return null; }
+    const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=1`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.features && data.features.length > 0) {
+        const c = data.features[0].geometry.coordinates;
+        return { lat: c[1], lng: c[0] };
+      }
+    }
+  } catch (e) {
+    console.warn("Photon geocode failed, trying Nominatim...");
+  }
+
+  // Try Provider 2: Nominatim
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=1`, {
+      headers: { 'User-Agent': 'SmartShip-Logistics-App' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data[0]) {
+        return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+      }
+    }
+  } catch (e) {
+    console.error("All geocoders failed for city:", city);
+  }
+
+  return null;
 }
 
 function pickIcon(pt: GeoPoint): L.DivIcon {
   if (pt.isOrigin) return ORIGIN_ICON;
-  if (pt.isDest)   return DEST_ICON;
+  if (pt.isDest)   return pt.isActive ? ACTIVE_ICON : DEST_ICON; // Highlight destination if active (delivered)
   if (pt.isActive) return ACTIVE_ICON;
+  if (pt.isPlanned) return PLANNED_ICON;
   return DONE_ICON;
 }
 
-export const ShipmentRouteMap = ({ originCity, destinationCity, stops = [] }: Props) => {
+export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, destCoords, stops = [], routeData = [], shipmentStatus }: Props) => {
   const mapRef   = useRef<L.Map | null>(null);
   const [points, setPoints]   = useState<GeoPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState('');
+  const [donePath, setDonePath] = useState<[number, number][]>([]);
+  const [todoPath, setTodoPath] = useState<[number, number][]>([]);
 
   useEffect(() => {
     if (!originCity || !destinationCity) { setLoading(false); return; }
     setLoading(true);
     setError('');
 
-    // Collect unique city names to geocode
-    const hubNames  = stops.map(s => s.label).filter(Boolean);
-    const allNames  = [originCity, ...hubNames, destinationCity];
-    const uniqNames = Array.from(new Set(allNames));
+    // If we have route data from the backend, use real coordinates
+    if (routeData.length > 0) {
+      buildFromRouteData();
+    } else {
+      buildFromNominatim();
+    }
 
-    // Stagger Nominatim requests (1 req/s policy)
-    const promises = uniqNames.map((name, i) =>
-      new Promise<{ name: string; geo: { lat: number; lng: number } | null }>(resolve =>
-        setTimeout(async () => {
-          const geo = await geocodeCity(name);
-          resolve({ name, geo });
-        }, i * 350)   // 350ms between each = safe for Nominatim
-      )
-    );
+    async function buildFromRouteData() {
+      // Use direct coordinates if provided, otherwise fallback to geocoding
+      const originGeo = originCoords || await geocodeCity(originCity);
+      const destGeo   = destCoords || await geocodeCity(destinationCity);
 
-    Promise.all(promises).then(results => {
-      const geoMap = new Map(results.map(r => [r.name, r.geo]));
       const pts: GeoPoint[] = [];
+      const isDelivered = shipmentStatus === 'Delivered';
 
-      uniqNames.forEach((name, idx) => {
-        const geo = geoMap.get(name);
-        if (!geo) return;
+      // Origin
+      if (originGeo) {
+        pts.push({ ...originGeo, label: originCity, isOrigin: true, isDone: true });
+      }
 
-        const isOrigin = idx === 0;
-        const isDest   = idx === uniqNames.length - 1 && !isOrigin;
-        const stop     = stops.find(s => s.label === name);
+      // Hub stops from route data (using real coordinates)
+      const lastCompletedIdx = routeData.reduce((acc, r, i) => r.isCompleted ? i : acc, -1);
+
+      routeData.forEach((hub, idx) => {
+        if (hub.latitude === 0 && hub.longitude === 0) return; // skip invalid coords
+        const trackingStop = stops.find(s => s.label === hub.hubName);
+        
+        // If delivered, all hubs are done
+        const isDone = isDelivered || hub.isCompleted;
+        const isActive = !isDelivered && idx === lastCompletedIdx + 1 && !hub.isCompleted;
 
         pts.push({
-          ...geo,
-          label:     name,
-          status:    stop?.status,
-          timestamp: stop?.timestamp,
-          isActive:  stop?.isActive,
-          isDone:    stop?.isDone,
-          isOrigin,
-          isDest,
+          lat: hub.latitude,
+          lng: hub.longitude,
+          label: hub.hubName,
+          status: trackingStop?.status || (isDone ? 'Completed' : isActive ? 'Current' : 'Planned'),
+          timestamp: trackingStop?.timestamp,
+          isActive,
+          isDone,
+          isPlanned: !isDone && !isActive,
         });
       });
 
-      setPoints(pts);
+      // Destination
+      if (destGeo) {
+        pts.push({ 
+          ...destGeo, 
+          label: destinationCity, 
+          isDest: true, 
+          isActive: isDelivered,
+          isDone: isDelivered 
+        });
+      }
 
+      setPoints(pts);
+      fitMap(pts);
+      setLoading(false);
+    }
+
+    async function buildFromNominatim() {
+      // Legacy: geocode all hub names via Nominatim
+      const hubNames  = stops.map(s => s.label).filter(Boolean);
+      const allNames  = [originCity, ...hubNames, destinationCity];
+      const uniqNames = Array.from(new Set(allNames));
+
+      const promises = uniqNames.map((name, i) =>
+        new Promise<{ name: string; geo: { lat: number; lng: number } | null }>(resolve =>
+          setTimeout(async () => {
+            const geo = await geocodeCity(name);
+            resolve({ name, geo });
+          }, i * 350)
+        )
+      );
+
+      Promise.all(promises).then(results => {
+        const geoMap = new Map(results.map(r => [r.name, r.geo]));
+        const pts: GeoPoint[] = [];
+
+        uniqNames.forEach((name, idx) => {
+          const geo = geoMap.get(name);
+          if (!geo) return;
+
+          const isOrigin = idx === 0;
+          const isDest   = idx === uniqNames.length - 1 && !isOrigin;
+          const stop     = stops.find(s => s.label === name);
+
+          pts.push({
+            ...geo,
+            label:     name,
+            status:    stop?.status,
+            timestamp: stop?.timestamp,
+            isActive:  stop?.isActive,
+            isDone:    stop?.isDone,
+            isOrigin,
+            isDest,
+          });
+        });
+
+        setPoints(pts);
+        fitMap(pts);
+        setLoading(false);
+      });
+    }
+
+    function fitMap(pts: GeoPoint[]) {
       if (pts.length > 1 && mapRef.current) {
         const bounds = L.latLngBounds(pts.map(p => [p.lat, p.lng]));
         mapRef.current.fitBounds(bounds, { padding: [40, 40] });
       }
-      setLoading(false);
-    });
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originCity, destinationCity, stops.length]);
+  }, [originCity, destinationCity, stops.length, routeData.length]);
+
+  useEffect(() => {
+    if (points.length < 2) { setDonePath([]); setTodoPath([]); return; }
+    
+    async function updateRoads() {
+       const pivotIdx = points.findIndex(p => p.isActive);
+       const splitAt = pivotIdx !== -1 ? pivotIdx : points.reduce((acc, p, i) => (p.isDone || p.isOrigin) ? i : acc, 0);
+       
+       const traveled = points.slice(0, splitAt + 1);
+       const upcoming = points.slice(splitAt);
+       
+       if (traveled.length >= 2) setDonePath(await getOSRMPath(traveled));
+       else setDonePath([]);
+       
+       if (upcoming.length >= 2) setTodoPath(await getOSRMPath(upcoming));
+       else setTodoPath([]);
+    }
+    updateRoads();
+  }, [points]);
+
+  async function getOSRMPath(coords: { lat: number; lng: number }[]): Promise<[number, number][]> {
+    try {
+      const q = coords.map(c => `${c.lng},${c.lat}`).join(';');
+      const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${q}?overview=full&geometries=geojson`);
+      const data = await res.json();
+      if (data.code === 'Ok') return data.routes[0].geometry.coordinates.map((c: any) => [c[1], c[0]]);
+    } catch {}
+    return coords.map(c => [c.lat, c.lng]);
+  }
 
   if (loading) {
     return (
@@ -172,8 +307,6 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, stops = [] }: Pr
     );
   }
 
-  const polyline = points.map(p => [p.lat, p.lng] as [number, number]);
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {/* Header */}
@@ -185,21 +318,39 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, stops = [] }: Pr
           }}>
             Live Shipment Route
           </span>
+          {routeData.length > 0 && (
+            <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 3, background: 'rgba(0,196,140,0.15)', color: '#00c48c', fontFamily: 'Orbitron, monospace', letterSpacing: '0.1em' }}>
+              AUTO-ROUTED
+            </span>
+          )}
         </div>
         <div style={{ display: 'flex', gap: 16, fontSize: 11, color: '#888', fontFamily: 'Inter, sans-serif' }}>
           <span><span style={{ color: '#00c48c' }}>●</span> Origin</span>
-          <span><span style={{ color: '#f5a623' }}>●</span> Current Hub</span>
           <span><span style={{ color: '#555' }}>●</span> Done</span>
+          <span><span style={{ color: '#f5a623' }}>●</span> Current Hub</span>
+          <span><span style={{ color: '#3a3a5c' }}>●</span> Planned</span>
           <span><span style={{ color: '#e0001a' }}>●</span> Destination</span>
         </div>
       </div>
 
-      {/* Map */}
+      {/* Map Container */}
       <div style={{
-        height: 420, borderRadius: 8, overflow: 'hidden',
+        height: 500, borderRadius: 12, overflow: 'hidden',
         border: '1px solid rgba(224,0,26,0.2)',
-        filter: 'brightness(0.82) saturate(0.65) hue-rotate(180deg)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+        position: 'relative'
       }}>
+        {loading && (
+          <div style={{
+            position: 'absolute', inset: 0, zIndex: 1000,
+            background: 'rgba(10,10,10,0.7)', backdropFilter: 'blur(4px)',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12
+          }}>
+            <div className="spinner" style={{ width: 40, height: 40, border: '3px solid rgba(224,0,26,0.1)', borderTopColor: '#e0001a', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+            <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, color: '#e0001a', letterSpacing: '0.1em' }}>Calculating Road Network...</div>
+          </div>
+        )}
+
         <MapContainer
           center={points.length > 0 ? [points[0].lat, points[0].lng] : [20.5937, 78.9629]}
           zoom={5}
@@ -210,20 +361,47 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, stops = [] }: Pr
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>'
-            maxZoom={18}
+            className="map-tiles"
           />
 
-          {/* Route polyline */}
-          {polyline.length > 1 && (
+          {/* Traveled Path (Grey) */}
+          {donePath.length > 1 && (
             <Polyline
-              positions={polyline}
+              positions={donePath}
               pathOptions={{
-                color: '#e0001a',
-                weight: 3,
-                opacity: 0.75,
-                dashArray: '10, 8',
+                color: '#6b7280', // Cool Grey
+                weight: 4,
+                opacity: 0.6,
+                lineJoin: 'round'
               }}
             />
+          )}
+
+          {/* Upcoming Path (Professional Blue) */}
+          {todoPath.length > 1 && (
+            <Polyline
+              positions={todoPath}
+              pathOptions={{
+                color: '#3b82f6', // Premium Blue
+                weight: 5,
+                opacity: 0.9,
+                lineJoin: 'round',
+                dashArray: '1, 10', // Dotted effect for planned path
+              }}
+            />
+          )}
+
+          {/* Current Leg (Solid Blue) */}
+          {todoPath.length > 1 && (
+             <Polyline
+             positions={todoPath.slice(0, Math.max(2, Math.floor(todoPath.length * 0.15)))} // Show a bit of solid blue to indicate direction
+             pathOptions={{
+               color: '#3b82f6',
+               weight: 5,
+               opacity: 1,
+               lineJoin: 'round'
+             }}
+           />
           )}
 
           {/* Hub markers */}
@@ -234,13 +412,14 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, stops = [] }: Pr
                   <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color: '#111' }}>
                     {pt.label}
                   </div>
-                  {pt.isOrigin && <div style={{ fontSize: 11, color: '#00a070' }}>📦 Origin</div>}
-                  {pt.isDest   && <div style={{ fontSize: 11, color: '#c00' }}>🏁 Destination</div>}
+                  {pt.isOrigin && <div style={{ fontSize: 11, color: '#00a070' }}>Origin</div>}
+                  {pt.isDest   && <div style={{ fontSize: 11, color: '#c00' }}>Destination</div>}
+                  {pt.isPlanned && <div style={{ fontSize: 11, color: '#888' }}>Upcoming Hub</div>}
                   {pt.status   && (
                     <div style={{
                       marginTop: 5, display: 'inline-block',
                       padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 700,
-                      background: pt.isActive ? '#f5a623' : pt.isDone ? '#555' : '#ddd',
+                      background: pt.isActive ? '#f5a623' : pt.isDone ? '#555' : pt.isPlanned ? '#3a3a5c' : '#ddd',
                       color: '#fff',
                     }}>
                       {pt.status.toUpperCase()}
@@ -248,7 +427,7 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, stops = [] }: Pr
                   )}
                   {pt.timestamp && (
                     <div style={{ marginTop: 4, fontSize: 10, color: '#666' }}>
-                      🕐 {new Date(pt.timestamp).toLocaleString('en-IN')}
+                      {new Date(pt.timestamp).toLocaleString('en-IN')}
                     </div>
                   )}
                 </div>
@@ -272,7 +451,7 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, stops = [] }: Pr
             <span key={idx} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
               {idx > 0 && <span style={{ color: '#ffffffff', fontSize: 17 }}>→</span>}
               <span style={{
-                color: p.isOrigin ? '#00c48c' : p.isDest ? '#e0001a' : p.isActive ? '#f5a623' : '#555',
+                color: p.isOrigin ? '#00c48c' : p.isDest ? '#e0001a' : p.isActive ? '#f5a623' : p.isDone ? '#555' : '#3a3a5c',
                 fontWeight: p.isOrigin || p.isDest ? 700 : 400,
               }}>
                 {p.label}

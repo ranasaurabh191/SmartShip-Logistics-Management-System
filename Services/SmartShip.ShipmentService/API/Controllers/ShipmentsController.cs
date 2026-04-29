@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.ShipmentService.API.Filters;
 using SmartShip.ShipmentService.Core.DTOs;
@@ -94,6 +94,10 @@ public class ShipmentsController : ControllerBase
         if (shipment == null) return NotFound();
         return Ok(shipment);
     }
+    [HttpGet("route/{id}")]
+    [Authorize]
+    public async Task<IActionResult> GetRoute(int id) => Ok(await _service.GetRouteAsync(id));
+
     [HttpGet("internal/{id}")]
     [InternalApiKey]  
     public async Task<IActionResult> GetByIdInternal(int id) =>  Ok(await _service.GetByIdAsync(id));
@@ -108,5 +112,23 @@ public class ShipmentsController : ControllerBase
 
         return Ok(shipments);
     }
+
+    [HttpPut("{id}/advance-hub")]
+    [Authorize]
+    public async Task<IActionResult> AdvanceToNextHub(int id)
+    {
+        try
+        {
+            var result = await _service.AdvanceToNextHubAsync(id);
+            return Ok(result);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
 }
-    

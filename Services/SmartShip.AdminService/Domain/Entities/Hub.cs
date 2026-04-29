@@ -1,4 +1,4 @@
-﻿namespace SmartShip.AdminService.Domain.Entities;
+namespace SmartShip.AdminService.Domain.Entities;
 
 public class Hub
 {
@@ -7,6 +7,8 @@ public class Hub
     public string City { get; set; } = string.Empty;
     public string State { get; set; } = string.Empty;
     public string Country { get; set; } = string.Empty;
+    public double Latitude { get; set; }
+    public double Longitude { get; set; }
     public string ContactPhone { get; set; } = string.Empty;
     public bool IsActive { get; set; } = true;
     public DateTime CreatedAt { get; set; } = DateTime.Now;

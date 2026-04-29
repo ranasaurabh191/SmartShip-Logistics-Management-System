@@ -1,7 +1,8 @@
-﻿using MailKit.Net.Smtp;
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
+using SmartShip.NotificationService.Infrastructure.Helpers;
 
 namespace SmartShip.NotificationService.Infrastructure.Services;
 
@@ -65,19 +66,6 @@ public class EmailService : IEmailService
         if (string.IsNullOrWhiteSpace(toEmail))
             throw new ArgumentException("Email address cannot be null or empty");
 
-        var body = $"""
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-                <h2 style="color: #333;">SmartShip OTP Verification</h2>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center;">
-                    <h1 style="font-size: 48px; letter-spacing: 8px; margin: 0; color: #007bff;">{otp}</h1>
-                </div>
-                <p>
-                    This OTP is valid for <strong>5 minutes</strong>. Do not share it with anyone.
-                </p>
-                <p>— SmartShip Team</p>
-            </div>
-        """;
-
-        await SendEmailAsync(toEmail, "SmartShip OTP Verification", body);
+        await SendEmailAsync(toEmail, "SmartShip OTP Verification", EmailTemplates.OtpVerification(otp));
     }
 }

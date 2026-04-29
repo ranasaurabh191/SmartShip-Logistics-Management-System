@@ -1,4 +1,4 @@
-﻿using SmartShip.ShipmentService.Core.DTOs;
+using SmartShip.ShipmentService.Core.DTOs;
 using SmartShip.ShipmentService.Domain.Enums;
 
 namespace SmartShip.ShipmentService.Core.Interfaces.Services
@@ -16,6 +16,7 @@ namespace SmartShip.ShipmentService.Core.Interfaces.Services
         Task CancelByCustomerAsync(int shipmentId, int customerId, string reason);
         Task<IEnumerable<ShipmentSummaryDto>> GetShipmentSummaryByCustomerAsync(int customerId);
         Task<ShipmentResponse?> GetByTrackingNumberAsync(string trackingNumber);
-
+        Task<IEnumerable<RouteStopDto>> GetRouteAsync(int shipmentId);
+        Task<RouteStopDto> AdvanceToNextHubAsync(int shipmentId);
     }
 }

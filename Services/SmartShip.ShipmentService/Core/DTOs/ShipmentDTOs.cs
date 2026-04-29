@@ -1,8 +1,8 @@
-﻿using SmartShip.ShipmentService.Domain.Enums;
+using SmartShip.ShipmentService.Domain.Enums;
 
 namespace SmartShip.ShipmentService.Core.DTOs;
 
-public record AddressDto(string FullName, string Phone, string Street, string City, string State, string PostalCode, string Country);
+public record AddressDto(string FullName, string Phone, string Street, string City, string State, string PostalCode, string Country, double? Latitude = 0, double? Longitude = 0);
 public record PackageDto(double WeightKg, double LengthCm, double WidthCm, double HeightCm, string Description, decimal DeclaredValue);
 
 public record CreateShipmentRequest(

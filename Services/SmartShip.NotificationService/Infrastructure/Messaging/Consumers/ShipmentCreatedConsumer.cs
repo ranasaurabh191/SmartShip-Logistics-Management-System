@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Helpers;
 using SmartShip.Shared.Events;
@@ -45,15 +45,10 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
             email,
             type: "ShipmentCreated",
             subject: $"Shipment Created — {msg.TrackingNumber}",
-            body: $"""
-            <h2>Your Shipment Has Been Created!</h2>
-            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>From:</b> {msg.SenderCity}</p>
-            <p><b>Created At:</b> {msg.CreatedAt:dd-MMM-yyyy hh:mm tt}</p>
-            <br/>
-            <p>Please complete payment and schedule pickup to proceed.</p>
-            <p>— SmartShip Team</p>
-            """
+            body: EmailTemplates.ShipmentCreated(
+                msg.TrackingNumber,
+                msg.SenderCity,
+                msg.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"))
         );
     }
 }

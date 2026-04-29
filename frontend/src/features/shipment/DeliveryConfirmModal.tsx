@@ -59,8 +59,6 @@ export const DeliveryConfirmModal = ({
       errs.receiverName = 'Receiver name is required (min 2 characters)';
     if (!form.deliveredBy.trim() || form.deliveredBy.trim().length < 2)
       errs.deliveredBy = 'Delivery agent name is required';
-    if (!form.notes.trim())
-      errs.notes = 'Notes are required';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -164,7 +162,7 @@ export const DeliveryConfirmModal = ({
             <textarea
               className="ss-input"
               style={{ width: '100%', minHeight: 80, resize: 'vertical' }}
-              placeholder='"Package left at reception", "Collected by security guard"'
+              placeholder='e.g. "Package left at reception", "Collected by security guard"'
               value={form.notes}
               onChange={e => setForm(p => ({ ...p, notes: e.target.value }))}
             />

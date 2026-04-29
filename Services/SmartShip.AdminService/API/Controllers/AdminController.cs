@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.AdminService.Core.DTOs;
 using SmartShip.AdminService.Core.Interfaces.Services;
@@ -19,6 +19,9 @@ public class AdminController : ControllerBase
 
     [HttpGet("hubs")]
     public async Task<IActionResult> GetHubs([FromQuery] HubPagedRequest request) => Ok(await _service.GetHubsPagedAsync(request));
+
+    [HttpGet("hubs/all-active")]
+    public async Task<IActionResult> GetAllActiveHubs() => Ok(await _service.GetAllActiveHubsAsync());
 
     [HttpGet("hubs/{id}")]
     public async Task<IActionResult> GetHub(int id)

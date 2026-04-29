@@ -1,5 +1,6 @@
 // features/shipment/ShipmentsPage.tsx
 import { useEffect, useMemo, useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '../../core/api/axios';
 import { useAuthStore } from '../../store/useAuthStore';
@@ -59,6 +60,12 @@ export const ShipmentsPage = () => {
   const [loading, setLoading] = useState(true);
   const [busyShipmentId, setBusyShipmentId] = useState<number | null>(null);
 
+  type RouteStop = {
+    id: number; shipmentId: number; hubId: number | null; hubName: string; hubCity: string;
+    latitude: number; longitude: number; sequenceOrder: number;
+    isCompleted: boolean; reachedAt?: string | null;
+  };
+
   const [selectedShipment, setSelectedShipment] = useState<ShipmentRow | null>(null);
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [shipmentToCancel, setShipmentToCancel] = useState<number | null>(null);
@@ -72,6 +79,10 @@ export const ShipmentsPage = () => {
   const [pickupDateTime, setPickupDateTime] = useState('');
   const [verifyPayment, setVerifyPayment] = useState<PaymentInfo | null>(null);
   const [verifyForm, setVerifyForm] = useState({ razorpayPaymentId: '', signature: '' });
+  const [routeStops, setRouteStops] = useState<RouteStop[]>([]);
+  const [nextHub, setNextHub] = useState<RouteStop | null>(null);
+  const [routeLoading, setRouteLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState('');
 
   const fetchShipments = async () => {
     setLoading(true);
@@ -164,21 +175,53 @@ export const ShipmentsPage = () => {
     } finally { setBusyShipmentId(null); }
   };
 
-  const openStatusModal = (e: React.MouseEvent, shipment: ShipmentRow) => {
-    e.stopPropagation(); setSelectedShipment(shipment); setAdminLocation(''); setStatusModalOpen(true);
+  const openStatusModal = async (e: React.MouseEvent, shipment: ShipmentRow) => {
+    e.stopPropagation();
+    setSelectedShipment(shipment);
+    setSelectedStatus(shipment.status);
+    setAdminLocation('');
+    setRouteStops([]);
+    setNextHub(null);
+    setStatusModalOpen(true);
+    setRouteLoading(true);
+    try {
+      const res = await apiClient.get(`/admin/shipments/route/${shipment.id}`);
+      const stops: RouteStop[] = Array.isArray(res.data) ? res.data : [];
+      setRouteStops(stops);
+      const next = stops.find(s => !s.isCompleted) || null;
+      setNextHub(next);
+      if (next) setAdminLocation(next.hubName);
+    } catch {
+      setRouteStops([]);
+      setNextHub(null);
+    } finally {
+      setRouteLoading(false);
+    }
   };
 
   const confirmAdminStatusUpdate = async () => {
-    if (!selectedShipment) return;
-    const nextStatus = ADMIN_NEXT_STATUS[selectedShipment.status];
-    if (!nextStatus) { addNotification('No further status transition available.', 'warning'); return; }
-    if (!adminLocation.trim()) { addNotification('Please enter hub location.', 'warning'); return; }
+    if (!selectedShipment || !selectedStatus) return;
+    const hubLocation = nextHub?.hubName || adminLocation.trim() || 'Warehouse';
     try {
       setBusyShipmentId(selectedShipment.id);
+      // Update status with hub location
       await apiClient.put(`/admin/shipments/status/${selectedShipment.id}`, {
-        status: nextStatus, location: adminLocation, resolution: '',
+        status: selectedStatus, location: hubLocation, resolution: '',
       });
+      // Advance the route hub if we are moving through InTransit hubs
+      if (selectedStatus === 'InTransit' && nextHub) {
+        try {
+          await apiClient.put(`/admin/shipments/advance-hub/${selectedShipment.id}`);
+        } catch { /* non-fatal */ }
+      }
+      // Auto-advance if marking as delivered to ensure map moves to final point
+      if (selectedStatus === 'Delivered' && nextHub) {
+         try { await apiClient.put(`/admin/shipments/advance-hub/${selectedShipment.id}`); } catch {}
+      }
+
       setStatusModalOpen(false); setSelectedShipment(null); setAdminLocation('');
+      setRouteStops([]); setNextHub(null);
+      addNotification(`Status updated to ${selectedStatus} successfully.`, 'success');
       await fetchShipments();
     } catch (err: any) {
       addNotification(err?.response?.data?.message || 'Failed to update shipment status.', 'error');
@@ -201,6 +244,7 @@ export const ShipmentsPage = () => {
       });
       setResolveModalOpen(false); setSelectedShipment(null);
       setResolutionText(''); setAdminLocation('');
+      addNotification('Shipment resolved successfully.', 'success');
       await fetchShipments();
     } catch (err: any) {
       addNotification(err?.response?.data?.message || 'Failed to resolve shipment.', 'error');
@@ -505,7 +549,7 @@ export const ShipmentsPage = () => {
       </div>
 
       {/* Retry Verify Modal */}
-      {verifyModalOpen && verifyPayment && (
+      {verifyModalOpen && verifyPayment && ReactDOM.createPortal(
         <div onClick={() => setVerifyModalOpen(false)} style={modalBackdrop}>
           <div onClick={e => e.stopPropagation()} className="ss-card"
             style={{ ...modalCard, boxShadow: '0 0 40px rgba(224,0,26,0.15)' }}>
@@ -532,32 +576,88 @@ export const ShipmentsPage = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Update Status Modal */}
-      {statusModalOpen && isAdmin && (
+      {statusModalOpen && isAdmin && ReactDOM.createPortal(
         <div onClick={() => setStatusModalOpen(false)} style={modalBackdrop}>
           <div onClick={e => e.stopPropagation()} className="ss-card" style={modalCard}>
             <h2 className="section-title">Update Shipment Status</h2>
             <p className="section-sub" style={{ marginBottom: 12 }}>
               {selectedShipment?.trackingNumber} · <strong>{selectedShipment?.status}</strong>
-              {selectedShipment?.status && ADMIN_NEXT_STATUS[selectedShipment.status] && (
-                <> → <strong style={{ color: 'var(--color-accent)' }}>{ADMIN_NEXT_STATUS[selectedShipment.status]}</strong></>
-              )}
             </p>
-            <input className="ss-input" placeholder="Enter current hub location" value={adminLocation}
-              onChange={e => setAdminLocation(e.target.value)} style={{ width: '100%', marginTop: 16 }} />
+
+            <div style={{ marginTop: 16 }}>
+              <label style={{ fontSize: 11, color: '#888', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'block' }}>New Status</label>
+              <select 
+                className="ss-input" 
+                value={selectedStatus} 
+                onChange={e => setSelectedStatus(e.target.value)}
+                style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)' }}
+              >
+                <option value="Booked">Booked</option>
+                <option value="PickedUp">PickedUp</option>
+                <option value="InTransit">InTransit</option>
+                <option value="OutForDelivery">OutForDelivery</option>
+                <option value="Delivered">Delivered</option>
+                <option value="Cancelled">Cancelled</option>
+              </select>
+            </div>
+
+            {/* Route Hub Selector */}
+            {routeLoading ? (
+              <div style={{ padding: '16px 0', color: '#888', fontSize: 12, fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Loading route plan...</div>
+            ) : routeStops.length > 0 ? (
+              <div style={{ marginTop: 16 }}>
+                <label style={{ fontSize: 11, color: '#888', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'block' }}>Route Hub</label>
+                {/* Route progress visualization */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap', marginBottom: 12, padding: '8px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.06)' }}>
+                  {routeStops.map((stop, idx) => (
+                    <span key={stop.id} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                      {idx > 0 && <span style={{ color: '#444', fontSize: 12 }}>→</span>}
+                      <span style={{
+                        fontSize: 11, fontWeight: stop.id === nextHub?.id ? 700 : 400, padding: '2px 8px', borderRadius: 4,
+                        background: stop.isCompleted ? 'rgba(0,196,140,0.15)' : stop.id === nextHub?.id ? 'rgba(224,0,26,0.15)' : 'rgba(255,255,255,0.04)',
+                        color: stop.isCompleted ? '#00c48c' : stop.id === nextHub?.id ? '#e0001a' : '#666',
+                        border: stop.id === nextHub?.id ? '1px solid rgba(224,0,26,0.3)' : '1px solid transparent',
+                      }}>{stop.hubName}</span>
+                    </span>
+                  ))}
+                </div>
+                <select className="ss-input" value={adminLocation} onChange={e => {
+                  setAdminLocation(e.target.value);
+                  const selected = routeStops.find(s => s.hubName === e.target.value);
+                  setNextHub(selected || null);
+                }} style={{ width: '100%' }}>
+                  {routeStops.filter(s => !s.isCompleted).map(stop => (
+                    <option key={stop.id} value={stop.hubName}>{stop.hubName} ({stop.hubCity})</option>
+                  ))}
+                </select>
+                {nextHub && (
+                  <div style={{ fontSize: 11, color: '#888', marginTop: 6, fontFamily: 'Inter, sans-serif' }}>
+                    Advancing to <strong style={{ color: '#fff' }}>{nextHub.hubName}</strong> — {nextHub.hubCity} ({nextHub.latitude.toFixed(4)}, {nextHub.longitude.toFixed(4)})
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Fallback: free-text input if no route exists */
+              <input className="ss-input" placeholder="Enter current hub location" value={adminLocation}
+                onChange={e => setAdminLocation(e.target.value)} style={{ width: '100%', marginTop: 16 }} />
+            )}
+
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
               <button className="ss-btn ss-btn-outline" onClick={() => setStatusModalOpen(false)}>Cancel</button>
               <button className="ss-btn" onClick={confirmAdminStatusUpdate}>Confirm Update</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Resolve Modal */}
-      {resolveModalOpen && isAdmin && (
+      {resolveModalOpen && isAdmin && ReactDOM.createPortal(
         <div onClick={() => setResolveModalOpen(false)} style={modalBackdrop}>
           <div onClick={e => e.stopPropagation()} className="ss-card" style={modalCard}>
             <h2 className="section-title">Resolve Shipment</h2>
@@ -570,11 +670,12 @@ export const ShipmentsPage = () => {
               <button className="ss-btn" onClick={confirmResolve}>Confirm Resolve</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Pickup Modal */}
-      {pickupModalOpen && (
+      {pickupModalOpen && ReactDOM.createPortal(
         <div onClick={() => setPickupModalOpen(false)} style={modalBackdrop}>
           <div onClick={e => e.stopPropagation()} className="ss-card"
             style={{ ...modalCard, boxShadow: '0px 0px 50px rgba(195, 189, 189, 0.45)' }}>
@@ -590,11 +691,12 @@ export const ShipmentsPage = () => {
                 onClick={confirmSchedulePickup}>Confirm Pickup</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Delivery Confirmation Modal */}
-      {deliveryModalOpen && selectedShipment && (
+      {deliveryModalOpen && selectedShipment && ReactDOM.createPortal(
         <DeliveryConfirmModal
           shipmentId={selectedShipment.id}
           trackingNumber={selectedShipment.trackingNumber}
@@ -610,11 +712,12 @@ export const ShipmentsPage = () => {
             setSelectedShipment(null);
             await fetchShipments();
           }}
-        />
+        />,
+        document.body
       )}
 
       {/* Cancel Confirmation Modal */}
-      {cancelModalOpen && shipmentToCancel && (
+      {cancelModalOpen && shipmentToCancel && ReactDOM.createPortal(
         <div onClick={() => { setCancelModalOpen(false); setShipmentToCancel(null); }} style={modalBackdrop}>
           <div onClick={e => e.stopPropagation()} className="ss-card"
             style={{ ...modalCard, boxShadow: '0 0 40px rgba(0,0,0,0.45)' }}>
@@ -629,7 +732,8 @@ export const ShipmentsPage = () => {
                 onClick={confirmCancel}>Yes, Cancel</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

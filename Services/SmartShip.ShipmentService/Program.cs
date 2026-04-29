@@ -110,6 +110,11 @@ try
         client.BaseAddress = new Uri(builder.Configuration["Services:IdentityService"]!);
     });
 
+    builder.Services.AddHttpClient("AdminService", client =>
+    {
+        client.BaseAddress = new Uri(builder.Configuration["Services:AdminService"] ?? "http://localhost:5004/");
+    });
+
     builder.Services.AddHttpContextAccessor();
 
     var rabbitHost = builder.Configuration["RabbitMQ:Host"] ?? "localhost";

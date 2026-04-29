@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Helpers;
 using SmartShip.Shared.Events;
@@ -45,14 +45,9 @@ public class ShipmentDeliveredConsumer : IConsumer<ShipmentDeliveredEvent>
             email,
             type: "ShipmentDelivered",
             subject: $"Shipment Delivered — {msg.TrackingNumber}",
-            body: $"""
-            <h2>Your Shipment Has Been Delivered!</h2>
-            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>Delivered At:</b> {msg.DeliveredAt:dd-MMM-yyyy hh:mm tt}</p>
-            <br/>
-            <p>Thank you for using SmartShip!</p>
-            <p>— SmartShip Team</p>
-            """
+            body: EmailTemplates.ShipmentDelivered(
+                msg.TrackingNumber,
+                msg.DeliveredAt.ToString("dd-MMM-yyyy hh:mm tt"))
         );
     }
 }

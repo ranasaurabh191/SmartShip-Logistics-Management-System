@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using System.Text.Json;
 using SmartShip.AdminService.Core.DTOs;
 using SmartShip.AdminService.Core.Interfaces.Persistence;
@@ -125,7 +125,7 @@ public class AdminService : IAdminService
 
         return new PagedResponse<HubDto>
         {
-            Data = paged.Data.Select(h => new HubDto(h.Id, h.Name, h.City, h.State, h.Country, h.ContactPhone, h.IsActive)),
+            Data = paged.Data.Select(h => new HubDto(h.Id, h.Name, h.City, h.State, h.Country, h.Latitude, h.Longitude, h.ContactPhone, h.IsActive)),
             TotalCount = paged.TotalCount,
             Page = paged.Page,
             PageSize = paged.PageSize
@@ -148,7 +148,7 @@ public class AdminService : IAdminService
 
         _logger.LogInformation("Hub found: {HubName} | City: {City}", h.Name, h.City);
 
-        return new HubDto(h.Id, h.Name, h.City, h.State, h.Country, h.ContactPhone, h.IsActive);
+        return new HubDto(h.Id, h.Name, h.City, h.State, h.Country, h.Latitude, h.Longitude, h.ContactPhone, h.IsActive);
     }
 
     public async Task<HubDto> CreateHubAsync(CreateHubRequest req)
@@ -164,6 +164,8 @@ public class AdminService : IAdminService
             City = req.City,
             State = req.State,
             Country = req.Country,
+            Latitude = req.Latitude,
+            Longitude = req.Longitude,
             ContactPhone = req.ContactPhone
         };
 
@@ -172,7 +174,7 @@ public class AdminService : IAdminService
 
         _logger.LogInformation("Hub created: ID {HubId} | {HubName} | {City}", hub.Id, hub.Name, hub.City);
 
-        return new HubDto(hub.Id, hub.Name, hub.City, hub.State, hub.Country, hub.ContactPhone, hub.IsActive);
+        return new HubDto(hub.Id, hub.Name, hub.City, hub.State, hub.Country, hub.Latitude, hub.Longitude, hub.ContactPhone, hub.IsActive);
     }
 
     public async Task UpdateHubAsync(int id, UpdateHubRequest req)
@@ -192,6 +194,8 @@ public class AdminService : IAdminService
         h.City = req.City;
         h.State = req.State;
         h.Country = req.Country;
+        h.Latitude = req.Latitude;
+        h.Longitude = req.Longitude;
         h.ContactPhone = req.ContactPhone;
         h.IsActive = req.IsActive;
 
@@ -219,6 +223,12 @@ public class AdminService : IAdminService
         await _unitOfWork.SaveChangesAsync();
 
         _logger.LogInformation("Hub deleted: ID {HubId} | {HubName}", id, h.Name);
+    }
+
+    public async Task<IEnumerable<HubDto>> GetAllActiveHubsAsync()
+    {
+        var hubs = await _hubRepository.GetAllActiveAsync();
+        return hubs.Select(h => new HubDto(h.Id, h.Name, h.City, h.State, h.Country, h.Latitude, h.Longitude, h.ContactPhone, h.IsActive));
     }
 
     public async Task<ReportDto> GenerateReportAsync(ReportRequest req)

@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.PaymentService.Core.DTOs;
 using SmartShip.PaymentService.Core.Interfaces.Persistence;
 using SmartShip.PaymentService.Core.Interfaces.Repositories;
@@ -146,7 +146,11 @@ public class PaymentService : IPaymentService
                 TrackingNumber = payment.TrackingNumber,
                 PaymentMethod = "COD",
                 PaymentStatus = "Pending",
-                CustomerId = payment.CustomerId
+                CustomerId = payment.CustomerId,
+                Amount = payment.Amount,
+                PaidAt = DateTime.Now.ToString("dd-MMM-yyyy hh:mm tt"),
+                RazorpayPaymentId = null,
+                RazorpayOrderId = null
             });
 
             _logger.LogInformation("PaymentCompletedEvent published for COD with {ShipmentId}", request.ShipmentId);
@@ -297,7 +301,11 @@ public class PaymentService : IPaymentService
             TrackingNumber = payment.TrackingNumber,
             PaymentMethod = "Online",
             PaymentStatus = "Paid",
-            CustomerId = payment.CustomerId
+            CustomerId = payment.CustomerId,
+            Amount = payment.Amount,
+            PaidAt = payment.PaidAt?.ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt"),
+            RazorpayPaymentId = payment.RazorpayPaymentId,
+            RazorpayOrderId = payment.RazorpayOrderId
         });
 
         _logger.LogInformation("PaymentCompletedEvent published for ShipmentID: {ShipmentId}", payment.ShipmentId);

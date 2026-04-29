@@ -15,6 +15,12 @@ interface TrackingEvent {
   description: string;
 }
 
+interface RouteStopData {
+  id: number; hubId: number; hubName: string; hubCity: string;
+  latitude: number; longitude: number; sequenceOrder: number;
+  isCompleted: boolean; reachedAt?: string | null;
+}
+
 interface ShipmentDetail {
   id: string;
   numericId: number;
@@ -31,6 +37,8 @@ interface ShipmentDetail {
   receiverPhone?: string;
   senderAddress?: string;
   receiverAddress?: string;
+  senderAddressObj?: any;
+  receiverAddressObj?: any;
 }
 
 export const TrackShipment = () => {
@@ -40,6 +48,7 @@ export const TrackShipment = () => {
   const [trackInput, setTrackInput] = useState('');
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState<'timeline' | 'map' | 'documents' | 'delivery'>('timeline');
+  const [routeData, setRouteData] = useState<RouteStopData[]>([]);
   const user = useAuthStore(state => state.user);
   const isAdmin = user?.role === 'ADMIN';
   const buildShipmentViewModel = (shipmentData: any, trackingItems: any[]): ShipmentDetail => ({
@@ -67,6 +76,8 @@ export const TrackShipment = () => {
       shipmentData?.receiverAddress?.state,
       shipmentData?.receiverAddress?.postalCode,
     ].filter(Boolean).join(', '),
+    senderAddressObj: shipmentData?.senderAddress,
+    receiverAddressObj: shipmentData?.receiverAddress,
     trackingEvents: trackingItems.map((e: any) => ({
       hubName: e.location ?? '',
       timestamp: e.eventTime ?? '',
@@ -121,6 +132,19 @@ export const TrackShipment = () => {
       setLoading(false);
     }
   };
+
+  // Fetch route data whenever shipment is loaded
+  useEffect(() => {
+    if (!shipment?.numericId) return;
+    const fetchRoute = async () => {
+      try {
+        const res = await apiClient.get(`/shipments/route/${shipment.numericId}`);
+        const stops: RouteStopData[] = Array.isArray(res.data) ? res.data : [];
+        setRouteData(stops);
+      } catch { setRouteData([]); }
+    };
+    fetchRoute();
+  }, [shipment?.numericId]);
 
   useEffect(() => {
     if (!id) { setLoading(false); return; }
@@ -312,12 +336,23 @@ export const TrackShipment = () => {
                 <ShipmentRouteMap
                   originCity={shipment.originCity}
                   destinationCity={shipment.destinationCity}
+                  originCoords={shipment.senderAddressObj ? { lat: shipment.senderAddressObj.latitude, lng: shipment.senderAddressObj.longitude } : undefined}
+                  destCoords={shipment.receiverAddressObj ? { lat: shipment.receiverAddressObj.latitude, lng: shipment.receiverAddressObj.longitude } : undefined}
+                  shipmentStatus={shipment.status}
                   stops={shipment.trackingEvents.map((evt, i) => ({
                     label: evt.hubName,
                     timestamp: evt.timestamp,
                     status: evt.status,
                     isActive: i === shipment.trackingEvents.length - 1,
                     isDone: i < shipment.trackingEvents.length - 1,
+                  }))}
+                  routeData={routeData.map(r => ({
+                    hubName: r.hubName,
+                    hubCity: r.hubCity,
+                    latitude: r.latitude,
+                    longitude: r.longitude,
+                    isCompleted: r.isCompleted,
+                    sequenceOrder: r.sequenceOrder,
                   }))}
                 />
               )}

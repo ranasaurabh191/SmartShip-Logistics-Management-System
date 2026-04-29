@@ -49,32 +49,131 @@ interface Props {
   defaultCenter?: [number, number];
 }
 
-/* ── Nominatim helpers ── */
-const NOM_HEADERS = { 'Accept-Language': 'en', 'User-Agent': 'SmartShip-App/1.0' };
-
 async function reverseGeocode(lat: number, lng: number): Promise<PickedLocation> {
-  const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`;
-  const res = await fetch(url, { headers: NOM_HEADERS });
-  const data: NominatimResult = await res.json();
-  const a = data.address;
-  const streetNum = a.house_number ?? '';
-  const road      = a.road ?? '';
-  const city      = a.city ?? a.town ?? a.village ?? a.suburb ?? a.county ?? '';
-  return {
+  const fallback: PickedLocation = {
     lat, lng,
-    street:           [streetNum, road].filter(Boolean).join(' ') || data.display_name.split(',')[0],
-    city,
-    state:            a.state ?? '',
-    postalCode:       a.postcode ?? '',
-    country:          a.country ?? '',
-    formattedAddress: data.display_name,
+    street: '', city: '', state: '', postalCode: '', country: '',
+    formattedAddress: `${lat.toFixed(6)}, ${lng.toFixed(6)}`,
   };
+
+  const fetchWithTimeout = async (url: string, options: any = {}, timeout = 1500) => {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    try {
+      const response = await fetch(url, { ...options, signal: controller.signal });
+      clearTimeout(id);
+      return response;
+    } catch (e) {
+      clearTimeout(id);
+      throw e;
+    }
+  };
+
+  // Try Provider 1: Photon (Fast 1.5s timeout)
+  try {
+    const res = await fetchWithTimeout(`https://photon.komoot.io/reverse?lat=${lat}&lon=${lng}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.features && data.features.length > 0) {
+        const p = data.features[0].properties;
+        const city = p.city ?? p.town ?? p.village ?? p.county ?? '';
+        return {
+          lat, lng,
+          street: [p.housenumber, p.street ?? p.name].filter(Boolean).join(' ').trim(),
+          city, state: p.state ?? '', postalCode: p.postcode ?? '', country: p.country ?? '',
+          formattedAddress: [p.name, p.street, city, p.state, p.country].filter(Boolean).join(', '),
+        };
+      }
+    }
+  } catch (e) {
+    console.warn("Photon timed out fast, trying Nominatim...");
+  }
+
+  // Try Provider 2: Nominatim (Fast 1.5s timeout)
+  try {
+    const res = await fetchWithTimeout(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`, {
+      headers: { 'User-Agent': 'SmartShip-Logistics-Management-System' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.address) {
+        const a = data.address;
+        return {
+          lat, lng,
+          street: [a.road, a.house_number].filter(Boolean).join(' '),
+          city: a.city ?? a.town ?? a.village ?? '',
+          state: a.state ?? '', postalCode: a.postcode ?? '', country: a.country ?? '',
+          formattedAddress: data.display_name,
+        };
+      }
+    }
+  } catch (e) {
+    console.warn("Nominatim failed, trying BigDataCloud...");
+  }
+
+  // Try Provider 3: BigDataCloud (Reliable fallback)
+  try {
+    const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`);
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        lat, lng,
+        street: data.locality || '',
+        city: data.city || data.principalSubdivision || '',
+        state: data.principalSubdivision || '',
+        postalCode: data.postcode || '',
+        country: data.countryName || '',
+        formattedAddress: [data.locality, data.city, data.countryName].filter(Boolean).join(', ') || fallback.formattedAddress,
+      };
+    }
+  } catch (e) {
+    console.error("All geocoding providers failed.", e);
+  }
+
+  return fallback;
 }
 
 async function searchAddress(query: string): Promise<NominatimResult[]> {
-  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&addressdetails=1&limit=5&countrycodes=in`;
-  const res = await fetch(url, { headers: NOM_HEADERS });
-  return res.json();
+  // Try Provider 1: Photon
+  try {
+    const res = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`);
+    if (res.ok) {
+      const data: any = await res.json();
+      return (data.features || []).map((f: any) => {
+        const p = f.properties;
+        const city = p.city ?? p.town ?? p.village ?? '';
+        const formatted = [p.name, p.street, city, p.state, p.country].filter(Boolean).join(', ');
+        return {
+          lat: f.geometry.coordinates[1].toString(),
+          lon: f.geometry.coordinates[0].toString(),
+          display_name: formatted,
+          address: {}
+        };
+      });
+    }
+  } catch (e) {
+    console.warn("Photon search failed, trying Nominatim...", e);
+  }
+
+  // Try Provider 2: Nominatim
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5`, {
+      headers: { 'User-Agent': 'SmartShip-Logistics-Management-System' }
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return data.map((item: any) => ({
+        lat: item.lat,
+        lon: item.lon,
+        display_name: item.display_name,
+        address: {}
+      }));
+    }
+  } catch (e) {
+    console.error("All search providers failed.", e);
+  }
+
+  return [];
 }
 
 /* ── Inner click handler (must be inside MapContainer) ── */
@@ -119,7 +218,11 @@ export const MapLocationPicker = ({ label, onPick, defaultCenter }: Props) => {
       const geo = await reverseGeocode(lat, lng);
       setPickedAddr(geo.formattedAddress);
       onPick(geo);
-    } catch { setPickedAddr(`${lat.toFixed(5)}, ${lng.toFixed(5)}`); }
+    } catch {
+      const fallback = `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+      setPickedAddr(fallback);
+      onPick({ lat, lng, street: '', city: '', state: '', postalCode: '', country: '', formattedAddress: fallback });
+    }
     finally   { setResolving(false); }
   }, [onPick]);
 

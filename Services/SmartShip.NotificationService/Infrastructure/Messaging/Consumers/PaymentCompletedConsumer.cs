@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Helpers;
 using SmartShip.Shared.Events;
@@ -35,16 +35,15 @@ public class PaymentCompletedConsumer : IConsumer<PaymentCompletedEvent>
             customerId, email,
             type: "PaymentCompleted",
             subject: $"Payment Confirmed — {msg.TrackingNumber}",
-            body: $"""
-            <h2>Payment Confirmed!</h2>
-            <h2>Your Shipment has been booked.</h2>
-            <p><b>Tracking Number:</b> {msg.TrackingNumber}</p>
-            <p><b>Method:</b> {msg.PaymentMethod}</p>
-            <p><b>Status:</b> {msg.PaymentStatus}</p>
-            <br/>
-            <p>You can now schedule your pickup.</p>
-            <p>— SmartShip Team</p>
-        """
+            body: EmailTemplates.PaymentCompleted(
+                msg.TrackingNumber,
+                msg.ShipmentId,
+                msg.PaymentMethod,
+                msg.PaymentStatus,
+                msg.Amount,
+                msg.PaidAt,
+                msg.RazorpayPaymentId,
+                msg.RazorpayOrderId)
         );
     }
 }

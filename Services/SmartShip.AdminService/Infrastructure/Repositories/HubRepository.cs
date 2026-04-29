@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SmartShip.AdminService.Core.DTOs;
 using SmartShip.AdminService.Core.Interfaces.Repositories;
 using SmartShip.AdminService.Domain.Entities;
@@ -76,4 +76,7 @@ public class HubRepository : IHubRepository
         _context.Hubs.Remove(hub);
         return Task.CompletedTask;
     }
+
+    public async Task<List<Hub>> GetAllActiveAsync()
+        => await _context.Hubs.Where(h => h.IsActive).OrderBy(h => h.Name).ToListAsync();
 }

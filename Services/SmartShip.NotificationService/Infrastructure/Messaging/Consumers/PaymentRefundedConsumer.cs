@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.NotificationService.Core.Interfaces.Services;
 using SmartShip.NotificationService.Infrastructure.Helpers;
 using SmartShip.Shared.Events;
@@ -37,18 +37,13 @@ public class PaymentRefundedConsumer : IConsumer<PaymentRefundedEvent>
         _logger.LogInformation("Sending notification | Type: PaymentRefunded | User: {UserId} | Email: {Email}",
             msg.CustomerId, email);
 
-        await _emailService.SendEmailAsync(email, "Refund Processed — SmartShip",
-            $"""
-            <h2>Refund Processed</h2>
-            <p>Your refund has been processed for the following shipment:</p>
-            <ul>
-                <li><b>Tracking Number:</b> {msg.TrackingNumber}</li>
-                <li><b>Refund Amount:</b> ₹{msg.Amount:F2}</li>
-                <li><b>Refunded At:</b> {msg.RefundedAt.ToLocalTime():dd-MMM-yyyy hh:mm tt}</li>
-            </ul>
-            <p>The refund will reflect in your account within 5-7 business days.</p>
-            <p>Thank you for using SmartShip.</p>
-            """);
+        await _emailService.SendEmailAsync(
+            email,
+            $"Refund Processed — {msg.TrackingNumber}",
+            EmailTemplates.PaymentRefunded(
+                msg.TrackingNumber,
+                msg.Amount.ToString("F2"),
+                msg.RefundedAt.ToLocalTime().ToString("dd-MMM-yyyy hh:mm tt")));
 
         _logger.LogInformation("Refund email sent to {Email}", email);
     }

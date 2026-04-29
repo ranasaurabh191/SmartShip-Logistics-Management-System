@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SmartShip.ShipmentService.Domain.Entities;
 
 namespace SmartShip.ShipmentService.Infrastructure.Data;
@@ -11,11 +11,12 @@ public class ShipmentDbContext : DbContext
     public DbSet<Address> Addresses => Set<Address>();
     public DbSet<Package> Packages => Set<Package>();
     public DbSet<ShipmentOrderState> ShipmentOrderSagas => Set<ShipmentOrderState>();
+    public DbSet<ShipmentRoute> ShipmentRoutes => Set<ShipmentRoute>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Shipment>(e =>
         {
-
             e.HasKey(s => s.Id);
             e.HasIndex(s => s.TrackingNumber).IsUnique();
             e.Property(s => s.ShippingRate).HasPrecision(18, 2);
@@ -40,6 +41,11 @@ public class ShipmentDbContext : DbContext
             e.Property(s => s.Amount).HasPrecision(18, 2);
             e.Property(s => s.RowVersion).IsRowVersion();
         });
-
+        modelBuilder.Entity<ShipmentRoute>(e =>
+        {
+            e.HasKey(r => r.Id);
+            e.HasIndex(r => new { r.ShipmentId, r.SequenceOrder }).IsUnique();
+            e.HasOne(r => r.Shipment).WithMany().HasForeignKey(r => r.ShipmentId).OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
