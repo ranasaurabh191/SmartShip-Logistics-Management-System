@@ -48,10 +48,7 @@ export const ShipmentsPage = () => {
   const basePath = isAdmin ? '/admin' : '/customer';
   const shipmentsEndpoint = isAdmin ? '/admin/shipments' : '/shipments/my';
 
-  const ADMIN_NEXT_STATUS: Record<string, string> = {
-    Draft: 'Booked', Booked: 'PickedUp', PickedUp: 'InTransit',
-    InTransit: 'OutForDelivery',
-  };
+
 
   const [shipments, setShipments] = useState<ShipmentRow[]>([]);
   const [paymentsByShipment, setPaymentsByShipment] = useState<Record<number, PaymentInfo | null>>({});

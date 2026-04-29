@@ -75,7 +75,7 @@ interface GeoPoint {
   isOrigin?: boolean; isDest?: boolean;
 }
 
-const NOM_HEADERS = { 'Accept-Language': 'en', 'User-Agent': 'SmartShip-App/1.0' };
+
 
 async function geocodeCity(city: string): Promise<{ lat: number; lng: number } | null> {
   const q = city.includes(',') ? city : city + ', India';
