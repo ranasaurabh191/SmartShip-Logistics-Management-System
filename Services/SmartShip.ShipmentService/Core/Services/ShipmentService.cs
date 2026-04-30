@@ -503,6 +503,20 @@ public class ShipmentService : IShipmentService
             ShippingRate = s.ShippingRate
         });
     }
+
+    public async Task<AdminSummaryDto> GetAdminSummaryAsync()
+    {
+        var shipments = await _shipmentRepository.GetAllAsync();
+        
+        return new AdminSummaryDto
+        {
+            TotalShipments = shipments.Count(),
+            TotalRevenue = shipments.Where(s => s.Status != ShipmentStatus.Cancelled).Sum(s => s.ShippingRate),
+            InTransitCount = shipments.Count(s => new[] { ShipmentStatus.Booked, ShipmentStatus.PickedUp, ShipmentStatus.InTransit, ShipmentStatus.OutForDelivery }.Contains(s.Status)),
+            DeliveredCount = shipments.Count(s => s.Status == ShipmentStatus.Delivered),
+            CancelledCount = shipments.Count(s => s.Status == ShipmentStatus.Cancelled)
+        };
+    }
     public Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type, double distanceKm = 0)
     {
         decimal rate = type switch

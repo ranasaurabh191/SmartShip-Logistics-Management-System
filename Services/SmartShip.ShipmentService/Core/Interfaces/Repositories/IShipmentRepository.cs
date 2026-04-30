@@ -1,4 +1,4 @@
-﻿using SmartShip.ShipmentService.Core.DTOs;
+using SmartShip.ShipmentService.Core.DTOs;
 using SmartShip.ShipmentService.Domain.Entities;
 
 namespace SmartShip.ShipmentService.Core.Interfaces.Repositories;
@@ -13,5 +13,6 @@ public interface IShipmentRepository
     Task AddAsync(Shipment shipment);
     void Update(Shipment shipment);
     Task<IEnumerable<Shipment>> GetByCustomerIdAsync(int customerId);
+    Task<IEnumerable<Shipment>> GetAllAsync();
     Task<Shipment?> GetByTrackingNumberAsync(string trackingNumber);
 }

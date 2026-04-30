@@ -32,13 +32,15 @@ export const CustomerDashboard = () => {
       try {
         // 1. Fetch Summary for correct counts
         const summaryRes = await apiClient.get('/shipments/summary');
-        const summaryItems: Shipment[] = summaryRes.data || [];
+        const summaryItems: Shipment[] = Array.isArray(summaryRes.data) 
+          ? summaryRes.data 
+          : (summaryRes.data?.data || summaryRes.data?.items || []);
 
         // 2. Fetch Recent for the table
         const recentRes = await apiClient.get('/shipments/my', {
           params: { page: 1, pageSize: 5 },
         });
-        const recentItems = recentRes.data?.data ?? [];
+        const recentItems = recentRes.data?.data ?? recentRes.data?.items ?? (Array.isArray(recentRes.data) ? recentRes.data : []);
         setShipments(recentItems);
 
         const statsData: DashboardStats = {

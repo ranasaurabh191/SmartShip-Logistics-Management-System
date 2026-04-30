@@ -527,7 +527,7 @@ export const ShipmentsPage = () => {
                         </>
                       )}
 
-                      {!(s.status === 'Draft' || s.status === 'Booked') && !isAdmin && (
+                      {(s.status === 'Draft' || s.status === 'Booked') && !isAdmin && (
                         <button className="ss-btn ss-btn-outline"
                           disabled={busyShipmentId === s.id}
                           onClick={e => openCancelModal(e, s.id)}>
@@ -553,7 +553,7 @@ export const ShipmentsPage = () => {
         
         {/* Pagination Controls */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderTop: '1px solid var(--color-border)' }}>
-          <div style={{ fontSize: 12, color: '#888', fontFamily: 'Orbitron, monospace' }}>
+          <div style={{ fontSize: 12, color: '#888', fontFamily: 'inter,monospace' }}>
             SHOWING <span style={{ color: '#fff' }}>{((page - 1) * pageSize) + 1}</span> - <span style={{ color: '#fff' }}>{Math.min(page * pageSize, totalCount)}</span> OF <span style={{ color: '#fff' }}>{totalCount}</span> RECORDS
           </div>
           <div style={{ display: 'flex', gap: 10 }}>

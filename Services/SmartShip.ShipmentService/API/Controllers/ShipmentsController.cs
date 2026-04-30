@@ -28,7 +28,11 @@ public class ShipmentsController : ControllerBase
         _logger = logger;
     }
     
-    private int GetUserId() => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+    private int GetUserId() 
+    {
+        var claim = User.FindFirst("userId")?.Value ?? User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return int.Parse(claim ?? "0");
+    }
 
     [HttpPost]
     [Authorize(Roles = "CUSTOMER")]
@@ -42,6 +46,11 @@ public class ShipmentsController : ControllerBase
     [Authorize(Roles = "CUSTOMER")]
     public async Task<IActionResult> GetMine([FromQuery] PagedRequest request) =>
     Ok(await _service.GetMyShipmentsPagedAsync(GetUserId(), request));
+
+    [HttpGet("summary")]
+    [Authorize(Roles = "CUSTOMER")]
+    public async Task<IActionResult> GetMySummary() =>
+        Ok(await _service.GetShipmentSummaryByCustomerAsync(GetUserId()));
 
     [HttpGet("{id}")]
     [Authorize]

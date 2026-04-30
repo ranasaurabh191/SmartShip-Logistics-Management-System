@@ -41,39 +41,48 @@ export const AdminDashboard = () => {
       setLoading(true);
 
       try {
-        const res = await apiClient.get('/admin/shipments', {
-          params: { page: 1, pageSize: 10 },
+        // 1. Fetch Summary for correct KPIs
+        const summaryRes = await apiClient.get('/admin/shipments/summary');
+        const s = summaryRes.data;
+
+        // 2. Fetch Recent for the table
+        const recentRes = await apiClient.get('/admin/shipments', {
+          params: { page: 1, pageSize: 5 },
         });
-        const items = Array.isArray(res.data)
-          ? res.data
-          : res.data?.data ?? res.data?.items ?? res.data?.Items ?? [];
-        setShipments(items);
+        const recentItems = recentRes.data?.data ?? recentRes.data?.items ?? (Array.isArray(recentRes.data) ? recentRes.data : []);
+        setShipments(recentItems);
 
-        const totalRevenue = items.reduce((sum: number, s: Shipment) => 
-            sum + (s.status !== 'Cancelled' ? Number(s.shippingRate || 0) : 0), 0);
-
-        if (kpis.length === 0) {
-          setKpis([
-            { label: 'Total Shipments', value: items.length,
-              delta: 'Last 10 records', up: true },
-            { label: 'Total Revenue',
-              value: `₹${totalRevenue.toLocaleString('en-IN')}`,
-              delta: 'Est. value', up: true },
-            { label: 'In Transit',
-              value: items.filter((s: Shipment) =>
-                ['InTransit','Booked','PickedUp','OutForDelivery'].includes(s.status)).length,
-              delta: 'Active', up: true },
-            { label: 'Delivered',
-              value: items.filter((s: Shipment) => s.status === 'Delivered').length,
-              delta: 'Completed', up: true },
-            { label: 'Cancelled',
-              value: items.filter((s: Shipment) => s.status === 'Cancelled').length,
-              delta: 'Failed', up: false },
-          ]);
-        }
+        setKpis([
+          { 
+            label: 'Total Shipments', 
+            value: s.totalShipments || 0,
+            delta: 'All-time', up: true 
+          },
+          { 
+            label: 'Total Revenue',
+            value: `₹${(s.totalRevenue || 0).toLocaleString('en-IN')}`,
+            delta: 'Est. value', up: true 
+          },
+          { 
+            label: 'In Transit',
+            value: s.inTransitCount || 0,
+            delta: 'Active', up: true 
+          },
+          { 
+            label: 'Delivered',
+            value: s.deliveredCount || 0,
+            delta: 'Completed', up: true 
+          },
+          { 
+            label: 'Cancelled',
+            value: s.cancelledCount || 0,
+            delta: 'System-wide', up: false 
+          },
+        ]);
       } catch (err: any) {
-        console.error('Shipments fetch failed:', err?.response?.status, err?.response?.data);
+        console.error('Admin Dashboard fetch failed:', err?.response?.status, err?.response?.data);
         setShipments([]);
+        setKpis([]);
       }
 
       // --- Hubs summary ---

@@ -65,12 +65,11 @@ public class ShipmentRepository : IShipmentRepository
     => await _context.Shipments
         .Where(s => s.CustomerId == customerId)
         .OrderByDescending(s => s.CreatedAt)
-        .Select(s => new Shipment { 
-            Id = s.Id, 
-            TrackingNumber = s.TrackingNumber,
-            Status = s.Status,
-            ShippingRate = s.ShippingRate
-        })
+        .ToListAsync();
+
+    public async Task<IEnumerable<Shipment>> GetAllAsync()
+    => await _context.Shipments
+        .OrderByDescending(s => s.CreatedAt)
         .ToListAsync();
 
     public async Task<PagedResponse<Shipment>> GetByCustomerPagedAsync(int customerId, PagedRequest req)

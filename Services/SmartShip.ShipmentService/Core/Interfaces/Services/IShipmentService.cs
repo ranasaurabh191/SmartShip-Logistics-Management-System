@@ -18,5 +18,6 @@ namespace SmartShip.ShipmentService.Core.Interfaces.Services
         Task<ShipmentResponse?> GetByTrackingNumberAsync(string trackingNumber);
         Task<IEnumerable<RouteStopDto>> GetRouteAsync(int shipmentId);
         Task<RouteStopDto> AdvanceToNextHubAsync(int shipmentId);
+        Task<AdminSummaryDto> GetAdminSummaryAsync();
     }
 }
