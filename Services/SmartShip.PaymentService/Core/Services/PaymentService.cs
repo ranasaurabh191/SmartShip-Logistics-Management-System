@@ -78,7 +78,7 @@ public class PaymentService : IPaymentService
 
         var shipment = await shipmentCheck.Content.ReadFromJsonAsync<ShipmentDTOs>();
         if (shipment == null)
-            throw new KeyNotFoundException("Failed to read shipment details.");
+            throw new InvalidOperationException("Could not retrieve shipment details.");
 
         if (shipment.CustomerId != authenticatedUserId)
         {
@@ -90,42 +90,51 @@ public class PaymentService : IPaymentService
         _logger.LogInformation("Shipment {ShipmentId} verified | TrackingNumber: {TrackingNumber}",
             request.ShipmentId, shipment.TrackingNumber);
 
-        var existing = await _paymentRepository.GetByShipmentIdAsync(request.ShipmentId);
+        // --- CALCULATE TOTAL AMOUNT INCLUDING SURCHARGES AND GST ---
+        decimal baseRate = shipment.ShippingRate;
+        decimal fuelSurcharge = Math.Round(baseRate * 0.05m, 2);
+        decimal handlingCharge = shipment.ShipmentType == "International" ? 120m : 50m;
+        decimal fragileCharge = shipment.IsFragile ? 80m : 0m;
+        decimal codFee = request.PaymentMethod == PaymentMethod.COD ? Math.Round(baseRate * 0.015m, 2) : 0m;
+        
+        decimal subtotal = baseRate + fuelSurcharge + handlingCharge + fragileCharge + codFee;
+        decimal gst = Math.Round(subtotal * 0.18m, 2);
+        decimal totalAmount = Math.Round(subtotal + gst, 2);
 
-        if (existing != null)
+        var payment = await _paymentRepository.GetByShipmentIdAsync(request.ShipmentId);
+
+        if (payment != null)
         {
-            if (existing.PaymentStatus == PaymentStatus.Paid)
+            if (payment.PaymentStatus == PaymentStatus.Paid)
                 throw new InvalidOperationException("You have already paid for this shipment.");
-            if (existing.PaymentMethod == PaymentMethod.COD)
-                throw new InvalidOperationException("COD already registered. Pay on delivery.");
-            if (existing.PaymentMethod == PaymentMethod.Online)
-                throw new InvalidOperationException("Payment already initiated. Please complete your payment.");
+            
+            payment.Amount = totalAmount;
+            payment.PaymentMethod = request.PaymentMethod;
+            payment.PaymentStatus = PaymentStatus.Pending;
+            payment.CreatedAt = DateTime.Now;
+            _paymentRepository.Update(payment);
         }
-
-        var payment = new ShipmentPayment
+        else
         {
-            ShipmentId = request.ShipmentId,
-            TrackingNumber = shipment.TrackingNumber,
-            CustomerId = authenticatedUserId,
-            Amount = shipment.ShippingRate,
-            PaymentMethod = request.PaymentMethod,
-            PaymentStatus = PaymentStatus.Pending,
-            CreatedAt = DateTime.Now
-        };
+            payment = new ShipmentPayment
+            {
+                ShipmentId = request.ShipmentId,
+                TrackingNumber = shipment.TrackingNumber,
+                CustomerId = authenticatedUserId,
+                Amount = totalAmount,
+                PaymentMethod = request.PaymentMethod,
+                PaymentStatus = PaymentStatus.Pending,
+                CreatedAt = DateTime.Now
+            };
+            await _paymentRepository.AddAsync(payment);
+        }
 
         var correlation = await _sagaCorrelationRepository.GetByShipmentIdAsync(request.ShipmentId);
-        if (correlation == null || correlation.CorrelationId == Guid.Empty)
-        {
-            _logger.LogWarning("No valid CorrelationId found for Shipment {ShipmentId}. Saga will not be updated.", request.ShipmentId);
-        }
-
         payment.SagaCorrelationId = correlation?.CorrelationId ?? Guid.Empty;
 
         if (request.PaymentMethod == PaymentMethod.COD)
         {
             payment.PaymentStatus = PaymentStatus.Pending;
-
-            await _paymentRepository.AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
 
             await _publisher.Publish(new PaymentCreatedEvent
@@ -136,8 +145,6 @@ public class PaymentService : IPaymentService
                 PaymentMethod = payment.PaymentMethod.ToString(),
                 Amount = payment.Amount
             });
-
-            _logger.LogInformation("PaymentCreatedEvent published for COD with {ShipmentId}", request.ShipmentId);
 
             await _publisher.Publish(new PaymentCompletedEvent
             {
@@ -153,10 +160,7 @@ public class PaymentService : IPaymentService
                 RazorpayOrderId = null
             });
 
-            _logger.LogInformation("PaymentCompletedEvent published for COD with {ShipmentId}", request.ShipmentId);
-
             _logger.LogInformation("COD order created for {ShipmentId}", request.ShipmentId);
-
             return MapToResponse(payment, "COD order created. Pay on delivery.");
         }
 
@@ -164,9 +168,8 @@ public class PaymentService : IPaymentService
         {
             try
             {
-                var razorpayOrderId = _razorpayClient.CreateOrder(shipment.ShippingRate, request.ShipmentId);
+                var razorpayOrderId = _razorpayClient.CreateOrder(totalAmount, request.ShipmentId);
                 payment.RazorpayOrderId = razorpayOrderId;
-                _logger.LogInformation("Razorpay order created: {OrderId}", razorpayOrderId);
             }
             catch (Exception ex)
             {
@@ -174,8 +177,6 @@ public class PaymentService : IPaymentService
                 throw new InvalidOperationException("Failed to initiate payment. Please try again.");
             }
 
-
-            await _paymentRepository.AddAsync(payment);
             await _unitOfWork.SaveChangesAsync();
 
             await _publisher.Publish(new PaymentCreatedEvent
@@ -186,8 +187,6 @@ public class PaymentService : IPaymentService
                 PaymentMethod = payment.PaymentMethod.ToString(),
                 Amount = payment.Amount
             });
-
-            _logger.LogInformation("PaymentCreatedEvent published for Online Payment with {ShipmentId}", request.ShipmentId);
 
             return MapToResponse(payment, "Online payment order created. Please complete payment.");
         }

@@ -171,7 +171,8 @@ public class ShipmentService : IShipmentService
                 ReceiverAddressId = receiver.Id,
                 PackageId = package.Id,
                 PickupScheduledAt = req.PickupScheduledAt,
-                Notes = req.Notes
+                Notes = req.Notes,
+                IsFragile = req.IsFragile
             };
 
             shipment.SenderAddress = sender;
@@ -194,14 +195,15 @@ public class ShipmentService : IShipmentService
                 SenderCity = sender.City,
                 CreatedAt = shipment.CreatedAt,
                 Amount = shipment.ShippingRate,
-                CorrelationId = correlationId
+                CorrelationId = correlationId,
+                IsFragile = shipment.IsFragile
             });
             _logger.LogInformation("Shipment created Event Published.");
 
             // Auto-generate route plan from sender → hubs → receiver
             await GenerateRouteForShipmentAsync(shipment, sender, receiver);
 
-            return MapToResponse(shipment, sender, receiver, package);
+            return MapToResponse(shipment, sender, receiver, package, "Pending");
         }
         catch (Exception ex)
         {
@@ -776,6 +778,7 @@ public class ShipmentService : IShipmentService
         new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country, sender.Latitude, sender.Longitude),
         new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country, receiver.Latitude, receiver.Longitude),
         new PackageDto(pkg.WeightKg, pkg.LengthCm, pkg.WidthCm, pkg.HeightCm, pkg.Description, pkg.DeclaredValue),
-        s.Notes
+        s.Notes,
+        s.IsFragile
     );
 }

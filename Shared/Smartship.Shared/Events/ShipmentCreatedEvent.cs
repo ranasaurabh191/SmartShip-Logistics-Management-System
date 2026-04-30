@@ -1,4 +1,4 @@
-﻿namespace SmartShip.Shared.Events;
+namespace SmartShip.Shared.Events;
 
 public class ShipmentCreatedEvent
 {
@@ -9,4 +9,5 @@ public class ShipmentCreatedEvent
     public string SenderCity { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; }
     public decimal Amount { get; set; }
+    public bool IsFragile { get; set; }
 }

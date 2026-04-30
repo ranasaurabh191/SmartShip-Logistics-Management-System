@@ -37,6 +37,7 @@ interface Props {
   data: InvoiceData;
   onClose: () => void;
   onDownloaded: (file: File) => void;
+  onFileReady?: (file: File) => void;
 }
 
 /* ─── Inline styles so the printed/PDF output is self-contained ─── */
@@ -330,8 +331,35 @@ InvoiceDocument.displayName = 'InvoiceDocument';
 
 
 /* ─── Modal Wrapper ─── */
-export const InvoicePrintView: React.FC<Props> = ({ data, onClose, onDownloaded }) => {
+export const InvoicePrintView: React.FC<Props> = ({ data, onClose, onDownloaded, onFileReady }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = React.useState(false);
+
+  const generatePDFBlob = async (): Promise<File | null> => {
+    if (!ref.current) return null;
+    try {
+      const canvas = await html2canvas(ref.current, { scale: 2, useCORS: true, backgroundColor: '#fff' });
+      const imgData = canvas.toDataURL('image/jpeg', 0.75);
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [794, 1123], compress: true });
+      pdf.addImage(imgData, 'JPEG', 0, 0, 794, 1123);
+      const pdfBlob = pdf.output('blob');
+      const fileName = `SmartShip-Invoice-${data.trackingNumber}.pdf`;
+      return new File([pdfBlob], fileName, { type: 'application/pdf' });
+    } catch (err) {
+      console.error('Failed to generate PDF', err);
+      return null;
+    }
+  };
+
+  React.useEffect(() => {
+    const timer = setTimeout(async () => {
+      const file = await generatePDFBlob();
+      if (file && onFileReady) {
+        onFileReady(file);
+      }
+    }, 1000); // Give a second for fonts/images to stabilize
+    return () => clearTimeout(timer);
+  }, []);
 
   const handlePrint = useReactToPrint({
     contentRef: ref,
@@ -339,18 +367,18 @@ export const InvoicePrintView: React.FC<Props> = ({ data, onClose, onDownloaded 
   });
 
   const handleDownloadPDF = async () => {
-    if (!ref.current) return;
-    const canvas = await html2canvas(ref.current, { scale: 2, useCORS: true, backgroundColor: '#fff' });
-    // Use JPEG with quality 0.75 instead of PNG to significantly reduce file size
-    const imgData = canvas.toDataURL('image/jpeg', 0.75);
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [794, 1123], compress: true });
-    pdf.addImage(imgData, 'JPEG', 0, 0, 794, 1123);
-    const pdfBlob = pdf.output('blob');
-    const fileName = `SmartShip-Invoice-${data.trackingNumber}.pdf`;
-    pdf.save(fileName);
-    // also give caller a File for upload
-    const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-    onDownloaded(file);
+    setIsGenerating(true);
+    const file = await generatePDFBlob();
+    if (file) {
+      const url = URL.createObjectURL(file);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = file.name;
+      link.click();
+      URL.revokeObjectURL(url);
+      onDownloaded(file);
+    }
+    setIsGenerating(false);
   };
 
   return (
@@ -368,7 +396,9 @@ export const InvoicePrintView: React.FC<Props> = ({ data, onClose, onDownloaded 
         <span style={{ fontFamily: 'Orbitron, monospace', color: '#fff', fontSize: 14, fontWeight: 700, letterSpacing: '0.1em' }}>
           INVOICE PREVIEW
         </span>
-        <button className="ss-btn" onClick={handleDownloadPDF}>⬇ Download PDF</button>
+        <button className="ss-btn" onClick={handleDownloadPDF} disabled={isGenerating}>
+          {isGenerating ? '⌛ Generating...' : '⬇ Download PDF'}
+        </button>
         <button className="ss-btn ss-btn-outline" onClick={() => handlePrint()}>🖨 Print</button>
         <button className="ss-btn ss-btn-outline" onClick={onClose} style={{ borderColor: '#555', color: '#aaa' }}>✕ Close</button>
       </div>

@@ -11,14 +11,16 @@ public record CreateShipmentRequest(
     PackageDto Package,
     ShipmentType ShipmentType,
     DateTime? PickupScheduledAt,
-    string? Notes
+    string? Notes,
+    bool IsFragile = false
 );
 
 public record ShipmentResponse(
     int Id, string TrackingNumber, int CustomerId,
     string ShipmentType, string Status, string PaymentStatus, decimal ShippingRate,
     string CreatedAt, string? PickupScheduledAt, string? DeliveredAt,
-    AddressDto SenderAddress, AddressDto ReceiverAddress, PackageDto Package, string? Notes
+    AddressDto SenderAddress, AddressDto ReceiverAddress, PackageDto Package, string? Notes,
+    bool IsFragile
 );
 
 public class ShipmentPagedRequest : PagedRequest

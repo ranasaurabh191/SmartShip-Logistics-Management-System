@@ -203,6 +203,7 @@ export const CreateShipmentWizard = () => {
         },
         shipmentType: formData.shipmentType, pickupScheduledAt: null,
         notes: formData.notes || 'Created via SmartShip.',
+        isFragile: fragile,
       };
       const res = await apiClient.post('/shipments', payload);
       setCreatedShipment(res.data);
@@ -503,28 +504,12 @@ export const CreateShipmentWizard = () => {
             <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#e0001a', marginBottom: 14 }}>
               Add-On Services
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              {/* Fragile toggle */}
-              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '10px 14px', border: `1px solid ${selectedPayMode === 'ONLINE' ? '#00c48c' : 'var(--color-border)'}`, borderRadius: 4, background: selectedPayMode === 'ONLINE' ? 'rgba(0,196,140,0.07)' : 'transparent', transition: 'all 0.15s' }}>
-                <input type="radio" name="paymode" checked={selectedPayMode === 'ONLINE'} onChange={() => setSelectedPayMode('ONLINE')} style={{ accentColor: '#00c48c', width: 16, height: 16 }} />
-                <div>
-                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, color: '#fff', fontWeight: 500, letterSpacing: '0.06em' }}>PAY ONLINE</div>
-                  <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>UPI / Card / Net banking via Razorpay</div>
-                </div>
-              </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12 }}>
               <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '10px 14px', border: `1px solid ${fragile ? '#e0001a' : 'var(--color-border)'}`, borderRadius: 4, background: fragile ? 'rgba(224,0,26,0.07)' : 'transparent', transition: 'all 0.15s' }}>
                 <input type="checkbox" checked={fragile} onChange={e => setFragile(e.target.checked)} style={{ accentColor: '#e0001a', width: 16, height: 16 }} />
                 <div>
                   <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, color: '#fff', fontWeight: 500, letterSpacing: '0.06em' }}>FRAGILE HANDLING</div>
                   <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>Extra care + padding · +₹80</div>
-                </div>
-              </label>
-              {/* COD toggle */}
-              <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '10px 14px', border: `1px solid ${selectedPayMode === 'COD' ? '#e0001a' : 'var(--color-border)'}`, borderRadius: 4, background: selectedPayMode === 'COD' ? 'rgba(224,0,26,0.07)' : 'transparent', transition: 'all 0.15s' }}>
-                <input type="radio" name="paymode" checked={selectedPayMode === 'COD'} onChange={() => setSelectedPayMode('COD')} style={{ accentColor: '#e0001a', width: 16, height: 16 }} />
-                <div>
-                  <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, color: '#fff', fontWeight: 500, letterSpacing: '0.06em' }}>CASH ON DELIVERY</div>
-                  <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>COD fee 1.5% of base rate</div>
                 </div>
               </label>
             </div>
@@ -584,11 +569,9 @@ export const CreateShipmentWizard = () => {
             )}
           </div>
 
-          {!selectedPayMode && (
-            <div style={{ fontSize: 12, color: '#f5a623', display: 'flex', gap: 8, alignItems: 'center' }}>
-              <span>⚠</span> Select a payment mode above to continue.
-            </div>
-          )}
+          <div style={{ fontSize: 12, color: '#f5a623', display: 'flex', gap: 8, alignItems: 'center' }}>
+            <span>ℹ</span> Final payment mode can be selected in the next step.
+          </div>
         </div>
       );
     }
@@ -716,11 +699,11 @@ export const CreateShipmentWizard = () => {
                 onChange={e => { const f = e.target.files?.[0]; if (f) setLabelFile(f); }} />
             </div>
 
-            {/* Pre-fill with invoice if downloaded */}
+            {/* Pre-fill with invoice if generated */}
             {invoiceFile && !labelFile && (
               <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(0,196,140,0.08)', border: '1px solid rgba(0,196,140,0.2)', borderRadius: 4, fontSize: 12, color: '#99e6b3', cursor: 'pointer' }}
                 onClick={() => setLabelFile(invoiceFile)}>
-                ↑ Use the invoice you downloaded: <strong>{invoiceFile.name}</strong>
+                ↑ Use the generated invoice as shipping label: <strong>{invoiceFile.name}</strong>
               </div>
             )}
           </div>
@@ -752,7 +735,7 @@ export const CreateShipmentWizard = () => {
   /* ══════════════════ STEP NEXT BUTTON LABEL ══════════════════ */
   const nextLabel = () => {
     if (submitting) return 'CREATING SHIPMENT...';
-    if (activeStep === 3) return selectedPayMode ? 'Confirm & Create Shipment →' : 'Select Payment Mode First';
+    if (activeStep === 3) return 'Confirm & Create Shipment →';
     if (activeStep === 4) return paymentResponse ? 'Continue to Label Upload →' : 'Complete Payment First';
     if (activeStep === STEPS.length - 1) return null; // handled inside step
     return 'Continue →';
@@ -760,7 +743,6 @@ export const CreateShipmentWizard = () => {
 
   const showNextButton = activeStep < STEPS.length - 1;
   const nextDisabled = submitting ||
-    (activeStep === 3 && !selectedPayMode) ||
     (activeStep === 4 && !paymentResponse);
 
   return (
@@ -769,10 +751,13 @@ export const CreateShipmentWizard = () => {
         <InvoicePrintView
           data={invoiceData}
           onClose={() => setShowInvoice(false)}
+          onFileReady={(file) => {
+            setInvoiceFile(file);
+          }}
           onDownloaded={(file) => {
             setInvoiceFile(file);
             setShowInvoice(false);
-            addNotification('Invoice downloaded! You can now upload it as a label.', 'success');
+            addNotification('Invoice downloaded!', 'success');
           }}
         />
       )}
