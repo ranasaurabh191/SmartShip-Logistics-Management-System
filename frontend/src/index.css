@@ -50,6 +50,16 @@ body {
   overflow-x: hidden;
 }
 
+/* ─── Global Button Transitions ─── */
+button {
+  cursor: pointer;
+  transition: all 0.15s ease, transform 0.1s ease;
+}
+
+button:active {
+  transform: scale(0.96) !important;
+}
+
 /* ─── Subtle background scanline overlay ─── */
 body::before {
   content: '';
@@ -165,22 +175,31 @@ h6 {
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.1s ease, opacity 0.1s ease;
 }
 
 .ss-btn:hover {
   background: var(--color-accent-hover);
 }
 
+.ss-btn:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+
 .ss-btn-outline {
   background: transparent;
   border: 1px solid var(--color-accent);
   color: var(--color-accent);
-  
 }
 
 .ss-btn-outline:hover {
   background: rgba(224, 0, 26, 0.1);
+}
+
+.ss-btn-outline:active {
+  transform: scale(0.96);
+  background: rgba(224, 0, 26, 0.2);
 }
 
 /* ─── KPI STRIP CARD ─── */
@@ -287,6 +306,10 @@ h6 {
 .sidebar-item:hover {
   color: var(--color-text);
   background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-item:active {
+  transform: scale(0.98);
 }
 
 .sidebar-item.active {

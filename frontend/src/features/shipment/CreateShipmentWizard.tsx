@@ -349,10 +349,7 @@ export const CreateShipmentWizard = () => {
           <input className="ss-input" style={{ width: '100%', borderColor: err ? '#ff6b6b' : undefined }}
             placeholder={placeholder} value={(formData[section] as any)[field]}
             onChange={e => handleChange(section, field, e.target.value)}
-            onBlur={() => {
-              if (section === 'sender') setSenderErrors(validateAddressSection(formData.sender, 'Sender'));
-              if (section === 'receiver') setReceiverErrors(validateAddressSection(formData.receiver, 'Receiver'));
-            }}
+            onChange={e => handleChange(section, field, e.target.value)}
           />
         )}
         {err && <div style={inputErrorStyle}>⚠ {err}</div>}
@@ -369,7 +366,6 @@ export const CreateShipmentWizard = () => {
           placeholder={placeholder} value={formData.package[field]}
           type={field === 'description' ? 'text' : 'number'}
           onChange={e => handleChange('package', field, e.target.value)}
-          onBlur={() => setPackageErrors(validatePackageSection(formData.package))}
         />
         {err && <div style={inputErrorStyle}>⚠ {err}</div>}
       </div>
