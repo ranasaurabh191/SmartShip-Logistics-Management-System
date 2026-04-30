@@ -57,6 +57,10 @@ export const ShipmentsPage = () => {
   const [loading, setLoading] = useState(true);
   const [busyShipmentId, setBusyShipmentId] = useState<number | null>(null);
 
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+
   type RouteStop = {
     id: number; shipmentId: number; hubId: number | null; hubName: string; hubCity: string;
     latitude: number; longitude: number; sequenceOrder: number;
@@ -81,13 +85,15 @@ export const ShipmentsPage = () => {
   const [routeLoading, setRouteLoading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
 
-  const fetchShipments = async () => {
+  const fetchShipments = async (newPage?: number) => {
     setLoading(true);
+    const p = newPage || page;
     try {
-      const res = await apiClient.get(shipmentsEndpoint, { params: { page: 1, pageSize: 25 } });
+      const res = await apiClient.get(shipmentsEndpoint, { params: { page: p, pageSize: pageSize, search: search } });
       const responseData = res.data;
-      const items: ShipmentApi[] = Array.isArray(responseData)
-        ? responseData : responseData?.data ?? responseData?.items ?? [];
+      const items: ShipmentApi[] = responseData?.data ?? [];
+      setTotalCount(responseData?.totalCount || 0);
+      
       const mapped: ShipmentRow[] = items.map(s => ({
         id: s.id, trackingNumber: s.trackingNumber,
         senderFullName: s.senderAddress?.fullName ?? '',
@@ -109,12 +115,13 @@ export const ShipmentsPage = () => {
         })
       );
       setPaymentsByShipment(Object.fromEntries(paymentEntries));
+      if (newPage) setPage(newPage);
     } catch {
       setShipments([]); setPaymentsByShipment({});
     } finally { setLoading(false); }
   };
 
-  useEffect(() => { fetchShipments(); }, [shipmentsEndpoint]);
+  useEffect(() => { fetchShipments(1); }, [shipmentsEndpoint, search]);
 
   const statuses = ['ALL', 'Draft', 'Booked', 'PickedUp', 'InTransit', 'OutForDelivery', 'Delivered', 'Cancelled'];
 
@@ -543,6 +550,31 @@ export const ShipmentsPage = () => {
             })}
           </tbody>
         </table>
+        
+        {/* Pagination Controls */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderTop: '1px solid var(--color-border)' }}>
+          <div style={{ fontSize: 12, color: '#888', fontFamily: 'Orbitron, monospace' }}>
+            SHOWING <span style={{ color: '#fff' }}>{((page - 1) * pageSize) + 1}</span> - <span style={{ color: '#fff' }}>{Math.min(page * pageSize, totalCount)}</span> OF <span style={{ color: '#fff' }}>{totalCount}</span> RECORDS
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button 
+              className="ss-btn ss-btn-outline" 
+              disabled={page <= 1 || loading}
+              onClick={() => fetchShipments(page - 1)}
+              style={{ padding: '6px 16px' }}
+            >
+              PREVIOUS
+            </button>
+            <button 
+              className="ss-btn ss-btn-outline" 
+              disabled={page * pageSize >= totalCount || loading}
+              onClick={() => fetchShipments(page + 1)}
+              style={{ padding: '6px 16px' }}
+            >
+              NEXT
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Retry Verify Modal */}
@@ -587,19 +619,19 @@ export const ShipmentsPage = () => {
             </p>
 
             <div style={{ marginTop: 16 }}>
-              <label style={{ fontSize: 11, color: '#888', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'block' }}>New Status</label>
+              <label style={{ fontSize: 10, color: '#bebebeff', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'block' }}>New Status</label>
               <select 
                 className="ss-input" 
                 value={selectedStatus} 
                 onChange={e => setSelectedStatus(e.target.value)}
-                style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)' }}
+                style={{ width: '100%', padding: '10px',color:"#f1eaeaff" }}
               >
-                <option value="Booked">Booked</option>
                 <option value="PickedUp">PickedUp</option>
                 <option value="InTransit">InTransit</option>
                 <option value="OutForDelivery">OutForDelivery</option>
                 <option value="Delivered">Delivered</option>
                 <option value="Cancelled">Cancelled</option>
+                
               </select>
             </div>
 
@@ -612,7 +644,7 @@ export const ShipmentsPage = () => {
                 {/* Route progress visualization */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap', marginBottom: 12, padding: '8px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.06)' }}>
                   {routeStops.map((stop, idx) => (
-                    <span key={stop.id} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span key={stop.id} style={{ display: 'flex', alignItems: 'center', gap:1 }}>
                       {idx > 0 && <span style={{ color: '#444', fontSize: 12 }}>→</span>}
                       <span style={{
                         fontSize: 11, fontWeight: stop.id === nextHub?.id ? 700 : 400, padding: '2px 8px', borderRadius: 4,
@@ -633,7 +665,7 @@ export const ShipmentsPage = () => {
                   ))}
                 </select>
                 {nextHub && (
-                  <div style={{ fontSize: 11, color: '#888', marginTop: 6, fontFamily: 'Inter, sans-serif' }}>
+                  <div style={{ fontSize: 11, color: '#ada5a5ff', marginTop: 6, fontFamily: 'Inter, sans-serif' }}>
                     Advancing to <strong style={{ color: '#fff' }}>{nextHub.hubName}</strong> — {nextHub.hubCity} ({nextHub.latitude.toFixed(4)}, {nextHub.longitude.toFixed(4)})
                   </div>
                 )}

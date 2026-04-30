@@ -120,6 +120,29 @@ export const CreateShipmentWizard = () => {
   const [uploadLoading, setUploadLoading] = useState(false);
   const [uploadError, setUploadError] = useState('');
   const [uploadSuccess, setUploadSuccess] = useState('');
+  const [distance, setDistance] = useState<number>(0);
+
+  const haversine = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  };
+
+  useEffect(() => {
+    const sLat = Number(formData.sender.latitude);
+    const sLng = Number(formData.sender.longitude);
+    const rLat = Number(formData.receiver.latitude);
+    const rLng = Number(formData.receiver.longitude);
+    if (sLat && sLng && rLat && rLng) {
+      setDistance(haversine(sLat, sLng, rLat, rLng));
+    } else {
+      setDistance(0);
+    }
+  }, [formData.sender.latitude, formData.sender.longitude, formData.receiver.latitude, formData.receiver.longitude]);
 
   useEffect(() => {
     const weight = Number(formData.package.weightKg);
@@ -147,11 +170,12 @@ export const CreateShipmentWizard = () => {
         shipmentType: formData.shipmentType,
         paymentMode: selectedPayMode,
         fragile,
+        distanceKm: distance
       }));
     } else {
       setCosts(null);
     }
-  }, [estimatedRate, formData.shipmentType, selectedPayMode, fragile]);
+  }, [estimatedRate, formData.shipmentType, selectedPayMode, fragile, distance]);
 
   /* ── Field helpers ── */
   const handleChange = (section: 'sender' | 'receiver' | 'package', field: string, value: string) => {
@@ -220,14 +244,14 @@ export const CreateShipmentWizard = () => {
     if (!payment.razorpayOrderId) { setPaymentError('No Razorpay Order ID. Try again.'); return; }
     setPaymentLoading(false);
 
-    const options: RazorpayOptions = {
+    const options: any = {
       key: RAZORPAY_KEY_ID,
       amount: payment.amount * 100,
       currency: 'INR',
       name: 'SmartShip',
       description: `Shipment ${payment.trackingNumber}`,
       order_id: payment.razorpayOrderId,
-      handler: async (response: RazorpayPaymentResponse) => {
+      handler: async (response: any) => {
         setPaymentLoading(true); setPaymentError(''); setPaymentSuccess('');
         try {
           const res = await apiClient.post('/payment/verify', {
@@ -349,7 +373,6 @@ export const CreateShipmentWizard = () => {
           <input className="ss-input" style={{ width: '100%', borderColor: err ? '#ff6b6b' : undefined }}
             placeholder={placeholder} value={(formData[section] as any)[field]}
             onChange={e => handleChange(section, field, e.target.value)}
-            onChange={e => handleChange(section, field, e.target.value)}
           />
         )}
         {err && <div style={inputErrorStyle}>⚠ {err}</div>}
@@ -389,6 +412,13 @@ export const CreateShipmentWizard = () => {
     if (section === 'sender') setSenderErrors({});
     if (section === 'receiver') setReceiverErrors({});
   };
+
+  const renderCostRow = (label: string, amount: number) => (
+    <tr>
+      <td>{label}</td>
+      <td style={{ textAlign: 'right', fontFamily: 'sans-serif', fontWeight: 500 }}>{fmtINR(amount)}</td>
+    </tr>
+  );
 
   const renderStep = () => {
     if (activeStep === 0 || activeStep === 1) {
@@ -482,20 +512,9 @@ export const CreateShipmentWizard = () => {
 
     if (activeStep === 3) {
       const c = costs;
-      const isDomestic = formData.shipmentType !== 'International';
-
-      const rows = c ? [
-        { label: 'Base Shipping Rate', amount: c.baseRate },
-        { label: 'Fuel Surcharge (5%)', amount: c.fuelSurcharge },
-        { label: `Handling Charge (${isDomestic ? 'Domestic' : 'International'})`, amount: c.handlingCharge },
-        ...(c.fragileCharge > 0 ? [{ label: 'Fragile / Special Handling', amount: c.fragileCharge }] : []),
-        ...(c.codFee > 0 ? [{ label: 'COD Service Fee (1.5%)', amount: c.codFee }] : []),
-      ] : [];
 
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-
-          {/* Add-ons */}
           <div style={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border)', borderRadius: 4, padding: 20 }}>
             <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#e0001a', marginBottom: 14 }}>
               Add-On Services
@@ -511,7 +530,6 @@ export const CreateShipmentWizard = () => {
             </div>
           </div>
 
-          {/* Itemized Table */}
           <div style={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border)', borderRadius: 4, overflow: 'hidden' }}>
             <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--color-border)', fontFamily: 'Orbitron, monospace', fontSize: 11, fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#fff' }}>
               Itemized Cost Breakdown
@@ -524,25 +542,31 @@ export const CreateShipmentWizard = () => {
                 </tr>
               </thead>
               <tbody>
-                {c ? rows.map((row, i) => (
-                  <tr key={i}>
-                    <td>{row.label}</td>
-                    <td style={{ textAlign: 'right', fontFamily: 'sans-serif', fontWeight: 500 }}>{fmtINR(row.amount)}</td>
-                  </tr>
-                )) : (
+                {c ? (
+                  <>
+                    {renderCostRow('Base Shipping Rate', c.baseRate)}
+                    {renderCostRow('Fuel Surcharge (5%)', c.fuelSurcharge)}
+                    {renderCostRow(`Handling Charge (${formData.shipmentType})`, c.handlingCharge)}
+                    {c.distSurcharge > 0 && renderCostRow(`Distance Surcharge (>${(distance - 500).toFixed(0)}km extra)`, c.distSurcharge)}
+                    {fragile && renderCostRow('Fragile Handling', c.fragileCharge)}
+                    {c.codFee > 0 && renderCostRow('COD Service Fee (1.5%)', c.codFee)}
+                  </>
+                ) : (
                   <tr><td colSpan={2} style={{ color: '#888', textAlign: 'center', padding: 20 }}>Enter package weight to see breakdown</td></tr>
                 )}
               </tbody>
             </table>
             {c && (
               <div style={{ borderTop: '1px solid var(--color-border)' }}>
-                {/* Subtotal */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '8px 13px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                   <span style={{ color: '#888', fontSize: 12 }}>Subtotal (excl. GST)</span>
                   <span style={{ fontFamily: 'sans-serif', fontWeight: 500 }}>{fmtINR(c.subtotal)}</span>
                 </div>
-                {/* GST rows */}
-                {isDomestic ? (
+                {c.isInternational ? (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 13px', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#888', fontSize: 12 }}>
+                    <span>IGST @ 18%</span><span style={{ fontFamily: 'sans-serif' }}>{fmtINR(c.totalGst)}</span>
+                  </div>
+                ) : (
                   <>
                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 13px', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#888', fontSize: 12 }}>
                       <span>CGST @ 9%</span><span style={{ fontFamily: 'sans-serif' }}>{fmtINR(c.cgst)}</span>
@@ -551,22 +575,13 @@ export const CreateShipmentWizard = () => {
                       <span>SGST @ 9%</span><span style={{ fontFamily: 'sans-serif' }}>{fmtINR(c.sgst)}</span>
                     </div>
                   </>
-                ) : (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 13px', borderBottom: '1px solid rgba(255,255,255,0.04)', color: '#888', fontSize: 12 }}>
-                    <span>IGST @ 18%</span><span style={{ fontFamily: 'sans-serif' }}>{fmtINR(c.igst)}</span>
-                  </div>
                 )}
-                {/* Grand Total */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 13px', background: 'rgba(224,0,26,0.1)', borderTop: '1px solid rgba(224,0,26,0.25)' }}>
                   <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 13, fontWeight: 700, color: '#fff', letterSpacing: '0.08em' }}>GRAND TOTAL</span>
                   <span style={{ fontFamily: 'Orbitron, monospace', fontSize: 18, fontWeight: 600, color: '#e0001a' }}>{fmtINR(c.grandTotal)}</span>
                 </div>
               </div>
             )}
-          </div>
-
-          <div style={{ fontSize: 12, color: '#f5a623', display: 'flex', gap: 8, alignItems: 'center' }}>
-            <span>ℹ</span> Final payment mode can be selected in the next step.
           </div>
         </div>
       );
@@ -576,7 +591,6 @@ export const CreateShipmentWizard = () => {
     if (activeStep === 4) {
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          {/* Shipment summary banner */}
           {createdShipment && (
             <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, padding: '16px 20px', background: 'rgba(0,196,140,0.07)', border: '1px solid rgba(0,196,140,0.2)', borderRadius: 4 }}>
               <div>
@@ -597,7 +611,21 @@ export const CreateShipmentWizard = () => {
             </div>
           )}
 
-          {/* Payment buttons */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, padding: 16, background: 'rgba(255,255,255,0.03)', borderRadius: 4 }}>
+            <div>
+              <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', marginBottom: 4 }}>Type</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{formData.shipmentType}</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', marginBottom: 4 }}>Distance</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{distance.toFixed(2)} km</div>
+            </div>
+            <div>
+              <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', marginBottom: 4 }}>Weight</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{formData.package.weightKg} kg</div>
+            </div>
+          </div>
+
           {paymentResponse?.paymentStatus !== 'Paid' && (
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
               <button className="ss-btn" disabled={paymentLoading} onClick={() => handleCreateOrder('COD')}

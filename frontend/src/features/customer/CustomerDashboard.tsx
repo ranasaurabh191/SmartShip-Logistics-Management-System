@@ -30,27 +30,26 @@ export const CustomerDashboard = () => {
   useEffect(() => {
     const fetchAll = async () => {
       try {
+        // 1. Fetch Summary for correct counts
+        const summaryRes = await apiClient.get('/shipments/summary');
+        const summaryItems: Shipment[] = summaryRes.data || [];
+
+        // 2. Fetch Recent for the table
         const recentRes = await apiClient.get('/shipments/my', {
-          params: { page: 1, pageSize: 10 },
+          params: { page: 1, pageSize: 5 },
         });
-
-        const items = Array.isArray(recentRes.data)
-          ? recentRes.data
-          : recentRes.data?.data ?? recentRes.data?.items ?? [];
-
-        setShipments(items);
+        const recentItems = recentRes.data?.data ?? [];
+        setShipments(recentItems);
 
         const statsData: DashboardStats = {
-          totalShipments: items.length,
-          inTransit: items.filter((s: Shipment) =>
-            ['InTransit', 'In Transit', 'Booked', 'PickedUp', 'OutForDelivery'].includes(
-              s.status
-            )
+          totalShipments: summaryItems.length,
+          inTransit: summaryItems.filter((s: Shipment) =>
+            ['InTransit', 'Booked', 'PickedUp', 'OutForDelivery'].includes(s.status)
           ).length,
-          delivered: items.filter((s: Shipment) => s.status === 'Delivered').length,
-          cancelled: items.filter((s: Shipment) => s.status === 'Cancelled').length,
-          drafts: items.filter((s: Shipment) => s.status === 'Draft').length,
-          totalSpend: items.reduce(
+          delivered: summaryItems.filter((s: Shipment) => s.status === 'Delivered').length,
+          cancelled: summaryItems.filter((s: Shipment) => s.status === 'Cancelled').length,
+          drafts: summaryItems.filter((s: Shipment) => s.status === 'Draft').length,
+          totalSpend: summaryItems.reduce(
             (sum: number, s: Shipment) => sum + Number(s.shippingRate || 0),
             0
           ),
@@ -60,12 +59,7 @@ export const CustomerDashboard = () => {
       } catch (error) {
         console.error('Dashboard fetch failed:', error);
         setStats({
-          totalShipments: 0,
-          inTransit: 0,
-          delivered: 0,
-          cancelled: 0,
-          drafts: 0,
-          totalSpend: 0,
+          totalShipments: 0, inTransit: 0, delivered: 0, cancelled: 0, drafts: 0, totalSpend: 0,
         });
         setShipments([]);
       } finally {

@@ -10,6 +10,7 @@ public class Shipment
     public ShipmentStatus Status { get; set; } = ShipmentStatus.Draft;
     public decimal ShippingRate { get; set; }
     public bool IsFragile { get; set; }
+    public double DistanceKm { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }
     public DateTime? PickupScheduledAt { get; set; }

@@ -10,7 +10,7 @@ namespace SmartShip.ShipmentService.Core.Interfaces.Services
         Task UpdateStatusAsync(int id, UpdateStatusRequest request);
         Task SchedulePickupAsync(int id, int customerId, SchedulePickupRequest request);
         Task ResolveExceptionAsync(int id, string resolution);
-        Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type);
+        Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type, double distanceKm = 0);
         Task<PagedResponse<ShipmentResponse>> GetAllPagedAsync(ShipmentPagedRequest request);
         Task<PagedResponse<ShipmentResponse>> GetMyShipmentsPagedAsync(int customerId, PagedRequest request);
         Task CancelByCustomerAsync(int shipmentId, int customerId, string reason);

@@ -95,11 +95,23 @@ public class PaymentService : IPaymentService
         decimal fuelSurcharge = Math.Round(baseRate * 0.05m, 2);
         decimal handlingCharge = shipment.ShipmentType == "International" ? 120m : 50m;
         decimal fragileCharge = shipment.IsFragile ? 80m : 0m;
+        
+        // Distance Charge Check (Sync with ShipmentService)
+        double distance = Haversine(shipment.SenderLat, shipment.SenderLng, shipment.ReceiverLat, shipment.ReceiverLng);
+        decimal distanceSurcharge = 0;
+        if (distance > 500)
+        {
+            distanceSurcharge = Math.Round((decimal)(distance - 500) * 2.0m, 2);
+        }
+
         decimal codFee = request.PaymentMethod == PaymentMethod.COD ? Math.Round(baseRate * 0.015m, 2) : 0m;
         
-        decimal subtotal = baseRate + fuelSurcharge + handlingCharge + fragileCharge + codFee;
+        decimal subtotal = baseRate + fuelSurcharge + handlingCharge + fragileCharge + codFee + distanceSurcharge;
         decimal gst = Math.Round(subtotal * 0.18m, 2);
         decimal totalAmount = Math.Round(subtotal + gst, 2);
+
+        _logger.LogInformation("Payment Calculation: Base={Base}, Fuel={Fuel}, DistSurcharge={Dist}, Total={Total}", 
+            baseRate, fuelSurcharge, distanceSurcharge, totalAmount);
 
         var payment = await _paymentRepository.GetByShipmentIdAsync(request.ShipmentId);
 
@@ -424,4 +436,15 @@ public class PaymentService : IPaymentService
         PaidAt = p.PaidAt?.ToString("dd-MMM-yyyy hh:mm tt"),
         Message = message
     };
+
+    private static double Haversine(double lat1, double lon1, double lat2, double lon2)
+    {
+        const double R = 6371;
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                Math.Cos(lat1 * Math.PI / 180) * Math.Cos(lat2 * Math.PI / 180) *
+                Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        return R * 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+    }
 }

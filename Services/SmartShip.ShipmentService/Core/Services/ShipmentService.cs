@@ -149,12 +149,15 @@ public class ShipmentService : IShipmentService
 
             _logger.LogInformation("Customer {CustomerId} validated. Proceeding with shipment creation.", customerId);
 
-            var rate = await CalculateRateAsync(req.Package.WeightKg, req.ShipmentType);
-            _logger.LogInformation("Calculated shipping rate: {Rate} for Type: {Type}", rate, req.ShipmentType);
-
             var sender = MapAddress(req.SenderAddress);
             var receiver = MapAddress(req.ReceiverAddress);
             var package = MapPackage(req.Package);
+
+            double distance = Haversine(sender.Latitude, sender.Longitude, receiver.Latitude, receiver.Longitude);
+            _logger.LogInformation("Calculated distance: {Distance} km between cities", distance);
+
+            var rate = await CalculateRateAsync(req.Package.WeightKg, req.ShipmentType, distance);
+            _logger.LogInformation("Calculated shipping rate: {Rate} for Type: {Type} | Distance: {Distance}km", rate, req.ShipmentType, distance);
 
             await _addressRepository.AddRangeAsync(sender, receiver);
             await _packageRepository.AddAsync(package);
@@ -172,7 +175,8 @@ public class ShipmentService : IShipmentService
                 PackageId = package.Id,
                 PickupScheduledAt = req.PickupScheduledAt,
                 Notes = req.Notes,
-                IsFragile = req.IsFragile
+                IsFragile = req.IsFragile,
+                DistanceKm = distance
             };
 
             shipment.SenderAddress = sender;
@@ -200,8 +204,8 @@ public class ShipmentService : IShipmentService
             });
             _logger.LogInformation("Shipment created Event Published.");
 
-            // Auto-generate route plan from sender → hubs → receiver
-            await GenerateRouteForShipmentAsync(shipment, sender, receiver);
+            // Removed automatic route generation from CreateAsync
+            // It will now only be generated when the status moves to InTransit
 
             return MapToResponse(shipment, sender, receiver, package, "Pending");
         }
@@ -333,6 +337,18 @@ public class ShipmentService : IShipmentService
 
             _shipmentRepository.Update(s);
             await _unitOfWork.SaveChangesAsync();
+
+            // GENERATE ROUTE ONLY WHEN ENTERING TRANSIT
+            if (st == ShipmentStatus.InTransit)
+            {
+                var ctx = _unitOfWork.GetDbContext<Infrastructure.Data.ShipmentDbContext>();
+                var existingRoute = await ctx.Set<ShipmentRoute>().AnyAsync(r => r.ShipmentId == s.Id);
+                if (!existingRoute)
+                {
+                    _logger.LogInformation("Shipment {TrackingNumber} entering InTransit. Generating route plan now...", s.TrackingNumber);
+                    await GenerateRouteForShipmentAsync(s, s.SenderAddress!, s.ReceiverAddress!);
+                }
+            }
 
             _logger.LogInformation("Shipment {TrackingNumber} status: {OldStatus} → {NewStatus}",
                 s.TrackingNumber, oldStatus, st);
@@ -482,10 +498,12 @@ public class ShipmentService : IShipmentService
         return shipments.Select(s => new ShipmentSummaryDto
         {
             Id = s.Id,
-            TrackingNumber = s.TrackingNumber
+            TrackingNumber = s.TrackingNumber,
+            Status = s.Status.ToString(),
+            ShippingRate = s.ShippingRate
         });
     }
-    public Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type)
+    public Task<decimal> CalculateRateAsync(double weightKg, ShipmentType type, double distanceKm = 0)
     {
         decimal rate = type switch
         {
@@ -496,10 +514,19 @@ public class ShipmentService : IShipmentService
             _ => (decimal)(weightKg * 80)
         };
 
+        // Distance Charge: 500km free, ₹2 per extra km
+        if (distanceKm > 500)
+        {
+            decimal extraDistance = (decimal)(distanceKm - 500);
+            decimal distanceCharge = Math.Round(extraDistance * 2.0m, 2);
+            rate += distanceCharge;
+            _logger.LogInformation("Added distance surcharge: {Charge} for {ExtraKm} extra km", distanceCharge, extraDistance);
+        }
+
         var finalRate = Math.Max(rate, 99);
 
-        _logger.LogInformation("Rate calculated: {Rate} | Type: {Type} | Weight: {Weight}kg",
-            finalRate, type, weightKg);
+        _logger.LogInformation("Rate calculated: {Rate} | Type: {Type} | Weight: {Weight}kg | Dist: {Dist}km",
+            finalRate, type, weightKg, distanceKm);
 
         return Task.FromResult(finalRate);
     }
@@ -656,9 +683,29 @@ public class ShipmentService : IShipmentService
                     }
                     else
                     {
+                        // Resolve actual city/town name for the highway transit point
+                        string resolvedCity = "Highway Transit";
+                        try {
+                            var revUrl = $"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat.ToString().Replace(',','.')}&lon={lon.ToString().Replace(',','.')}&zoom=10";
+                            using var revClient = new HttpClient();
+                            revClient.DefaultRequestHeaders.Add("User-Agent", "SmartShip-Logistics-App");
+                            var revRes = await revClient.GetAsync(revUrl);
+                            if (revRes.IsSuccessStatusCode) {
+                                var revJson = await revRes.Content.ReadAsStringAsync();
+                                var revData = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(revJson);
+                                if (revData.TryGetProperty("address", out var addr)) {
+                                    resolvedCity = (addr.TryGetProperty("city", out var c) ? c.GetString() : null) ??
+                                                   (addr.TryGetProperty("town", out var t) ? t.GetString() : null) ??
+                                                   (addr.TryGetProperty("village", out var v) ? v.GetString() : null) ??
+                                                   (addr.TryGetProperty("county", out var co) ? co.GetString() : null) ??
+                                                   "Highway Transit";
+                                }
+                            }
+                        } catch { /* Fallback */ }
+
                         routeStops.Add(new ShipmentRoute {
-                            ShipmentId = shipment.Id, HubId = null, HubName = $"Transit Node {sequence + 1}",
-                            HubCity = "Highway Transit", Latitude = lat, Longitude = lon,
+                            ShipmentId = shipment.Id, HubId = null, HubName = resolvedCity + " Node",
+                            HubCity = resolvedCity, Latitude = lat, Longitude = lon,
                             SequenceOrder = sequence++, IsCompleted = false
                         });
                     }
@@ -774,11 +821,12 @@ public class ShipmentService : IShipmentService
         s.ShippingRate,
         s.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
         s.PickupScheduledAt?.ToString("dd-MMM-yyyy hh:mm tt"),
-        s.DeliveredAt?.ToString("dd-MMM-yyyy hh:mm tt"),
+        s.DeliveredAt?.ToString("dd-Mmm-yyyy hh:mm tt"),
         new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country, sender.Latitude, sender.Longitude),
         new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country, receiver.Latitude, receiver.Longitude),
         new PackageDto(pkg.WeightKg, pkg.LengthCm, pkg.WidthCm, pkg.HeightCm, pkg.Description, pkg.DeclaredValue),
         s.Notes,
-        s.IsFragile
+        s.IsFragile,
+        s.DistanceKm
     );
 }

@@ -20,7 +20,7 @@ public record ShipmentResponse(
     string ShipmentType, string Status, string PaymentStatus, decimal ShippingRate,
     string CreatedAt, string? PickupScheduledAt, string? DeliveredAt,
     AddressDto SenderAddress, AddressDto ReceiverAddress, PackageDto Package, string? Notes,
-    bool IsFragile
+    bool IsFragile, double DistanceKm
 );
 
 public class ShipmentPagedRequest : PagedRequest

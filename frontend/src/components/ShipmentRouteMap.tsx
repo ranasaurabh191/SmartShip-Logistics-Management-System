@@ -162,7 +162,10 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
         
         // If delivered, all hubs are done
         const isDone = isDelivered || hub.isCompleted;
-        const isActive = !isDelivered && idx === lastCompletedIdx + 1 && !hub.isCompleted;
+        
+        // Active if it's the next uncompleted hub AND we are actually in transit
+        const inTransitPhase = !!shipmentStatus && !['Draft', 'Pending', 'PickupScheduled', 'Created', 'Booked'].includes(shipmentStatus);
+        const isActive = inTransitPhase && !isDelivered && idx === lastCompletedIdx + 1 && !hub.isCompleted;
 
         pts.push({
           lat: hub.latitude,
@@ -364,44 +367,35 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
             className="map-tiles"
           />
 
-          {/* Traveled Path (Grey) */}
-          {donePath.length > 1 && (
-            <Polyline
-              positions={donePath}
-              pathOptions={{
-                color: '#6b7280', // Cool Grey
-                weight: 4,
-                opacity: 0.6,
-                lineJoin: 'round'
-              }}
-            />
-          )}
+          {/* Traveled and Upcoming Path - Only show when in transit */}
+          {shipmentStatus && !['Draft', 'Pending', 'PickupScheduled', 'Created'].includes(shipmentStatus) && (
+            <>
+              {/* Traveled Path (Grey) */}
+              {donePath.length > 1 && (
+                <Polyline
+                  positions={donePath}
+                  pathOptions={{
+                    color: '#6b7280', // Cool Grey
+                    weight: 4,
+                    opacity: 0.6,
+                    lineJoin: 'round'
+                  }}
+                />
+              )}
 
-          {/* Upcoming Path (Professional Blue) */}
-          {todoPath.length > 1 && (
-            <Polyline
-              positions={todoPath}
-              pathOptions={{
-                color: '#3b82f6', // Premium Blue
-                weight: 5,
-                opacity: 0.9,
-                lineJoin: 'round',
-                dashArray: '1, 10', // Dotted effect for planned path
-              }}
-            />
-          )}
-
-          {/* Current Leg (Solid Blue) */}
-          {todoPath.length > 1 && (
-             <Polyline
-             positions={todoPath.slice(0, Math.max(2, Math.floor(todoPath.length * 0.15)))} // Show a bit of solid blue to indicate direction
-             pathOptions={{
-               color: '#3b82f6',
-               weight: 5,
-               opacity: 1,
-               lineJoin: 'round'
-             }}
-           />
+              {/* Upcoming Path (Professional Solid Blue) */}
+              {todoPath.length > 1 && (
+                <Polyline
+                  positions={todoPath}
+                  pathOptions={{
+                    color: '#3b82f6', // Premium Blue
+                    weight: 5,
+                    opacity: 0.9,
+                    lineJoin: 'round'
+                  }}
+                />
+              )}
+            </>
           )}
 
           {/* Hub markers */}
