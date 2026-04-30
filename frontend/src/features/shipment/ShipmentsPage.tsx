@@ -428,8 +428,9 @@ export const ShipmentsPage = () => {
         ))}
       </div>
 
-      <div className="ss-card" style={{ padding: 10, overflowX: 'auto' }}>
-        <table className="ss-table">
+      <div className="ss-card" style={{ padding: 0 }}>
+        <div style={{ overflowX: 'auto', padding: 10 }}>
+          <table className="ss-table">
           <thead>
             <tr>
               <th>Tracking No.</th><th>Sender</th><th>Receiver</th>
@@ -550,10 +551,11 @@ export const ShipmentsPage = () => {
             })}
           </tbody>
         </table>
+      </div>
         
         {/* Pagination Controls */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderTop: '1px solid var(--color-border)' }}>
-          <div style={{ fontSize: 12, color: '#888', fontFamily: 'inter,monospace' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderTop: '1px solid var(--color-border)', background: 'rgba(0,0,0,0.2)' }}>
+          <div style={{ fontSize: 12, color: '#888', fontFamily: 'inter, monospace' }}>
             SHOWING <span style={{ color: '#fff' }}>{((page - 1) * pageSize) + 1}</span> - <span style={{ color: '#fff' }}>{Math.min(page * pageSize, totalCount)}</span> OF <span style={{ color: '#fff' }}>{totalCount}</span> RECORDS
           </div>
           <div style={{ display: 'flex', gap: 10 }}>
@@ -561,7 +563,11 @@ export const ShipmentsPage = () => {
               className="ss-btn ss-btn-outline" 
               disabled={page <= 1 || loading}
               onClick={() => fetchShipments(page - 1)}
-              style={{ padding: '6px 16px' }}
+              style={{ 
+                padding: '6px 16px', 
+                opacity: (page <= 1 || loading) ? 0.4 : 1,
+                cursor: (page <= 1 || loading) ? 'not-allowed' : 'pointer'
+              }}
             >
               PREVIOUS
             </button>
@@ -569,7 +575,11 @@ export const ShipmentsPage = () => {
               className="ss-btn ss-btn-outline" 
               disabled={page * pageSize >= totalCount || loading}
               onClick={() => fetchShipments(page + 1)}
-              style={{ padding: '6px 16px' }}
+              style={{ 
+                padding: '6px 16px',
+                opacity: (page * pageSize >= totalCount || loading) ? 0.4 : 1,
+                cursor: (page * pageSize >= totalCount || loading) ? 'not-allowed' : 'pointer'
+              }}
             >
               NEXT
             </button>

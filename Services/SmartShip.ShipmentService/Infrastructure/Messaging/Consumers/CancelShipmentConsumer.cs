@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.Shared.Events;
 using SmartShip.ShipmentService.Core.Interfaces.Persistence;
 using SmartShip.ShipmentService.Core.Interfaces.Repositories;
@@ -36,9 +36,9 @@ public class CancelShipmentConsumer : IConsumer<CancelShipmentCommand>
             return;
         }
 
-        if (shipment.Status != ShipmentStatus.Draft)
+        if (shipment.Status != ShipmentStatus.Draft && shipment.Status != ShipmentStatus.Booked)
         {
-            _logger.LogWarning("Shipment {ShipmentId} is in {Status} — skipping cancellation.",
+            _logger.LogWarning("Shipment {ShipmentId} is in {Status} — skipping cancellation. Only Draft or Booked can be auto-cancelled.",
                 msg.ShipmentId, shipment.Status);
             return;
         }

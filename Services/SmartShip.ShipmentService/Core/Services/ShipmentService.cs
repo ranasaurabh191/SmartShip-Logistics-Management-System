@@ -511,7 +511,9 @@ public class ShipmentService : IShipmentService
         return new AdminSummaryDto
         {
             TotalShipments = shipments.Count(),
-            TotalRevenue = shipments.Where(s => s.Status != ShipmentStatus.Cancelled).Sum(s => s.ShippingRate),
+            TotalRevenue = shipments
+                .Where(s => s.PaymentMethod == PaymentMethod.Online && s.Status != ShipmentStatus.Cancelled)
+                .Sum(s => s.ShippingRate),
             InTransitCount = shipments.Count(s => new[] { ShipmentStatus.Booked, ShipmentStatus.PickedUp, ShipmentStatus.InTransit, ShipmentStatus.OutForDelivery }.Contains(s.Status)),
             DeliveredCount = shipments.Count(s => s.Status == ShipmentStatus.Delivered),
             CancelledCount = shipments.Count(s => s.Status == ShipmentStatus.Cancelled)

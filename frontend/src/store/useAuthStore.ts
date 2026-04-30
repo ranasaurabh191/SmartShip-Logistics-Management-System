@@ -17,7 +17,7 @@ interface AuthState {
 }
 
 const getStoredUser = (): User | null => {
-  const raw = localStorage.getItem('user');
+  const raw = sessionStorage.getItem('user');
   if (!raw) return null;
 
   try {
@@ -29,20 +29,20 @@ const getStoredUser = (): User | null => {
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: getStoredUser(),
-  token: localStorage.getItem('token'),
-  isAuthenticated: !!localStorage.getItem('token'),
+  token: sessionStorage.getItem('token'),
+  isAuthenticated: !!sessionStorage.getItem('token'),
 
   hydrate: () => {
     set({
       user: getStoredUser(),
-      token: localStorage.getItem('token'),
-      isAuthenticated: !!localStorage.getItem('token'),
+      token: sessionStorage.getItem('token'),
+      isAuthenticated: !!sessionStorage.getItem('token'),
     });
   },
 
   login: (user, token) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem('token', token);
+    sessionStorage.setItem('user', JSON.stringify(user));
 
     set({
       user,
@@ -52,8 +52,8 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   logout: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('user');
 
     set({
       user: null,

@@ -185,7 +185,11 @@ export const PaymentsPage = () => {
                   <td>₹{Number(p.amount).toLocaleString('en-IN')}</td>
                   <td>{p.paymentMethod}</td>
                   <td>
-                    <span className={`ss-badge ${p.paymentStatus === 'Paid' ? 'success' : ''}`}>
+                    <span className={`ss-badge ${
+                      p.paymentStatus === 'Paid' ? 'success' : 
+                      p.paymentStatus === 'Refunded' ? 'info' : 
+                      p.paymentStatus === 'Failed' ? 'error' : ''
+                    }`}>
                       {p.paymentStatus}
                     </span>
                   </td>

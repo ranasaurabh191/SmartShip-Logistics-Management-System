@@ -1,6 +1,7 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { SmartShipLogo } from '../shared/components/Logo';
 import { useEffect, useState } from 'react';
+import { useAuthStore } from '../store/useAuthStore';
 
 const STATS = [
   { value: '31,000+', label: 'Pin Codes Covered' },
@@ -17,10 +18,16 @@ const FEATURES = [
 ];
 
 export const AuthLayout = () => {
+  const logout = useAuthStore(state => state.logout);
   const location = useLocation();
   const isLogin = location.pathname.includes('login');
 
   const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    // Explicitly logout when hitting auth pages
+    logout();
+  }, [logout]);
 
   useEffect(() => {
     setVisible(false);

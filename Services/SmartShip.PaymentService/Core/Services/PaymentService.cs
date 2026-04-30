@@ -384,7 +384,7 @@ public class PaymentService : IPaymentService
         var payments = await _paymentRepository.GetByCustomerIdAsync(customerId);
 
         return payments
-            .OrderBy(x => x.CreatedAt)
+            .OrderByDescending(x => x.CreatedAt)
             .Select(x => MapToResponse(x))
             .ToList();
     }
@@ -394,7 +394,7 @@ public class PaymentService : IPaymentService
         var payments = await _paymentRepository.GetAllAsync();
 
         return payments
-            .OrderBy(x => x.CreatedAt)
+            .OrderByDescending(x => x.CreatedAt)
             .Select(x => MapToResponse(x))
             .ToList();
     }

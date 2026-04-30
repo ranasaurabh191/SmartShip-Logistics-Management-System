@@ -150,6 +150,11 @@ h6 {
   color: var(--color-text-muted);
 }
 
+.ss-badge.info {
+  border-color: #00a8ff;
+  color: #00a8ff;
+}
+
 .ss-badge.glow {
   box-shadow: 0 0 6px rgba(224, 0, 26, 0.4);
 }

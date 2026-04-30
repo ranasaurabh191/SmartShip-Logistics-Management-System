@@ -123,6 +123,7 @@ try
     {
         x.AddConsumer<UserDeletedConsumer>();
         x.AddConsumer<CancelShipmentConsumer>();
+        x.AddConsumer<PaymentCreatedConsumer>();
 
         if (isTesting)
         {
@@ -154,6 +155,8 @@ try
                     e.ConfigureSaga<ShipmentOrderState>(ctx));
                 cfg.ReceiveEndpoint("shipment-cancel-command", e =>
                     e.ConfigureConsumer<CancelShipmentConsumer>(ctx));
+                cfg.ReceiveEndpoint("shipment-payment-created", e =>
+                    e.ConfigureConsumer<PaymentCreatedConsumer>(ctx));
             });
         }
     });
