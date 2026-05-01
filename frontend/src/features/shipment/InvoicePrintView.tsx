@@ -161,7 +161,7 @@ const S = {
   },
 };
 
-export const InvoiceDocument = React.forwardRef<HTMLDivElement, { data: InvoiceData }>(
+const InvoiceDocument = React.forwardRef<HTMLDivElement, { data: InvoiceData }>(
   ({ data }, ref) => {
     const { costs } = data;
     const isDomestic = !costs.isInternational;

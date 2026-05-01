@@ -1,5 +1,5 @@
 
-export interface AddressSection {
+interface AddressSection {
   fullName: string;
   phone: string;
   street: string;
@@ -9,7 +9,7 @@ export interface AddressSection {
   country: string;
 }
 
-export interface PackageSection {
+interface PackageSection {
   weightKg: string;
   lengthCm: string;
   widthCm: string;
