@@ -15,7 +15,7 @@ export interface CostBreakdown {
   isInternational: boolean;
 }
 
-interface CostInput {
+export interface CostInput {
   baseRate: number;
   shipmentType: string;
   paymentMode: 'COD' | 'ONLINE' | null;

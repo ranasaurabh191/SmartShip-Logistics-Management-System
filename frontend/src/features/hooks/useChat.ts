@@ -10,7 +10,7 @@ export interface ShipmentChip {
 }
 
 
-interface Message {
+export interface Message {
     role: 'user' | 'bot';
     text: string;
     timestamp: Date;

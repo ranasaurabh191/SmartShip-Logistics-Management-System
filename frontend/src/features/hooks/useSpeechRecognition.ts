@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-type SpeechState = 'idle' | 'listening' | 'processing' | 'error';
+export type SpeechState = 'idle' | 'listening' | 'processing' | 'error';
 
 interface UseSpeechRecognitionOptions {
   lang?: string;
@@ -17,7 +17,7 @@ interface UseSpeechRecognitionOptions {
   onEnd?: () => void;
 }
 
-interface UseSpeechRecognitionReturn {
+export interface UseSpeechRecognitionReturn {
   isSupported: boolean;
   speechState: SpeechState;
   interimText: string;

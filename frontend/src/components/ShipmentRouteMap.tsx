@@ -39,7 +39,7 @@ const ACTIVE_ICON  = makeIcon('#f5a623', '▶');
 const DONE_ICON    = makeIcon('#555555', '✓');
 const PLANNED_ICON = makeIcon('#3a3a5c', '•');
 
-interface RouteStop {
+export interface RouteStop {
   label: string;
   timestamp?: string;
   status?: string;
@@ -47,7 +47,7 @@ interface RouteStop {
   isDone?: boolean;
 }
 
-interface RouteHubData {
+export interface RouteHubData {
   hubName: string;
   hubCity: string;
   latitude: number;
