@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.Shared.Events;
 using SmartShip.TrackingService.Domain.Entities;
 using SmartShip.TrackingService.Infrastructure.Data;
@@ -21,25 +21,12 @@ public class ShipmentCreatedConsumer : IConsumer<ShipmentCreatedEvent>
         var msg = context.Message;
 
         _logger.LogInformation(
-            "Processing ShipmentCreated: {TrackingNumber} (ID: {Id})",
+            "Processing ShipmentCreated: {TrackingNumber} (ID: {Id}). Skipping timeline event as per new requirements.",
             msg.TrackingNumber,
             msg.ShipmentId);
 
-        _db.TrackingEvents.Add(new TrackingEvent
-        {
-            ShipmentId = msg.ShipmentId,
-            TrackingNumber = msg.TrackingNumber,
-            Status = "Draft",
-            Location = msg.SenderCity,
-            Description = "Shipment created",
-            EventTime = msg.CreatedAt,
-            UpdatedBy = "system"
-        });
-
-        await _db.SaveChangesAsync();
-
-        _logger.LogInformation(
-            "Created Draft event for {TrackingNumber}",
-            msg.TrackingNumber);
+        // Logic removed: We no longer show 'Draft' or creation events in the public timeline.
+        // Logistics events will start from 'Picked Up'.
+        await Task.CompletedTask;
     }
 }

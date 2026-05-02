@@ -1,4 +1,4 @@
-﻿namespace SmartShip.TrackingService.Infrastructure.Messaging.Consumers
+namespace SmartShip.TrackingService.Infrastructure.Messaging.Consumers
 {
     using MassTransit;
     using SmartShip.Shared.Events;
@@ -16,20 +16,9 @@
 
         public async Task Consume(ConsumeContext<PaymentCreatedEvent> context)
         {
-            var msg = context.Message;
-
-            _db.TrackingEvents.Add(new TrackingEvent
-            {
-                ShipmentId = msg.ShipmentId,
-                TrackingNumber = msg.TrackingNumber,
-                Status = "PaymentCreated",
-                Location = "Payment Gateway",
-                Description = $"{msg.PaymentMethod} payment initiated",
-                EventTime = msg.CreatedAt,
-                UpdatedBy = "payment-service"
-            });
-
-            await _db.SaveChangesAsync();
+            // Payment events are no longer displayed in the public tracking timeline.
+            // Logistics events will start from 'Picked Up'.
+            await Task.CompletedTask;
         }
     }
 }

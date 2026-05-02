@@ -445,8 +445,7 @@ export const CreateShipmentWizard = () => {
                 letterSpacing: '0.1em', textTransform: 'uppercase', transition: 'all 0.2s',
               }}
             >
-              <span style={{ fontSize: 14 }}>📍</span>
-              {showMap ? 'Hide Map' : 'Pin on Map'}
+              {showMap ? 'Hide Map' : 'Choose Location on Map'}
             </button>
           </div>
 
@@ -547,7 +546,7 @@ export const CreateShipmentWizard = () => {
                     {renderCostRow('Base Shipping Rate', c.baseRate)}
                     {renderCostRow('Fuel Surcharge (5%)', c.fuelSurcharge)}
                     {renderCostRow(`Handling Charge (${formData.shipmentType})`, c.handlingCharge)}
-                    {c.distSurcharge > 0 && renderCostRow(`Distance Surcharge (>${(distance - 500).toFixed(0)}km extra)`, c.distSurcharge)}
+                    {c.distSurcharge > 0 && renderCostRow('Long-Distance Surcharge (>2000km)', c.distSurcharge)}
                     {fragile && renderCostRow('Fragile Handling', c.fragileCharge)}
                     {c.codFee > 0 && renderCostRow('COD Service Fee (1.5%)', c.codFee)}
                   </>

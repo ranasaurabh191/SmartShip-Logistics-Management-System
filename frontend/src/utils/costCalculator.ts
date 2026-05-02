@@ -30,7 +30,7 @@ export function calculateCosts(input: CostInput): CostBreakdown {
   const fuelSurcharge   = parseFloat((baseRate * 0.05).toFixed(2));   
   const handlingCharge  = isInternational ? 120 : 50;                
   const fragileCharge   = fragile ? 80 : 0;
-  const distSurcharge   = distanceKm > 500 ? parseFloat(((distanceKm - 500) * 2).toFixed(2)) : 0;
+  const distSurcharge   = distanceKm > 2000 ? 200 : 0;
   const codFee          = paymentMode === 'COD'
     ? parseFloat((baseRate * 0.015).toFixed(2))
     : 0;                                                               

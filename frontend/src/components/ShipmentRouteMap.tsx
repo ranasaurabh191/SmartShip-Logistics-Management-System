@@ -113,9 +113,9 @@ async function geocodeCity(city: string): Promise<{ lat: number; lng: number } |
 }
 
 function pickIcon(pt: GeoPoint): L.DivIcon {
-  if (pt.isOrigin) return ORIGIN_ICON;
-  if (pt.isDest)   return pt.isActive ? ACTIVE_ICON : DEST_ICON; // Highlight destination if active (delivered)
   if (pt.isActive) return ACTIVE_ICON;
+  if (pt.isOrigin) return ORIGIN_ICON;
+  if (pt.isDest)   return DEST_ICON;
   if (pt.isPlanned) return PLANNED_ICON;
   return DONE_ICON;
 }
@@ -130,6 +130,15 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
 
   useEffect(() => {
     if (!originCity || !destinationCity) { setLoading(false); return; }
+    
+    // RULE: If status is Booked or earlier, show nothing on map
+    const prePickupStatuses = ['Draft', 'Pending', 'Booked', 'PickupScheduled', 'Created'];
+    if (prePickupStatuses.includes(shipmentStatus || '')) {
+        setPoints([]);
+        setLoading(false);
+        return;
+    }
+
     setLoading(true);
     setError('');
 
@@ -141,16 +150,22 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
     }
 
     async function buildFromRouteData() {
-      // Use direct coordinates if provided, otherwise fallback to geocoding
       const originGeo = originCoords || await geocodeCity(originCity);
       const destGeo   = destCoords || await geocodeCity(destinationCity);
 
       const pts: GeoPoint[] = [];
       const isDelivered = shipmentStatus === 'Delivered';
+      const isPickedUp = shipmentStatus === 'PickedUp';
 
       // Origin
       if (originGeo) {
-        pts.push({ ...originGeo, label: originCity, isOrigin: true, isDone: true });
+        pts.push({ 
+            ...originGeo, 
+            label: originCity, 
+            isOrigin: true, 
+            isDone: true,
+            isActive: isPickedUp // Movement is still at origin when picked up
+        });
       }
 
       // Hub stops from route data (using real coordinates)
@@ -163,8 +178,8 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
         // If delivered, all hubs are done
         const isDone = isDelivered || hub.isCompleted;
         
-        // Active if it's the next uncompleted hub AND we are actually in transit
-        const inTransitPhase = !!shipmentStatus && !['Draft', 'Pending', 'PickupScheduled', 'Created', 'Booked'].includes(shipmentStatus);
+        // Active if it's the next uncompleted hub AND we are actually in transit (not just picked up)
+        const inTransitPhase = shipmentStatus === 'InTransit' || shipmentStatus === 'OutForDelivery';
         const isActive = inTransitPhase && !isDelivered && idx === lastCompletedIdx + 1 && !hub.isCompleted;
 
         pts.push({
@@ -247,7 +262,7 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [originCity, destinationCity, stops.length, routeData.length]);
+  }, [originCity, destinationCity, stops.length, routeData.length, shipmentStatus]); // Added shipmentStatus to deps
 
   useEffect(() => {
     if (points.length < 2) { setDonePath([]); setTodoPath([]); return; }
@@ -278,10 +293,39 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
     return coords.map(c => [c.lat, c.lng]);
   }
 
+  // Early return if no points (Booked status etc)
+  if (!loading && points.length === 0 && !error) {
+    return (
+      <div style={{
+        height: 500, display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        background: '#0d0d1a', borderRadius: 8,
+        border: '1px solid rgba(224,0,26,0.1)', gap: 14,
+      }}>
+        <div style={{
+          width: 80, height: 80, borderRadius: '50%',
+          background: 'rgba(224,0,26,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          border: '1px solid rgba(224,0,26,0.1)', marginBottom: 10
+        }}>
+           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#e0001a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.4">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+           </svg>
+        </div>
+        <div style={{
+          fontFamily: 'Orbitron, monospace', fontSize: 11,
+          color: '#555', letterSpacing: '0.14em', textTransform: 'uppercase'
+        }}>
+          Tracking will begin once shipment is picked up
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div style={{
-        height: 420, display: 'flex', flexDirection: 'column',
+        height: 500, display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
         background: '#0d0d1a', borderRadius: 8,
         border: '1px solid rgba(224,0,26,0.2)', gap: 14,
@@ -330,8 +374,8 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
         <div style={{ display: 'flex', gap: 16, fontSize: 11, color: '#888', fontFamily: 'Inter, sans-serif' }}>
           <span><span style={{ color: '#00c48c' }}>●</span> Origin</span>
           <span><span style={{ color: '#555' }}>●</span> Done</span>
-          <span><span style={{ color: '#f5a623' }}>●</span> Current Hub</span>
-          <span><span style={{ color: '#3a3a5c' }}>●</span> Planned</span>
+          <span><span style={{ color: '#f5a623' }}>●</span> Current Position</span>
+          <span><span style={{ color: '#3a3a5c' }}>●</span> Planned Hub</span>
           <span><span style={{ color: '#e0001a' }}>●</span> Destination</span>
         </div>
       </div>
@@ -343,17 +387,6 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
         boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
         position: 'relative'
       }}>
-        {loading && (
-          <div style={{
-            position: 'absolute', inset: 0, zIndex: 1000,
-            background: 'rgba(10,10,10,0.7)', backdropFilter: 'blur(4px)',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12
-          }}>
-            <div className="spinner" style={{ width: 40, height: 40, border: '3px solid rgba(224,0,26,0.1)', borderTopColor: '#e0001a', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-            <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 12, color: '#e0001a', letterSpacing: '0.1em' }}>Calculating Road Network...</div>
-          </div>
-        )}
-
         <MapContainer
           center={points.length > 0 ? [points[0].lat, points[0].lng] : [20.5937, 78.9629]}
           zoom={5}
@@ -367,15 +400,15 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
             className="map-tiles"
           />
 
-          {/* Traveled and Upcoming Path - Only show when in transit */}
-          {shipmentStatus && !['Draft', 'Pending', 'PickupScheduled', 'Created'].includes(shipmentStatus) && (
+          {/* Traveled and Upcoming Path */}
+          {points.length > 1 && (
             <>
               {/* Traveled Path (Grey) */}
               {donePath.length > 1 && (
                 <Polyline
                   positions={donePath}
                   pathOptions={{
-                    color: '#6b7280', // Cool Grey
+                    color: '#6b7280', 
                     weight: 4,
                     opacity: 0.6,
                     lineJoin: 'round'
@@ -388,7 +421,7 @@ export const ShipmentRouteMap = ({ originCity, destinationCity, originCoords, de
                 <Polyline
                   positions={todoPath}
                   pathOptions={{
-                    color: '#3b82f6', // Premium Blue
+                    color: '#3b82f6', 
                     weight: 5,
                     opacity: 0.9,
                     lineJoin: 'round'

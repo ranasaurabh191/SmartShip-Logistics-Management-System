@@ -204,28 +204,31 @@ export const ShipmentsPage = () => {
   };
 
   const confirmAdminStatusUpdate = async () => {
-    if (!selectedShipment || !selectedStatus) return;
-    const hubLocation = nextHub?.hubName || adminLocation.trim() || 'Warehouse';
+    if (!selectedShipment) return;
+    
     try {
       setBusyShipmentId(selectedShipment.id);
-      // Update status with hub location
-      await apiClient.put(`/admin/shipments/status/${selectedShipment.id}`, {
-        status: selectedStatus, location: hubLocation, resolution: '',
-      });
-      // Advance the route hub if we are moving through InTransit hubs
-      if (selectedStatus === 'InTransit' && nextHub) {
-        try {
-          await apiClient.put(`/admin/shipments/advance-hub/${selectedShipment.id}`);
-        } catch { /* non-fatal */ }
-      }
-      // Auto-advance if marking as delivered to ensure map moves to final point
-      if (selectedStatus === 'Delivered' && nextHub) {
-         try { await apiClient.put(`/admin/shipments/advance-hub/${selectedShipment.id}`); } catch {}
+      
+      // If we are in the transit phase and have a next hub, we use the advance-hub API
+      // which automatically handles InTransit and OutForDelivery statuses.
+      const canAdvance = (selectedShipment.status === 'PickedUp' || selectedShipment.status === 'InTransit') && nextHub;
+      
+      if (canAdvance) {
+        await apiClient.put(`/admin/shipments/advance-hub/${selectedShipment.id}`);
+        addNotification(`Arrival confirmed at ${nextHub?.hubName}.`, 'success');
+      } else {
+        if (!selectedStatus) {
+           addNotification('Please select a status.', 'warning');
+           return;
+        }
+        await apiClient.put(`/admin/shipments/status/${selectedShipment.id}`, {
+          status: selectedStatus, location: adminLocation || 'Warehouse', resolution: '',
+        });
+        addNotification(`Status updated to ${selectedStatus} successfully.`, 'success');
       }
 
       setStatusModalOpen(false); setSelectedShipment(null); setAdminLocation('');
       setRouteStops([]); setNextHub(null);
-      addNotification(`Status updated to ${selectedStatus} successfully.`, 'success');
       await fetchShipments();
     } catch (err: any) {
       addNotification(err?.response?.data?.message || 'Failed to update shipment status.', 'error');
@@ -628,67 +631,79 @@ export const ShipmentsPage = () => {
               {selectedShipment?.trackingNumber} · <strong>{selectedShipment?.status}</strong>
             </p>
 
-            <div style={{ marginTop: 16 }}>
-              <label style={{ fontSize: 10, color: '#bebebeff', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'block' }}>New Status</label>
-              <select 
-                className="ss-input" 
-                value={selectedStatus} 
-                onChange={e => setSelectedStatus(e.target.value)}
-                style={{ width: '100%', padding: '10px',color:"#f1eaeaff" }}
-              >
-                <option value="PickedUp">PickedUp</option>
-                <option value="InTransit">InTransit</option>
-                <option value="OutForDelivery">OutForDelivery</option>
-                <option value="Delivered">Delivered</option>
-                <option value="Cancelled">Cancelled</option>
-                
-              </select>
-            </div>
-
-            {/* Route Hub Selector */}
-            {routeLoading ? (
-              <div style={{ padding: '16px 0', color: '#888', fontSize: 12, fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Loading route plan...</div>
-            ) : routeStops.length > 0 ? (
+            {/* Status Selection: Only show if not already in transit/delivered */}
+            {(selectedShipment?.status === 'Booked' || selectedShipment?.status === 'Draft') && (
               <div style={{ marginTop: 16 }}>
-                <label style={{ fontSize: 11, color: '#888', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'block' }}>Route Hub</label>
-                {/* Route progress visualization */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap', marginBottom: 12, padding: '8px 12px', background: 'rgba(255,255,255,0.03)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.06)' }}>
-                  {routeStops.map((stop, idx) => (
-                    <span key={stop.id} style={{ display: 'flex', alignItems: 'center', gap:1 }}>
-                      {idx > 0 && <span style={{ color: '#444', fontSize: 12 }}>→</span>}
-                      <span style={{
-                        fontSize: 11, fontWeight: stop.id === nextHub?.id ? 700 : 400, padding: '2px 8px', borderRadius: 4,
-                        background: stop.isCompleted ? 'rgba(0,196,140,0.15)' : stop.id === nextHub?.id ? 'rgba(224,0,26,0.15)' : 'rgba(255,255,255,0.04)',
-                        color: stop.isCompleted ? '#00c48c' : stop.id === nextHub?.id ? '#e0001a' : '#666',
-                        border: stop.id === nextHub?.id ? '1px solid rgba(224,0,26,0.3)' : '1px solid transparent',
-                      }}>{stop.hubName}</span>
-                    </span>
-                  ))}
-                </div>
-                <select className="ss-input" value={adminLocation} onChange={e => {
-                  setAdminLocation(e.target.value);
-                  const selected = routeStops.find(s => s.hubName === e.target.value);
-                  setNextHub(selected || null);
-                }} style={{ width: '100%' }}>
-                  {routeStops.filter(s => !s.isCompleted).map(stop => (
-                    <option key={stop.id} value={stop.hubName}>{stop.hubName} ({stop.hubCity})</option>
-                  ))}
+                <label style={{ fontSize: 10, color: '#bebebeff', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, display: 'block' }}>Update Status</label>
+                <select 
+                  className="ss-input" 
+                  value={selectedStatus} 
+                  onChange={e => setSelectedStatus(e.target.value)}
+                  style={{ width: '100%', padding: '10px', color: "#f1eaeaff" }}
+                >
+                  <option value="">Select Status</option>
+                  <option value="PickedUp">PickedUp</option>
+                  <option value="Cancelled">Cancelled</option>
                 </select>
-                {nextHub && (
-                  <div style={{ fontSize: 11, color: '#ada5a5ff', marginTop: 6, fontFamily: 'Inter, sans-serif' }}>
-                    Advancing to <strong style={{ color: '#fff' }}>{nextHub.hubName}</strong> — {nextHub.hubCity} ({nextHub.latitude.toFixed(4)}, {nextHub.longitude.toFixed(4)})
-                  </div>
-                )}
+                <button className="ss-btn" onClick={confirmAdminStatusUpdate} style={{ width: '100%', marginTop: 12 }}>
+                  Update Status
+                </button>
               </div>
-            ) : (
-              /* Fallback: free-text input if no route exists */
-              <input className="ss-input" placeholder="Enter current hub location" value={adminLocation}
-                onChange={e => setAdminLocation(e.target.value)} style={{ width: '100%', marginTop: 16 }} />
             )}
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
-              <button className="ss-btn ss-btn-outline" onClick={() => setStatusModalOpen(false)}>Cancel</button>
-              <button className="ss-btn" onClick={confirmAdminStatusUpdate}>Confirm Update</button>
+            {/* Hub Advance Section (Show if PickedUp or InTransit) */}
+            {(selectedShipment?.status === 'PickedUp' || selectedShipment?.status === 'InTransit') && (
+              <div style={{ marginTop: 20 }}>
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 16, marginBottom: 16 }}>
+                  <label style={{ fontSize: 11, color: '#888', fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10, display: 'block' }}>Logistics Progress</label>
+                  
+                  {routeLoading ? (
+                    <div style={{ padding: '16px 0', color: '#888', fontSize: 12, fontFamily: 'Orbitron, monospace', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Loading route...</div>
+                  ) : routeStops.length > 0 ? (
+                    <>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap', marginBottom: 16, padding: '12px', background: 'rgba(255,255,255,0.03)', borderRadius: 6, border: '1px solid rgba(255,255,255,0.06)' }}>
+                        {routeStops.map((stop, idx) => (
+                          <span key={stop.id} style={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            {idx > 0 && <span style={{ color: '#444', fontSize: 12 }}>→</span>}
+                            <span style={{
+                              fontSize: 11, fontWeight: stop.id === nextHub?.id ? 700 : 400, padding: '2px 8px', borderRadius: 4,
+                              background: stop.isCompleted ? 'rgba(0,196,140,0.15)' : stop.id === nextHub?.id ? 'rgba(224,0,26,0.15)' : 'rgba(255,255,255,0.04)',
+                              color: stop.isCompleted ? '#00c48c' : stop.id === nextHub?.id ? '#e0001a' : '#666',
+                              border: stop.id === nextHub?.id ? '1px solid rgba(224,0,26,0.3)' : '1px solid transparent',
+                            }}>{stop.hubName}</span>
+                          </span>
+                        ))}
+                      </div>
+                      
+                      {nextHub ? (
+                        <div style={{ textAlign: 'center' }}>
+                          <p style={{ fontSize: 13, color: '#ccc', marginBottom: 16 }}>
+                            Shipment is moving to: <strong style={{ color: '#fff' }}>{nextHub.hubName}</strong>
+                          </p>
+                          <button className="ss-btn" onClick={confirmAdminStatusUpdate} style={{ width: '100%', background: 'var(--color-accent)' }}>
+                            Confirm Arrival at {nextHub.hubName}
+                          </button>
+                        </div>
+                      ) : (
+                        <div style={{ textAlign: 'center', color: '#888', padding: '10px 0' }}>
+                          All route stops completed. Final status auto-updated.
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div style={{ color: '#888', fontSize: 12 }}>No route plan found.</div>
+                  )}
+                </div>
+                
+                {/* Always allow cancellation */}
+                <button className="ss-btn ss-btn-outline" onClick={() => { setSelectedStatus('Cancelled'); confirmAdminStatusUpdate(); }} style={{ width: '100%', borderColor: 'rgba(255,0,0,0.3)', color: '#ff6b6b' }}>
+                  Cancel Shipment
+                </button>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 24 }}>
+              <button className="ss-btn ss-btn-outline" onClick={() => setStatusModalOpen(false)}>Close</button>
             </div>
           </div>
         </div>,

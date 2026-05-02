@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SmartShip.TrackingService.Core.DTOs;
 using SmartShip.TrackingService.Core.Interfaces.Repositories;
 using SmartShip.TrackingService.Domain.Entities;
@@ -14,9 +14,12 @@ public class TrackingEventRepository : ITrackingEventRepository
     {
         _context = context;
     }
+    private static readonly string[] ExcludedStatuses = { "Draft", "PaymentCreated", "PaymentSuccessful" };
+
     public async Task<PagedResponse<TrackingEvent>> GetAllPagedAsync(TrackingEventPagedRequest req)
     {
         var query = _context.TrackingEvents
+            .Where(x => !ExcludedStatuses.Contains(x.Status))
             .OrderByDescending(x => x.EventTime)
             .AsQueryable();
 
@@ -52,7 +55,7 @@ public class TrackingEventRepository : ITrackingEventRepository
     public async Task<PagedResponse<TrackingEvent>> GetByTrackingNumberPagedAsync(string trackingNumber, TrackingEventPagedRequest req)
     {
         var query = _context.TrackingEvents
-            .Where(t => t.TrackingNumber == trackingNumber)
+            .Where(t => t.TrackingNumber == trackingNumber && !ExcludedStatuses.Contains(t.Status))
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(req.Status))

@@ -310,20 +310,20 @@ public class ShipmentService : IShipmentService
             if (st == ShipmentStatus.Cancelled && s.Status == ShipmentStatus.Delivered)
                 throw new InvalidOperationException("Cannot cancel a delivered shipment.");
 
-            if (st == s.Status && st != ShipmentStatus.InTransit)
-                return; // No change needed unless it's InTransit (to record new hub)
+            if (st == ShipmentStatus.InTransit)
+                throw new InvalidOperationException("In Transit status is managed automatically when you advance to a hub.");
 
-            // Allow same status or forward progression
-            if (st == ShipmentStatus.PickedUp && s.Status != ShipmentStatus.Booked && s.Status != ShipmentStatus.PickedUp)
+            if (st == ShipmentStatus.OutForDelivery)
+                throw new InvalidOperationException("Out For Delivery status is managed automatically when the final hub is reached.");
+
+            if (st == s.Status)
+                return; // No change needed
+
+            // Allow forward progression
+            if (st == ShipmentStatus.PickedUp && s.Status != ShipmentStatus.Booked)
                 throw new InvalidOperationException($"Shipment must be Booked before PickedUp. Current: {s.Status}");
 
-            if (st == ShipmentStatus.InTransit && s.Status != ShipmentStatus.PickedUp && s.Status != ShipmentStatus.InTransit)
-                throw new InvalidOperationException($"Shipment must be PickedUp before InTransit. Current: {s.Status}");
-
-            if (st == ShipmentStatus.OutForDelivery && s.Status != ShipmentStatus.InTransit && s.Status != ShipmentStatus.PickedUp && s.Status != ShipmentStatus.OutForDelivery)
-                throw new InvalidOperationException($"Shipment must be InTransit/PickedUp before OutForDelivery. Current: {s.Status}");
-
-            if (st == ShipmentStatus.Delivered && s.Status != ShipmentStatus.OutForDelivery && s.Status != ShipmentStatus.Delivered)
+            if (st == ShipmentStatus.Delivered && s.Status != ShipmentStatus.OutForDelivery)
                 throw new InvalidOperationException($"Shipment must be OutForDelivery before Delivered. Current: {s.Status}");
 
             if (st == ShipmentStatus.Booked && s.PickupScheduledAt == null)
@@ -338,14 +338,14 @@ public class ShipmentService : IShipmentService
             _shipmentRepository.Update(s);
             await _unitOfWork.SaveChangesAsync();
 
-            // GENERATE ROUTE ONLY WHEN ENTERING TRANSIT
-            if (st == ShipmentStatus.InTransit)
+            // GENERATE ROUTE WHEN PICKED UP
+            if (st == ShipmentStatus.PickedUp)
             {
                 var ctx = _unitOfWork.GetDbContext<Infrastructure.Data.ShipmentDbContext>();
                 var existingRoute = await ctx.Set<ShipmentRoute>().AnyAsync(r => r.ShipmentId == s.Id);
                 if (!existingRoute)
                 {
-                    _logger.LogInformation("Shipment {TrackingNumber} entering InTransit. Generating route plan now...", s.TrackingNumber);
+                    _logger.LogInformation("Shipment {TrackingNumber} picked up. Generating route plan now...", s.TrackingNumber);
                     await GenerateRouteForShipmentAsync(s, s.SenderAddress!, s.ReceiverAddress!);
                 }
             }
@@ -530,19 +530,23 @@ public class ShipmentService : IShipmentService
             _ => (decimal)(weightKg * 80)
         };
 
-        // Distance Charge: 500km free, ₹2 per extra km
-        if (distanceKm > 500)
+        const decimal baseDistance = 2000m;
+        const decimal flatDistanceSurcharge = 200m;
+
+        if (distanceKm > (double)baseDistance)
         {
-            decimal extraDistance = (decimal)(distanceKm - 500);
-            decimal distanceCharge = Math.Round(extraDistance * 2.0m, 2);
-            rate += distanceCharge;
-            _logger.LogInformation("Added distance surcharge: {Charge} for {ExtraKm} extra km", distanceCharge, extraDistance);
+            rate += flatDistanceSurcharge;
+
+            _logger.LogInformation("Added flat distance surcharge: {Charge} for shipment over {BaseKm}km",
+                flatDistanceSurcharge,
+                baseDistance
+            );
         }
 
         var finalRate = Math.Max(rate, 99);
 
-        _logger.LogInformation("Rate calculated: {Rate} | Type: {Type} | Weight: {Weight}kg | Dist: {Dist}km",
-            finalRate, type, weightKg, distanceKm);
+        _logger.LogInformation("Rate calculated: {Rate} | Type: {Type} | Weight: {Weight}kg ",
+            finalRate, type, weightKg);
 
         return Task.FromResult(finalRate);
     }
@@ -564,7 +568,6 @@ public class ShipmentService : IShipmentService
         );
     }
 
-    // ── Route Planning ─────────────────────────────────────────────────────
     public async Task<IEnumerable<RouteStopDto>> GetRouteAsync(int shipmentId)
     {
         var ctx = _unitOfWork.GetDbContext<Infrastructure.Data.ShipmentDbContext>();
@@ -609,22 +612,46 @@ public class ShipmentService : IShipmentService
         if (nextStop == null)
             throw new InvalidOperationException("All hubs in the route have been completed.");
 
+        var oldStatus = shipment.Status;
         nextStop.IsCompleted = true;
         nextStop.ReachedAt = DateTime.Now;
+
+        var allCompleted = routes.All(r => r.IsCompleted);
+        if (allCompleted)
+        {
+            shipment.Status = ShipmentStatus.OutForDelivery;
+        }
+        else
+        {
+            shipment.Status = ShipmentStatus.InTransit;
+        }
+
+        shipment.UpdatedAt = DateTime.Now;
         await _unitOfWork.SaveChangesAsync();
 
-        _logger.LogInformation("Shipment {TrackingNumber} advanced to hub: {Hub} (seq {Seq})",
-            shipment.TrackingNumber, nextStop.HubName, nextStop.SequenceOrder);
+        _logger.LogInformation("Shipment {TrackingNumber} advanced to hub: {Hub} (seq {Seq}). Status: {Old} -> {New}",
+            shipment.TrackingNumber, nextStop.HubName, nextStop.SequenceOrder, oldStatus, shipment.Status);
+
+        if (oldStatus != shipment.Status)
+        {
+            await _publisher.Publish(new ShipmentStatusUpdatedEvent
+            {
+                ShipmentId = shipment.Id,
+                TrackingNumber = shipment.TrackingNumber,
+                OldStatus = oldStatus.ToString(),
+                NewStatus = shipment.Status.ToString(),
+                Location = nextStop.HubCity ?? nextStop.HubName,
+                UpdatedBy = "system-auto",
+                UpdatedAt = DateTime.Now,
+                CustomerId = shipment.CustomerId
+            });
+        }
 
         return new RouteStopDto(
-            nextStop.Id, nextStop.ShipmentId, nextStop.HubId, nextStop.HubName, nextStop.HubCity,
+            nextStop.Id, nextStop.ShipmentId, nextStop.HubId, nextStop.HubName, nextStop.HubCity!,
             nextStop.Latitude, nextStop.Longitude, nextStop.SequenceOrder, nextStop.IsCompleted, nextStop.ReachedAt);
     }
 
-    /// <summary>
-    /// Generates a route plan for a shipment using nearest-hub algorithm.
-    /// Called automatically on shipment creation.
-    /// </summary>
     private async Task GenerateRouteForShipmentAsync(Shipment shipment, Address sender, Address receiver)
     {
         try
@@ -636,7 +663,6 @@ public class ShipmentService : IShipmentService
             var hubs = await response.Content.ReadFromJsonAsync<List<HubInfo>>();
             if (hubs == null || hubs.Count == 0) return;
 
-            // 1. Get the actual road path from OSRM
             var roadPoints = new List<double[]>();
             try
             {
@@ -668,7 +694,6 @@ public class ShipmentService : IShipmentService
 
             if (roadPoints.Count > 10)
             {
-                // Divide road into segments (max 4 internal points)
                 var indices = new int[] { 
                     (int)(roadPoints.Count * 0.2), 
                     (int)(roadPoints.Count * 0.4), 
@@ -681,7 +706,6 @@ public class ShipmentService : IShipmentService
                     var p = roadPoints[idx];
                     var lat = p[0]; var lon = p[1];
 
-                    // Find if any real hub is within 150km of this road point
                     var nearbyHub = hubs
                         .Where(h => Haversine(lat, lon, h.Latitude, h.Longitude) < 150)
                         .OrderBy(h => Haversine(lat, lon, h.Latitude, h.Longitude))
@@ -699,7 +723,6 @@ public class ShipmentService : IShipmentService
                     }
                     else
                     {
-                        // Resolve actual city/town name for the highway transit point
                         string resolvedCity = "Highway Transit";
                         try {
                             var revUrl = $"https://nominatim.openstreetmap.org/reverse?format=json&lat={lat.ToString().Replace(',','.')}&lon={lon.ToString().Replace(',','.')}&zoom=10";
@@ -717,7 +740,7 @@ public class ShipmentService : IShipmentService
                                                    "Highway Transit";
                                 }
                             }
-                        } catch { /* Fallback */ }
+                        } catch { }
 
                         routeStops.Add(new ShipmentRoute {
                             ShipmentId = shipment.Id, HubId = null, HubName = resolvedCity + " Node",
@@ -753,14 +776,12 @@ public class ShipmentService : IShipmentService
         var cleanCity = (city ?? "").Trim();
         var cleanState = (state ?? "").Trim();
 
-        // 1. Try exact city match
         var cityMatch = hubs.FirstOrDefault(h =>
             h.City.Equals(cleanCity, StringComparison.OrdinalIgnoreCase) ||
             cleanCity.Contains(h.City, StringComparison.OrdinalIgnoreCase) ||
             h.City.Contains(cleanCity, StringComparison.OrdinalIgnoreCase));
         if (cityMatch != null) return cityMatch;
 
-        // 2. Try geographic distance if we have coordinates (MOST ACCURATE)
         if (lat != 0 && lon != 0)
         {
             return hubs
@@ -768,18 +789,15 @@ public class ShipmentService : IShipmentService
                 .FirstOrDefault();
         }
 
-        // 3. Try state match as fallback
         var stateMatch = hubs.FirstOrDefault(h =>
             h.State.Equals(cleanState, StringComparison.OrdinalIgnoreCase) ||
             cleanState.Contains(h.State, StringComparison.OrdinalIgnoreCase));
         if (stateMatch != null) return stateMatch;
 
-        // Final Fallback: pick a central hub
         return hubs.FirstOrDefault(h => h.City.Equals("Bhopal", StringComparison.OrdinalIgnoreCase)) 
                ?? hubs.FirstOrDefault();
     }
 
-    /// <summary>Haversine formula — returns distance in km between two lat/lng points.</summary>
     private static double Haversine(double lat1, double lon1, double lat2, double lon2)
     {
         const double R = 6371; // Earth radius in km
