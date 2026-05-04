@@ -123,7 +123,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
         </div>
       </aside>
 
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ flex: 1, paddingTop:10, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         <header style={{
           height: 69, borderBottom: '1px solid rgba(255,255,255,0.06)',
           background: '#0f0f0f', display: 'flex', alignItems: 'center',
@@ -157,34 +157,21 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({ role }) => {
             position: 'relative',
           }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="sync">
             <motion.div
               key={location.pathname}
-              initial={{
-                opacity: 0,
-                x: 28,
-                scale: 0.85,
-                filter: 'blur(4px)',
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                scale: 1,
-                filter: 'blur(0px)',
-              }}
-              exit={{
-                opacity: 0,
-                x: -18,
-                scale: 0.99,
-                filter: 'blur(3px)',
-              }}
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.98 }}
               transition={{
-                duration: 0.26,
-                ease: [0.2, 1, 0.36, 1],
+                duration: 0.45,
+                ease: [0.22, 1, 0.36, 1],
               }}
               style={{
-                height: '100%',
+                position: 'absolute',
+                inset: 0,
                 overflow: 'auto',
+                padding: 27,
               }}
             >
               <Outlet />

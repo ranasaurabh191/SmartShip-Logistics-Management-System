@@ -7,6 +7,7 @@ import {
   type AddressErrors, type PackageErrors,
 } from '../../utils/shipmentValidation';
 import { calculateCosts, fmtINR, type CostBreakdown } from '../../utils/costCalculator';
+import { geocodeAddress } from '../../utils/geocoding';
 import { InvoicePrintView, type InvoiceData } from './InvoicePrintView';
 import { MapLocationPicker, type PickedLocation } from '../../components/MapLocationPicker';
 
@@ -190,10 +191,36 @@ export const CreateShipmentWizard = () => {
     if (activeStep === 0) {
       const e = validateAddressSection(formData.sender, 'Sender');
       setSenderErrors(e); if (hasErrors(e)) return;
+      
+      // Auto-geocode if coordinates missing
+      if (!formData.sender.latitude || !formData.sender.longitude) {
+        setSubmitting(true);
+        const geo = await geocodeAddress(formData.sender.city, formData.sender.state, formData.sender.country);
+        if (geo) {
+          setFormData(prev => ({ 
+            ...prev, 
+            sender: { ...prev.sender, latitude: geo.lat, longitude: geo.lng } 
+          }));
+        }
+        setSubmitting(false);
+      }
     }
     if (activeStep === 1) {
       const e = validateAddressSection(formData.receiver, 'Receiver');
       setReceiverErrors(e); if (hasErrors(e)) return;
+
+      // Auto-geocode if coordinates missing
+      if (!formData.receiver.latitude || !formData.receiver.longitude) {
+        setSubmitting(true);
+        const geo = await geocodeAddress(formData.receiver.city, formData.receiver.state, formData.receiver.country);
+        if (geo) {
+          setFormData(prev => ({ 
+            ...prev, 
+            receiver: { ...prev.receiver, latitude: geo.lat, longitude: geo.lng } 
+          }));
+        }
+        setSubmitting(false);
+      }
     }
     if (activeStep === 2) {
       const e = validatePackageSection(formData.package);
@@ -617,7 +644,10 @@ export const CreateShipmentWizard = () => {
             </div>
             <div>
               <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', marginBottom: 4 }}>Distance</div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{distance.toFixed(2)} km</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: distance === 0 ? 'var(--color-accent)' : '#fff' }}>
+                {distance.toFixed(2)} km
+                {distance === 0 && <span style={{ fontSize: 10, marginLeft: 8, fontWeight: 400 }}>(Check Addresses)</span>}
+              </div>
             </div>
             <div>
               <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', marginBottom: 4 }}>Weight</div>
@@ -799,7 +829,11 @@ export const CreateShipmentWizard = () => {
         {STEPS.map((s, i) => (
           <div key={s.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
             {i > 0 && (
-              <div style={{ position: 'absolute', left: '-50%', top: 14, width: '100%', height: 1, background: i <= activeStep ? 'var(--color-accent)' : 'var(--color-border)' }} />
+              <div style={{ 
+                position: 'absolute', left: '-50%', top: 14, width: '100%', height: 1, 
+                background: i <= activeStep ? 'var(--color-accent)' : 'var(--color-border)',
+                transition: 'background 0.5s ease'
+              }} />
             )}
             <div style={{
               width: 28, height: 28, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -808,6 +842,8 @@ export const CreateShipmentWizard = () => {
               fontFamily: 'Orbitron, monospace', fontSize: 13, fontWeight: 700,
               color: i <= activeStep ? '#fff' : '#555', zIndex: 1,
               boxShadow: i === activeStep ? '0 0 10px rgba(224,0,26,0.4)' : 'none',
+              transition: 'all 0.3s ease',
+              animation: i === activeStep ? 'pulseRed 2s infinite' : 'none'
             }}>
               {i < activeStep ? '✓' : i + 1}
             </div>
@@ -827,7 +863,9 @@ export const CreateShipmentWizard = () => {
         <div style={{ fontFamily: 'Orbitron, monospace', fontSize: 14, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#fff', marginBottom: 20, borderBottom: '1px solid var(--color-border)', paddingBottom: 12 }}>
           Step {activeStep + 1} — {STEPS[activeStep].label}
         </div>
-        {renderStep()}
+        <div key={activeStep} className="step-transition">
+          {renderStep()}
+        </div>
       </div>
 
       {/* ── Navigation ── */}

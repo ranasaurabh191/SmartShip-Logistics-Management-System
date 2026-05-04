@@ -46,8 +46,10 @@ const ParticleCanvas = () => {
     window.addEventListener('resize', resize);
 
     const onMouseMove = (e: MouseEvent) => {
-      mouse.px = mouse.x; mouse.py = mouse.y;
-      mouse.x = e.clientX; mouse.y = e.clientY;
+      mouse.px = mouse.x; 
+      mouse.py = mouse.y;
+      mouse.x = e.clientX; 
+      mouse.y = e.clientY;
     };
     const onMouseLeave = () => { mouse.x = -9999; mouse.y = -9999; };
     window.addEventListener('mousemove', onMouseMove);
@@ -87,8 +89,6 @@ const ParticleCanvas = () => {
       }
     });
 
-    const CONNECT = 10;
-    const CONNECT_SQ = CONNECT * CONNECT;
     const MOUSE_RADIUS = 180;
     const MOUSE_RADIUS_SQ = MOUSE_RADIUS * MOUSE_RADIUS;
     const REPEL_RADIUS = 60;
@@ -194,46 +194,7 @@ const ParticleCanvas = () => {
         ctx.fill();
       }
 
-      // Connections between same/adjacent depth layers
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          if (Math.abs(particles[i].depth - particles[j].depth) > 0.35) continue;
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dSq = dx * dx + dy * dy;
-          if (dSq < CONNECT_SQ) {
-            const d = Math.sqrt(dSq);
-            const avgDepth = (particles[i].depth + particles[j].depth) * 0.5;
-            const [r, g, b] = particles[i].color;
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(${r},${g},${b},${(1 - d / CONNECT) * 0.12 * avgDepth})`;
-            ctx.lineWidth = avgDepth * 0.6;
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Mouse connections
-      if (mouse.x > 0) {
-        const mConnSq = (CONNECT * 1.4) * (CONNECT * 1.4);
-        for (const p of particles) {
-          const dx = mouse.x - p.x;
-          const dy = mouse.y - p.y;
-          const dSq = dx * dx + dy * dy;
-          if (dSq < mConnSq) {
-            const d = Math.sqrt(dSq);
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(255,60,30,${(1 - d / (CONNECT * 1.4)) * 0.35 * p.depth})`;
-            ctx.lineWidth = p.depth * 0.8;
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.stroke();
-          }
-        }
-      }
-
+      
       animFrame = requestAnimationFrame(draw);
     };
 
@@ -254,7 +215,7 @@ const ParticleCanvas = () => {
         inset: 0,
         zIndex: 0,
         pointerEvents: 'none',
-        opacity: 100,
+        opacity: 1,
       }}
     />
   );
@@ -314,8 +275,6 @@ const LogisticsAnimation = () => {
       reverse: Math.random() > 0.5,
       trail: [],
     })).map((p, i) => ({ ...p, edgeIdx: i }));
-
-
 
     const gridDots: { x: number; y: number; alpha: number; phase: number }[] = [];
     for (let r = 0; r < 14; r++) {
@@ -512,15 +471,15 @@ const LogisticsAnimation = () => {
     <canvas
       ref={canvasRef}
       style={{
-        opacity: 1.92,
+        opacity: 1,
         display: 'block',
         filter: 'drop-shadow(0 0 40px rgba(224,0,26,0.15))',
-        marginRight: '-300px',
+        marginRight: '-350px',
       }}
     />
   );
 };
-// ─── Scroll Reveal Hook ───────────────────────────────────────────────────────
+
 function useReveal() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -530,7 +489,7 @@ function useReveal() {
     if (!el) return;
     const obs = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold: 0.12 }
+      { threshold: 0.10 }
     );
     obs.observe(el);
     return () => obs.disconnect();
@@ -539,7 +498,6 @@ function useReveal() {
   return { ref, visible };
 }
 
-// ─── Reveal wrapper ───────────────────────────────────────────────────────────
 interface RevealProps {
   children: React.ReactNode;
   delay?: number;
@@ -562,7 +520,6 @@ const Reveal = ({ children, delay = 0, style }: RevealProps) => {
   );
 };
 
-// ─── Section label ────────────────────────────────────────────────────────────
 const SectionLabel = ({ label }: { label: string }) => (
   <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 14, padding: '4px 12px', border: '1px solid rgba(224,0,26,0.35)', borderRadius: 4 }}>
     <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#e0001a', boxShadow: '0 0 6px rgba(224,0,26,0.8)' }} />
@@ -579,9 +536,7 @@ export const LandingPage = () => {
   const [heroVisible, setHeroVisible] = useState(false);
 
   useEffect(() => {
-    // Hero entrance animation
     setTimeout(() => setHeroVisible(true), 80);
-    // Nav becomes opaque on scroll
     const onScroll = () => setNavSolid(window.scrollY > 60);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
@@ -590,18 +545,13 @@ export const LandingPage = () => {
   return (
     <div style={{ minHeight: '100vh', padding: '1px 20px', display: 'flex', flexDirection: 'column', background: '#0a0a0a', position: 'relative', overflowX: 'hidden' }}>
 
-      {/* ── Animated network mesh background ── */}
       <ParticleCanvas />
 
-      {/* ── Scanline overlay ── */}
       <div style={{
         position: 'fixed', inset: 0, zIndex: 1, pointerEvents: 'none',
         backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px)',
       }} />
 
-      {/* ═══════════════════════════════════════════
-          NAVBAR —
-      ═══════════════════════════════════════════ */}
       <nav style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 200,
         padding: '16px 100px',

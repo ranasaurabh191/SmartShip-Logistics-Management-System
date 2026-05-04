@@ -5,7 +5,6 @@ import { useNotificationStore } from '../../store/useNotificationStore';
 import { useSpeechRecognition } from '../hooks/useSpeechRecognition';
 
 
-interface Props { shipmentId?: number; }
 
 
 const AI_LOGO = (
@@ -83,6 +82,7 @@ const CLOSE_ICON = (
     </svg>
 );
 
+interface Props { shipmentId?: number; }
 
 export const ChatWidget = ({ shipmentId }: Props) => {
     const [open, setOpen] = useState(false);
@@ -183,60 +183,6 @@ export const ChatWidget = ({ shipmentId }: Props) => {
 
     return (
         <>
-            <style>{`
-                @keyframes ss-pulse {
-                    0%   { transform: scale(1);   opacity: 0.55; }
-                    100% { transform: scale(1.55); opacity: 0; }
-                }
-                @keyframes ss-slideUp {
-                    from { opacity: 0; transform: translateY(14px) scale(0.97); }
-                    to   { opacity: 1; transform: translateY(0)   scale(1); }
-                }
-                @keyframes ss-fadeMsg {
-                    from { opacity: 0; transform: translateY(5px); }
-                    to   { opacity: 1; transform: translateY(0); }
-                }
-                @keyframes ss-blink {
-                    0%, 100% { opacity: 1; } 50% { opacity: 0.2; }
-                }
-                .ss-window  { animation: ss-slideUp 0.28s cubic-bezier(0.34,1.4,0.64,1) both; }
-                .ss-msg-anim{ animation: ss-fadeMsg 0.22s ease both; }
-                .ss-fab-btn { transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1), background 0.2s ease; }
-                .ss-fab-btn:hover  { transform: scale(1.1); }
-                .ss-fab-btn:active { transform: scale(0.93); }
-                .ss-quick   { transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease; }
-                .ss-quick:hover { background: rgba(226,75,74,0.08) !important; color: #E24B4A !important; border-color: rgba(226,75,74,0.4) !important; transform: translateY(-1px); }
-                .ss-send    { transition: opacity 0.15s ease, transform 0.12s ease; }
-                .ss-send:hover:not(:disabled)  { transform: scale(1.08); }
-                .ss-send:active:not(:disabled) { transform: scale(0.93); }
-                .ss-input:focus { border-color: rgba(226,75,74,0.5) !important; box-shadow: 0 0 0 3px rgba(226,75,74,0.1) !important; }
-                .ss-dot { width: 5px; height: 5px; border-radius: 50%; display: inline-block; }
-                .ss-chip { transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease; }
-                .ss-chip:hover { background: rgba(226,75,74,0.08) !important; color: #E24B4A !important; border-color: rgba(226,75,74,0.5) !important; transform: translateY(-1px); }
-                .ss-chip:active { transform: scale(0.96); }
-                
-                @keyframes ss-voice-pulse {
-                0%, 100% { transform: scale(1);   box-shadow: 0 0 0 0 rgba(226,75,74,0.6); }
-                50%       { transform: scale(1.1); box-shadow: 0 0 0 7px rgba(226,75,74,0); }
-                }
-                @keyframes ss-wave {
-                0%, 100% { height: 4px; }
-                25%       { height: 12px; }
-                50%       { height: 7px; }
-                75%       { height: 16px; }
-                }
-                .ss-mic-btn { transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease; }
-                .ss-mic-btn:hover:not(:disabled) { transform: scale(1.08); }
-                .ss-mic-btn:active:not(:disabled) { transform: scale(0.93); }
-                .ss-mic-listening { animation: ss-voice-pulse 1.1s ease infinite; }
-                .ss-voice-bar { display: inline-block; width: 3px; border-radius: 2px; background: #E24B4A; margin: 0 1px; animation: ss-wave 0.7s ease-in-out infinite; }
-                .ss-voice-bar:nth-child(2) { animation-delay: 0.1s; }
-                .ss-voice-bar:nth-child(3) { animation-delay: 0.22s; }
-                .ss-voice-bar:nth-child(4) { animation-delay: 0.12s; }
-
-            `}</style>
-
-
             {/* FAB */}
             <div style={{ position: 'fixed', bottom: 28, right: 28, zIndex: 10000 }}>
                 {/* Pulse ring */}

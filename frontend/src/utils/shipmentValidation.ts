@@ -1,4 +1,3 @@
-
 export interface AddressSection {
   fullName: string;
   phone: string;
@@ -38,8 +37,8 @@ export function validateAddressSection(
   else if (data.country !== 'India' && !/^\+?\d{7,15}$/.test(data.phone.replace(/\s/g, '')))
     errors.phone = 'Enter a valid international phone number';
 
-  if (!data.street || data.street.trim().length < 10)
-    errors.street = 'Street address must be at least 10 characters';
+  if (!data.street || data.street.trim().length < 5)
+    errors.street = 'Street address must be at least 5 characters';
 
   if (!data.city || data.city.trim().length < 2)
     errors.city = 'Enter a valid city name';

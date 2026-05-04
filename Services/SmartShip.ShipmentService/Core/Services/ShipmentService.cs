@@ -65,7 +65,7 @@ public class ShipmentService : IShipmentService
                 {
                     "Confirmed" => "Paid",
                     "Cancelled" => "Cancelled",
-                    "PaymentFailed" => "Failed",
+                    "PaymentFailedState" => "Failed",
                     null => "Pending",
                     _ => "Pending"
                 };
@@ -106,7 +106,7 @@ public class ShipmentService : IShipmentService
                 {
                     "Confirmed" => "Paid",
                     "Cancelled" => "Cancelled",
-                    "PaymentFailed" => "Failed",
+                    "PaymentFailedState" => "Failed",
                     null => "Pending",
                     _ => "Pending"
                 };
@@ -278,7 +278,7 @@ public class ShipmentService : IShipmentService
         {
             "Confirmed" => "Paid",
             "Cancelled" => "Cancelled",
-            "PaymentFailed" => "Failed",
+            "PaymentFailedState" => "Failed",
             null => "Pending",
             _ => "Pending"
         };
@@ -417,9 +417,9 @@ public class ShipmentService : IShipmentService
                 throw new KeyNotFoundException("Shipment not found or you are not authorized to schedule pickup for it.");
             }
 
-            if (s.Status != ShipmentStatus.Draft)
+            if (s.Status != ShipmentStatus.Draft && s.Status != ShipmentStatus.PaymentFailed)
                 throw new InvalidOperationException(
-                    $"Pickup can only be scheduled for Draft shipments. Current status: {s.Status}.");
+                    $"Pickup can only be scheduled for Draft or PaymentFailed shipments. Current status: {s.Status}.");
 
             var httpClient = CreateInternalClient("PaymentService");
             var response = await httpClient.GetAsync($"api/payment/shipment/{id}");
@@ -855,7 +855,7 @@ public class ShipmentService : IShipmentService
         s.ShippingRate,
         s.CreatedAt.ToString("dd-MMM-yyyy hh:mm tt"),
         s.PickupScheduledAt?.ToString("dd-MMM-yyyy hh:mm tt"),
-        s.DeliveredAt?.ToString("dd-Mmm-yyyy hh:mm tt"),
+        s.DeliveredAt?.ToString("dd-MMM-yyyy hh:mm tt"),
         new AddressDto(sender.FullName, sender.Phone, sender.Street, sender.City, sender.State, sender.PostalCode, sender.Country, sender.Latitude, sender.Longitude),
         new AddressDto(receiver.FullName, receiver.Phone, receiver.Street, receiver.City, receiver.State, receiver.PostalCode, receiver.Country, receiver.Latitude, receiver.Longitude),
         new PackageDto(pkg.WeightKg, pkg.LengthCm, pkg.WidthCm, pkg.HeightCm, pkg.Description, pkg.DeclaredValue),

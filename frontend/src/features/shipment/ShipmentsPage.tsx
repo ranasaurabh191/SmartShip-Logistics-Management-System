@@ -35,10 +35,18 @@ type ShipmentRow = {
 const statusStyle: Record<string, string> = {
   InTransit: 'warning', Booked: '', Delivered: 'success',
   Cancelled: 'muted', Draft: 'muted', PickedUp: 'warning', OutForDelivery: 'warning',
+  PaymentFailed: 'danger',
 };
 
 const PAYMENTMETHOD = { COD: 0, ONLINE: 1 };
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as string;
+
+const fmtDate = (dateStr: string | null | undefined) => {
+  if (!dateStr || dateStr.startsWith('0001-01-01')) return '—';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '—';
+  return d.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+};
 
 export const ShipmentsPage = () => {
   const navigate = useNavigate();
@@ -123,7 +131,7 @@ export const ShipmentsPage = () => {
 
   useEffect(() => { fetchShipments(1); }, [shipmentsEndpoint, search]);
 
-  const statuses = ['ALL', 'Draft', 'Booked', 'PickedUp', 'InTransit', 'OutForDelivery', 'Delivered', 'Cancelled'];
+  const statuses = ['ALL', 'Draft', 'PaymentFailed', 'Booked', 'PickedUp', 'InTransit', 'OutForDelivery', 'Delivered', 'Cancelled'];
 
   const filtered = useMemo(() =>
     shipments.filter(s => {
@@ -386,7 +394,7 @@ export const ShipmentsPage = () => {
   };
 
   const canSchedulePickup = (shipment: ShipmentRow, payment: PaymentInfo | null | undefined): boolean => {
-    if (shipment.status !== 'Draft') return false;
+    if (shipment.status !== 'Draft' && shipment.status !== 'PaymentFailed') return false;
     if (!payment) return false;
     if (payment.paymentMethod === 'COD') return true;
     return payment.paymentMethod === 'Online' && payment.paymentStatus === 'Paid';
@@ -448,8 +456,13 @@ export const ShipmentsPage = () => {
             {!loading && filtered.map(s => {
               const payment = paymentsByShipment[s.id];
               const scheduleAllowed = canSchedulePickup(s, payment);
+              const pStatus = (payment?.paymentStatus || '').toLowerCase().trim();
               const hasUnpaidOnline = payment?.paymentMethod === 'Online' &&
-                payment?.paymentStatus !== 'Paid' && !!payment?.razorpayOrderId;
+                pStatus !== 'paid' &&
+                pStatus !== 'refunded' &&
+                pStatus !== 'cancelled' &&
+                !!payment?.razorpayOrderId;
+              const isRetriable = s.status === 'Draft' || s.status === 'PaymentFailed';
 
               return (
                 <tr key={s.id} style={{ cursor: 'pointer' }} onClick={() => navigate(`${basePath}/track/${s.id}`)}>
@@ -465,9 +478,9 @@ export const ShipmentsPage = () => {
                     </span>
                   </td>
                   <td>{s.shippingRate.toLocaleString('en-IN')}</td>
-                  <td>{new Date(s.createdAt).toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true })}</td>
-                  <td>{s.pickupScheduledAt ? new Date(s.pickupScheduledAt).toLocaleString('en-IN') : '—'}</td>
-                  <td>{s.deliveredAt ? new Date(s.deliveredAt).toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true }) : '—'}</td>
+                  <td>{fmtDate(s.createdAt)}</td>
+                  <td>{s.pickupScheduledAt ? fmtDate(s.pickupScheduledAt) : '—'}</td>
+                  <td>{s.deliveredAt ? fmtDate(s.deliveredAt) : '—'}</td>
                   <td title={s.notes ?? ''} style={{ maxWidth: 180, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.notes ?? ''}</td>
                   <td style={{ minWidth: 230 }}>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(10px, 1fr))', gap: 8, width: '100%', alignItems: 'center' }}>
@@ -520,7 +533,7 @@ export const ShipmentsPage = () => {
                       )}
 
                       {/* Existing unpaid online order → Pay Now (re-open checkout) + Retry Verify */}
-                      {!isAdmin && hasUnpaidOnline && s.status === 'Draft' && (
+                      {!isAdmin && hasUnpaidOnline && isRetriable && (
                         <>
                           <button className="ss-btn "
                             style={{ padding: '5px 6px', textAlign: 'center' }}
@@ -531,7 +544,7 @@ export const ShipmentsPage = () => {
                         </>
                       )}
 
-                      {(s.status === 'Draft' || s.status === 'Booked') && !isAdmin && (
+                      {(s.status === 'Draft' || s.status === 'Booked' || s.status === 'PaymentFailed') && !isAdmin && (
                         <button className="ss-btn ss-btn-outline"
                           disabled={busyShipmentId === s.id}
                           onClick={e => openCancelModal(e, s.id)}>

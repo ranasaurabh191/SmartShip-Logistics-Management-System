@@ -1,4 +1,4 @@
-﻿using MassTransit;
+using MassTransit;
 using SmartShip.Shared.Events;
 using SmartShip.ShipmentService.Domain.Entities;
 
@@ -7,6 +7,7 @@ namespace SmartShip.ShipmentService.Core.Sagas;
 public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderState>
 {
     public State PaymentPending { get; private set; } = null!;
+    public State PaymentFailedState { get; private set; } = null!;
     public State Confirmed { get; private set; } = null!;
     public State Cancelled { get; private set; } = null!;
 
@@ -58,20 +59,32 @@ public class ShipmentOrderStateMachine : MassTransitStateMachine<ShipmentOrderSt
 
             When(PaymentFailed)
                 .Then(ctx => ctx.Saga.UpdatedAt = DateTime.Now)
-                .Publish(ctx => new CancelShipmentCommand
+                .Publish(ctx => new UpdateShipmentStatusToPaymentFailedCommand
                 {
                     CorrelationId = ctx.Saga.CorrelationId,
                     ShipmentId = ctx.Saga.ShipmentId,
                     TrackingNumber = ctx.Saga.TrackingNumber,
-                    CustomerId = ctx.Saga.CustomerId,
                     Reason = ctx.Message.Reason
-                }).TransitionTo(Cancelled),
+                }).TransitionTo(PaymentFailedState),
+
              When(ShipmentCancelledByCustomer)
                     .TransitionTo(Cancelled)
                     .Then(ctx => _logger.LogInformation(
                         "Saga cancelled by customer (pre-payment) | ShipmentId: {ShipmentId}",
                         ctx.Saga.ShipmentId))
             );
+
+        During(PaymentFailedState,
+            When(PaymentCompleted)
+                .Then(ctx => ctx.Saga.UpdatedAt = DateTime.Now)
+                .TransitionTo(Confirmed),
+
+            When(ShipmentCancelledByCustomer)
+                .TransitionTo(Cancelled)
+                .Then(ctx => _logger.LogInformation(
+                    "Saga cancelled by customer (after payment failure) | ShipmentId: {ShipmentId}",
+                    ctx.Saga.ShipmentId))
+        );
 
         During(Confirmed,
                 When(ShipmentCancelledByCustomer)

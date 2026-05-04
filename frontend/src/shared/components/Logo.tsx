@@ -6,12 +6,9 @@ export const SmartShipLogo = () => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
-    {/* Speed lines */}
     <rect x="0" y="10" width="30" height="4" rx="2" fill="#e0001a" />
     <rect x="5" y="19" width="22" height="4" rx="2" fill="#ffffffff" />
     <rect x="11" y="28" width="14" height="4" rx="2" fill="#e0001a" />
-
-    {/* Brand text */}
     <text
       x="28"
       y="31"
@@ -23,7 +20,5 @@ export const SmartShipLogo = () => (
     >
       SmartShip
     </text>
-
-
   </svg>
 );

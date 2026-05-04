@@ -199,6 +199,8 @@ export const PaymentsPage = () => {
                     <td>
                       {p.paymentMethod?.toLowerCase() === 'online' &&
                       p.paymentStatus?.toLowerCase() !== 'paid' &&
+                      p.paymentStatus?.toLowerCase() !== 'refunded' &&
+                      p.paymentStatus?.toLowerCase() !== 'cancelled' &&
                       p.razorpayOrderId ? (
                         <div style={{ display: 'flex', gap: 8 }}>
                           {/* Primary — opens Razorpay checkout */}

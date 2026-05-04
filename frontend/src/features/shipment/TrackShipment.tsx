@@ -8,6 +8,13 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { useChatStore } from '../../store/useChatStore';
 import { ShipmentRouteMap } from '../../components/ShipmentRouteMap';
 
+const fmtDate = (dateStr: string | null | undefined) => {
+  if (!dateStr || dateStr.startsWith('0001-01-01')) return '—';
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return '—';
+  return d.toLocaleString('en-IN', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true });
+};
+
 interface TrackingEvent {
   hubName: string;
   timestamp: string;
@@ -315,7 +322,7 @@ export const TrackShipment = () => {
                                 </div>
                                 <div style={{ textAlign: 'right', flexShrink: 0 }}>
                                   <div style={{ fontSize: 12, color: '#d6d6d6', fontFamily: 'Roboto, sans-serif', letterSpacing: '0.08em' }}>
-                                    {evt.timestamp ? new Date(evt.timestamp).toLocaleString('en-IN') : ''}
+                                    {fmtDate(evt.timestamp)}
                                   </div>
                                   <span className={`ss-badge ${isActive ? 'glow' : isDone ? 'success' : 'muted'}`} style={{ marginTop: 4, display: 'inline-block' }}>
                                     {evt.status?.toUpperCase()}

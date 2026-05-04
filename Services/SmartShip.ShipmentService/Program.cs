@@ -124,6 +124,7 @@ try
         x.AddConsumer<UserDeletedConsumer>();
         x.AddConsumer<CancelShipmentConsumer>();
         x.AddConsumer<PaymentCreatedConsumer>();
+        x.AddConsumer<PaymentFailedShipmentConsumer>();
 
         if (isTesting)
         {
@@ -157,6 +158,8 @@ try
                     e.ConfigureConsumer<CancelShipmentConsumer>(ctx));
                 cfg.ReceiveEndpoint("shipment-payment-created", e =>
                     e.ConfigureConsumer<PaymentCreatedConsumer>(ctx));
+                cfg.ReceiveEndpoint("shipment-payment-failed-status", e =>
+                    e.ConfigureConsumer<PaymentFailedShipmentConsumer>(ctx));
             });
         }
     });
