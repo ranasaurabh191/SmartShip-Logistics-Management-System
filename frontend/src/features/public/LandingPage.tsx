@@ -46,9 +46,9 @@ const ParticleCanvas = () => {
     window.addEventListener('resize', resize);
 
     const onMouseMove = (e: MouseEvent) => {
-      mouse.px = mouse.x; 
+      mouse.px = mouse.x;
       mouse.py = mouse.y;
-      mouse.x = e.clientX; 
+      mouse.x = e.clientX;
       mouse.y = e.clientY;
     };
     const onMouseLeave = () => { mouse.x = -9999; mouse.y = -9999; };
@@ -194,7 +194,7 @@ const ParticleCanvas = () => {
         ctx.fill();
       }
 
-      
+
       animFrame = requestAnimationFrame(draw);
     };
 
@@ -534,13 +534,13 @@ export const LandingPage = () => {
   const navigate = useNavigate();
   const [navSolid, setNavSolid] = useState(false);
   const [heroVisible, setHeroVisible] = useState(false);
-
   useEffect(() => {
     setTimeout(() => setHeroVisible(true), 80);
     const onScroll = () => setNavSolid(window.scrollY > 60);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
 
   return (
     <div style={{ minHeight: '100vh', padding: '1px 20px', display: 'flex', flexDirection: 'column', background: '#0a0a0a', position: 'relative', overflowX: 'hidden' }}>
@@ -565,6 +565,7 @@ export const LandingPage = () => {
       }}>
         <SmartShipLogo />
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          
           <button
             className="ss-btn ss-btn-outline"
             style={{ padding: '8px 20px', fontSize: 12 }}
@@ -582,9 +583,8 @@ export const LandingPage = () => {
         </div>
       </nav>
 
-      {/* ═══════════════════════════════════════════
-          SECTION 1 — HERO
-      ═══════════════════════════════════════════ */}
+    {/* SECTION 1 — HERO */}
+
       <section style={{
         position: 'relative', zIndex: 10,
         minHeight: '100vh',
@@ -841,7 +841,7 @@ export const LandingPage = () => {
             fontSize: 14,
             letterSpacing: '0.12em',
             cursor: 'pointer',
-            boxShadow: '0 0 20px rgba(224,0,26,0.8)', 
+            boxShadow: '0 0 20px rgba(224,0,26,0.8)',
           }}
           onClick={() => navigate('/auth/login')}
         >

@@ -29,8 +29,6 @@ export const AuthLayout = () => {
   }, [logout]);
 
   useEffect(() => {
-    setVisible(false);
-
     const timer = setTimeout(() => {
       setVisible(true);
     }, 200);
@@ -215,7 +213,7 @@ export const AuthLayout = () => {
 
             <div style={{
               opacity: visible ? 1 : 0,
-              transform: visible ? 'translateY(0)' : 'translateY(8px)',
+              transform: visible ? 'translateY(0px)' : 'translateY(18px)',
               transition: 'opacity 0.18s ease, transform 0.18s ease',
             }}>
               <Outlet />

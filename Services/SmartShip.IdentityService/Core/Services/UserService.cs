@@ -14,20 +14,17 @@ public class UserService : IUserService
     private readonly IUnitOfWork _unitOfWork;
     private readonly ILogger<UserService> _logger;
     private readonly IPublishEndpoint _publisher;
-    private readonly IHttpClientFactory _httpClientFactory;
     public UserService(
         IUserRepository userRepository,
         IUnitOfWork unitOfWork,
         ILogger<UserService> logger,
         IPublishEndpoint publisher,
-        IOtpVerificationRepository otpRepository,
-        IHttpClientFactory httpClientFactory)
+        IOtpVerificationRepository otpRepository)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _publisher = publisher;
-        _httpClientFactory = httpClientFactory;
         _otpRepository = otpRepository;
     }
 

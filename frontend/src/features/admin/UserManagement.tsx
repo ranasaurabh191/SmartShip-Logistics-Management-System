@@ -11,7 +11,6 @@ interface User {
   role: string;
 }
 
-// Normalise whatever shape the API returns into our interface
 const normaliseUser = (u: any): User => ({
   id: u.id,
   name: u.name ?? u.fullName ?? '—',

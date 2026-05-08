@@ -204,9 +204,6 @@ public class ShipmentService : IShipmentService
             });
             _logger.LogInformation("Shipment created Event Published.");
 
-            // Removed automatic route generation from CreateAsync
-            // It will now only be generated when the status moves to InTransit
-
             return MapToResponse(shipment, sender, receiver, package, "Pending");
         }
         catch (Exception ex)
@@ -317,9 +314,9 @@ public class ShipmentService : IShipmentService
                 throw new InvalidOperationException("Out For Delivery status is managed automatically when the final hub is reached.");
 
             if (st == s.Status)
-                return; // No change needed
+                return; 
 
-            // Allow forward progression
+          
             if (st == ShipmentStatus.PickedUp && s.Status != ShipmentStatus.Booked)
                 throw new InvalidOperationException($"Shipment must be Booked before PickedUp. Current: {s.Status}");
 
@@ -338,7 +335,6 @@ public class ShipmentService : IShipmentService
             _shipmentRepository.Update(s);
             await _unitOfWork.SaveChangesAsync();
 
-            // GENERATE ROUTE WHEN PICKED UP
             if (st == ShipmentStatus.PickedUp)
             {
                 var ctx = _unitOfWork.GetDbContext<Infrastructure.Data.ShipmentDbContext>();
@@ -666,7 +662,10 @@ public class ShipmentService : IShipmentService
             var roadPoints = new List<double[]>();
             try
             {
-                var osrmUrl = $"https://router.project-osrm.org/route/v1/driving/{sender.Longitude.ToString().Replace(',','.')},{sender.Latitude.ToString().Replace(',','.')};{receiver.Longitude.ToString().Replace(',','.')},{receiver.Latitude.ToString().Replace(',','.')}?overview=full&geometries=geojson";
+                var osrmUrl = $"https://router.project-osrm.org/route/v1/driving/{sender.Longitude.ToString().Replace(',','.')}," +
+                              $"{sender.Latitude.ToString().Replace(',','.')};{receiver.Longitude.ToString().Replace(',','.')}," +
+                              $"{receiver.Latitude.ToString().Replace(',','.')}?overview=full&geometries=geojson";
+
                 var osrmRes = await new HttpClient().GetAsync(osrmUrl);
                 if (osrmRes.IsSuccessStatusCode)
                 {
@@ -687,7 +686,7 @@ public class ShipmentService : IShipmentService
                     }
                 }
             }
-            catch { /* Fallback */ }
+            catch { }
 
             var routeStops = new List<ShipmentRoute>();
             var sequence = 0;

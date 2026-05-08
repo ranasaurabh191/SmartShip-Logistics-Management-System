@@ -85,12 +85,15 @@ const CLOSE_ICON = (
 interface Props { shipmentId?: number; }
 
 export const ChatWidget = ({ shipmentId }: Props) => {
+
+
     const [open, setOpen] = useState(false);
     const [input, setInput] = useState('');
     const bottomRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const windowRef = useRef<HTMLDivElement>(null);
     const fabRef = useRef<HTMLButtonElement>(null);
+
     const user = useAuthStore(state => state.user);
     const addNotification = useNotificationStore(state => state.addNotification);
     const { messages, loading, sendMessage, clearChat, activeShipmentId } = useChat(shipmentId);
@@ -123,6 +126,8 @@ export const ChatWidget = ({ shipmentId }: Props) => {
     useEffect(() => {
         if (!open) stopVoice();
     }, [open]);
+
+
     useEffect(() => {
         if (prevUserIdRef.current !== null && prevUserIdRef.current !== user?.id) {
             clearChat();
@@ -130,6 +135,7 @@ export const ChatWidget = ({ shipmentId }: Props) => {
         }
         prevUserIdRef.current = user?.id ?? null;
     }, [user?.id]);
+
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);

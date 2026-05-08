@@ -99,9 +99,9 @@ public class PaymentService : IPaymentService
         // Distance Charge Check (Sync with ShipmentService)
         double distance = Haversine(shipment.SenderLat, shipment.SenderLng, shipment.ReceiverLat, shipment.ReceiverLng);
         decimal distanceSurcharge = 0;
-        if (distance > 500)
+        if (distance > 2000)
         {
-            distanceSurcharge = Math.Round((decimal)(distance - 500) * 2.0m, 2);
+            distanceSurcharge = Math.Round((decimal)(distance - 2000) * 2.0m, 2);
         }
 
         decimal codFee = request.PaymentMethod == PaymentMethod.COD ? Math.Round(baseRate * 0.015m, 2) : 0m;

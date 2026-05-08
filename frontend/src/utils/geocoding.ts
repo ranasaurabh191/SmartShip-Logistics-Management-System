@@ -10,7 +10,6 @@ export async function geocodeAddress(city: string, state: string, country: strin
   if (!query) return null;
 
   try {
-    // Try Photon (Komoot)
     const photonRes = await fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=1`);
     if (photonRes.ok) {
       const data = await photonRes.json();
@@ -24,7 +23,6 @@ export async function geocodeAddress(city: string, state: string, country: strin
   }
 
   try {
-    // Try Nominatim
     const nominatimRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`, {
       headers: { 'User-Agent': 'SmartShip-Logistics-Management-System' }
     });

@@ -46,7 +46,7 @@ export const LoginPage = () => {
   const handleGoogleLogin = () => { window.location.href = `${IDENTITY_BASE}/auth/oauth/google`; };
   const handleGitHubLogin = () => { window.location.href = `${IDENTITY_BASE}/auth/oauth/github`; };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');

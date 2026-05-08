@@ -785,12 +785,11 @@ export const CreateShipmentWizard = () => {
     }
   };
 
-  /* ══════════════════ STEP NEXT BUTTON LABEL ══════════════════ */
   const nextLabel = () => {
     if (submitting) return 'CREATING SHIPMENT...';
     if (activeStep === 3) return 'Confirm & Create Shipment →';
     if (activeStep === 4) return paymentResponse ? 'Continue to Label Upload →' : 'Complete Payment First';
-    if (activeStep === STEPS.length - 1) return null; // handled inside step
+    if (activeStep === STEPS.length - 1) return null; 
     return 'Continue →';
   };
 

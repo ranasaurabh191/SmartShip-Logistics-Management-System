@@ -477,7 +477,7 @@ export const ShipmentsPage = () => {
                       {getPaymentLabel(payment)}
                     </span>
                   </td>
-                  <td>{s.shippingRate.toLocaleString('en-IN')}</td>
+                  <td>₹{s.shippingRate.toLocaleString('en-IN')}</td>
                   <td>{fmtDate(s.createdAt)}</td>
                   <td>{s.pickupScheduledAt ? fmtDate(s.pickupScheduledAt) : '—'}</td>
                   <td>{s.deliveredAt ? fmtDate(s.deliveredAt) : '—'}</td>

@@ -28,8 +28,8 @@ interface Hub {
 }
 
 export const AdminDashboard = () => {
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [shipments, setShipments]     = useState<Shipment[]>([]);
   const [kpis, setKpis]               = useState<SystemKpi[]>([]);
   const [hubs, setHubs]               = useState<Hub[]>([]);
@@ -41,11 +41,9 @@ export const AdminDashboard = () => {
       setLoading(true);
 
       try {
-        // 1. Fetch Summary for correct KPIs
         const summaryRes = await apiClient.get('/admin/shipments/summary');
         const s = summaryRes.data;
 
-        // 2. Fetch Recent for the table
         const recentRes = await apiClient.get('/admin/shipments', {
           params: { page: 1, pageSize: 5 },
         });

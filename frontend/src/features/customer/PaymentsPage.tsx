@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { apiClient } from '../../core/api/axios';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useNotificationStore } from '../../store/useNotificationStore';
@@ -25,11 +25,6 @@ export const PaymentsPage = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  const [verifyModalOpen, setVerifyModalOpen] = useState(false);
-  const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null);
-  const [verifyLoading, setVerifyLoading] = useState(false);
-  const [verifyForm, setVerifyForm] = useState({ razorpayPaymentId: '', signature: '' });
 
   const fetchPayments = async (signal?: AbortSignal) => {
     try {
@@ -72,7 +67,7 @@ export const PaymentsPage = () => {
 
     const options: RazorpayOptions = {
       key: RAZORPAY_KEY_ID,
-      amount: payment.amount * 100, // paise
+      amount: payment.amount * 100, 
       currency: 'INR',
       name: 'SmartShip',
       description: `Payment for Shipment #${payment.shipmentId}`,
@@ -115,33 +110,6 @@ export const PaymentsPage = () => {
 
     const rzp = new window.Razorpay(options);
     rzp.open();
-  };
-
-
-  const closeVerifyModal = () => {
-    setVerifyModalOpen(false);
-    setSelectedPayment(null);
-    setVerifyForm({ razorpayPaymentId: '', signature: '' });
-  };
-
-  const handleRetryVerify = async () => {
-    if (!selectedPayment?.razorpayOrderId) return;
-    try {
-      setVerifyLoading(true);
-      await apiClient.post('/payment/verify', {
-        razorpayOrderId: selectedPayment.razorpayOrderId,
-        razorpayPaymentId: verifyForm.razorpayPaymentId.trim(),
-        signature: verifyForm.signature.trim(),
-        shipmentId: selectedPayment.shipmentId,
-        paymentMethod: 'Online',
-      });
-      closeVerifyModal();
-      await fetchPayments();
-    } catch (err: any) {
-      addNotification(err?.response?.data?.message || 'Payment verification failed.', 'error');
-    } finally {
-      setVerifyLoading(false);
-    }
   };
 
   return (
@@ -203,14 +171,12 @@ export const PaymentsPage = () => {
                       p.paymentStatus?.toLowerCase() !== 'cancelled' &&
                       p.razorpayOrderId ? (
                         <div style={{ display: 'flex', gap: 8 }}>
-                          {/* Primary — opens Razorpay checkout */}
                           <button
                             className="ss-btn"
                             onClick={() => handlePayNow(p)}
                           >
                             Pay Now
                           </button>
-
                         </div>
                       ) : (
                         '—'
@@ -223,55 +189,6 @@ export const PaymentsPage = () => {
           </table>
         )}
       </div>
-
-      {/* Manual Retry Verify Modal */}
-      {verifyModalOpen && selectedPayment && (
-        <div
-          onClick={closeVerifyModal}
-          style={{
-            position: 'fixed', inset: 0,
-            background: 'rgba(0,0,0,0.7)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            zIndex: 9999,
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="ss-card"
-            style={{ width: 500, padding: 24 }}
-          >
-            <h2 className="section-title">Retry Payment Verification</h2>
-
-            <input
-              className="ss-input"
-              placeholder="Razorpay Payment ID (pay_...)"
-              value={verifyForm.razorpayPaymentId}
-              onChange={(e) => setVerifyForm((prev) => ({ ...prev, razorpayPaymentId: e.target.value }))}
-              style={{ width: '100%', marginBottom: 12 }}
-            />
-
-            <input
-              className="ss-input"
-              placeholder="Signature"
-              value={verifyForm.signature}
-              onChange={(e) => setVerifyForm((prev) => ({ ...prev, signature: e.target.value }))}
-              style={{ width: '100%', marginBottom: 20 }}
-            />
-
-            <button
-              className="ss-btn"
-              onClick={handleRetryVerify}
-              disabled={
-                verifyLoading ||
-                !verifyForm.razorpayPaymentId.trim() ||
-                !verifyForm.signature.trim()
-              }
-            >
-              {verifyLoading ? 'VERIFYING...' : 'Verify Payment'}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
