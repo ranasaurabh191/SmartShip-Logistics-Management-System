@@ -147,7 +147,7 @@ try
     builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
     builder.Services.AddScoped<ITrackingService, TrackingService>();
 
-    builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+    builder.Services.AddCors(opt => opt.AddPolicy("AllowAll", p => p.WithOrigins("http://localhost:5173", "http://localhost:3000").AllowAnyHeader().AllowAnyMethod()));
 
     builder.Services.AddSingleton<IConnection>(sp =>
     {
