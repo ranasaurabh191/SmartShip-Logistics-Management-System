@@ -12,6 +12,7 @@ export const OAuthCallbackPage = () => {
     const userId = params.get('userId');
     const role   = params.get('role') as 'CUSTOMER' | 'ADMIN';
     const name   = params.get('name') ?? '';
+    const email  = params.get('email') ?? '';
     const error  = params.get('error');
 
     if (error || !token || !userId || !role) {
@@ -20,7 +21,7 @@ export const OAuthCallbackPage = () => {
     }
 
     login(
-      { id: parseInt(userId), email: '', name: decodeURIComponent(name), role },
+      { id: parseInt(userId), email: decodeURIComponent(email), name: decodeURIComponent(name), role },
       token
     );
 

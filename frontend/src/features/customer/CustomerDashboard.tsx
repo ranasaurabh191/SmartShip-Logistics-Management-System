@@ -21,6 +21,12 @@ interface DashboardStats {
   totalSpend: number;
 }
 
+const statusStyle: Record<string, string> = {
+  InTransit: 'warning', Booked: '', Delivered: 'success',
+  Cancelled: 'muted', Draft: 'muted', PickedUp: 'warning', OutForDelivery: 'warning',
+  PaymentFailed: 'danger',
+};
+
 export const CustomerDashboard = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState<DashboardStats | null>(null);
@@ -192,7 +198,11 @@ export const CustomerDashboard = () => {
                 >
                   <td>{shipment.trackingNumber}</td>
                   <td>{shipment.shipmentType}</td>
-                  <td >{shipment.status}</td>
+                  <td>
+                    <span className={`ss-badge ${statusStyle[shipment.status] ?? ''}`} style={{ padding: '3px 5px' }}>
+                      {shipment.status}
+                    </span>
+                  </td>
                   <td>₹{Number(shipment.shippingRate || 0).toLocaleString('en-IN')}</td>
                   <td>{new Date(shipment.createdAt).toLocaleDateString('en-IN')}</td>
                 </tr>

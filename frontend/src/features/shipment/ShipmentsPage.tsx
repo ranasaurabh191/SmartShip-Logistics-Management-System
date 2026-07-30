@@ -344,7 +344,6 @@ export const ShipmentsPage = () => {
         return;
       }
 
-      // Online — immediately launch Razorpay checkout with the new order
       setBusyShipmentId(null); // release before opening modal (handler sets it again)
       await fetchShipments();  // refresh so payment shows in table
       launchRazorpay(payment, shipment.id);

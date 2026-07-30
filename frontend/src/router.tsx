@@ -43,10 +43,9 @@ export const router = createBrowserRouter([
           { path: 'signup', element: <SignupPage /> },
           { path: 'forgot-password', element: <ForgotPasswordPage /> },
           { path: 'reset-password', element: <ResetPasswordPage /> },
-          { path: 'callback', element: <OAuthCallbackPage /> },
-
         ],
       },
+      { path: 'auth/callback', element: <OAuthCallbackPage /> },
       {
         path: 'customer',
         element: <DashboardLayout role="CUSTOMER" />,

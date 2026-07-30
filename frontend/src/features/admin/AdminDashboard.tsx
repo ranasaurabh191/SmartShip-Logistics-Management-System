@@ -27,6 +27,12 @@ interface Hub {
   isActive: boolean;
 }
 
+const statusStyle: Record<string, string> = {
+  InTransit: 'warning', Booked: '', Delivered: 'success',
+  Cancelled: 'muted', Draft: 'muted', PickedUp: 'warning', OutForDelivery: 'warning',
+  PaymentFailed: 'danger',
+};
+
 export const AdminDashboard = () => {
 
   const navigate = useNavigate();
@@ -247,10 +253,7 @@ export const AdminDashboard = () => {
                   <td>{s.trackingNumber}</td>
                   <td>{s.shipmentType}</td>
                   <td>
-                    <span className={`ss-badge ${
-                      s.status === 'Delivered' ? 'success' :
-                      s.status === 'Cancelled' ? '' : 'glow'
-                    }`}>
+                    <span className={`ss-badge ${statusStyle[s.status] ?? ''}`} style={{ padding: '3px 5px' }}>
                       {s.status}
                     </span>
                   </td>

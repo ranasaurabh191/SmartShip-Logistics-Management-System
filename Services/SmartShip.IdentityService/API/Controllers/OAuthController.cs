@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using SmartShip.IdentityService.Core.Interfaces.Services;
 using System.Security.Claims;
@@ -80,7 +80,7 @@ public class OAuthController : ControllerBase
 
         await HttpContext.SignOutAsync("ExternalCookie");
 
-        var frontendUrl = _config["OAuth:FrontendCallbackUrl"] + $"?token={token}&userId={userId}&role={role}&name={Uri.EscapeDataString(name!)}";
+        var frontendUrl = _config["OAuth:FrontendCallbackUrl"] + $"?token={token}&userId={userId}&role={role}&name={Uri.EscapeDataString(name!)}&email={Uri.EscapeDataString(email!)}";
 
         return Redirect(frontendUrl);
     }
