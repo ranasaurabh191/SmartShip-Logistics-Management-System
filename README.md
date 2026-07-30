@@ -1,12 +1,3 @@
-# SmartShip-Logistics-Management-System
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
-
-# create readme for me smartship project it must not have any emojies
-
-Based on the information from your background and the search results, I'll create a comprehensive README for your SmartShip project. Let me write it now.
-
-***
-
 # SmartShip - Microservices-Based Logistics Management System
 
 ## Overview
@@ -250,18 +241,6 @@ docker-compose push
 ```
 
 
-### Kubernetes
-
-Helm charts are available in `/deploy/helm/smartship/` for Kubernetes deployment.
-
-```bash
-helm install smartship ./deploy/helm/smartship \
-  --namespace smartship \
-  --create-namespace \
-  -f values-prod.yaml
-```
-
-
 ### Environment Variables
 
 Key environment variables for production:
@@ -297,11 +276,6 @@ Key environment variables for production:
 - Update API documentation for contract changes
 - Run static analysis (`dotnet format`)
 
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Contact
 
 Saurabh Rana - [GitHub Profile](https://github.com/saurabhrana)
@@ -317,66 +291,4 @@ Project Link: [https://github.com/saurabhrana/SmartShip](https://github.com/saur
 - RabbitMQ and MassTransit communities
 - Razorpay developer documentation
 <span style="display:none">[^1][^10][^11][^12][^13][^14][^15][^16][^17][^18][^19][^2][^20][^21][^22][^23][^24][^25][^26][^27][^28][^29][^3][^30][^4][^5][^6][^7][^8][^9]</span>
-
-<div align="center">⁂</div>
-
-[^1]: https://github.com/dylanwe/smartship
-
-[^2]: https://github.com/andersinno/smartship
-
-[^3]: https://dotnet.microsoft.com/en-us/apps/aspnet/microservices
-
-[^4]: https://learn.microsoft.com/en-us/shows/on-dotnet/microservice-architecture-with-aspnet-core
-
-[^5]: https://www.linkedin.com/posts/omarelswaf_project-shipping-management-system-a-activity-7342242417367998464-fTIz
-
-[^6]: https://medium.com/@avinash.dhumal/deep-dive-supply-chain-management-architecture-2dc1e347cf7b
-
-[^7]: https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/microservice-application-layer-implementation-web-api
-
-[^8]: https://medium.com/@vikkasjindal/e-commerce-order-processing-using-net-core-microservices-8e5b586377e6
-
-[^9]: https://github.com/Deboraj-roy/ASP.NET-Core-Microservices-NET-8
-
-[^10]: https://www.cosmiclearn.com/dotnet/aspnetcore_project_microservices.php
-
-[^11]: https://assets.ctfassets.net/9n3x4rtjlya6/5covSmo42Q6SQye4IUOKae/6cd6c6d1510c99253b7b0917e299de72/Edwin_van_Wijk_-_Building_Microservices_using_.NET_Core_and_Docker.pdf
-
-[^12]: https://welpmagazine.com/scalable-logistics-software-with-net/
-
-[^13]: https://cap.dotnetcore.xyz/user-guide/en/samples/eshoponcontainers/
-
-[^14]: http://github.com/topics/ship
-
-[^15]: https://cordis.europa.eu/project/id/823916
-
-[^16]: https://www.linkedin.com/in/saurabh-rana-45606424b
-
-[^17]: https://al-kindipublishers.org/index.php/jcsts/article/download/10736/9489
-
-[^18]: https://www.youtube.com/watch?v=vGZ3QJqsd60
-
-[^19]: https://github.com/topics/supply-chain-management?o=asc\&s=stars
-
-[^20]: https://dotnettutorials.net/lesson/microservices-using-asp-net-core/
-
-[^21]: https://wjaets.com/sites/default/files/fulltext_pdf/WJAETS-2025-1078.pdf
-
-[^22]: https://github.com/topics/supply-chain-management?l
-
-[^23]: https://dotnet.microsoft.com/en-us/learn/dotnet/architecture-guides
-
-[^24]: https://github.com/topics/courier-management
-
-[^25]: https://github.com/topics/warehouse-management-system
-
-[^26]: https://www.linkedin.com/in/saurabh-rana2019
-
-[^27]: https://www.linkedin.com/pub/dir/Saurabh/Rana
-
-[^28]: https://github.com/topics/logistics?l=c%23\&o=asc\&s=stars
-
-[^29]: https://github.com/topics/supply-chain-management
-
-[^30]: https://github.com/Mikhel-lab/Asp.Net-Core-Inventory-Order-Management-System-master
 
