@@ -6,7 +6,7 @@ SmartShip Logistics Management System is an enterprise-grade, microservice-based
 ## 📸 
 
 ### Home
-![Home](https://github.com/ranasaurabh191/SafetySnap/blob/main/screenshots/Screenshot%202025-10-29%20141615.png)
+![Home](https://github.com/ranasaurabh191/SmartShip-Logistics-Management-System/blob/main/Screenshot%202026-05-28%20000721.png)
 
 ### SignIn/SignUp
 ![SignIn/SignUp](https://github.com/ranasaurabh191/SmartShip-Logistics-Management-System/blob/main/Screenshot%202026-05-28%20000804.png)
