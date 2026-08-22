@@ -2,6 +2,7 @@
 
 SmartShip Logistics Management System is an enterprise-grade, microservice-based platform built for end-to-end logistics, parcel tracking, fleet and hub operations, payment processing, and notification handling. Engineered with .NET 10 Web APIs, Ocelot API Gateway, React 19, SQL Server, and RabbitMQ, SmartShip provides a resilient, event-driven solution to manage domestic and international shipments seamlessly.
 
+https://smartshiplogistics-e645e.web.app/ 
 ---
 ## 📸 
 
